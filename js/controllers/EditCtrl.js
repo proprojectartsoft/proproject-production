@@ -5,14 +5,18 @@ angular.module($APP.name).controller('EditCtrl', [
     'FormUpdateService',
     '$location',
     '$rootScope',
-    'FormDesignService',
+    '$ionicSideMenuDelegate',
     '$ionicScrollDelegate',
     '$ionicPopup',
-    function ($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, FormDesignService, $ionicScrollDelegate, $ionicPopup) {
-        $scope.formData = $rootScope.rootForm;
-        console.log($scope.formData, $rootScope.formData)
+    function ($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, $ionicPopup) {
+        $ionicSideMenuDelegate.canDragContent(false);
+        $scope.formData = angular.copy($rootScope.rootForm);
+        FormInstanceService.get($rootScope.formId).then(function (data) {
+            $rootScope.formData = data;
+            $scope.formData = data;
+        });
+        
         $scope.submit = function (help) {
-//            console.log(help, $rootScope.formId)
             var confirmPopup = $ionicPopup.confirm({
                 title: 'Edit form',
                 template: 'Are you sure you want to edit this form?'
@@ -21,16 +25,33 @@ angular.module($APP.name).controller('EditCtrl', [
                 if (res) {
                     FormInstanceService.update($rootScope.formId, $scope.formData).then(function (data) {
                         if (data) {
+                            $rootScope.formId = data;
+                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                        }
+                    });
+                }
+            });
+        };
+        $scope.saveAsNew = function () {
+            var confirmPopup = $ionicPopup.confirm({
+                title: 'Edit form',
+                template: 'Are you sure you want to save this form?'
+            });
+            confirmPopup.then(function (res) {
+                if (res) {
+                    FormInstanceService.save_as($scope.formData).then(function (data) {
+                        if (data) {
                             $rootScope.formId = data.id;
                             FormInstanceService.get($rootScope.formId).then(function (data) {
                                 $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                            })
+                            });
                         }
-                    })
+                    });
                 }
             });
 
         };
+
         function elmYPosition(id) {
             var elm = document.getElementById(id);
             var y = elm.offsetTop;
@@ -46,12 +67,12 @@ angular.module($APP.name).controller('EditCtrl', [
             if (id) {
                 $scope.scroll_ref = $timeout(function () { // we need little delay
                     var stopY = elmYPosition(id) - 40;
-                    console.log(stopY)
                     $ionicScrollDelegate.scrollTo(0, stopY, true);
 
                 }, 50);
             }
-        }
+        };
+
         $scope.toggleGroup = function (group, id) {
             if ($scope.isGroupShown(group)) {
                 $scope.shownGroup = null;
@@ -60,10 +81,12 @@ angular.module($APP.name).controller('EditCtrl', [
             }
             $scope.goto(id);
         };
+
         $scope.repeatGroup = function (x) {
             var aux = {};
-            angular.copy(x, aux);
-            aux.repeatable = false;
+            console.log(x);
+            angular.copy(x, aux);            
+            aux.repeatable = true;
             aux.id = 0;
             for (var i = 0; i < aux.field_instances.length; i++) {
                 aux.field_instances[i].field_group_instance_id = 0;
@@ -75,10 +98,13 @@ angular.module($APP.name).controller('EditCtrl', [
                     }
                 }
                 for (var j = 0; j < aux.field_instances[i].field_values.length; j++) {
+                    aux.field_instances[i].field_values[j].name =  x.field_instances[i].field_values[j].name;
+                    aux.field_instances[i].field_values[j].value =  x.field_instances[i].field_values[j].value;
                     aux.field_instances[i].field_values[j].id = 0;
                     aux.field_instances[i].field_values[j].field_instance_id = 0;
                 }
             }
+            console.log(aux);
             for (var i = 0; i < $scope.formData.field_group_instances.length; i++) {
                 if (x === $scope.formData.field_group_instances[i]) {
                     $scope.formData.field_group_instances.splice(i + 1, 0, aux);
@@ -86,10 +112,11 @@ angular.module($APP.name).controller('EditCtrl', [
                 }
             }
         };
+
         $scope.repeatField = function (x, y) {
             var test = {};
             angular.copy(y, test);
-            test.repeatable = false;
+            test.repeatable = true;
             test.id = 0;
             for (var i = 0; i < x.field_instances.length; i++) {
                 if (x.field_instances[i] === y) {
@@ -102,14 +129,16 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 }
             }
-        }
+        };
 
         $scope.isGroupShown = function (group) {
             return $scope.shownGroup === group;
         };
+
         $scope.$on('updateScopeFromDirective', function () {
             FormUpdateService.addProduct($scope.formData, $scope.modalHelper);
         });
+
         $scope.$on('moduleSaveChanges', function () {
             $scope.formData = FormUpdateService.getProducts();
         });

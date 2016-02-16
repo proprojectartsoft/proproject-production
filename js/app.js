@@ -1,8 +1,7 @@
 
 var $APP = $APP || {}; // App namespace
-//$APP.server = 'http://artvm23.vmnet.ro';
-//$APP.server = 'http://app.preprod.proproject.io/';
-$APP.server = 'http://app.proproject.io/';
+  $APP.server = 'http://app.proproject.io/';
+// $APP.server = 'http://artvm23.vmnet.ro';
 //$APP.server = 'http://proproject.artsoft-consult.ro';
 $APP.name = 'proproject';
 $APP.mobile = true;
@@ -16,25 +15,16 @@ angular.module($APP.name, [
     'ionic-datepicker',
     'ionic-timepicker',
     'angularMoment',
-    'angular-cache'
+    'angular-cache',
+    'ngCordova'
 ]);
-angular.module($APP.name).run(function ($ionicPlatform, $rootScope, CategoriesService, CacheFactory) {
-
+angular.module($APP.name).run(function ($ionicPlatform, CacheFactory, $window) {
+        
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         }
-        function getAndroidVersion(ua) {
-            ua = (ua || navigator.userAgent).toLowerCase();
-            var match = ua.match(/android\s([0-9\.]*)/);
-            return match ? match[1] : false;
-        }
-        ;
 
-        getAndroidVersion(); //"4.2.1"
-        parseInt(getAndroidVersion(), 10); //4
-        parseFloat(getAndroidVersion()); //4.2
-        console.log(getAndroidVersion())
         if (window.StatusBar) {
             StatusBar.styleDefault();
             StatusBar.overlaysWebView(false);
@@ -46,7 +36,6 @@ angular.module($APP.name).run(function ($ionicPlatform, $rootScope, CategoriesSe
         sync.setOptions({
             storageMode: 'localStorage'
         });
-
 
     });
 
@@ -166,6 +155,7 @@ angular.module($APP.name).config([
                     },
                     reload: true,
                     cache: false,
+                    autoscroll: false,
                     views: {
                         'menuContent': {
                             templateUrl: "view/registers.html",
@@ -188,11 +178,17 @@ angular.module($APP.name).config([
                         }
                     }
                 })
+                .state('forgotpassword', {
+                    url: "/forgotpassword",
+                    templateUrl: "view/forgotpassword.html",
+                    controller: "ForgotPasswordCtrl"
+                })
                 .state('login', {
                     url: "/login",
                     templateUrl: "view/login.html",
                     controller: "LoginCtrl"
                 });
+
         $urlRouterProvider.otherwise('/login'); //hardcoded for start
     }
 ]);

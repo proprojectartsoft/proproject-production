@@ -1,288 +1,191 @@
 angular.module($APP.name).factory('SyncService', [
-    '$http',
-    'CacheFactory',
     '$q',
+    'CacheFactory',
     '$ionicPopup',
-    '$timeout',
     'FormInstanceService',
     'FormDesignService',
-    'RegisterService',
     'ProjectService',
     '$rootScope',
-    'CategoriesService',
-    function ($http, CacheFactory, $q, $ionicPopup, $timeout, FormInstanceService, FormDesignService, RegisterService, ProjectService, $rootScope, CategoriesService) {
-        var projectsReadyDestroyer = function () {
-        };
-        var categoriesReadyDestroyer = function () {
-        };
-        var designReadyDestroyer = function () {
-        };
-        var designCountReadyDestroyer = function () {
-        };
-        var designFCountReadyDestroyer = function () {
-        };
-        function up() {
-            console.log("Calling up function");
-            var sync = CacheFactory.get('sync');
-            console.log('SYNC');
-            if (!sync || sync.length === 0) {
-                sync = CacheFactory('sync');
-            }
-            var forms = sync.keys();
-            if (forms.length) {
-                var aux = 0;
-                for (var i = 0; i < forms.length; i++) {
-                    var formX = sync.get(forms[i]);
-                    if (formX) {
-                        console.log('* form uploaded', forms[i]);
-                        FormInstanceService.create(formX, true).then(function (response) {
-                            sync.remove(forms[i]);
-//                            aux++
-                        });
-                    }
-//                    console.log(i, form.length)
-                    if (i === forms.length - 1) {
-                        $rootScope.$emit('syncUp.complete');
-                    }
-                }
-                if (aux === forms.length) {
-                    sync.remove("3");
-                }
-
-            } else {
-                // No forms to send - sync up is complete
-                console.log('sync up is complete - no forms to send');
-                $rootScope.$emit('syncUp.complete');
-            }
-        }
-
-        function down() {
-            console.log("Calling down function");
-            //PROJECT CACHE
-            var projectsCache = CacheFactory.get('projectsCache');
-            if (projectsCache) {
-                projectsCache.destroy();
-                projectsCache = CacheFactory('projectsCache');
-                projectsCache.setOptions({
-                    storageMode: 'localStorage'
-                });
-            } else {
-                projectsCache = CacheFactory('projectsCache');
-                projectsCache.setOptions({
-                    storageMode: 'localStorage'
-                });
-            }
-
-
-
-
-
-            //USER CACHE
-            var settings = CacheFactory.get('settings');
-            if (!settings || settings.length === 0) {
-                settings = CacheFactory('settings');
-                settings.setOptions({
-                    storageMode: 'localStorage'
-                });
-            }
-            $rootScope.currentUser = settings.get('user');
-
-            $rootScope.projects = [];
-
-            ProjectService.list().then(function (projects) {
-                $rootScope.projects = projects;
-                for (var i = 0; i < projects.length; i++) {
-                    projectsCache.put(projects[i].id, projects[i]);
-                }
-                $rootScope.$broadcast('sync.projects.ready');
-            });
-            projectsReadyDestroyer = $rootScope.$on('sync.projects.ready', function () {
-//                CATEGORIES CACHE
-                var categoriesCache = CacheFactory.get('categoriesCache');
-                if (!categoriesCache) {
-                    categoriesCache = CacheFactory('categoriesCache');
-                    categoriesCache.setOptions({
-                        storageMode: 'localStorage'
-                    });
-                }
-                $rootScope.categories = [];
-                CategoriesService.list().then(function (categories) {
-                    angular.forEach(categories, function (ctg) {
-                        categoriesCache.put(ctg.id, ctg);
-                        $rootScope.categories.push(ctg);
-                    });
-
-                    $rootScope.$emit('sync.categories.ready');
-                });
-            });
-
-
-            categoriesReadyDestroyer = $rootScope.$on('sync.categories.ready', function () {
-                $rootScope.designFCount = 0;
-                $rootScope.designTotal = 0;
-                $rootScope.designCount = 0;
-                $rootScope.categSw = 0;
-                $rootScope.sw = 0;
-
-                angular.forEach($rootScope.categories, function (ctg) {
-                    FormDesignService.list(ctg.id).then(function (formDesigns) {
-                        $rootScope.designFCount++;
-                        $rootScope.designTotal += formDesigns.length;
-                    })
-                });
-                $rootScope.$watch('designFCount', function () {
-                    if ($rootScope.sw === 0) {
-                        $rootScope.sw++;
-                        $rootScope.$emit('sync.design.ready');
-                    }
-                });
-            });
-//            $rootScope.$on('sync.design.ready', function () {
-//                $rootScope.instanceFCount = 0;
-//                $rootScope.instanceTotal = 0;
-//                $rootScope.sw = 0;
-//
-//                angular.forEach($rootScope.projects, function (prj) {
-//                    FormInstanceService.list(prj.id).then(function (formInstance) {
-//                        $rootScope.instanceFCount++;
-//                        $rootScope.instanceTotal += formInstance.length;
-//                    })
-//                });
-//                $rootScope.$watch('instanceFCount', function () {
-//                    if ($rootScope.instanceFCount === $rootScope.projects.length && $rootScope.sw === 0) {
-//                        $rootScope.sw++;
-//                        $rootScope.$emit('sync.instance.ready');
-//                    }
-//                });
-//            });
-//            $rootScope.$on('sync.instance.ready', function () {
-//                $rootScope.registerFCount = 0;
-//                $rootScope.registerTotal = 0;
-//                $rootScope.sw = 0;
-//
-//                angular.forEach($rootScope.projects, function (prj) {
-//                    RegisterService.list(prj.id).then(function (formRegister) {
-//                        $rootScope.registerFCount++;
-//                        $rootScope.registerTotal += formRegister.length;
-//                    })
-//                });
-//                $rootScope.$watch('registerFCount', function () {
-//                    if ($rootScope.registerFCount === $rootScope.projects.length && $rootScope.sw === 0) {
-//                        $rootScope.sw++;
-//                        $rootScope.$emit('size.ready');
-//                    }
-//                });
-//            });
-            designReadyDestroyer = $rootScope.$on('sync.design.ready', function () {
-                $rootScope.designCount = 0;
-                $rootScope.designFCount = 0;
-                //DESIGNS CACHE
-                var designsCache = CacheFactory.get('designsCache');
-                if (designsCache) {
-                    var list = designsCache.keys();
-                    for (var i = 0; i < list.length; i++) {
-                        designsCache.remove(list[i]);
-                    }
-                }
-                else {
-                    designsCache = CacheFactory('designsCache');
-                    designsCache.setOptions({
-                        storageMode: 'localStorage'
-                    });
-                }
-                angular.forEach($rootScope.categories, function (ctg) {
-                    FormDesignService.list(ctg.id).then(function (formDesigns) {
-                        $rootScope.designFCount++;
-                        for (var k = 0; k < formDesigns.length; k++) {
-                            FormDesignService.get(formDesigns[k].id).then(function (design) {
-                                designsCache.put(design.id, design);
-                                $rootScope.designCount++;
-                            });
-                        }
-                    })
-                });
-                designFCountReadyDestroyer = $rootScope.$watch('designFCount', function () {
-                    if ($rootScope.designFCount === $rootScope.categories.length) {
-                        designCountReadyDestroyer = $rootScope.$watch('designCount', function () {
-                            if ($rootScope.designCount === $rootScope.designTotal) {
-                                console.log('wut')
-//                                $rootScope.$broadcast('sync.design.ready')
-                                $rootScope.$broadcast('syncDown.complete');
-                            }
-                        });
-                    }
-                });
-            });
-
-        }
-
-
-
+    '$http',
+    '$timeout',
+    function ($q, CacheFactory, $ionicPopup, FormInstanceService, FormDesignService, ProjectService, $rootScope, $http, $timeout) {
 
         return {
             sync: function () {
-                // Once sync up has complete, start syncing down.
+                var requests = [ProjectService.list_current(true), FormDesignService.list_mobile()];
+                var upRequests = [];
+                var projectsCache = CacheFactory.get('projectsCache');
+                var designsCache = CacheFactory.get('designsCache');
+                var settingsCache = CacheFactory.get('settings');
+                var sync = CacheFactory.get('sync');
+                var photos = CacheFactory.get('photos');
+                var forms, pics, picX, formX;
 
-                // First remove the listener, if it exists. Then add.
-                $rootScope.$$listeners['syncUp.complete'] = undefined;
-                $rootScope.$on('syncUp.complete', function (event, args) {
-                    console.log("syncUp complete");
-                    projectsReadyDestroyer();
-                    categoriesReadyDestroyer();
-                    designReadyDestroyer();
-                    designFCountReadyDestroyer();
-                    designCountReadyDestroyer();
-                    down();
+                var syncPopup = $ionicPopup.alert({
+                    title: "Syncing",
+                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                    content: "",
+                    buttons: []
                 });
+                function upload() {
+                    if (!sync || sync.length === 0) {
+                        sync = CacheFactory('sync');
+                    }
+                    if (!photos) {
+                        photos = CacheFactory('photos');
+                        photos.setOptions({
+                            storageMode: 'localStorage'
+                        });
+                    }
+                    forms = sync.keys();
+                    pics = photos.keys();
+                    console.log('w', forms)
+                    if (forms) {
+                        angular.forEach(forms, function (formKey) {
+                            picX = false;
+                            formX = sync.get(formKey);
+                            if (pics.indexOf(formKey) !== -1) {
+                                console.log('sync.start.create_sync', formKey);
+                                picX = photos.get(formKey);
+                                console.log('sync.stop.create_sync', picX);
+                            }
+                            if (formX) {
+                                var help1 = angular.copy(formX);
+                                var help2 = angular.copy(picX);
+                                upRequests.push(FormInstanceService.create_sync(help1, help2).then(function () {
+                                    console.log('help', help1, help2)
+                                }));
+                            }
+                        });
+                    }
+                }
+                function clear() {
+                    if (!settingsCache) {
+                        settingsCache = CacheFactory('settingsCache');
+                        settingsCache.setOptions({
+                            storageMode: 'localStorage'
+                        });
+                    }
+                    if (!photos) {
+                        photos = CacheFactory('photos');
+                        photos.setOptions({
+                            storageMode: 'localStorage'
+                        });
+                    }
 
-                // First remove the listener, if it exists. Then add.
-                $rootScope.$$listeners['syncDown.complete'] = undefined;
-                $rootScope.$on('syncDown.complete', function (event, args) {
-                    console.log("syncDown complete");
-                    // Close the sync progress popup
-                    $rootScope.syncPopup.close();
-                });
+                    if (projectsCache) {
+                        projectsCache.removeAll();
+                    } else {
+                        projectsCache = CacheFactory('projectsCache');
+                        projectsCache.setOptions({
+                            storageMode: 'localStorage'
+                        });
+                        projectsCache.removeAll();
+                    }
+                    if (designsCache) {
+                        designsCache.removeAll();
+                    }
+                    else {
+                        designsCache = CacheFactory('designsCache');
+                        designsCache.setOptions({
+                            storageMode: 'localStorage'
+                        });
+                        designsCache.removeAll();
+                    }
+                    upload();
+                }
+                function asyncCall(listOfPromises, onErrorCallback, finalCallback) {
+                    listOfPromises = listOfPromises || [];
+                    onErrorCallback = onErrorCallback || angular.noop;
+                    finalCallback = finalCallback || angular.noop;
+                    var newListOfPromises = listOfPromises.map(function (promise) {
+                        return promise.catch(function (reason) {
+                            onErrorCallback(reason);
+                            return {'rejected_status': reason.status};
 
-                if (window.navigator.onLine) {
-
-                    // Open a popup to block the UI
-                    $rootScope.syncPopup = $ionicPopup.alert({
-                        title: "Syncing",
-                        template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                        content: "",
-                        buttons: []
+                        });
                     });
+                    $q.all(newListOfPromises).then(finalCallback);
+                }
+                return $http.get($APP.server + '/api/userversion/session').then(function (version) {
+                    var currentVersion = settingsCache.get("version");
+                    var doRequest;
+                    if (currentVersion !== version.data) {
+                        clear();
+                        doRequest = requests.concat(upRequests);
+                        console.log(doRequest);
+                    }
+                    else {
+                        upload();
+                        doRequest = upRequests;
+                        if (doRequest.length === 0) {
+                            syncPopup.close();
+                        }
+                        console.log('OK', upRequests)
+                    }
+                    asyncCall(doRequest,
+                            function error(result) {
+                                console.log('Some error occurred, but we get going:', result);
+                            },
+                            function success(result) {
+                                var sw = false;
+                                if (currentVersion !== version.data) {
+                                    $rootScope.projects = result[0];
+                                    angular.forEach($rootScope.projects, function (proj) {
+                                        if (proj.id === $rootScope.projectId && proj.name === $rootScope.navTitle) {
+                                            sw = true;
+                                        }
+                                    });
+                                    if (!sw) {
+                                        $rootScope.projectId = result[0][0].id;
+                                        $rootScope.navTitle = result[0][0].name;
+                                    }
+                                    for (var i = 0; i < result[0].length; i++) {
+                                        projectsCache.put(result[0][i].id, result[0][i]);
+                                    }
+                                    for (var i = 0; i < result[1].length; i++) {
+                                        designsCache.put(result[1][i].id, result[1][i]);
+                                    }
+                                }
+                                currentVersion = version.data;
 
-                    // We need to delay slightly to allow popup above to instantiate
+                                if (sync) {
+                                    sync.removeAll();
+                                } else {
+                                    sync = CacheFactory('sync');
+                                    sync.setOptions({
+                                        storageMode: 'localStorage'
+                                    });
+                                    sync.removeAll();
+                                }
+
+                                if (photos) {
+                                    photos.removeAll();
+                                } else {
+                                    photos = CacheFactory('photos');
+                                    photos.setOptions({
+                                        storageMode: 'localStorage'
+                                    });
+                                    photos.removeAll();
+                                }
+
+                                settingsCache.put("version", currentVersion);
+
+                                $timeout(function () {
+                                    syncPopup.close();
+                                });
+                            }
+                    );
+                }, function errorCallback(response) {
                     $timeout(function () {
-                        console.log("STARTING SYNC");
-                        up();
-                    }, 200);
-
-                    // We will call Sync.down() once Sync.up() has completed.
-                    //Sync.down();
-                }
-                else {
-                    $ionicPopup.alert({
-                        title: 'You are Offline',
-                        content: 'Please go online to sync your data.'
+                        syncPopup.close();
+                        var alertPopup = $ionicPopup.alert({
+                            title: 'Offline',
+                            template: 'Could not connect to the cloud'
+                        });
                     });
-                }
-            },
-            upSync: function () {
-                console.log("Calling up factory method");
-                up();
-            },
-            downSync: function () {
-                console.log("Calling down factory method");
-                down();
-            },
-            numNonSynced: function () {
-                var sync = $angularCacheFactory('sync');
-                if (!sync || sync.length == 0) {
-                    return 0;
-                }
-                return sync.keys().length;
+                });
+
             }
         };
     }

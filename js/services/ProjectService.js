@@ -6,16 +6,15 @@ angular.module($APP.name).factory('ProjectService', [
             list: function () {
                 return $http.get($APP.server + '/api/project', {}).then(
                         function (payload) {
-//                            var projectsCache = CacheFactory.get('projectsCache');
-//                            if (!projectsCache || projectsCache.length === 0) {
-//                                projectsCache = CacheFactory('projectsCache');
-//                                projectsCache.setOptions({
-//                                    storageMode: 'localStorage'
-//                                });
-//                            }
-//                            for (var i = 0; i < payload.data.length; i++) {
-//                                projectsCache.put(payload.data[i].id, payload.data[i]);
-//                            }
+                            return payload.data;
+                        }, function (err) {
+                });
+            },
+            list_current: function (active) {
+                return $http.get($APP.server + '/api/project/list', {
+                    params: {active: active}
+                }).then(
+                        function (payload) {
                             return payload.data;
                         }
                 );

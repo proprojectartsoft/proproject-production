@@ -1,14 +1,19 @@
 angular.module($APP.name).controller('AppCtrl', [
     '$rootScope',
-    '$state',
-    'AuthService',
-    'ProjectService',
     '$scope',
-    '$ionicSideMenuDelegate',
     'CacheFactory',
-    'SyncService',
-    'CategoriesService',
-    function ($rootScope, $state, AuthService, ProjectService, $scope, $ionicSideMenuDelegate, CacheFactory, SyncService, CategoriesService) {
+    function ($rootScope, $scope, CacheFactory) {
+        var getAndroidVersion = function (ua) {
+            ua = (ua || navigator.userAgent).toLowerCase();
+            var match = ua.match(/android\s([0-9\.]*)/);
+            return match ? match[1] : false;
+        };
+
+        getAndroidVersion(); //"4.2.1"
+        parseInt(getAndroidVersion(), 10); //4
+        parseFloat(getAndroidVersion()); //4.2
+        $rootScope.androidOk = parseFloat(getAndroidVersion()) > 4.4;
+
         var settings = CacheFactory.get('settings');
         if (!settings || settings.length === 0) {
             settings = CacheFactory('settings');
@@ -18,20 +23,12 @@ angular.module($APP.name).controller('AppCtrl', [
         }
         $scope.user = settings.get("user");
 
-        var categoriesCache = CacheFactory('categoriesCache');
-        categoriesCache.setOptions({
-            storageMode: 'localStorage'
-        });
-        $rootScope.categories = [];
-        angular.forEach(categoriesCache.keys(), function (key) {
-            $rootScope.categories.push(categoriesCache.get(key));
-        });
-
         var projectsCache = CacheFactory('projectsCache');
         projectsCache.setOptions({
             storageMode: 'localStorage'
         });
         $rootScope.projects = [];
+
         $rootScope.$watch('projectsCache.keys()', function (newValue, oldValue) {
             angular.forEach(projectsCache.keys(), function (key) {
                 $rootScope.projects.push(projectsCache.get(key));

@@ -1,12 +1,12 @@
 angular.module($APP.name).controller('LoginCtrl', [
-    '$rootScope',
     '$scope',
     '$state',
     'AuthService',
-    '$ionicPopup',
-    'ReloadMeService',
     'CacheFactory',
-    function ($rootScope, $scope, $state, AuthService, $ionicPopup, ReloadMeService, CacheFactory) {
+    'SyncService',
+    '$rootScope',
+    '$timeout',
+    function ($scope, $state, AuthService, CacheFactory, SyncService, $rootScope, $timeout) {
         $scope.user = [];
         $scope.user.username = "";
         $scope.user.password = "";
@@ -27,8 +27,9 @@ angular.module($APP.name).controller('LoginCtrl', [
                 storageMode: 'localStorage'
             });
         }
-        else{
-//        if (reloadCache) {
+        var aux = reloadCache.get('reload');
+        console.log('aux')
+        if (aux) {
             AuthService.isLoggedInCache();
         }
         $scope.hasRemember = rememberCache.get('remember');
@@ -49,30 +50,24 @@ angular.module($APP.name).controller('LoginCtrl', [
                     if (rememberCache) {
                         if ($scope.user.rememberMe) {
                             rememberCache.put('remember', {'username': $scope.user.username, 'password': $scope.user.password});
-                            reloadCache.put('reload', {'username': $scope.user.username, 'password': $scope.user.password});
-                        }
-                        else {
+                        } else {
                             rememberCache.destroy();
                         }
                     }
-                    $state.go("app.categories");
+                    var reloadCache = CacheFactory.get('reloadCache');
+                    if (!reloadCache) {
+                        reloadCache = CacheFactory('reloadCache');
+                        reloadCache.setOptions({
+                            storageMode: 'localStorage'
+                        });
+                    }
+                    reloadCache.put('reload', {'username': $scope.user.username, 'password': $scope.user.password});
+                    $timeout(function () {
+                        SyncService.sync();
+                        $state.go('app.categories', {'projectId': $rootScope.projectId});
+                    });                    
                 }
             });
-
-//                    then(function (data) {
-//                
-//            }, function error(err) {
-//                if (!$scope.popupOpen) {
-//                    $scope.popupOpen = true;
-//                    $ionicPopup.alert({
-//                        title: 'Invalid login',
-//                        content: 'Please enter valid username and password.'
-//                    }).then(function (rest) {
-//                        $scope.popupOpen = false;
-//                    });
-//                }
-//                $rootScope.error = 'Failed to login';
-//            });
         };
     }
 ]);

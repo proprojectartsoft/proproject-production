@@ -6,30 +6,27 @@ angular.module($APP.name).controller('RegisterCtrl', [
     '$stateParams',
     '$location',
     'FormInstanceService',
-    'CacheFactory',
-    function ($scope, $rootScope, $stateParams, RegisterService, $stateParams, $location, FormInstanceService, CacheFactory) {
-        
+    '$ionicSideMenuDelegate',
+    function ($scope, $rootScope, $stateParams, RegisterService, $stateParams, $location, FormInstanceService, $ionicSideMenuDelegate) {
         $rootScope.categoryId = $stateParams.categoryId;
-        RegisterService.get($stateParams.code).then(function (data) {
+        $ionicSideMenuDelegate.canDragContent(false);
+        $rootScope.slideHeader = false;
+        $rootScope.slideHeaderPrevious = 0;
+        $rootScope.slideHeaderHelper = false;
+        
+        RegisterService.get($stateParams.code, $stateParams.projectId).then(function (data) {
             $scope.listHelp = [];
             $scope.data = data;
+            $scope.parsedData = $scope.transform(data.records)
             $scope.num = $scope.data.records.values.length;
         });
-        var categoriesCache = CacheFactory.get('categoriesCache');
-        if (!categoriesCache || categoriesCache.length === 0) {
-            categoriesCache = CacheFactory('categoriesCache');
-            categoriesCache.setOptions({
-                storageMode: 'localStorage'
-            });
-        }
-
         $scope.dateToString = function (val) {
             var date = new Date(parseInt(val));
             return date.toString();
         };
 
         $scope.refresh = function () {
-            RegisterService.get($rootScope.formName).then(function (data) {
+            RegisterService.get($rootScope.formName, $stateParams.projectId).then(function (data) {
                 $scope.listHelp = [];
                 $scope.data = data;
                 $scope.num = $scope.data.records.values.length;
@@ -44,19 +41,32 @@ angular.module($APP.name).controller('RegisterCtrl', [
             }
             return '-';
         };
-        $scope.increment = function (x) {
-            console.log(x);
-        }
 
-        $scope.back = function () {
-            console.log($stateParams);
-        };
-        $scope.change = function (reg) {
-            $rootScope.formId = $scope.help('instance_id', reg);
+        $scope.change = function (id) {
+            $rootScope.formId = id;
+            console.log(id)
             FormInstanceService.get($rootScope.formId).then(function (data) {
                 $rootScope.rootForm = data;
                 $location.path("/app/view/" + $rootScope.projectId + "/register/" + $rootScope.formId);
             });
-        }
+        };
+
+        $scope.transform = function (data) {
+            var list = [];
+            var aux;
+            angular.forEach(data.values, function (register) {
+                aux = {};
+                angular.forEach(register, function (reg) {
+                    if (reg.key === 'Date completed') {
+                        aux['date_completed'] = reg.value;
+                    }
+                    else {
+                        aux[reg.key] = reg.value;
+                    }
+                });
+                list.push(aux);
+            });
+            return list;
+        };
     }
 ]);
