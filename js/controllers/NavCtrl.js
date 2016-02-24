@@ -7,7 +7,8 @@ angular.module($APP.name).controller('NavCtrl', [
     'CacheFactory',
     'SyncService',
     '$timeout',
-    function ($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, SyncService, $timeout) {
+    '$http',
+    function ($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, SyncService, $timeout, $http) {
         $scope.toggleLeft = function () {
             $ionicSideMenuDelegate.toggleLeft();
         };
@@ -129,7 +130,17 @@ angular.module($APP.name).controller('NavCtrl', [
 
         $scope.sync = function () {
             $timeout(function () {
-                SyncService.sync();
+                $http.get($APP.server + '/api/me', {withCredentials: true}).then(function (user) {
+                    SyncService.sync();
+                }, function errorCallback(response) {
+                    console.log(response.status)
+                    if (response.status === 403) {
+                        AuthService.autoLogFix().then(function (result) {
+                            SyncService.sync();
+                        });
+                    }
+                });
+
             });
         };
 

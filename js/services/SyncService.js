@@ -11,8 +11,8 @@ angular.module($APP.name).factory('SyncService', [
     function ($q, CacheFactory, $ionicPopup, FormInstanceService, FormDesignService, ProjectService, $rootScope, $http, $timeout) {
 
         return {
-            sync: function () {
-                var requests = [ProjectService.list_current(true), FormDesignService.list_mobile()];
+            sync: function () {                
+                var requests = [];
                 var upRequests = [];
                 var projectsCache = CacheFactory.get('projectsCache');
                 var designsCache = CacheFactory.get('designsCache');
@@ -39,7 +39,7 @@ angular.module($APP.name).factory('SyncService', [
                     }
                     forms = sync.keys();
                     pics = photos.keys();
-                    console.log('w', forms)
+                    console.log('w', forms);
                     if (forms) {
                         angular.forEach(forms, function (formKey) {
                             picX = false;
@@ -112,6 +112,7 @@ angular.module($APP.name).factory('SyncService', [
                     var doRequest;
                     if (currentVersion !== version.data) {
                         clear();
+                        requests = [ProjectService.list_current(true), FormDesignService.list_mobile()];
                         doRequest = requests.concat(upRequests);
                         console.log(doRequest);
                     }
