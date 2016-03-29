@@ -71,22 +71,19 @@ angular.module($APP.name).directive('edit', [
                         var aux = '';
                         if ($scope.data.field_values[0].value !== 0) {
                             aux = $scope.data.field_values[0].value.substr(0, 4);
-                            var fix = $scope.data.field_values[0].value.substr(3, 2) + '.' + $scope.data.field_values[0].value.substr(0, 2) + '.' + $scope.data.field_values[0].value.substr(6, 4);
-                            var fix2 = $scope.data.field_values[0].value.substr(3, 2) + ' ' + $scope.data.field_values[0].value.substr(0, 2) + ' ' + $scope.data.field_values[0].value.substr(6, 4);
+                            var array = [];                            
+                            array.push($scope.data.field_values[0].value.substr(3, 2));
+                            array.push($scope.data.field_values[0].value.substr(0, 2));
+                            array.push($scope.data.field_values[0].value.substr(6, 4));
                         }
-                        if ($scope.data.field_values[0].value !== '0' && $scope.data.field_values[0].value !== 0 && aux !== '1969') {
-                            fix = new Date(fix);
-                            //DON'T CHANGE                           
-                            if (fix == 'Invalid data') {
-                                fix = new Date(fix2);
-                            }
-                            $scope.data.field_values[0].value = fix;
+                        if ($scope.data.field_values[0].value !== '0' && $scope.data.field_values[0].value !== 0 && aux !== '1969' && $scope.data.field_values[0].value !== '') {
+                            var xfix = new Date(array[2], array[0], array[1]);
+                            $scope.data.field_values[0].value = xfix;
                         }
                         else {
-                            $scope.data.field_values[0].value = new Date(null);
+                            $scope.data.field_values[0].value = '';
                         }
                     }
-
                 }
 
                 if ($scope.data.type === "time") {
