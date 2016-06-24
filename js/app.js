@@ -1,6 +1,6 @@
 
 var $APP = $APP || {}; // App namespace
-  $APP.server = 'http://app.proproject.io/';
+$APP.server = 'http://app.preprod.proproject.io/';
 // $APP.server = 'http://artvm23.vmnet.ro';
 //$APP.server = 'http://proproject.artsoft-consult.ro';
 $APP.name = 'proproject';
@@ -12,14 +12,14 @@ $APP.shareUrl = 'https://app.proproject.co.uk/form/';
 
 angular.module($APP.name, [
     'ionic',
-    'ionic-datepicker',
-    'ionic-timepicker',
+    'ion-datetime-picker',
     'angularMoment',
     'angular-cache',
     'ngCordova'
 ]);
-angular.module($APP.name).run(function ($ionicPlatform, CacheFactory, $window) {
-        
+angular.module($APP.name).run(function ($ionicPlatform, CacheFactory, AuthService) {
+
+    AuthService.init();
     $ionicPlatform.ready(function () {
         if (window.cordova && window.cordova.plugins.Keyboard) {
             cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
@@ -29,6 +29,7 @@ angular.module($APP.name).run(function ($ionicPlatform, CacheFactory, $window) {
             StatusBar.styleDefault();
             StatusBar.overlaysWebView(false);
         }
+
         var sync = CacheFactory.get('sync');
         if (!sync) {
             sync = CacheFactory('sync');
@@ -36,7 +37,6 @@ angular.module($APP.name).run(function ($ionicPlatform, CacheFactory, $window) {
         sync.setOptions({
             storageMode: 'localStorage'
         });
-
     });
 
 });
@@ -66,16 +66,6 @@ angular.module($APP.name).config([
                         }
                     }
                 })
-                .state('app.about', {
-                    url: "/about",
-                    views: {
-                        'menuContent': {
-                            templateUrl: "view/about.html",
-                            controller: 'AboutCtrl'
-                        }
-                    }
-                })
-
                 .state('app.forms', {
                     url: "/category/:projectId/:categoryId",
                     params: {
@@ -104,17 +94,17 @@ angular.module($APP.name).config([
                         }
                     }
                 })
-                .state('app.edit', {
-                    url: "/edit/:projectId/:formId",
+                .state('app.completed', {
+                    url: "/view/:projectId/:categoryId",
                     params: {
                         projectId: null,
-                        formId: null
+                        categoryId: null
                     },
                     reload: true,
                     views: {
                         'menuContent': {
-                            templateUrl: "view/edit.html",
-                            controller: 'EditCtrl'
+                            templateUrl: "view/completed.html",
+                            controller: 'FormCompletedCtrl'
                         }
                     }
                 })
@@ -133,17 +123,56 @@ angular.module($APP.name).config([
                         }
                     }
                 })
-                .state('app.completed', {
-                    url: "/view/:projectId/:categoryId",
+                .state('app.myaccount', {
+                    url: "/myaccount",
+                    views: {
+                        'menuContent': {
+                            templateUrl: "view/myaccount.html",
+                            controller: 'MyAccountCtrl'
+                        }
+                    }
+                })
+                .state('app.shared', {
+                    url: "/shared",
+                    views: {
+                        'menuContent': {
+                            templateUrl: "view/shared.html",
+                            controller: 'SharedCtrl'
+                        }
+                    }
+                })
+                .state('app.sharedform', {
+                    url: "/sharedform/:id/:formId",
+                    params: {
+                        id: null,
+                        formId: null
+                    },
+                    views: {
+                        'menuContent': {
+                            templateUrl: "view/sharedform.html",
+                            controller: 'SharedFormCtrl'
+                        }
+                    }
+                })
+                .state('app.about', {
+                    url: "/about",
+                    views: {
+                        'menuContent': {
+                            templateUrl: "view/about.html"
+                        }
+                    }
+                })
+                .state('app.edit', {
+                    url: "/edit/:projectId/:formId",
                     params: {
                         projectId: null,
-                        categoryId: null
+                        formId: null
                     },
                     reload: true,
                     views: {
                         'menuContent': {
-                            templateUrl: "view/completed.html",
-                            controller: 'FormCompletedCtrl'
+                            templateUrl: "view/edit.html",
+                            controller: 'EditCtrl'
                         }
                     }
                 })
@@ -178,11 +207,7 @@ angular.module($APP.name).config([
                         }
                     }
                 })
-                .state('forgotpassword', {
-                    url: "/forgotpassword",
-                    templateUrl: "view/forgotpassword.html",
-                    controller: "ForgotPasswordCtrl"
-                })
+
                 .state('login', {
                     url: "/login",
                     templateUrl: "view/login.html",

@@ -10,13 +10,140 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
     '$ionicPopup',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
-    function ($scope, $state, FormInstanceService, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory) {
-        
+    '$ionicListDelegate',
+    'ShareService',
+    '$timeout',
+    'SecuredPopups',
+    function ($scope, $state, FormInstanceService, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, ShareService, $timeout, SecuredPopups) {
+
         $scope.$on('$ionicView.enter', function () {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
-        
+
+        $scope.filter = {};
+        $scope.importContact = function (id) {
+            $timeout(function () {
+                navigator.contacts.pickContact(function (contact) {
+                    if (contact.emails) {
+                        $scope.filter.email = contact.emails[0].value;
+                        $timeout(function () {
+                            var alertPopupA = SecuredPopups.show('alert', {
+                                template: '<input type="email" ng-model="filter.email">',
+                                title: 'Share form',
+                                subTitle: 'Please insert an email address',
+                                scope: $scope,
+                                buttons: [
+                                    {text: '<i class="ion-person-add"></i>',
+                                        onTap: function (e) {
+                                            $scope.importContact(id);
+                                        }
+                                    },
+                                    {text: 'Cancel',
+                                        onTap: function (e) {
+                                            $ionicListDelegate.closeOptionButtons();
+                                        }
+                                    },
+                                    {
+                                        text: 'Send',
+                                        type: 'button-positive',
+                                        onTap: function (e) {
+                                            if ($scope.filter.email) {
+                                                var alertPopupB = SecuredPopups.show('alert', {
+                                                    title: "Sending email",
+                                                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                                    content: "",
+                                                    buttons: []
+                                                });
+                                                ShareService.form.create(id, $scope.filter.email).then(function (response) {
+                                                    alertPopupB.close();
+                                                    if (response.message === "Form shared") {
+                                                        $scope.filter.email = "";
+                                                        var alertPopupC = SecuredPopups.show('alert', {
+                                                            title: 'Share',
+                                                            template: 'Email sent.'
+                                                        });
+                                                    } else {
+                                                        $scope.filter.email = "";
+                                                        var alertPopupC = SecuredPopups.show('alert', {
+                                                            title: 'Share',
+                                                            template: 'Form already shared to this user.'
+                                                        });
+                                                    }
+                                                });
+
+                                            } else {
+                                                var alertPopupC = SecuredPopups.show('alert', {
+                                                    title: 'Share',
+                                                    template: 'Please insert a valid value for email.'
+                                                });
+                                            }
+                                        }
+                                    }
+                                ]
+                            });
+                        });
+                    }
+                }, function (err) {
+                });
+            });
+        }
+        $scope.shareThis = function (predicate) {
+            var alertPopupA = SecuredPopups.show('alert', {
+                template: '<input type="email" ng-model="filter.email">',
+                title: 'Share form',
+                subTitle: 'Please insert an email address',
+                scope: $scope,
+                buttons: [
+                    {text: '<i class="ion-person-add"></i>',
+                        onTap: function (e) {
+                            $scope.importContact(predicate.id);
+                        }
+                    },
+                    {text: 'Cancel',
+                        onTap: function (e) {
+                            $ionicListDelegate.closeOptionButtons();
+                        }
+                    },
+                    {
+                        text: 'Send',
+                        type: 'button-positive',
+                        onTap: function (e) {
+                            if ($scope.filter.email) {
+                                var alertPopupB = SecuredPopups.show('alert', {
+                                    title: "Sending email",
+                                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                    content: "",
+                                    buttons: []
+                                });
+                                ShareService.form.create(predicate.id, $scope.filter.email).then(function (response) {
+                                    alertPopupB.close();
+                                    if (response.message === "Form shared") {
+                                        $scope.filter.email = "";
+                                        var alertPopupC = SecuredPopups.show('alert', {
+                                            title: 'Share',
+                                            template: 'Email sent.'
+                                        });
+                                    } else {
+                                        $scope.filter.email = "";
+                                        var alertPopupC = SecuredPopups.show('alert', {
+                                            title: 'Share',
+                                            template: 'Form already shared to this user.'
+                                        });
+                                    }
+                                });
+                            } else {
+                                var alertPopupC = SecuredPopups.show('alert', {
+                                    title: 'Share',
+                                    template: 'Please insert a valid value for email.'
+                                });
+                            }
+                        }
+                    }
+                ]
+            });
+        };
+
         $scope.isLoaded = false;
         $rootScope.slideHeader = false;
         $rootScope.slideHeaderPrevious = 0;
@@ -25,8 +152,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
         $scope.getFullCode = function (row) {
             if (row.revision !== '0') {
                 return row.code + '-' + row.form_number + '-Rev' + row.revision;
-            }
-            else {
+            } else {
                 return row.code + '-' + row.form_number;
             }
         };
@@ -94,8 +220,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                 if (data.length === 0) {
                     $scope.hasData = 'no data';
                 }
-            }
-            else {
+            } else {
                 $scope.hasData = 'no data';
             }
         });

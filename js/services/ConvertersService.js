@@ -9,8 +9,7 @@ angular.module($APP.name).service('ConvertersService', [
             if (field.type === 'text' || field.type === 'email' || field.type === 'textarea' || field.type === 'number') {
                 if (field.value) {
                     field_values = [{"id": 0, "name": field.value, "value": field.value, "position": field.position, "field_instance_id": 0}];
-                }
-                else {
+                } else {
                     field_values = [{"id": 0, "name": field.value, "value": '', "position": field.position, "field_instance_id": 0}];
                 }
             }
@@ -28,8 +27,7 @@ angular.module($APP.name).service('ConvertersService', [
                     }
                     x = dd + '-' + MM + '-' + yyyy;
                     field_values = [{"id": 0, "name": x, "value": x, "position": field.position, "field_instance_id": 0}];
-                }
-                else {
+                } else {
                     field_values = [{"id": 0, "name": '', "value": '', "position": field.position, "field_instance_id": 0}];
                 }
             }
@@ -46,16 +44,14 @@ angular.module($APP.name).service('ConvertersService', [
                     }
                     x = hh + ':' + mm;
                     field_values = [{"id": 0, "name": x, "value": x, "position": field.position, "field_instance_id": 0}];
-                }
-                else {
+                } else {
                     field_values = [{"id": 0, "name": null, "value": '', "position": field.position, "field_instance_id": 0}];
                 }
             }
             if (field.type === 'checkbox') {
                 if (!field.value) {
                     field_values = [{"id": 0, "name": false, "value": false, "position": field.position, "field_instance_id": 0}];
-                }
-                else {
+                } else {
                     field_values = [{"id": 0, "name": true, "value": true, "position": field.position, "field_instance_id": 0}];
                 }
             }
@@ -64,8 +60,7 @@ angular.module($APP.name).service('ConvertersService', [
                 angular.forEach(field.option_designs, function (option_value) {
                     if (option_value.value === field.value) {
                         field_helper = {"id": 0, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
-                    }
-                    else {
+                    } else {
                         field_helper = {"id": 0, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
                     }
                     field_values.push(field_helper);
@@ -76,8 +71,7 @@ angular.module($APP.name).service('ConvertersService', [
                 angular.forEach(field.option_designs, function (option_value) {
                     if (option_value.value === field.value) {
                         field_helper = {"id": 0, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
-                    }
-                    else {
+                    } else {
                         field_helper = {"id": 0, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
                     }
                     field_values.push(field_helper);
@@ -88,8 +82,7 @@ angular.module($APP.name).service('ConvertersService', [
                 angular.forEach(field.option_designs, function (option_value) {
                     if (option_value.value === true) {
                         field_helper = {"id": 0, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
-                    }
-                    else {
+                    } else {
                         field_helper = {"id": 0, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
                     }
                     field_values.push(field_helper);
@@ -98,8 +91,7 @@ angular.module($APP.name).service('ConvertersService', [
             if (field.type === 'signature') {
                 if (field.value) {
                     field_values = [{"id": 0, "name": 'Signature', "value": field.value, "position": field.position, "field_instance_id": 0}];
-                }
-                else {
+                } else {
                     field_values = [{"id": 0, "name": 'Signature', "value": '', "position": field.position, "field_instance_id": 0}];
                 }
             }
@@ -109,27 +101,35 @@ angular.module($APP.name).service('ConvertersService', [
         var instanceToInstanceValuesFormat = function (field) {
             var field_values, field_helper;
             if (field.type === 'date') {
+                console.log(field)
                 if (field.field_values[0].value && field.field_values[0].value != 'Invalid Date') {
-                    var dd = field.field_values[0].value.getDate();
-                    var MM = field.field_values[0].value.getMonth() + 1;
-                    var yyyy = field.field_values[0].value.getFullYear();
-                    if (dd < 10) {
-                        dd = '0' + dd;
+                    var x;
+                    if (typeof field.field_values[0].value === 'object') {
+                        var dd = field.field_values[0].value.getDate();
+                        var MM = field.field_values[0].value.getMonth() + 1;
+                        var yyyy = field.field_values[0].value.getFullYear();
+                        if (dd < 10) {
+                            dd = '0' + dd;
+                        }
+                        if (MM < 10) {
+                            MM = '0' + MM;
+                        }
+                        x = dd + '-' + MM + '-' + yyyy;
+                    } else {
+//                        console.log(field.field_values[0])
+                        x = field.field_values[0].name
                     }
-                    if (MM < 10) {
-                        MM = '0' + MM;
-                    }
-                    var x = dd + '-' + MM + '-' + yyyy;
+
                     field.field_values[0].name = x;
                     field.field_values[0].value = x;
-                }
-                else {
+                } else {
                     field.field_values[0].name = '';
                     field.field_values[0].value = '';
                 }
                 field_values = field.field_values;
             }
             if (field.type === 'time' && field.field_values[0].value != 'Invalid Date') {
+                console.log(field)
                 if (field.field_values[0].value) {
                     var hh = field.field_values[0].value.getHours();
                     var mm = field.field_values[0].value.getMinutes();
@@ -142,8 +142,7 @@ angular.module($APP.name).service('ConvertersService', [
                     var x = hh + ':' + mm;
                     field.field_values[0].name = x;
                     field.field_values[0].value = x;
-                }
-                else {
+                } else {
                     field.field_values[0].name = '';
                     field.field_values[0].value = '';
                 }
@@ -153,10 +152,14 @@ angular.module($APP.name).service('ConvertersService', [
             if (field.type === 'select') {
                 field_values = [];
                 angular.forEach(field.field_values, function (option_value) {
-                    if (option_value.name === field.value) {
-                        option_value.value = true;
-                    }
-                    else {
+                    console.log(option_value, field)
+                    if (field.value) {
+                        if (option_value.name === field.value.name) {
+                            option_value.value = true;
+                        } else {
+                            option_value.value = false;
+                        }
+                    } else {
                         option_value.value = false;
                     }
                     field_values.push(option_value);
@@ -168,8 +171,7 @@ angular.module($APP.name).service('ConvertersService', [
                 angular.forEach(field.field_values, function (option_value) {
                     if (option_value.name === field.value) {
                         option_value.value = true;
-                    }
-                    else {
+                    } else {
                         option_value.value = false;
                     }
                     field_values.push(option_value);
@@ -187,8 +189,7 @@ angular.module($APP.name).service('ConvertersService', [
                 angular.forEach(field.field_values, function (option_value) {
                     if (option_value.value === true) {
                         field_helper = {"id": option_value.id, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
-                    }
-                    else {
+                    } else {
                         field_helper = {"id": option_value.id, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
                     }
                     field_values.push(field_helper);
@@ -216,6 +217,10 @@ angular.module($APP.name).service('ConvertersService', [
                     "hash": null,
                     "pdf": design.pdf,
                     "project_id": parseInt($stateParams.projectId),
+                    "resource_field_id": design.resource_field_id,
+                    "staff_field_id": design.staff_field_id,
+                    "pay_item_field_id": design.pay_item_field_id,
+                    "scheduling_field_id": design.scheduling_field_id,
                     "customer_id": design.customer_id,
                     "category": design.category,
                     "category_id": design.category_id,
@@ -272,8 +277,7 @@ angular.module($APP.name).service('ConvertersService', [
                 if (data.type === "checkbox" && data.field_values && data.field_values.length > 0) {
                     if (data.field_values[0].value === 'true' || data.field_values[0].value === true) {
                         data.value = true;
-                    }
-                    else {
+                    } else {
                         data.value = false;
                     }
                 }
@@ -287,8 +291,7 @@ angular.module($APP.name).service('ConvertersService', [
                 if (data.type === "time" && data.field_values && data.field_values.length > 0) {
                     if (data.field_values[0].value !== '' && data.field_values[0].value !== 0 && data.field_values[0].value !== '0') {
                         data.value = new Date("01 " + data.field_values[0].value);
-                    }
-                    else {
+                    } else {
                         data.value = null;
                     }
                 }
@@ -296,8 +299,7 @@ angular.module($APP.name).service('ConvertersService', [
                     var fix = data.field_values[0].value.substr(3, 2) + '-' + data.field_values[0].value.substr(0, 2) + '-' + data.field_values[0].value.substr(6, 4);
                     if (data.field_values[0].value !== '0' && data.field_values[0].value !== 0 && data.field_values[0].value !== '') {
                         data.value = new Date(fix);
-                    }
-                    else {
+                    } else {
                         data.value = null;
                     }
                 }
@@ -334,6 +336,10 @@ angular.module($APP.name).service('ConvertersService', [
                     "customerName": data.customerName,
                     "revised": data.revised,
                     "codeWithRevision": data.codeWithRevision,
+                    "resource_field_id": data.resource_field_id,
+                    "scheduling_field_id": data.scheduling_field_id,
+                    "pay_item_field_id": data.pay_item_field_id,
+                    "staff_field_id": data.staff_field_id,
                     "field_group_instances": []
                 };
                 var requestGroupList = [], requestFieldList = [];
@@ -406,6 +412,10 @@ angular.module($APP.name).service('ConvertersService', [
                     "created_on": new Date().getTime(),
                     "updated_on": new Date().getTime(),
                     "formDesignId": data.formDesignId,
+                    "resource_field_id": data.resource_field_id,
+                    "scheduling_field_id": data.scheduling_field_id,
+                    "pay_item_field_id": data.pay_item_field_id,
+                    "staff_field_id": data.staff_field_id,
                     "field_group_instances": []
                 };
                 var requestGroupList = [], requestFieldList = [];
@@ -460,13 +470,14 @@ angular.module($APP.name).service('ConvertersService', [
             photoList: function (photos, id, project) {
                 var list = photos;
                 var requestList = [];
-                console.log(id)
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i].base64String !== "") {
-                        list[i].id = 0;
-                        list[i].formInstanceId = id;
-                        list[i].projectId = project;
-                        requestList.push(list[i]);
+                if (list) {
+                    for (var i = 0; i < list.length; i++) {
+                        if (list[i].base64String !== "") {
+                            list[i].id = 0;
+                            list[i].formInstanceId = id;
+                            list[i].projectId = project;
+                            requestList.push(list[i]);
+                        }
                     }
                 }
                 console.log(requestList)

@@ -33,18 +33,19 @@ angular.module($APP.name).directive('edit', [
 //                        $scope.modal.hash = $scope.hash;
 //                        FieldUpdateService.addProduct($scope.modalHelper);
                         $rootScope.$broadcast('updateScopeFromDirective');
-                        $scope.modal.show();                        
+                        $scope.modal.show();
                     });
                 };
-
+                
                 if ($scope.data.type === "select") {
                     if ($scope.data.field_values[0]) {
                         for (var i = 0; i < $scope.data.field_values.length; i++) {
                             if ($scope.data.field_values[i] && $scope.data.field_values[i].value === 'true') {
-                                $scope.data.value = $scope.data.field_values[i].name;
+                                $scope.data.value = $scope.data.field_values[i];
                             }
                         }
                     }
+                    console.log($scope.data.value)
                 }
                 if ($scope.data.type === "number" && $scope.data.field_values[0]) {
                     $scope.data.field_values[0].value = parseInt($scope.data.field_values[0].value);
@@ -84,12 +85,14 @@ angular.module($APP.name).directive('edit', [
                             $scope.data.field_values[0].value = '';
                         }
                     }
+
                 }
 
                 if ($scope.data.type === "time") {
                     if ($scope.data.field_values[0] && $scope.data.field_values[0].value !== '0' && $scope.data.field_values[0].value !== 0 && $scope.data.field_values[0].value !== "") {
 //                        $scope.data.field_values[0].value = new Date("01 " + $scope.data.field_values[0].value)
-                        $scope.data.field_values[0].value = new Date("Mon, 25 Dec 1995 " + $scope.data.field_values[0].value)
+                        $scope.data.field_values[0].value = new Date("Mon, 25 Dec 1995 " + $scope.data.field_values[0].value);
+                        console.log($scope.data.field_values[0].value)
                     }
                 }
                 if ($scope.data.type === "radio" && $scope.data.field_values.length > 0) {
