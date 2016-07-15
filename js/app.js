@@ -32,6 +32,7 @@ angular.module($APP.name).run(function ($ionicPlatform, CacheFactory, AuthServic
     });
 
 });
+
 angular.module($APP.name).config([
     '$stateProvider',
     'CacheFactoryProvider',

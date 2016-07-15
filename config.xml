@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <widget id="io.proproject.app" 
-        version="1.0.7" 
-		versionCode = "262"
+        version="1.0.8" 
+		versionCode = "263"
         xmlns="http://www.w3.org/ns/widgets" 
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:cdv="http://cordova.apache.org/ns/1.0" 
         xmlns:gap="http://phonegap.com/ns/1.0">
    
-    <name>proproject</name>
+       <name>proproject</name>
   
     <description></description>
     
@@ -42,6 +42,8 @@
     <preference name="SplashScreen" value="screen"/>
     <preference name="orientation" value="portrait"/>
     <preference name="fullscreen" value="false" />
+    <preference name="stay-in-webview" value="false"/>
+    <preference name="android-windowSoftInputMode" value="adjustResize"/>
   
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar"/>
