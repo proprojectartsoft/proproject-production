@@ -1,15 +1,5 @@
 <ion-side-menus cache-view="false" drag-content="false" class="custom-menu">
     <ion-side-menu-content>
-<!--        <ion-header-bar class="bar-calm">
-            <div class="buttons">
-                <button class="button icon button-clear ion-navicon"
-                        ng-click="toggleLeft($event)"></button>
-            </div>
-            <h1 class="title">{{navTitle}}</h1>
-        </ion-header-bar>-->
-
-
-
         <ion-header-bar class="bar bar-header bar-calm">
             <button class="button button-icon icon ion-navicon" ng-click="toggleLeft($event)"></button>
             <div class="h1 title">{{navTitle}}</div>
@@ -54,7 +44,7 @@
                 <img src="img/new/about.png">
                 <span>About</span>
             </ion-item>
-            <ion-item nav-clear menu-close ng-click="goAt()"
+            <ion-item nav-clear menu-close href="" onclick="navigator.app.loadUrl('http://app.preprod.proproject.io/', {openExternal: true});"
                       class="dark-bg dark-border menu-item project-web-link">
                 <img src="img/new/onweb.png">
                 <span>ProProject on web</span>
@@ -63,4 +53,3 @@
     </ion-side-menu>
 
 </ion-side-menus>
-
