@@ -113,7 +113,7 @@ angular.module($APP.name).factory('SyncService', [
                                 if (result.length) {
                                     auxTitle = result[0]
                                 }
-                                $rootScope.navTitle =auxTitle.name;
+                                $rootScope.navTitle = auxTitle.name;
                                 $rootScope.projectId = auxTitle.id;
                                 localStorage.setObject('ppnavTitle', auxTitle.name);
                                 localStorage.setObject('ppprojectId', auxTitle.id);
@@ -228,6 +228,9 @@ angular.module($APP.name).factory('SyncService', [
                 });
                 doRequest = doRequest.concat(upRequests);
             }
+
+            localStorage.removeItem('ppfsync')
+            localStorage.removeItem('pppsync')
 
 
             asyncCall(doRequest,
