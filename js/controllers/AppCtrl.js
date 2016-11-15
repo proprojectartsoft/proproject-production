@@ -23,7 +23,7 @@ angular.module($APP.name).controller('AppCtrl', [
                 storageMode: 'localStorage'
             });
         }
-        $scope.user = settings.get("user");
+        $scope.user = localStorage.getObject("ppuser");;
 
         var projectsCache = CacheFactory('projectsCache');
         projectsCache.setOptions({
@@ -88,6 +88,3 @@ angular.module($APP.name).controller('AppCtrl', [
 
     }
 ]);
-
-
-

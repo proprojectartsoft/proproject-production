@@ -347,6 +347,7 @@ angular.module($APP.name).factory('SyncService', [
                     if (navigator.onLine) {
                         getme()
                             .success(function(data) {
+                                localStorage.setObject("ppuser", data)
                                 AuthService.version().then(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
                                         $state.go('app.categories', {
@@ -418,6 +419,7 @@ angular.module($APP.name).factory('SyncService', [
                         DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true)
                         getme()
                             .success(function(data) {
+                                localStorage.setObject("ppuser", data)
                                 down();
                             })
                             .error(function(data, status) {

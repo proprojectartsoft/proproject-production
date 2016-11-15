@@ -207,7 +207,7 @@ angular.module($APP.name).service('ConvertersService', [
                         storageMode: 'localStorage'
                     });
                 }
-                $rootScope.thisUser = settings.get("user");
+                $rootScope.thisUser = localStorage.getObject("ppuser");
                 var requestForm = {
                     "id": 0,
                     "active": true,
@@ -314,7 +314,7 @@ angular.module($APP.name).service('ConvertersService', [
                         storageMode: 'localStorage'
                     });
                 }
-                $rootScope.thisUser = settings.get("user");
+                $rootScope.thisUser = localStorage.getObject("ppuser");;
                 var requestForm = {
                     "id": data.id,
                     "active": true,
@@ -395,7 +395,7 @@ angular.module($APP.name).service('ConvertersService', [
                         storageMode: 'localStorage'
                     });
                 }
-                $rootScope.thisUser = settings.get("user");
+                $rootScope.thisUser = localStorage.getObject("ppuser");;
                 var requestForm = {
                     "id": 0,
                     "active": true,
