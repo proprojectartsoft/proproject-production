@@ -133,7 +133,7 @@ angular.module($APP.name).factory('AuthService', [
               storageMode: 'localStorage'
             });
           }
-          localStorage.set("ppuser", $rootScope.currentUser)
+          localStorage.setObject("ppuser", $rootScope.currentUser)
 
           return payload.data.data;
         }, function errorCallback(response) {
