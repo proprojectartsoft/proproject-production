@@ -29,11 +29,12 @@ angular.module($APP.name).controller('LoginCtrl', [
         password: $scope.user.password
       }).then(function (response) {
         if (response) {
-          localStorage.setObject('ppreload', {'username': $scope.user.username, 'password': $scope.user.password});
           if ($scope.user.rememberMe) {
             localStorage.setObject('ppremember', {'username': $scope.user.username, 'password': $scope.user.password});
           }
           $timeout(function () {
+            SyncService.sync_close();
+            localStorage.setObject('ppreload', {'username': $scope.user.username, 'password': $scope.user.password});
             SyncService.sync_button();
           });
         }
