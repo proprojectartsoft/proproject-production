@@ -79,11 +79,11 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 //     title: 'Share',
                                                 //     template: 'Please insert a valid value for email.'
                                                 // });
-                                                // e.preventDefault();
+                                                e.preventDefault();
                                                 var alertPopupErr = $ionicPopup.alert({
                                                     title: "Share",
                                                     template: "",
-                                                    content: "Please enter a valid e-mail address.",
+                                                    content: "Please insert a valid e-mail address.",
                                                     buttons: [{
                                                         text: 'OK',
                                                         type: 'button-positive',
@@ -148,11 +148,11 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     }
                                 });
                             } else {
-                                // e.preventDefault();
+                                e.preventDefault();
                                 var alertPopupErr = $ionicPopup.alert({
                                     title: "Share",
                                     template: "",
-                                    content: "Please enter a valid e-mail address.",
+                                    content: "Please insert a valid e-mail address!",
                                     buttons: [{
                                         text: 'OK',
                                         type: 'button-positive',

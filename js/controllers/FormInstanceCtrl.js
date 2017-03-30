@@ -726,7 +726,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                                 });
 
                                             } else {
-                                                // e.preventDefault();
+                                                e.preventDefault();
                                                 var alertPopupErr = $ionicPopup.alert({
                                                     title: "Share",
                                                     template: "",
@@ -792,11 +792,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     }
                                 });
                             } else {
-                                // e.preventDefault();
+                                e.preventDefault();
                                 var alertPopupErr = $ionicPopup.alert({
                                     title: "Share",
                                     template: "",
-                                    content: "Please enter a valid e-mail address.",
+                                    content: "Please enter a valid e-mail address!",
                                     buttons: [{
                                         text: 'OK',
                                         type: 'button-positive',
