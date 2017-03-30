@@ -727,17 +727,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
 
                                             } else {
                                                 e.preventDefault();
-                                                var alertPopupErr = SecuredPopups.alert({
-                                                    title: "Share",
-                                                    template: "",
-                                                    content: "Please enter a valid e-mail address.",
-                                                    buttons: [{
-                                                        text: 'OK',
-                                                        type: 'button-positive',
-                                                        onTap: function(e) {
-                                                            alertPopupErr.close();
-                                                        }
-                                                    }]
+                                                var alertPopupC = SecuredPopups.show('alert', {
+                                                    title: 'Share',
+                                                    template: 'Please enter a valid e-mail address.'
                                                 });
                                             }
                                         }
@@ -793,17 +785,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 });
                             } else {
                                 e.preventDefault();
-                                var alertPopupErr = SecuredPopups.alert({
-                                    title: "Share",
-                                    template: "",
-                                    content: "Please enter a valid e-mail address.",
-                                    buttons: [{
-                                        text: 'OK',
-                                        type: 'button-positive',
-                                        onTap: function(e) {
-                                            alertPopupErr.close();
-                                        }
-                                    }]
+                                var alertPopupC = SecuredPopups.show('alert', {
+                                    title: 'Share',
+                                    template: 'Please enter a valid e-mail address.'
                                 });
                             }
                         }

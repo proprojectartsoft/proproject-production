@@ -74,24 +74,24 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 });
 
                                             } else {
-
-                                                // var alertPopupC = SecuredPopups.show('alert', {
-                                                //     title: 'Share',
-                                                //     template: 'Please insert a valid value for email.'
-                                                // });
                                                 e.preventDefault();
-                                                var alertPopupErr = $ionicPopup.alert({
-                                                    title: "Share",
-                                                    template: "",
-                                                    content: "Please enter a valid e-mail address.",
-                                                    buttons: [{
-                                                        text: 'OK',
-                                                        type: 'button-positive',
-                                                        onTap: function(e) {
-                                                            alertPopupErr.close();
-                                                        }
-                                                    }]
+                                                var alertPopupC = SecuredPopups.show('alert', {
+                                                    title: 'Share',
+                                                    template: 'Please enter a valid e-mail address.'
                                                 });
+
+                                                // var alertPopupErr = $ionicPopup.alert({
+                                                //     title: "Share",
+                                                //     template: "",
+                                                //     content: "Please enter a valid e-mail address.",
+                                                //     buttons: [{
+                                                //         text: 'OK',
+                                                //         type: 'button-positive',
+                                                //         onTap: function(e) {
+                                                //             alertPopupErr.close();
+                                                //         }
+                                                //     }]
+                                                // });
                                             }
                                         }
                                     }
@@ -104,7 +104,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
         }
         $scope.shareThis = function(predicate) {
             var alertPopupA = SecuredPopups.show('alert', {
-                template: '<input type="email" ng-model="filter.email">',
+                template: '<input type = "email" ng-model="filter.email">',
                 title: 'Share form',
                 subTitle: 'Please enter a valid e-mail address.',
                 scope: $scope,
@@ -149,17 +149,9 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                 });
                             } else {
                                 e.preventDefault();
-                                var alertPopupErr = $ionicPopup.alert({
-                                    title: "Share",
-                                    template: "",
-                                    content: "Please enter a valid e-mail address.",
-                                    buttons: [{
-                                        text: 'OK',
-                                        type: 'button-positive',
-                                        onTap: function(e) {
-                                            alertPopupErr.close();
-                                        }
-                                    }]
+                                var alertPopupC = SecuredPopups.show('alert', {
+                                    title: 'Share',
+                                    template: 'Please enter a valid e-mail address.'
                                 });
                             }
                         }
