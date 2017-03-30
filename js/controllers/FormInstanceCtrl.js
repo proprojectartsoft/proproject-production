@@ -683,7 +683,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     if (contact.emails) {
                         $scope.filter.email = contact.emails[0].value;
                         $timeout(function() {
-                            var alertPopupA = $ionicPopup.show('alert', { //SecuredPopups
+                            var alertPopupA = SecuredPopups.show('alert', {
                                 template: '<input type="email" ng-model="filter.email">',
                                 title: 'Share form',
                                 subTitle: 'Please enter a valid e-mail address.',
@@ -727,7 +727,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
 
                                             } else {
                                                 e.preventDefault();
-                                                var alertPopupErr = $ionicPopup.alert({
+                                                var alertPopupErr = SecuredPopups.alert({
                                                     title: "Share",
                                                     template: "",
                                                     content: "Please enter a valid e-mail address.",
@@ -750,7 +750,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             });
         }
         $scope.shareThis = function(predicate) {
-            var alertPopupA = $ionicPopup.show('alert', { //SecuredPopups
+            var alertPopupA = SecuredPopups.show('alert', {
                 template: '<input type="email" ng-model="filter.email">',
                 title: 'Share form',
                 subTitle: 'Please enter a valid e-mail address.',
@@ -793,14 +793,14 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 });
                             } else {
                                 e.preventDefault();
-                                var alertPopupErr = $ionicPopup.alert({
+                                var alertPopupErr = SecuredPopups.alert({
                                     title: "Share",
                                     template: "",
-                                    content: "Please enter a valid e-mail address!",
+                                    content: "Please enter a valid e-mail address.",
                                     buttons: [{
                                         text: 'OK',
                                         type: 'button-positive',
-                                        onTap: function(ev) {
+                                        onTap: function(e) {
                                             alertPopupErr.close();
                                         }
                                     }]

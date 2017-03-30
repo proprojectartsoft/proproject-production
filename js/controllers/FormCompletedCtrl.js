@@ -28,7 +28,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                     if (contact.emails) {
                         $scope.filter.email = contact.emails[0].value;
                         $timeout(function() {
-                            var alertPopupA = $ionicPopup.show('alert', { //SecuredPopups
+                            var alertPopupA = SecuredPopups.show('alert', {
                                 template: '<input type="email" ng-model="filter.email">',
                                 title: 'Share form',
                                 subTitle: 'Please enter a valid e-mail address.',
@@ -83,7 +83,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 var alertPopupErr = $ionicPopup.alert({
                                                     title: "Share",
                                                     template: "",
-                                                    content: "Please insert a valid e-mail address.",
+                                                    content: "Please enter a valid e-mail address.",
                                                     buttons: [{
                                                         text: 'OK',
                                                         type: 'button-positive',
@@ -103,7 +103,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
             });
         }
         $scope.shareThis = function(predicate) {
-            var alertPopupA = $ionicPopup.show('alert', { //SecuredPopups
+            var alertPopupA = SecuredPopups.show('alert', {
                 template: '<input type="email" ng-model="filter.email">',
                 title: 'Share form',
                 subTitle: 'Please enter a valid e-mail address.',
@@ -152,7 +152,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                 var alertPopupErr = $ionicPopup.alert({
                                     title: "Share",
                                     template: "",
-                                    content: "Please insert a valid e-mail address!",
+                                    content: "Please enter a valid e-mail address.",
                                     buttons: [{
                                         text: 'OK',
                                         type: 'button-positive',
