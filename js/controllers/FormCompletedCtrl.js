@@ -74,11 +74,24 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 });
 
                                             } else {
-                                                var alertPopupC = SecuredPopups.show('alert', {
-                                                    title: 'Share',
-                                                    template: 'Please insert a valid value for email.'
-                                                });
+
+                                                // var alertPopupC = SecuredPopups.show('alert', {
+                                                //     title: 'Share',
+                                                //     template: 'Please insert a valid value for email.'
+                                                // });
                                                 e.preventDefault();
+                                                var alertPopup = $ionicPopup.alert({
+                                                    title: "Share",
+                                                    template: "",
+                                                    content: "Please enter a valid e-mail address.",
+                                                    buttons: [{
+                                                        text: 'OK',
+                                                        type: 'button-positive',
+                                                        onTap: function(e) {
+                                                            alertPopup.close();
+                                                        }
+                                                    }]
+                                                });
                                             }
                                         }
                                     }
@@ -135,11 +148,19 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     }
                                 });
                             } else {
-                                var alertPopupC = SecuredPopups.show('alert', {
-                                    title: 'Share',
-                                    template: 'Please insert a valid value for email.'
-                                });
                                 e.preventDefault();
+                                var alertPopup = $ionicPopup.alert({
+                                    title: "Share",
+                                    template: "",
+                                    content: "Please enter a valid e-mail address.",
+                                    buttons: [{
+                                        text: 'OK',
+                                        type: 'button-positive',
+                                        onTap: function(e) {
+                                            alertPopup.close();
+                                        }
+                                    }]
+                                });
                             }
                         }
                     }
