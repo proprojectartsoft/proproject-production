@@ -74,7 +74,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 });
 
                                             } else {
-                                                e.preventDefault();
+                                                // e.preventDefault();
                                                 var alertPopupC = SecuredPopups.show('alert', {
                                                     title: 'Share',
                                                     template: 'Please enter a valid e-mail address.'
@@ -148,7 +148,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     }
                                 });
                             } else {
-                                e.preventDefault();
+                                // e.preventDefault();
                                 var alertPopupC = SecuredPopups.show('alert', {
                                     title: 'Share',
                                     template: 'Please enter a valid e-mail address.'
