@@ -800,7 +800,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     buttons: [{
                                         text: 'OK',
                                         type: 'button-positive',
-                                        onTap: function(e) {
+                                        onTap: function(ev) {
                                             alertPopupErr.close();
                                         }
                                     }]
