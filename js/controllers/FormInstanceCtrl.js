@@ -683,7 +683,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     if (contact.emails) {
                         $scope.filter.email = contact.emails[0].value;
                         $timeout(function() {
-                            var alertPopupA = SecuredPopups.show('alert', {
+                            var alertPopupA = $ionicPopup.show('alert', { //SecuredPopups
                                 template: '<input type="email" ng-model="filter.email">',
                                 title: 'Share form',
                                 subTitle: 'Please enter a valid e-mail address.',
@@ -750,7 +750,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             });
         }
         $scope.shareThis = function(predicate) {
-            var alertPopupA = SecuredPopups.show('alert', {
+            var alertPopupA = $ionicPopup.show('alert', { //SecuredPopups
                 template: '<input type="email" ng-model="filter.email">',
                 title: 'Share form',
                 subTitle: 'Please enter a valid e-mail address.',
