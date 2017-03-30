@@ -726,11 +726,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                                 });
 
                                             } else {
-                                                e.preventDefault();
                                                 var alertPopupC = SecuredPopups.show('alert', {
                                                     title: 'Share',
                                                     template: 'Please insert a valid value for email.'
                                                 });
+                                                e.preventDefault();
                                             }
                                         }
                                     }
@@ -784,11 +784,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     }
                                 });
                             } else {
-                                e.preventDefault();
                                 var alertPopupC = SecuredPopups.show('alert', {
                                     title: 'Share',
                                     template: 'Please insert a valid value for email.'
                                 });
+                                e.preventDefault();
                             }
                         }
                     }
