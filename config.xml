@@ -7,29 +7,29 @@
 
     <author email="anthony.hanna@proproject.io" href="http://proproject.io/"></author>
 
-    <!-- <gap:config-file platform="ios" parent="NSPhotoLibraryUsageDescription" overwrite="true">
-        <string>We are using the Photo Library for something..</string>
-    </gap:config-file> -->
+    <gap:config-file platform="ios" parent="NSPhotoLibraryUsageDescription" overwrite="true">
+        <string>We are using the Photo Library</string>
+    </gap:config-file>
 
     <gap:config-file platform="android" parent="/manifest/application">
         <application android:debuggable="true"/>
     </gap:config-file>
 
-    <content src="index.html"/>
-
     <gap:config-file platform="android" parent="/manifest">
         <application android:theme="@android:style/Theme.NoTitleBar"></application>
     </gap:config-file>
 
-    <gap:plugin name="org.apache.cordova.splashscreen"/>
+    <content src="index.html"/>
+
+    <gap:plugin name="cordova-plugin-splashscreen" source="npm"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0"/>
     <plugin name="cordova-plugin-imagepicker" source="npm"/>
-    <gap:plugin name="org.apache.cordova.camera" source="npm"/>
+    <plugin name="cordova-plugin-file" source="npm"/>
+    <plugin name="cordova-plugin-file-transfer" source="npm"/>
     <gap:plugin name="cordova-plugin-contacts" source="npm"/>
+    <gap:plugin name="cordova-plugin-network-information" source="npm"/>
     <plugin name="cordova-sqlite-storage" spec="~0.8.5"/>
-    <plugin name="cordova-plugin-file" spec="~4.3.0"/>
-    <plugin name="cordova-plugin-file-transfer"/>
-    <plugin name="cordova-plugin-network-information"/>
+    <gap:plugin name="cordova-plugin-camera" source="npm"/>
 
     <access origin="*"/>
     <allow-navigation href="*"/>
@@ -41,7 +41,6 @@
     <preference name="DisallowOverscroll" value="true"/>
     <preference name="android-minSdkVersion" value="16"/>
     <preference name="BackupWebStorage" value="none"/>
-    <preference name="SplashScreen" value="screen"/>
     <preference name="orientation" value="portrait"/>
     <preference name="fullscreen" value="false"/>
     <preference name="stay-in-webview" value="false"/>
