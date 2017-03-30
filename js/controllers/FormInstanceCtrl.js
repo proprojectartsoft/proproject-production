@@ -726,8 +726,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                                 });
 
                                             } else {
-                                                e.preventDefault();
-                                                var alertPopup = $ionicPopup.alert({
+                                                // e.preventDefault();
+                                                var alertPopupErr = $ionicPopup.alert({
                                                     title: "Share",
                                                     template: "",
                                                     content: "Please enter a valid e-mail address.",
@@ -735,7 +735,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                                         text: 'OK',
                                                         type: 'button-positive',
                                                         onTap: function(e) {
-                                                            alertPopup.close();
+                                                            alertPopupErr.close();
                                                         }
                                                     }]
                                                 });
@@ -792,8 +792,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     }
                                 });
                             } else {
-                                e.preventDefault();
-                                var alertPopup = $ionicPopup.alert({
+                                // e.preventDefault();
+                                var alertPopupErr = $ionicPopup.alert({
                                     title: "Share",
                                     template: "",
                                     content: "Please enter a valid e-mail address.",
@@ -801,7 +801,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                         text: 'OK',
                                         type: 'button-positive',
                                         onTap: function(e) {
-                                            alertPopup.close();
+                                            alertPopupErr.close();
                                         }
                                     }]
                                 });

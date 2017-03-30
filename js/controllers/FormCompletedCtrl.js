@@ -79,8 +79,8 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 //     title: 'Share',
                                                 //     template: 'Please insert a valid value for email.'
                                                 // });
-                                                e.preventDefault();
-                                                var alertPopup = $ionicPopup.alert({
+                                                // e.preventDefault();
+                                                var alertPopupErr = $ionicPopup.alert({
                                                     title: "Share",
                                                     template: "",
                                                     content: "Please enter a valid e-mail address.",
@@ -88,7 +88,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                         text: 'OK',
                                                         type: 'button-positive',
                                                         onTap: function(e) {
-                                                            alertPopup.close();
+                                                            alertPopupErr.close();
                                                         }
                                                     }]
                                                 });
@@ -148,8 +148,8 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     }
                                 });
                             } else {
-                                e.preventDefault();
-                                var alertPopup = $ionicPopup.alert({
+                                // e.preventDefault();
+                                var alertPopupErr = $ionicPopup.alert({
                                     title: "Share",
                                     template: "",
                                     content: "Please enter a valid e-mail address.",
@@ -157,7 +157,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                         text: 'OK',
                                         type: 'button-positive',
                                         onTap: function(e) {
-                                            alertPopup.close();
+                                            alertPopupErr.close();
                                         }
                                     }]
                                 });
