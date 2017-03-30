@@ -14,40 +14,41 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
     'ShareService',
     '$timeout',
     'SecuredPopups',
-    function ($scope, $state, FormInstanceService, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, ShareService, $timeout, SecuredPopups) {
+    function($scope, $state, FormInstanceService, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, ShareService, $timeout, SecuredPopups) {
 
-        $scope.$on('$ionicView.enter', function () {
+        $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
         $scope.filter = {};
-        $scope.importContact = function (id) {
-            $timeout(function () {
-                navigator.contacts.pickContact(function (contact) {
+        $scope.importContact = function(id) {
+            $timeout(function() {
+                navigator.contacts.pickContact(function(contact) {
                     if (contact.emails) {
                         $scope.filter.email = contact.emails[0].value;
-                        $timeout(function () {
+                        $timeout(function() {
                             var alertPopupA = SecuredPopups.show('alert', {
                                 template: '<input type="email" ng-model="filter.email">',
                                 title: 'Share form',
-                                subTitle: 'Please insert an email address',
+                                subTitle: 'Please enter a valid e-mail address.',
                                 scope: $scope,
-                                buttons: [
-                                    {text: '<i class="ion-person-add"></i>',
-                                        onTap: function (e) {
+                                buttons: [{
+                                        text: '<i class="ion-person-add"></i>',
+                                        onTap: function(e) {
                                             $scope.importContact(id);
                                         }
                                     },
-                                    {text: 'Cancel',
-                                        onTap: function (e) {
+                                    {
+                                        text: 'Cancel',
+                                        onTap: function(e) {
                                             $ionicListDelegate.closeOptionButtons();
                                         }
                                     },
                                     {
                                         text: 'Send',
                                         type: 'button-positive',
-                                        onTap: function (e) {
+                                        onTap: function(e) {
                                             if ($scope.filter.email) {
                                                 var alertPopupB = SecuredPopups.show('alert', {
                                                     title: "Sending email",
@@ -55,7 +56,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                     content: "",
                                                     buttons: []
                                                 });
-                                                ShareService.form.create(id, $scope.filter.email).then(function (response) {
+                                                ShareService.form.create(id, $scope.filter.email).then(function(response) {
                                                     alertPopupB.close();
                                                     if (response.message === "Form shared") {
                                                         $scope.filter.email = "";
@@ -73,6 +74,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                                 });
 
                                             } else {
+                                                e.preventDefault();
                                                 var alertPopupC = SecuredPopups.show('alert', {
                                                     title: 'Share',
                                                     template: 'Please insert a valid value for email.'
@@ -84,31 +86,31 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                             });
                         });
                     }
-                }, function (err) {
-                });
+                }, function(err) {});
             });
         }
-        $scope.shareThis = function (predicate) {
+        $scope.shareThis = function(predicate) {
             var alertPopupA = SecuredPopups.show('alert', {
                 template: '<input type="email" ng-model="filter.email">',
                 title: 'Share form',
-                subTitle: 'Please insert an email address',
+                subTitle: 'Please enter a valid e-mail address.',
                 scope: $scope,
-                buttons: [
-                    {text: '<i class="ion-person-add"></i>',
-                        onTap: function (e) {
+                buttons: [{
+                        text: '<i class="ion-person-add"></i>',
+                        onTap: function(e) {
                             $scope.importContact(predicate.id);
                         }
                     },
-                    {text: 'Cancel',
-                        onTap: function (e) {
+                    {
+                        text: 'Cancel',
+                        onTap: function(e) {
                             $ionicListDelegate.closeOptionButtons();
                         }
                     },
                     {
                         text: 'Send',
                         type: 'button-positive',
-                        onTap: function (e) {
+                        onTap: function(e) {
                             if ($scope.filter.email) {
                                 var alertPopupB = SecuredPopups.show('alert', {
                                     title: "Sending email",
@@ -116,7 +118,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     content: "",
                                     buttons: []
                                 });
-                                ShareService.form.create(predicate.id, $scope.filter.email).then(function (response) {
+                                ShareService.form.create(predicate.id, $scope.filter.email).then(function(response) {
                                     alertPopupB.close();
                                     if (response.message === "Form shared") {
                                         $scope.filter.email = "";
@@ -133,6 +135,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     }
                                 });
                             } else {
+                                e.preventDefault();
                                 var alertPopupC = SecuredPopups.show('alert', {
                                     title: 'Share',
                                     template: 'Please insert a valid value for email.'
@@ -149,7 +152,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
-        $scope.getFullCode = function (row) {
+        $scope.getFullCode = function(row) {
             if (row.revision !== '0') {
                 return row.code + '-' + row.form_number + '-Rev' + row.revision;
             } else {
@@ -157,13 +160,13 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
             }
         };
 
-        AuthService.me().then(function (user) {
+        AuthService.me().then(function(user) {
             if (user && user.active === false) {
                 var alertPopup = $ionicPopup.alert({
                     title: 'Error',
                     template: 'Your account has been de-activated. Contact your supervisor for further information.',
                 });
-                alertPopup.then(function (res) {
+                alertPopup.then(function(res) {
                     var projectsCache = CacheFactory.get('projectsCache');
                     if (projectsCache) {
                         projectsCache.destroy();
@@ -199,9 +202,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                     if (settingsCache) {
                         settingsCache.destroy();
                     }
-                    AuthService.logout().success(function () {
-                    }, function () {
-                    });
+                    AuthService.logout().success(function() {}, function() {});
                     $state.go('login');
                 });
 
@@ -213,7 +214,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
         $rootScope.categoryId = $stateParams.categoryId;
 
-        FormInstanceService.list($stateParams.projectId, $stateParams.categoryId).then(function (data) {
+        FormInstanceService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
             $scope.isLoaded = true;
             $scope.formInstances = data;
             if (data) {
@@ -225,8 +226,8 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
             }
         });
 
-        $scope.refresh = function () {
-            FormInstanceService.list($stateParams.projectId, $stateParams.categoryId).then(function (data) {
+        $scope.refresh = function() {
+            FormInstanceService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
                 $scope.formInstances = data;
                 if (data) {
                     if (data.length === 0) {
@@ -237,18 +238,17 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
             });
         };
 
-        $scope.change = function (id) {
+        $scope.change = function(id) {
             $rootScope.formId = id;
-            FormInstanceService.get($rootScope.formId).then(function (data) {
+            FormInstanceService.get($rootScope.formId).then(function(data) {
                 $rootScope.rootForm = data;
                 $location.path("/app/view/" + $rootScope.projectId + "/form/" + id);
             });
         };
 
-        $scope.test = function () {
-        };
+        $scope.test = function() {};
 
-        $scope.form = function (completedFormId) {
+        $scope.form = function(completedFormId) {
             $state.go("app.form");
         };
     }
