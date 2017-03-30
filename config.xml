@@ -7,9 +7,9 @@
 
     <author email="anthony.hanna@proproject.io" href="http://proproject.io/"></author>
 
-    <gap:config-file platform="ios" parent="NSPhotoLibraryUsageDescription" overwrite="true">
+    <!-- <gap:config-file platform="ios" parent="NSPhotoLibraryUsageDescription" overwrite="true">
         <string>We are using the Photo Library for something..</string>
-    </gap:config-file>
+    </gap:config-file> -->
 
     <gap:config-file platform="android" parent="/manifest/application">
         <application android:debuggable="true"/>
@@ -21,7 +21,7 @@
         <application android:theme="@android:style/Theme.NoTitleBar"></application>
     </gap:config-file>
 
-    <!-- <gap:plugin name="org.apache.cordova.splashscreen"/> -->
+    <gap:plugin name="org.apache.cordova.splashscreen"/>
     <gap:plugin name="cordova-plugin-whitelist" source="npm" version="1.0.0"/>
     <plugin name="cordova-plugin-imagepicker" source="npm"/>
     <gap:plugin name="org.apache.cordova.camera" source="npm"/>
