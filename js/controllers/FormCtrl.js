@@ -1084,9 +1084,8 @@ angular.module($APP.name).controller('FormCtrl', [
             var y = elm.offsetTop;
             var node = elm;
             while (node.offsetParent && node.offsetParent !== document.body) {
-                node = node.offsetParent;
-                y += node.offsetTop;
-                console.log(node.offsetTop + " => " + y);
+                // node = node.offsetParent;
+                // y += node.offsetTop;
             }
             return y;
         }
@@ -1152,8 +1151,6 @@ angular.module($APP.name).controller('FormCtrl', [
             if ($scope.isGroupShown(group)) {
                 $scope.shownGroup = null;
             } else {
-                $scope.shownGroup = null;
-                $timeout(function() {}, 50);
                 $scope.shownGroup = group;
             }
             $scope.goto(id);
