@@ -1151,18 +1151,18 @@ angular.module($APP.name).controller('FormCtrl', [
             if ($scope.isGroupShown(group)) {
                 $scope.shownGroup = null;
             } else {
+                $scope.shownGroup = null;
                 $timeout(function() {
-                    $scope.shownGroup = null;
+                    $scope.shownGroup = group;
                 }, 10);
-                console.log("null: " + $scope.shownGroup);
-                $scope.shownGroup = group;
-                console.log("not null" + $scope.shownGroup);
             }
             $scope.goto(id);
         };
 
         $scope.isGroupShown = function(group) {
-            return $scope.shownGroup === group;
+            $timeout(function() {
+                return $scope.shownGroup === group;
+            }, 15);
         };
         $scope.$on('updateScopeFromDirective', function() {
             FormUpdateService.addProduct($scope.formData, $scope.modalHelper);
