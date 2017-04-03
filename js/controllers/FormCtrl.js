@@ -1148,14 +1148,16 @@ angular.module($APP.name).controller('FormCtrl', [
         };
 
         $scope.toggleGroup = function(group, id) {
-            // if ($scope.isGroupShown(group)) {
-            //     $scope.shownGroup = null;
-            // } else {
-            //     $scope.shownGroup = group;
-            // }
-
-            $scope.shownGroup = null;
-            $scope.shownGroup = group;
+            if ($scope.isGroupShown(group)) {
+                $scope.shownGroup = null;
+            } else {
+                $timeout(function() {
+                    $scope.shownGroup = null;
+                }, 10);
+                console.log("null: " + $scope.shownGroup);
+                $scope.shownGroup = group;
+                console.log("not null" + $scope.shownGroup);
+            }
             $scope.goto(id);
         };
 
