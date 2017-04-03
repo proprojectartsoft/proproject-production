@@ -1084,8 +1084,8 @@ angular.module($APP.name).controller('FormCtrl', [
             var y = elm.offsetTop;
             var node = elm;
             while (node.offsetParent && node.offsetParent !== document.body) {
-                // node = node.offsetParent;
-                // y += node.offsetTop;
+                node = node.offsetParent;
+                y += node.offsetTop;
             }
             return y;
         }
