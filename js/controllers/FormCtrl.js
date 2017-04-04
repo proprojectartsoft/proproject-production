@@ -1152,17 +1152,15 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.shownGroup = null;
             } else {
                 $scope.shownGroup = null;
-                $timeout(function() { // we need little delay
+                $timeout(function() {
                     $scope.shownGroup = group;
-                    console.log("Set shownGroup");
-                }, 50);
+                }, 30);
 
             }
             $scope.goto(id);
         };
 
         $scope.isGroupShown = function(group) {
-            console.log("Get shownGroup");
             return $scope.shownGroup === group;
         };
         $scope.$on('updateScopeFromDirective', function() {
