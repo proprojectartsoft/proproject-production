@@ -860,25 +860,27 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             } else {
                                 e.preventDefault();
                                 var notSharePopup = $ionicPopup.show({
-                                        title: 'Share',
-                                        template: 'Please enter a valid e-mail address.',
-                                        scope: $scope,
-                                        buttons: [{
-                                            text: 'OK',
-                                            onTap: function(e) {
-                                                notSharePopup.close();
-                                            }
-                                        }]
-                                    }).then(function(res) {
-                                        console.log("R: " + res);
-                                        notSharePopup.close();
-                                    }),
-                                    then(function(err) {
-                                        log("Err " + err);
-                                    }), .then(function(res) {
-                                        console.log("R: " + res);
-                                        notSharePopup.close();
-                                    })
+                                    title: 'Share',
+                                    template: 'Please enter a valid e-mail address.',
+                                    scope: $scope,
+                                    buttons: [{
+                                        text: 'OK',
+                                        onTap: function(e) {
+                                            notSharePopup.close();
+                                        }
+                                    }]
+                                });
+                                notSharePopup.then(function(res) {
+                                    console.log("R: " + res);
+                                    notSharePopup.close();
+                                });
+                                notSharePopup.then(function(err) {
+                                    log("Err " + err);
+                                });
+                                notSharePopup.then(function(res) {
+                                    console.log("R: " + res);
+                                    notSharePopup.close();
+                                })
                             }
                         }
                     }
