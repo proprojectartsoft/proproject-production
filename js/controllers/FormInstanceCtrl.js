@@ -860,16 +860,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             } else {
                                 console.log("form instance 2");
                                 e.preventDefault();
-                                var alertPopupC = $ionicPopup.alert({
+                                var alertPopupC = SecuredPopups.show('alert', {
                                     title: 'Share',
-                                    template: 'Please enter a valid e-mail address!!',
-                                    buttons: [{
-                                        text: 'OK',
-                                        type: 'button-positive',
-                                        onTap: function(e) {
-                                            alertPopupC.close();
-                                        }
-                                    }]
+                                    template: 'Please enter a valid e-mail address.'
                                 });
                             }
                         }
