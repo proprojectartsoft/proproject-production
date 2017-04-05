@@ -863,7 +863,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     title: 'Share',
                                     template: 'Please enter a valid e-mail address.',
                                     buttons: [{
-                                        // text: 'Cancel',
+                                        text: 'Cancel'
                                         // type: 'button-positive',
                                         // onTap: function(e) {
                                         //     notSharePopup.close();
