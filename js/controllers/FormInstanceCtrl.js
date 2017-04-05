@@ -838,7 +838,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                         text: 'OK',
                                         type: 'button-positive',
                                         onTap: function(e) {
-                                            alertPopup.close();
+                                            notSharePopup.close();
                                         }
                                     }]
                                 });
