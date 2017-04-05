@@ -818,6 +818,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 template: 'Form already shared to this user.'
                             });
                         }
+                    }, function(err){
+                      console.log("error sharing form!");
+                      console.log(err);
                     });
                 }
             });
