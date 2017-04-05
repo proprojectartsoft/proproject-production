@@ -862,13 +862,12 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var notSharePopup = $ionicPopup.alert({
                                     title: 'Share',
                                     template: 'Please enter a valid e-mail address.',
+                                    scope: $scope,
                                     buttons: [{
-                                        text: 'Cancel'
-                                        // type: 'button-positive',
-                                        // onTap: function(e) {
-                                        //     notSharePopup.close();
-                                        // }
-                                        // $ionicListDelegate.closeOptionButtons();
+                                        text: 'OK',
+                                        onTap: function(e) {
+                                            $ionicListDelegate.closeOptionButtons();
+                                        }
                                     }]
                                 });
                             }
