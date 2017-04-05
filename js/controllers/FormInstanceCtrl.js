@@ -762,7 +762,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                 buttons: [{
                     text: '<i class="ion-person-add"></i>',
                     onTap: function(e) {
-                        $scope.importContact(id);
+                        $scope.importContact(predicate.id);
                     }
                 }, {
                     text: 'Cancel',
@@ -801,9 +801,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         buttons: []
                     });
                     // alertPopup1.then(function(res) {});
-                    ShareService.form.create(id, res).then(function(response) {
-                        console.log("shared!!");
-                        console.log(response);
+                    ShareService.form.create(predicate.id, res).then(function(response) {
                         alertPopup1.close();
                         if (response.message === "Form shared") {
                             res = "";
@@ -818,9 +816,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 template: 'Form already shared to this user.'
                             });
                         }
-                    }, function(err){
-                      console.log("error sharing form!");
-                      console.log(err);
                     });
                 }
             });
