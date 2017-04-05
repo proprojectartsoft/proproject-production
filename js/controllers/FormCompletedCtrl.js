@@ -74,7 +74,6 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                         content: "",
                                         buttons: []
                                     });
-                                    // alertPopup1.then(function(res) {});
                                     ShareService.form.create(id, res).then(function(response) {
                                         alertPopup1.close();
                                         if (response.message === "Form shared") {
@@ -93,61 +92,6 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                                     });
                                 }
                             });
-                            // var alertPopupA = SecuredPopups.show('alert', {
-                            //     template: '<input type="email" ng-model="filter.email">',
-                            //     title: 'Share form',
-                            //     subTitle: 'Please enter a valid e-mail address.',
-                            //     scope: $scope,
-                            //     buttons: [{
-                            //             text: '<i class="ion-person-add"></i>',
-                            //             onTap: function(e) {
-                            //                 $scope.importContact(id);
-                            //             }
-                            //         },
-                            //         {
-                            //             text: 'Cancel',
-                            //             onTap: function(e) {
-                            //                 $ionicListDelegate.closeOptionButtons();
-                            //             }
-                            //         },
-                            //         {
-                            //             text: 'Send',
-                            //             type: 'button-positive',
-                            //             onTap: function(e) {
-                            //                 if ($scope.filter.email) {
-                            //                     var alertPopupB = SecuredPopups.show('alert', {
-                            //                         title: "Sending email",
-                            //                         template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                            //                         content: "",
-                            //                         buttons: []
-                            //                     });
-                            //                     ShareService.form.create(id, $scope.filter.email).then(function(response) {
-                            //                         alertPopupB.close();
-                            //                         if (response.message === "Form shared") {
-                            //                             $scope.filter.email = "";
-                            //                             var alertPopupC = SecuredPopups.show('alert', {
-                            //                                 title: 'Share',
-                            //                                 template: 'Email sent.'
-                            //                             });
-                            //                         } else {
-                            //                             $scope.filter.email = "";
-                            //                             var alertPopupC = SecuredPopups.show('alert', {
-                            //                                 title: 'Share',
-                            //                                 template: 'Form already shared to this user.'
-                            //                             });
-                            //                         }
-                            //                     });
-                            //
-                            //                 } else {
-                            //                     var alertPopupC = SecuredPopups.show('alert', {
-                            //                         title: 'Share',
-                            //                         template: 'Please enter a valid e-mail address.'
-                            //                     });
-                            //                 }
-                            //             }
-                            //         }
-                            //     ]
-                            // });
                         });
                     }
                 }, function(err) {});
@@ -200,7 +144,6 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                         content: "",
                         buttons: []
                     });
-                    // alertPopup1.then(function(res) {});
                     ShareService.form.create(predicate.id, res).then(function(response) {
                         alertPopup1.close();
                         if (response.message === "Form shared") {

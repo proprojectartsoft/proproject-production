@@ -729,12 +729,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                         content: "",
                                         buttons: []
                                     });
-                                    alertPopup1.then(function(res) {});
                                     ShareService.form.create(id, res).then(function(response) {
                                         alertPopup1.close();
                                         if (response.message === "Form shared") {
                                             res = "";
-                                            var alertPopupC = SecuredPopups.show('alert', { //TODO: ionicpopup
+                                            var alertPopupC = SecuredPopups.show('alert', {
                                                 title: 'Share',
                                                 template: 'Email sent.'
                                             });
@@ -800,7 +799,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         content: "",
                         buttons: []
                     });
-                    // alertPopup1.then(function(res) {});
                     ShareService.form.create(predicate.id, res).then(function(response) {
                         alertPopup1.close();
                         if (response.message === "Form shared") {
