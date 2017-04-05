@@ -859,17 +859,21 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
 
                             } else {
                                 e.preventDefault();
-                                var notSharePopup = $ionicPopup.alert({
+                                var notSharePopup = $ionicPopup.show({
                                     title: 'Share',
                                     template: 'Please enter a valid e-mail address.',
                                     scope: $scope,
                                     buttons: [{
                                         text: 'OK',
                                         onTap: function(e) {
-                                            $ionicListDelegate.closeOptionButtons();
+                                            notSharePopup.close();
                                         }
                                     }]
                                 });
+                                notSharePopup.then(function(res) {
+                                  console.log(res);
+                                  notSharePopup.close();
+                                })
                             }
                         }
                     }
