@@ -862,7 +862,14 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 e.preventDefault();
                                 var alertPopupC = SecuredPopups.show('alert', {
                                     title: 'Share',
-                                    template: 'Please enter a valid e-mail address.'
+                                    template: 'Please enter a valid e-mail address.',
+                                    buttons: [{
+                                        text: 'OK',
+                                        type: 'button-positive',
+                                        onTap: function(e) {
+                                            alertPopupC.close();
+                                        }
+                                    }]
                                 });
                             }
                         }
