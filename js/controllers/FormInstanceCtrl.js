@@ -735,7 +735,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                                 e.preventDefault();
                                                 var alertPopupC = $ionicPopup.alert({
                                                     title: 'Share',
-                                                    template: 'Please enter a valid e-mail address!!',
+                                                    template: 'Please enter a valid e-mail address.',
                                                     buttons: [{
                                                         text: 'OK',
                                                         type: 'button-positive',
@@ -858,17 +858,17 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 });
 
                             } else {
-                                console.log("form instance 2");
                                 e.preventDefault();
-                                var alertPopupC = SecuredPopups.show('alert', {
+                                var notSharePopup = $ionicPopup.alert({
                                     title: 'Share',
                                     template: 'Please enter a valid e-mail address.',
                                     buttons: [{
-                                        text: 'OK',
-                                        type: 'button-positive',
-                                        onTap: function(e) {
-                                            alertPopupC.close();
-                                        }
+                                        // text: 'Cancel',
+                                        // type: 'button-positive',
+                                        // onTap: function(e) {
+                                        //     notSharePopup.close();
+                                        // }
+                                        // $ionicListDelegate.closeOptionButtons();
                                     }]
                                 });
                             }
