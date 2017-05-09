@@ -1539,7 +1539,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             });
                         });
                     } else {
-                        // if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
                         $rootScope.formId = data.id;
                         if (!data.message && data.status !== 0) {
                             FormInstanceService.get($rootScope.formId).then(function(data) {
@@ -1552,48 +1551,36 @@ angular.module($APP.name).controller('FormCtrl', [
                                 });
                             });
                         }
-                        // }
-                        // else {
-                        //     if (data && data.status === 400) {
-                        //         $timeout(function() {
-                        //             formUp.close();
-                        //             $timeout(function() {
-                        //                 var alertPopup2 = $ionicPopup.alert({
-                        //                     title: 'Submision failed',
-                        //                     template: 'Incorrect data, try again'
-                        //                 });
-                        //                 alertPopup2.then(function(res) {});
-                        //             });
-                        //         });
-                        //     } else {
-                        //         $timeout(function() {
-                        //             formUp.close();
-                        //             $timeout(function() {
-                        //                 var alertPopup = $ionicPopup.alert({
-                        //                     title: 'Submision failed.',
-                        //                     template: 'You are offline. Submit forms by syncing next time you are online'
-                        //                 }).then(function(res) {
-                        //                     $state.go('app.forms', {
-                        //                         'projectId': $rootScope.projectId,
-                        //                         'categoryId': $scope.formData.category_id
-                        //                     });
-                        //                 });
-                        //             });
-                        //         });
-                        //     }
-                        // }
                     }
-                }).error(function(err) {
+                }).error(function(data) {
                     formUp.close();
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Submision failed.',
-                        template: 'You are offline. Submit forms by syncing next time you are online'
-                    }).then(function(res) {
-                        $state.go('app.forms', {
-                            'projectId': $rootScope.projectId,
-                            'categoryId': $scope.formData.category_id
+                    if (data && data.status === 400) {
+                        $timeout(function() {
+                            formUp.close();
+                            $timeout(function() {
+                                var alertPopup2 = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'Incorrect data, try again'
+                                });
+                                alertPopup2.then(function(res) {});
+                            });
                         });
-                    });
+                    } else {
+                        $timeout(function() {
+                            formUp.close();
+                            $timeout(function() {
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'You are offline. Submit forms by syncing next time you are online'
+                                }).then(function(res) {
+                                    $state.go('app.forms', {
+                                        'projectId': $rootScope.projectId,
+                                        'categoryId': $scope.formData.category_id
+                                    });
+                                });
+                            });
+                        });
+                    }
                 });
         }
     }
