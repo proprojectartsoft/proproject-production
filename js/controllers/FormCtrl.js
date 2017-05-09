@@ -1524,7 +1524,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 buttons: []
             });
             FormInstanceService.create(datax, img)
-                .then(function successCallback(data) {
+                .success(function(data) {
                     if (data && data.data && data.data.message) {
                         $timeout(function() {
                             formUp.close();
@@ -1583,7 +1583,7 @@ angular.module($APP.name).controller('FormCtrl', [
 
                         }
                     }
-                }, function(err) {
+                }).error(function(err) {
                     var alertPopup = $ionicPopup.alert({
                         title: 'Submision failed.',
                         template: 'You are offline. Submit forms by syncing next time you are online'
