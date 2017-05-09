@@ -76,8 +76,8 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     position: relative;
     text-align: left;
-    max-height: 60px;
-    transition: max-height 0.15s ease-out;
+    max-height: 40px;/*60*/
+    /*TODO:transition: max-height 0.15s ease-out;*/
 }
 
 .showPrjIsOn .prj-bar-txt {
@@ -145,15 +145,17 @@
 }
 
 .invShowPrj {
-    visibility: hidden;
     opacity: 0;
-    transition: visibility 0s, opacity 0.5s linear;
+    /*TODO:
+      visibility: hidden;
+      transition: visibility 0s, opacity 0.5s linear;*/
 }
 
 .showPrj {
     visibility: visible;
     opacity: 1;
     margin-top: 20px;
+    transition: visibility 0s, opacity 0.15s linear;/*TODO:not*/
 }
 
 .prj-item-default {

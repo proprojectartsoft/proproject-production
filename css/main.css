@@ -464,3 +464,8 @@ label.item.img-description {
     color: #000;
     background-color: #fff;
 }
+
+.category-content {
+    width: 100%;
+    margin-bottom: 30px;
+}
