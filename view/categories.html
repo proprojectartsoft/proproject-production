@@ -19,7 +19,6 @@
             </div>
         </header>
         <div class="category-content-abs">
-          <div class="category-content">
             <div class="category-row" ng-repeat="category in categories" ng-class="{'setInvisible':showProjects}">
                 <a class="col pp-icon" href="#/app/category/{{projectId}}/{{category.id}}" ui-sref="app.forms({projectId:projectId, categoryId:category.id})">
                     <div class="center-category">
@@ -28,8 +27,6 @@
                     </div>
                 </a>
             </div>
-          </div>
-
         </div>
     </ion-content>
 </ion-view>

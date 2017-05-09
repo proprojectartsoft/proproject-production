@@ -40,13 +40,15 @@
     border-bottom: 1px #fff solid;
 }
 
-.category-row:nth-child(5),
-.category-row:nth-child(6) {
+.category-row:last-child {
+    padding-bottom: 8%;
+}
+
+.category-row:nth-last-child(-n+2) {
     border-bottom: 0px #fff solid;
 }
 
-.category-row:nth-child(1):after,
-.category-row:nth-child(3):after {
+.category-row:nth-child(1):after, .category-row:nth-child(3):after {
     content: "";
     width: 40px;
     height: 40px;
@@ -76,7 +78,8 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
     position: relative;
     text-align: left;
-    max-height: 40px;/*60*/
+    max-height: 40px;
+    /*60*/
     /*TODO:transition: max-height 0.15s ease-out;*/
 }
 
@@ -155,7 +158,8 @@
     visibility: visible;
     opacity: 1;
     margin-top: 20px;
-    transition: visibility 0s, opacity 0.15s linear;/*TODO:not*/
+    transition: visibility 0s, opacity 0.15s linear;
+    /*TODO:not*/
 }
 
 .prj-item-default {
@@ -218,7 +222,8 @@
     border: none;
     background-color: #fff;
 }
-.insert-sig{
+
+.insert-sig {
     width: 100%;
     background: #FFFFFF;
     color: #a9a9a9;
@@ -226,27 +231,34 @@
     display: block;
     padding: 15px;
 }
-.center-category{
+
+.center-category {
     display: table-cell;
     vertical-align: middle;
 }
+
+
 /*=============================================================*/
-.menu-item.activated{
+
+.menu-item.activated {
     background-color: #31475A;
     border-color: #121d21;
 }
 
-.tab-item img{
+.tab-item img {
     height: 30px;
     margin-top: 6px;
 }
-.content{
+
+.content {
     padding-bottom: 80px;
 }
-.all-field-header{
+
+.all-field-header {
     position: relative;
 }
-.all-field-header button{
+
+.all-field-header button {
     border: none;
     position: absolute;
     height: 30px;
@@ -255,25 +267,28 @@
     top: 8px;
 }
 
-.grey-bgd{
-    background-color:#E8E8E8;
+.grey-bgd {
+    background-color: #E8E8E8;
 }
-.form-new-fields .item{
-    background-color:#E8E8E8;
+
+.form-new-fields .item {
+    background-color: #E8E8E8;
     border-bottom-color: #DDD;
 }
-.form-new-fields .item.item-total{
-    background-color:#fff;
+
+.form-new-fields .item.item-total {
+    background-color: #fff;
     position: relative;
     border-bottom-color: #ddd;
 }
 
-.form-new-fields .item.item-total div{
+.form-new-fields .item.item-total div {
     position: absolute;
-    right:17px;
-    top:17px;
+    right: 17px;
+    top: 17px;
 }
-.btn-add{
+
+.btn-add {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -282,43 +297,46 @@
     border-radius: 100%;
     border: none;
     background-color: #1EBCF3;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.25), 0 3px 12px rgba(0,0,0,0.22);
-    z-index:99;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25), 0 3px 12px rgba(0, 0, 0, 0.22);
+    z-index: 99;
 }
-.btn-add-resource{
+
+.btn-add-resource {
     position: fixed;
     bottom: 90px;
     right: 10px;
     border: none;
     background-color: #1EBCF3;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.25), 0 3px 12px rgba(0,0,0,0.22);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25), 0 3px 12px rgba(0, 0, 0, 0.22);
     height: 40px;
     padding: 0px 10px;
     color: #fff;
     font-size: 18px;
-    z-index:99;
+    z-index: 99;
 }
-.btn-add-subtask{
+
+.btn-add-subtask {
     position: fixed;
     bottom: 140px;
     right: 10px;
     border: none;
     background-color: #1EBCF3;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.25), 0 3px 12px rgba(0,0,0,0.22);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25), 0 3px 12px rgba(0, 0, 0, 0.22);
     height: 40px;
     padding: 0px 10px;
     color: #fff;
     font-size: 18px;
-    z-index:99;
+    z-index: 99;
 }
-.btn-add i{
+
+.btn-add i {
     font-size: 55px;
     color: #fff;
     margin-top: -7px;
     display: inline-block;
 }
 
-input[type='text'], input[type='number'],input[type='email']{
+input[type='text'], input[type='number'], input[type='email'] {
     padding: 15px !important;
     height: auto !important;
     border-top-left-radius: 0px;
@@ -326,36 +344,38 @@ input[type='text'], input[type='number'],input[type='email']{
 }
 
 .ion-datetime-picker .time .item-input input {
-    height:100% !important;
+    height: 100% !important;
     padding: 0 5px !important;
 }
 
-.popup-head{
+.popup-head {
     background-color: #1EBDF4;
 }
-.popup-buttons .button.button-positive{
+
+.popup-buttons .button.button-positive {
     border-color: #1EBDF4;
     background-color: #1EBDF4;
 }
 
-.bar-header{
-    .bar .buttons{
+.bar-header {
+    .bar .buttons {
         display: inline-block;
         width: 30px;
     }
 }
-.popup-buttons .ion-person-add{
+
+.popup-buttons .ion-person-add {
     color: #444;
     font-size: 22px;
 }
-form{
+
+form {
     position: relative;
 }
-input[type='email']:focus + strong::before{
 
-}
+input[type='email']:focus+strong::before {}
 
-input[type='text']:focus + strong::after, input[type='email']:focus + strong::after,input[type='password']:focus + strong::after, input[type='number']:focus + strong::after, textarea:focus:focus + strong::after, select:focus + strong::after{
+input[type='text']:focus+strong::after, input[type='email']:focus+strong::after, input[type='password']:focus+strong::after, input[type='number']:focus+strong::after, textarea:focus:focus+strong::after, select:focus+strong::after {
     content: '';
     width: calc(100% - 20px);
     height: 1px;
@@ -365,29 +385,36 @@ input[type='text']:focus + strong::after, input[type='email']:focus + strong::af
     margin-left: 10px;
 }
 
+
 /*input[type='text']:focus ,input[type='email']:focus,input[type='number']:focus, textarea:focus, select:focus{
     border-left: 3px solid #ef473a;
     padding-left: 12px !important;
 }*/
+
 .popover-backdrop.active {
     background-color: rgba(0, 0, 0, 0.5);
 }
-.customPopup{
+
+.customPopup {
     top: 60px !important;
     left: 15px !important;
     width: calc(100% - 30px);
     height: calc(100% - 40px);
 }
-.customPopup .bar-subheader{
-    padding:0px;
+
+.customPopup .bar-subheader {
+    padding: 0px;
 }
-.customPopup .item-input-wrapper input:focus{
+
+.customPopup .item-input-wrapper input:focus {
     border-left: none;
-    padding-left:15px !important;
+    padding-left: 15px !important;
 }
-.customPopup .list{
+
+.customPopup .list {
     top: 44px;
 }
-.customPopup .popover-arrow{
+
+.customPopup .popover-arrow {
     display: none;
 }
