@@ -1,17 +1,17 @@
-<ion-view title="Forms" class="all-view-bg"  cache-view="false" ng-class="{'bar-hide': slideHeader, 'bar-helper':slideHeaderHelper}">
+<ion-view title="Forms" class="all-view-bg" cache-view="false" ng-class="{'bar-hide': slideHeader, 'bar-helper':slideHeaderHelper}">
     <ion-header-bar class="bar-subheader item-button-left test-item" ui-sref="app.categories({projectId:projectId})">
         <span class="back-arrow ion-ios-arrow-left"></span>
         <span class="header-prj-text">{{categoryName}}</span>
     </ion-header-bar>
     <ion-content scroll-watch class="scrollx">
+        <ion-refresher on-refresh="refresh()" pulling-text="Pull to refresh..." refreshing-text="Refreshing!" spinner="android"></ion-refresher>
         <div class="content all-header-tabs">
-            <ion-refresher on-refresh="refresh()" pulling-text="Pull to refresh..." refreshing-text="Refreshing!" spinner="android"></ion-refresher>
-            <div  class="list">
+            <div class="list">
                 <div class="all-spinner" ng-if="hasData && isLoaded" style="margin-top:50%">
                     <span class="all-ion-text" style="font-size: 15vw; color:#4A6780">{{hasData}}</span>
                 </div>
                 <div class="list all-itemlist">
-                    <label style ="display: none" class="item item-input">
+                    <label style="display: none" class="item item-input">
                         <i class="icon ion-search placeholder-icon"></i>
                         <input type="text" placeholder="Search">
                     </label>

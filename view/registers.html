@@ -4,26 +4,24 @@
         <span class="header-prj-text">{{categoryName}}  - Registers</span>
     </ion-header-bar>
     <ion-content scroll-watch>
-        <div class="content" >
-            <div  class="list all-header-tabs">                       
+        <ion-refresher on-refresh="refresh()" pulling-text="Pull to refresh..." refreshing-text="Refreshing!" spinner="android"></ion-refresher>
+        <div class="content">
+            <div class="list all-header-tabs">
                 <div class="all-spinner" ng-if="hasData && isLoaded" style="margin-top:50%">
                     <span class="all-ion-text" style="font-size: 15vw; color:#4A6780">{{hasData}}</span>
                 </div>
-                <ion-refresher on-refresh="refresh()" pulling-text="Pull to refresh..." refreshing-text="Refreshing!" spinner="android"></ion-refresher>
                 <div class="list all-itemlist">
                     <label style="display: none" class="item item-input">
                         <i class="icon ion-search placeholder-icon"></i>
                         <input type="text" placeholder="Search">
                     </label>
-
-                    <a class="item" ng-repeat="reg in registers| orderBy:'-created_on'"
-                       ui-sref="app.register({projectId:projectId, code:reg.code, categoryId: categoryId})">
+                    <a class="item" ng-repeat="reg in registers| orderBy:'-created_on'" ui-sref="app.register({projectId:projectId, code:reg.code, categoryId: categoryId})">
                         <div class="form-name ng-binding">{{::reg.name}}</div>
                         <div class="form-code ng-binding">{{::reg.code}}</div>
                         <div class="badge badge-calm ng-binding">{{::reg.completed}}</div>
                     </a>
                 </div>
-            </div> 
+            </div>
         </div>
     </ion-content>
     <div class="tabs tabs-calm tabs-icon-only">
@@ -35,6 +33,6 @@
         </a>
         <a class="tab-item">
             <img src="img/new/registers.svg">
-        </a>                 
+        </a>
     </div>
 </ion-view>

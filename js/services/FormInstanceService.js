@@ -36,7 +36,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                     }
                     return payload.data;
                 }).error(function(payload) {
-                    // if (payload.status === 0 || payload.status === 502 || payload.status === 403) {
                     var requestList = [];
                     var ppfsync = localStorage.getObject('ppfsync');
                     var pppsync = localStorage.getObject('pppsync');
@@ -71,7 +70,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                         });
                         localStorage.setObject('pppsync', aux_p);
                     }
-                    // }
                     return payload;
                 });
             },
