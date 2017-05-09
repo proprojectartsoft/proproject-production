@@ -313,6 +313,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
             }
         };
+
         $scope.goStateDown = function(state, substate, data) {
             console.log(state, substate)
             if (state === 'scheduling') {
@@ -397,6 +398,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
+
         $scope.goState = function(state, substate) {
             switch (state) {
                 case 'resource':
@@ -475,7 +477,6 @@ angular.module($APP.name).controller('FormCtrl', [
             }
         }
 
-
         $ionicPopover.fromTemplateUrl('view/search.html', {
             scope: $scope
         }).then(function(popover) {
@@ -539,7 +540,6 @@ angular.module($APP.name).controller('FormCtrl', [
             }
         }
 
-
         $scope.openPopover = function($event, predicate, test) {
             $scope.filter.popup_predicate = predicate;
             if (test !== 'pi') {
@@ -559,6 +559,7 @@ angular.module($APP.name).controller('FormCtrl', [
             }
             $scope.popover.show($event);
         };
+
         $scope.selectPopover = function(item) {
             if (!$scope.filter.pi) {
                 $scope.filter.popup_predicate.name = item.name;
@@ -632,10 +633,10 @@ angular.module($APP.name).controller('FormCtrl', [
             }
             $scope.popover.hide();
         }
+
         $scope.closePopover = function() {
             $scope.popover.hide();
         }
-
 
         var designsCache = CacheFactory.get('designsCache');
         if (!designsCache || designsCache.length === 0) {
@@ -644,6 +645,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 storageMode: 'localStorage'
             });
         }
+
         $scope.filter = {
             state: 'form',
             actionBtn: false,
@@ -652,34 +654,35 @@ angular.module($APP.name).controller('FormCtrl', [
             popup_list: [],
             searchText: ''
         };
-        $scope.items = [{
-                display: 'Hello'
-            },
-            {
-                display: 'Baha'
-            },
-            {
-                display: 'Ala'
-            },
-            {
-                display: 'Siwar'
-            },
-            {
-                display: 'Monira'
-            },
-            {
-                display: 'Samir'
-            },
-            {
-                display: 'Spange Bob'
-            },
-            {
-                display: 'Deneris Targariant'
-            },
-            {
-                display: 'Ned Stark'
-            }
-        ];
+        // $scope.items = [{
+        //         display: 'Hello'
+        //     },
+        //     {
+        //         display: 'Baha'
+        //     },
+        //     {
+        //         display: 'Ala'
+        //     },
+        //     {
+        //         display: 'Siwar'
+        //     },
+        //     {
+        //         display: 'Monira'
+        //     },
+        //     {
+        //         display: 'Samir'
+        //     },
+        //     {
+        //         display: 'Spange Bob'
+        //     },
+        //     {
+        //         display: 'Deneris Targariant'
+        //     },
+        //     {
+        //         display: 'Ned Stark'
+        //     }
+        // ];
+
         $scope.onSelect = function(item) {
             console.log('item', item);
             if ($scope.filter.state === 'resource') {
@@ -698,126 +701,126 @@ angular.module($APP.name).controller('FormCtrl', [
                 });
             }
         };
-        $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [], function(rs) {
-            $scope.formData = JSON.parse(rs.rows.item(0).data)
-            $scope.titleShow = $scope.formData.name;
-            $scope.shownGroup = $scope.formData.field_group_designs[0];
-            $scope.filter.vat = $rootScope.custSett.vat;
-            $scope.filter.currency = $rootScope.custSett.currency;
-            $scope.filter.margin = $rootScope.custSett.margin;
-            $scope.filter.start = $rootScope.custSett.start;
-            $scope.filter.break = $rootScope.custSett.break;
-            $scope.filter.finish = $rootScope.custSett.finish;
-            if ($scope.formData.resource_field_design) {
-                $scope.resourceField = {
-                    'id': 0,
-                    'customer_id': $scope.formData.customer_id,
-                    'register_nominated': $scope.formData.resource_field_design.register_nominated,
-                    'date_option': $scope.formData.resource_field_design.date_option,
-                    'financial_option': $scope.formData.resource_field_design.financial_option,
-                    'total_cost': 0,
-                    'resources': [{
+
+        $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
+            function(rs) {
+                $scope.formData = JSON.parse(rs.rows.item(0).data)
+                $scope.titleShow = $scope.formData.name;
+                $scope.shownGroup = $scope.formData.field_group_designs[0];
+                $scope.filter.vat = $rootScope.custSett.vat;
+                $scope.filter.currency = $rootScope.custSett.currency;
+                $scope.filter.margin = $rootScope.custSett.margin;
+                $scope.filter.start = $rootScope.custSett.start;
+                $scope.filter.break = $rootScope.custSett.break;
+                $scope.filter.finish = $rootScope.custSett.finish;
+                if ($scope.formData.resource_field_design) {
+                    $scope.resourceField = {
+                        'id': 0,
+                        'customer_id': $scope.formData.customer_id,
+                        'register_nominated': $scope.formData.resource_field_design.register_nominated,
+                        'date_option': $scope.formData.resource_field_design.date_option,
+                        'financial_option': $scope.formData.resource_field_design.financial_option,
+                        'total_cost': 0,
+                        'resources': [{
+                            "id": 0,
+                            "resource_field_id": 0,
+                            "resource_id": 0,
+                            "position": 0,
+                            "calculation": false,
+                            "name": '',
+                            "product_ref": '',
+                            "unit_id": $rootScope.unit_list[0].id,
+                            "unit_name": $rootScope.unit_list[0].name,
+                            "resource_type_id": 0,
+                            "unit_obj": $rootScope.unit_list[0],
+                            "resource_type_name": '',
+                            "direct_cost": 0,
+                            "resource_margin": 0,
+                            "stage_id": 1,
+                            "stage_name": '',
+                            "vat": 0,
+                            "quantity": 0,
+                            "current_day": '',
+                            "total_cost": 0,
+                            "staff_role": '',
+                            "expiry_date": '',
+                            "abseteeism_reason_name": ''
+                        }]
+                    };
+                    $scope.filter.substate = $scope.resourceField.resources[0];
+                }
+                if ($scope.formData.pay_item_field_design) {
+                    $scope.payitemField = {
                         "id": 0,
-                        "resource_field_id": 0,
-                        "resource_id": 0,
-                        "position": 0,
-                        "calculation": false,
-                        "name": '',
-                        "product_ref": '',
-                        "unit_id": $rootScope.unit_list[0].id,
-                        "unit_name": $rootScope.unit_list[0].name,
-                        "resource_type_id": 0,
-                        "unit_obj": $rootScope.unit_list[0],
-                        "resource_type_name": '',
-                        "direct_cost": 0,
-                        "resource_margin": 0,
-                        "stage_id": 1,
-                        "stage_name": '',
-                        "vat": 0,
-                        "quantity": 0,
-                        "current_day": '',
-                        "total_cost": 0,
-                        "staff_role": '',
-                        "expiry_date": '',
-                        "abseteeism_reason_name": ''
-                    }]
-                };
-                $scope.filter.substate = $scope.resourceField.resources[0];
-            }
-            if ($scope.formData.pay_item_field_design) {
-                $scope.payitemField = {
-                    "id": 0,
-                    'register_nominated': $scope.formData.pay_item_field_design.register_nominated,
-                    'display_subtask': $scope.formData.pay_item_field_design.display_subtask,
-                    'display_resources': $scope.formData.pay_item_field_design.display_resources,
-                    "pay_items": [{
-                        "description": "",
-                        "reference": "",
-                        "unit": "",
-                        "quantity": "",
-                        "open": true,
-                        "child": true,
-                        "subtasks": [],
-                        "resources": []
-                    }]
-                };
-                $scope.filter.substate = $scope.payitemField.pay_items[0];
-            }
-            if ($scope.formData.scheduling_field_design) {
-                $scope.payitemField = {
-                    "id": 0,
-                    'display_subtask': $scope.formData.scheduling_field_design.true,
-                    "pay_items": [{
-                        "description": "",
-                        "reference": "",
-                        "unit": "",
-                        "quantity": "",
-                        "open": true,
-                        "child": true,
-                        "subtasks": [],
-                        "resources": []
-                    }]
-                };
-                $scope.filter.substate = $scope.payitemField.pay_items[0];
-            }
-            if ($scope.formData.staff_field_design) {
-                $scope.staffField = {
-                    'id': 0,
-                    'withTimes': $scope.formData.staff_field_design.withTimes,
-                    'resources': [{
-                        name: "",
-                        customerId: 0,
-                        employer_name: "",
-                        staff_role: "",
-                        product_ref: "",
-                        unit_name: "",
-                        direct_cost: 0.0,
-                        resource_type_name: "",
-                        resource_margin: 0,
-                        telephone_number: "",
-                        email: "",
-                        safety_card_number: "",
-                        expiry_date: "",
-                        staff: true,
-                        current_day: "",
-                        start_time: $scope.filter.start,
-                        break_time: $scope.filter.break,
-                        finish_time: $scope.filter.finish,
-                        total_time: "",
-                        comment: "",
-                        open: true,
-                        vat: 0.0
-                    }]
-                };
-                console.log($scope.staffField)
-                $scope.filter.substate = $scope.staffField.resources[0];
-            }
-        }, function(error) {
-            console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
-        });
-
-
-
+                        'register_nominated': $scope.formData.pay_item_field_design.register_nominated,
+                        'display_subtask': $scope.formData.pay_item_field_design.display_subtask,
+                        'display_resources': $scope.formData.pay_item_field_design.display_resources,
+                        "pay_items": [{
+                            "description": "",
+                            "reference": "",
+                            "unit": "",
+                            "quantity": "",
+                            "open": true,
+                            "child": true,
+                            "subtasks": [],
+                            "resources": []
+                        }]
+                    };
+                    $scope.filter.substate = $scope.payitemField.pay_items[0];
+                }
+                if ($scope.formData.scheduling_field_design) {
+                    $scope.payitemField = {
+                        "id": 0,
+                        'display_subtask': $scope.formData.scheduling_field_design.true,
+                        "pay_items": [{
+                            "description": "",
+                            "reference": "",
+                            "unit": "",
+                            "quantity": "",
+                            "open": true,
+                            "child": true,
+                            "subtasks": [],
+                            "resources": []
+                        }]
+                    };
+                    $scope.filter.substate = $scope.payitemField.pay_items[0];
+                }
+                if ($scope.formData.staff_field_design) {
+                    $scope.staffField = {
+                        'id': 0,
+                        'withTimes': $scope.formData.staff_field_design.withTimes,
+                        'resources': [{
+                            name: "",
+                            customerId: 0,
+                            employer_name: "",
+                            staff_role: "",
+                            product_ref: "",
+                            unit_name: "",
+                            direct_cost: 0.0,
+                            resource_type_name: "",
+                            resource_margin: 0,
+                            telephone_number: "",
+                            email: "",
+                            safety_card_number: "",
+                            expiry_date: "",
+                            staff: true,
+                            current_day: "",
+                            start_time: $scope.filter.start,
+                            break_time: $scope.filter.break,
+                            finish_time: $scope.filter.finish,
+                            total_time: "",
+                            comment: "",
+                            open: true,
+                            vat: 0.0
+                        }]
+                    };
+                    console.log($scope.staffField)
+                    $scope.filter.substate = $scope.staffField.resources[0];
+                }
+            },
+            function(error) {
+                console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
+            });
 
         $scope.actionBtnPayitem = function() {
             console.log($scope.filter.state, $scope.filter.substate)
@@ -859,9 +862,11 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.addStaff();
             }
         };
+
         PayitemService.list_payitems($stateParams.projectId).then(function(result) {
             $scope.popup_list = result;
         })
+
         $scope.addResource = function() {
             $scope.resourceField.resources.push({
                 "id": 0,
@@ -888,6 +893,7 @@ angular.module($APP.name).controller('FormCtrl', [
             });
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
+
         $scope.addStaff = function() {
             if ($scope.staffField) {
                 $scope.staffField.resources.push({
@@ -916,6 +922,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.substate = $scope.staffField.resources[$scope.staffField.resources.length - 1];
             }
         }
+
         $scope.addPayitem = function() {
             $scope.payitemField.pay_items.push({
                 "description": "",
@@ -927,6 +934,7 @@ angular.module($APP.name).controller('FormCtrl', [
             })
             $scope.filter.substate = $scope.payitemField.pay_items[$scope.payitemField.pay_items.length - 1]
         }
+
         $scope.addSubtask = function() {
             if ($scope.filter.substate && $scope.filter.substate.resources.length === 0) {
                 $scope.filter.substate.subtasks.push({
@@ -962,6 +970,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
+
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
                 $scope.filter.substate.resources.push({
@@ -994,6 +1003,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
+
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
                 $scope.filter.substateStk.resources.push({
@@ -1038,6 +1048,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         };
+
         $scope.addSpot = function() {
             if ($scope.imgURI.length < 9) {
                 $scope.imgURI.push({
@@ -1053,6 +1064,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.trim();
             }
         };
+
         $scope.delSpot = function(id) {
             for (var i = 0; i < $scope.imgURI.length; i++) {
                 if ($scope.imgURI[i].id === id) {
@@ -1074,6 +1086,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 });
             });
         };
+
         $scope.doShow = function() {
             $scope.picModal.hide();
             $scope.picModal.remove();
@@ -1163,9 +1176,11 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.isGroupShown = function(group) {
             return $scope.shownGroup === group;
         };
+
         $scope.$on('updateScopeFromDirective', function() {
             FormUpdateService.addProduct($scope.formData, $scope.modalHelper);
         });
+
         $scope.$on('moduleSaveChanges', function() {
             $scope.formData = FormUpdateService.getProducts();
         });
@@ -1275,6 +1290,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 // error
             });
         };
+
         $scope.removePicture = function(index) {
             if ($scope.imgURI.length !== 0) {
                 $scope.imgURI.splice(index, 1);
@@ -1298,7 +1314,6 @@ angular.module($APP.name).controller('FormCtrl', [
             img.src = url;
         };
 
-
         $scope.actionBtnCalculation = function() {
             if ($scope.filter.substateRes) {
                 $scope.filter.substateRes.calculation = !$scope.filter.substateRes.calculation;
@@ -1307,6 +1322,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.substateStkRes.calculation = !$scope.filter.substateStkRes.calculation;
             }
         }
+
         $scope.deleteElement = function(parent, data) {
             var i = parent.indexOf(data);
             if (data.subtasks) {
@@ -1322,8 +1338,6 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
-
-
 
         $scope.submit = function() {
             var confirmPopup = $ionicPopup.confirm({
@@ -1528,12 +1542,10 @@ angular.module($APP.name).controller('FormCtrl', [
                         }
                     });
                 }
-
             });
         };
 
         $scope.fastSave = function(datax, img) {
-
             var formUp = $ionicPopup.alert({
                 title: "Submitting",
                 template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -1602,7 +1614,5 @@ angular.module($APP.name).controller('FormCtrl', [
                     }
                 });
         }
-
-
     }
 ]);
