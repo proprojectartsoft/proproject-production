@@ -2,15 +2,27 @@
 
 angular.module($APP.name).service('ConvertersService', [
     '$rootScope', 'CacheFactory', '$stateParams',
-    function ($rootScope, CacheFactory, $stateParams) {
+    function($rootScope, CacheFactory, $stateParams) {
 
-        var designToInstanceValuesFormat = function (field) {
+        var designToInstanceValuesFormat = function(field) {
             var field_values, field_helper;
             if (field.type === 'text' || field.type === 'email' || field.type === 'textarea' || field.type === 'number') {
                 if (field.value) {
-                    field_values = [{"id": 0, "name": field.value, "value": field.value, "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": field.value,
+                        "value": field.value,
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 } else {
-                    field_values = [{"id": 0, "name": field.value, "value": '', "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": field.value,
+                        "value": '',
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 }
             }
             if (field.type === 'date') {
@@ -26,9 +38,21 @@ angular.module($APP.name).service('ConvertersService', [
                         MM = '0' + MM;
                     }
                     x = dd + '-' + MM + '-' + yyyy;
-                    field_values = [{"id": 0, "name": x, "value": x, "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": x,
+                        "value": x,
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 } else {
-                    field_values = [{"id": 0, "name": '', "value": '', "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": '',
+                        "value": '',
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 }
             }
             if (field.type === 'time' && field.value != 'Invalid Date') {
@@ -43,62 +67,134 @@ angular.module($APP.name).service('ConvertersService', [
                         mm = '0' + mm;
                     }
                     x = hh + ':' + mm;
-                    field_values = [{"id": 0, "name": x, "value": x, "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": x,
+                        "value": x,
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 } else {
-                    field_values = [{"id": 0, "name": null, "value": '', "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": null,
+                        "value": '',
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 }
             }
             if (field.type === 'checkbox') {
                 if (!field.value) {
-                    field_values = [{"id": 0, "name": false, "value": false, "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": false,
+                        "value": false,
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 } else {
-                    field_values = [{"id": 0, "name": true, "value": true, "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": true,
+                        "value": true,
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 }
             }
             if (field.type === 'select') {
                 field_values = [];
-                angular.forEach(field.option_designs, function (option_value) {
+                angular.forEach(field.option_designs, function(option_value) {
                     if (option_value.value === field.value) {
-                        field_helper = {"id": 0, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": 0,
+                            "name": option_value.name,
+                            "value": true,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     } else {
-                        field_helper = {"id": 0, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": 0,
+                            "name": option_value.name,
+                            "value": false,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     }
                     field_values.push(field_helper);
                 });
             }
             if (field.type === 'radio') {
                 field_values = [];
-                angular.forEach(field.option_designs, function (option_value) {
+                angular.forEach(field.option_designs, function(option_value) {
                     if (option_value.value === field.value) {
-                        field_helper = {"id": 0, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": 0,
+                            "name": option_value.name,
+                            "value": true,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     } else {
-                        field_helper = {"id": 0, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": 0,
+                            "name": option_value.name,
+                            "value": false,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     }
                     field_values.push(field_helper);
                 });
             }
             if (field.type === 'checkbox_list') {
                 field_values = [];
-                angular.forEach(field.option_designs, function (option_value) {
+                angular.forEach(field.option_designs, function(option_value) {
                     if (option_value.value === true) {
-                        field_helper = {"id": 0, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": 0,
+                            "name": option_value.name,
+                            "value": true,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     } else {
-                        field_helper = {"id": 0, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": 0,
+                            "name": option_value.name,
+                            "value": false,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     }
                     field_values.push(field_helper);
                 });
             }
             if (field.type === 'signature') {
                 if (field.value) {
-                    field_values = [{"id": 0, "name": 'Signature', "value": field.value, "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": 'Signature',
+                        "value": field.value,
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 } else {
-                    field_values = [{"id": 0, "name": 'Signature', "value": '', "position": field.position, "field_instance_id": 0}];
+                    field_values = [{
+                        "id": 0,
+                        "name": 'Signature',
+                        "value": '',
+                        "position": field.position,
+                        "field_instance_id": 0
+                    }];
                 }
             }
             return field_values;
         };
 
-        var instanceToInstanceValuesFormat = function (field) {
+        var instanceToInstanceValuesFormat = function(field) {
             var field_values, field_helper;
             if (field.type === 'date') {
                 console.log(field)
@@ -116,7 +212,7 @@ angular.module($APP.name).service('ConvertersService', [
                         }
                         x = dd + '-' + MM + '-' + yyyy;
                     } else {
-//                        console.log(field.field_values[0])
+                        //                        console.log(field.field_values[0])
                         x = field.field_values[0].name
                     }
 
@@ -151,7 +247,7 @@ angular.module($APP.name).service('ConvertersService', [
 
             if (field.type === 'select') {
                 field_values = [];
-                angular.forEach(field.field_values, function (option_value) {
+                angular.forEach(field.field_values, function(option_value) {
                     console.log(option_value, field)
                     if (field.value) {
                         if (option_value.name === field.value.name) {
@@ -168,7 +264,7 @@ angular.module($APP.name).service('ConvertersService', [
             }
             if (field.type === 'radio') {
                 field_values = [];
-                angular.forEach(field.field_values, function (option_value) {
+                angular.forEach(field.field_values, function(option_value) {
                     if (option_value.name === field.value) {
                         option_value.value = true;
                     } else {
@@ -177,8 +273,8 @@ angular.module($APP.name).service('ConvertersService', [
                     field_values.push(option_value);
                 });
             }
-            if (field.type === 'checkbox' || field.type === 'signature' || field.type === 'checkbox_list' || field.type === 'text' || field.type === 'textarea'
-                    || field.type === 'email' || field.type === 'number') {
+            if (field.type === 'checkbox' || field.type === 'signature' || field.type === 'checkbox_list' || field.type === 'text' || field.type === 'textarea' ||
+                field.type === 'email' || field.type === 'number') {
                 if (!field.field_values[0].value) {
                     field.field_values[0].value = "";
                 }
@@ -186,11 +282,23 @@ angular.module($APP.name).service('ConvertersService', [
             }
             if (field.type === 'checkbox_list') {
                 field_values = [];
-                angular.forEach(field.field_values, function (option_value) {
+                angular.forEach(field.field_values, function(option_value) {
                     if (option_value.value === true) {
-                        field_helper = {"id": option_value.id, "name": option_value.name, "value": true, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": option_value.id,
+                            "name": option_value.name,
+                            "value": true,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     } else {
-                        field_helper = {"id": option_value.id, "name": option_value.name, "value": false, "position": field.position, "field_instance_id": 0};
+                        field_helper = {
+                            "id": option_value.id,
+                            "name": option_value.name,
+                            "value": false,
+                            "position": field.position,
+                            "field_instance_id": 0
+                        };
                     }
                     field_values.push(field_helper);
                 });
@@ -199,7 +307,7 @@ angular.module($APP.name).service('ConvertersService', [
         };
 
         return {
-            designToInstance: function (design) {
+            designToInstance: function(design) {
                 var settings = CacheFactory.get('settings');
                 if (!settings || settings.length === 0) {
                     settings = CacheFactory('settings');
@@ -230,10 +338,11 @@ angular.module($APP.name).service('ConvertersService', [
                     "formDesignId": design.id,
                     "field_group_instances": []
                 };
-                var requestGroupList = [], requestFieldList = [];
+                var requestGroupList = [],
+                    requestFieldList = [];
                 var requestGroup, requestField;
 
-                angular.forEach(design.field_group_designs, function (field_group) {
+                angular.forEach(design.field_group_designs, function(field_group) {
                     requestGroup = {
                         "id": 0,
                         "name": field_group.name,
@@ -246,7 +355,7 @@ angular.module($APP.name).service('ConvertersService', [
                     };
                     requestFieldList = [];
 
-                    angular.forEach(field_group.field_designs, function (field) {
+                    angular.forEach(field_group.field_designs, function(field) {
                         requestField = {
                             "id": 0,
                             "name": field.name,
@@ -271,9 +380,9 @@ angular.module($APP.name).service('ConvertersService', [
                     requestGroupList.push(requestGroup);
                 });
                 requestForm.field_group_instances = requestGroupList;
-                return(requestForm);
+                return (requestForm);
             },
-            viewField: function (data) {
+            viewField: function(data) {
                 if (data.type === "checkbox" && data.field_values && data.field_values.length > 0) {
                     if (data.field_values[0].value === 'true' || data.field_values[0].value === true) {
                         data.value = true;
@@ -282,7 +391,7 @@ angular.module($APP.name).service('ConvertersService', [
                     }
                 }
                 if ((data.type === "select" || data.type === "radio") && data.field_values && data.field_values.length > 0) {
-                    angular.forEach(data.field_values, function (entry) {
+                    angular.forEach(data.field_values, function(entry) {
                         if (entry.value === true || entry.value === "true") {
                             data.value = entry.name;
                         }
@@ -305,7 +414,7 @@ angular.module($APP.name).service('ConvertersService', [
                 }
                 return data;
             },
-            instanceToUpdate: function (instance) {
+            instanceToUpdate: function(instance) {
                 var data = angular.copy(instance);
                 var settings = CacheFactory.get('settings');
                 if (!settings || settings.length === 0) {
@@ -342,10 +451,11 @@ angular.module($APP.name).service('ConvertersService', [
                     "staff_field_id": data.staff_field_id,
                     "field_group_instances": []
                 };
-                var requestGroupList = [], requestFieldList = [];
+                var requestGroupList = [],
+                    requestFieldList = [];
                 var requestGroup, requestField;
 
-                angular.forEach(data.field_group_instances, function (field_group) {
+                angular.forEach(data.field_group_instances, function(field_group) {
 
                     requestFieldList = [];
                     requestGroup = {
@@ -359,7 +469,7 @@ angular.module($APP.name).service('ConvertersService', [
                         "field_instances": []
                     };
 
-                    angular.forEach(field_group.field_instances, function (field) {
+                    angular.forEach(field_group.field_instances, function(field) {
                         requestField = {
                             "id": field.id,
                             "name": field.name,
@@ -386,7 +496,7 @@ angular.module($APP.name).service('ConvertersService', [
                 requestForm.field_group_instances = requestGroupList;
                 return requestForm;
             },
-            instanceToNew: function (instance) {
+            instanceToNew: function(instance) {
                 var data = angular.copy(instance);
                 var settings = CacheFactory.get('settings');
                 if (!settings || settings.length === 0) {
@@ -418,10 +528,11 @@ angular.module($APP.name).service('ConvertersService', [
                     "staff_field_id": data.staff_field_id,
                     "field_group_instances": []
                 };
-                var requestGroupList = [], requestFieldList = [];
+                var requestGroupList = [],
+                    requestFieldList = [];
                 var requestGroup, requestField;
 
-                angular.forEach(data.field_group_instances, function (field_group) {
+                angular.forEach(data.field_group_instances, function(field_group) {
 
                     requestFieldList = [];
                     requestGroup = {
@@ -434,9 +545,9 @@ angular.module($APP.name).service('ConvertersService', [
                         "at_revision": "0",
                         "field_instances": []
                     };
-                    angular.forEach(field_group.field_instances, function (field) {
+                    angular.forEach(field_group.field_instances, function(field) {
                         var aux = instanceToInstanceValuesFormat(field);
-                        angular.forEach(aux, function (val) {
+                        angular.forEach(aux, function(val) {
                             val.id = 0;
                             val.field_instance_id = 0;
                         });
@@ -467,7 +578,7 @@ angular.module($APP.name).service('ConvertersService', [
                 requestForm.field_group_instances = requestGroupList;
                 return requestForm;
             },
-            photoList: function (photos, id, project) {
+            photoList: function(photos, id, project) {
                 var list = photos;
                 var requestList = [];
                 if (list) {

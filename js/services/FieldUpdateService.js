@@ -1,11 +1,11 @@
-angular.module($APP.name).service('FieldUpdateService', function ($rootScope) {
+angular.module($APP.name).service('FieldUpdateService', function($rootScope) {
     var productList = [];
 
-    var addProduct = function (newObj) {
+    var addProduct = function(newObj) {
         productList = newObj;
     };
 
-    var getProducts = function () {
+    var getProducts = function() {
         return productList;
     };
 

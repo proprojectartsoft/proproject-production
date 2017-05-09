@@ -1,10 +1,10 @@
-angular.module($APP.name).controller('LoadingCtrl', function ($scope, $ionicLoading) {
-    $scope.show = function () {
+angular.module($APP.name).controller('LoadingCtrl', function($scope, $ionicLoading) {
+    $scope.show = function() {
         $ionicLoading.show({
             templateUrl: '/view/spinner.html'
         });
     };
-    $scope.hide = function () {
+    $scope.hide = function() {
         $ionicLoading.hide();
     };
 });

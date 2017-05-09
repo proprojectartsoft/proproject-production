@@ -1,6 +1,6 @@
 angular.module($APP.name).factory('ReloadMeService', [
     'CacheFactory',
-    function (CacheFactory) {
+    function(CacheFactory) {
 
         var reloadCache = CacheFactory.get('reloadCache');
 
@@ -13,17 +13,17 @@ angular.module($APP.name).factory('ReloadMeService', [
         }
 
         return {
-            set: function (user, password) {
+            set: function(user, password) {
                 reloadCache.put('reload', {
                     username: user,
                     password: password
                 });
             },
-            get: function () {
-                
+            get: function() {
+
                 return reloadCache.get('reload');
             },
-            clear: function () {
+            clear: function() {
                 reloadCache.destroy();
             }
         };

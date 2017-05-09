@@ -10,34 +10,34 @@ angular.module($APP.name).controller('RegistersCtrl', [
     '$ionicSideMenuDelegate',
     '$timeout',
     '$ionicHistory',
-    function ($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $ionicPopup, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory) {
+    function($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $ionicPopup, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory) {
         $scope.isLoaded = false;
-        
-        $scope.$on('$ionicView.enter', function () {
+
+        $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
-        
+
         $scope.hasData = '';
         $rootScope.slideHeader = false;
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
-        $scope.$on('$stateChangeSuccess', function () {
+        $scope.$on('$stateChangeSuccess', function() {
             console.log('state change registers');
-//            $timeout(function () {
-////                $ionicScrollDelegate.scrollTop();
-//            });
+            //            $timeout(function () {
+            ////                $ionicScrollDelegate.scrollTop();
+            //            });
         });
 
 
-        AuthService.me().then(function (user) {
+        AuthService.me().then(function(user) {
             if (user && user.active === false) {
                 var alertPopup = $ionicPopup.alert({
                     title: 'Error',
                     template: 'Your account has been de-activated. Contact your supervisor for further information.',
                 });
-                alertPopup.then(function (res) {
+                alertPopup.then(function(res) {
                     var projectsCache = CacheFactory.get('projectsCache');
                     if (projectsCache) {
                         projectsCache.destroy();
@@ -73,9 +73,7 @@ angular.module($APP.name).controller('RegistersCtrl', [
                     if (settingsCache) {
                         settingsCache.destroy();
                     }
-                    AuthService.logout().success(function () {
-                    }, function () {
-                    });
+                    AuthService.logout().success(function() {}, function() {});
                     $state.go('login');
                 });
 
@@ -85,23 +83,22 @@ angular.module($APP.name).controller('RegistersCtrl', [
         });
         if ($stateParams.categoryId) {
             $rootScope.categoryId = $stateParams.categoryId;
-            RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function (data) {
+            RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
                 $scope.isLoaded = true;
                 $scope.registers = data;
                 if (data) {
                     if (data.length === 0) {
                         $scope.hasData = 'no data';
                     }
-                }
-                else {
+                } else {
                     $scope.hasData = 'no data';
                 }
             });
         }
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
 
-        $scope.refresh = function () {
-            RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function (data) {
+        $scope.refresh = function() {
+            RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
                 if (data) {
                     $scope.registers = data;
                     if (data.length === 0) {

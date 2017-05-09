@@ -1,45 +1,54 @@
 angular.module($APP.name).factory('FormDesignService', [
     '$http',
-    function ($http) {
+    function($http) {
 
         return {
-            get: function (id) {
+            get: function(id) {
                 return $http.get($APP.server + '/api/formdesign', {
-                    params: {id: id}
+                    params: {
+                        id: id
+                    }
                 }).then(
-                        function (payload) {
-                            return payload.data;
-                        }, function (err) {
-                });
+                    function(payload) {
+                        return payload.data;
+                    },
+                    function(err) {});
             },
-            list: function (categoryId) {
+            list: function(categoryId) {
                 return $http.get($APP.server + '/api/formdesign', {
-                    params: {categoryId: categoryId}
+                    params: {
+                        categoryId: categoryId
+                    }
                 }).then(
-                        function (payload) {
-                            return payload.data;
-                        }, function (err) {
-                });
+                    function(payload) {
+                        return payload.data;
+                    },
+                    function(err) {});
             },
-            list_mobile: function (categoryId) {
+            list_mobile: function(categoryId) {
                 return $http.get($APP.server + '/api/formdesign/mobilelist', {
-                    params: {categoryId: categoryId}
+                    params: {
+                        categoryId: categoryId
+                    }
                 }).then(
-                        function (payload) {
-                            return payload.data;
-                        }, function (err) {
-                });
+                    function(payload) {
+                        return payload.data;
+                    },
+                    function(err) {});
             },
-            checkpermission: function (id) {
+            checkpermission: function(id) {
                 return $http.get($APP.server + '/api/formdesign/checkpermission', {
-                    params: {id: id}
+                    params: {
+                        id: id
+                    }
                 }).then(
-                        function (payload) {
-                            return payload.data;
-                        }, function (err) {
-                }, function (result) {
-                    console.log('sadsadkbasndkasn')
-                });
+                    function(payload) {
+                        return payload.data;
+                    },
+                    function(err) {},
+                    function(result) {
+                        console.log('sadsadkbasndkasn')
+                    });
             }
         };
     }

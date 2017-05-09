@@ -55,85 +55,84 @@ angular.module($APP.name).factory('SyncService', [
         }
         var down = function() {
             AuthService.version().then(function(result) {
-                    localStorage.setObject('ppversion', result);
-                })
-                //Designs
+                localStorage.setObject('ppversion', result);
+            })
+            //Designs
             var designs = function() {
-                    var obj = new servresp('designs', 0, []);
-                    var ping = $interval(function() {
-                        obj.timer += 1;
-                    }, 1);
-                    return FormDesignService.list_mobile().then(function(result) {
-                        if (result) {
-                            $interval.cancel(ping)
-                            obj.response = result;
-                            $APP.db.transaction(function(tx) {
-                                tx.executeSql('DROP TABLE IF EXISTS DesignsTable');
-                                tx.executeSql('CREATE TABLE IF NOT EXISTS DesignsTable (id int primary key, name text, guidance text, category_id int, permission int, data text)');
-                                angular.forEach(result, function(form) {
-                                    tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
-                                });
-                            }, function(error) {
-                                console.log('Transaction ERROR: ' + error.message);
-                            }, function() {});
-                            return obj;
-                        }
-                    });
-                }
-                //Projects
+                var obj = new servresp('designs', 0, []);
+                var ping = $interval(function() {
+                    obj.timer += 1;
+                }, 1);
+                return FormDesignService.list_mobile().then(function(result) {
+                    if (result) {
+                        $interval.cancel(ping)
+                        obj.response = result;
+                        $APP.db.transaction(function(tx) {
+                            tx.executeSql('DROP TABLE IF EXISTS DesignsTable');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS DesignsTable (id int primary key, name text, guidance text, category_id int, permission int, data text)');
+                            angular.forEach(result, function(form) {
+                                tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
+                            });
+                        }, function(error) {
+                            console.log('Transaction ERROR: ' + error.message);
+                        }, function() {});
+                        return obj;
+                    }
+                });
+            }
+            //Projects
             var projects = function() {
-                    var obj = new servresp('projects', 0, []);
-                    var ping = $interval(function() {
-                        obj.timer += 1;
-                    }, 1);
-                    return ProjectService.list_current(true).then(function(result) {
-                        if (result) {
-                            DbService.add('projects', result);
-                            $interval.cancel(ping)
-                            obj.response = result;
-                            var id = localStorage.getObject('ppprojectId');
-                            var name = localStorage.getObject('ppnavTitle');
-                            var sw = false;
-                            $rootScope.projects = result;
-                            if (id && name) {
-                                angular.forEach(result, function(proj) {
-                                    if (proj.id === id && proj.name === name) {
-                                        sw = true;
-                                    }
-                                });
-                            }
-                            if (sw === true && id && name) {
-                                $rootScope.navTitle = name;
-                                $rootScope.projectId = id;
-                            } else {
-                                var auxTitle = {
-                                    name: 'No projects.',
-                                    id: 0
+                var obj = new servresp('projects', 0, []);
+                var ping = $interval(function() {
+                    obj.timer += 1;
+                }, 1);
+                return ProjectService.list_current(true).then(function(result) {
+                    if (result) {
+                        DbService.add('projects', result);
+                        $interval.cancel(ping)
+                        obj.response = result;
+                        var id = localStorage.getObject('ppprojectId');
+                        var name = localStorage.getObject('ppnavTitle');
+                        var sw = false;
+                        $rootScope.projects = result;
+                        if (id && name) {
+                            angular.forEach(result, function(proj) {
+                                if (proj.id === id && proj.name === name) {
+                                    sw = true;
                                 }
-                                if (result.length) {
-                                    auxTitle = result[0]
-                                }
-                                $rootScope.navTitle = auxTitle.name;
-                                $rootScope.projectId = auxTitle.id;
-                                localStorage.setObject('ppnavTitle', auxTitle.name);
-                                localStorage.setObject('ppprojectId', auxTitle.id);
-                            }
-
-
-                            $APP.db.transaction(function(tx) {
-                                tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
-                                tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
-                                angular.forEach(result, function(project) {
-                                    tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
-                                });
-                            }, function(error) {
-                                console.log('Transaction ERROR: ' + error.message);
-                            }, function() {});
-                            return obj;
+                            });
                         }
-                    });
-                }
-                //Designs
+                        if (sw === true && id && name) {
+                            $rootScope.navTitle = name;
+                            $rootScope.projectId = id;
+                        } else {
+                            var auxTitle = {
+                                name: 'No projects.',
+                                id: 0
+                            }
+                            if (result.length) {
+                                auxTitle = result[0]
+                            }
+                            $rootScope.navTitle = auxTitle.name;
+                            $rootScope.projectId = auxTitle.id;
+                            localStorage.setObject('ppnavTitle', auxTitle.name);
+                            localStorage.setObject('ppprojectId', auxTitle.id);
+                        }
+
+                        $APP.db.transaction(function(tx) {
+                            tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
+                            angular.forEach(result, function(project) {
+                                tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
+                            });
+                        }, function(error) {
+                            console.log('Transaction ERROR: ' + error.message);
+                        }, function() {});
+                        return obj;
+                    }
+                });
+            }
+            //Designs
             var custsett = function() {
                 var obj = new servresp('custsett', 0, []);
                 var ping = $interval(function() {
@@ -231,7 +230,6 @@ angular.module($APP.name).factory('SyncService', [
 
             localStorage.removeItem('ppfsync')
             localStorage.removeItem('pppsync')
-
 
             asyncCall(doRequest,
                 function error(result) {
