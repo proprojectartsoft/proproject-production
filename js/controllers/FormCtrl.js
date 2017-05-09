@@ -654,34 +654,6 @@ angular.module($APP.name).controller('FormCtrl', [
             popup_list: [],
             searchText: ''
         };
-        // $scope.items = [{
-        //         display: 'Hello'
-        //     },
-        //     {
-        //         display: 'Baha'
-        //     },
-        //     {
-        //         display: 'Ala'
-        //     },
-        //     {
-        //         display: 'Siwar'
-        //     },
-        //     {
-        //         display: 'Monira'
-        //     },
-        //     {
-        //         display: 'Samir'
-        //     },
-        //     {
-        //         display: 'Spange Bob'
-        //     },
-        //     {
-        //         display: 'Deneris Targariant'
-        //     },
-        //     {
-        //         display: 'Ned Stark'
-        //     }
-        // ];
 
         $scope.onSelect = function(item) {
             console.log('item', item);
@@ -1352,7 +1324,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             delete $scope.picModal;
                         }
                     }
-                    console.log($scope)
                     $timeout(function() {
                         if ($scope.formData.resource_field_design) {
                             angular.forEach($scope.resourceField.resources, function(item) {
@@ -1372,8 +1343,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    //                                            var date = new Date(item.current_day_obj);
-                                    //                                            item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                    // var date = new Date(item.current_day_obj);
+                                    // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     item.current_day = item.current_day_obj;
                                 }
                             });
@@ -1404,8 +1375,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        //                                                var date = new Date(res.current_day_obj);
-                                        //                                                res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                        // var date = new Date(res.current_day_obj);
+                                        // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -1465,8 +1436,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        //                                                var date = new Date(res.current_day_obj);
-                                        //                                                res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                        // var date = new Date(res.current_day_obj);
+                                        // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -1514,11 +1485,11 @@ angular.module($APP.name).controller('FormCtrl', [
                                     item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
+                                    // item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
                                     item.current_day = item.current_day_obj.getTime();
                                 }
                                 if (item.expiry_date_obj) {
-                                    //                                    item.expiry_date = item.expiry_date_obj.getDate() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getFullYear();
+                                    // item.expiry_date = item.expiry_date_obj.getDate() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getFullYear();
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
                                 if (item.start_time_obj) {
@@ -1552,8 +1523,8 @@ angular.module($APP.name).controller('FormCtrl', [
                 content: "",
                 buttons: []
             });
-            FormInstanceService.create(datax, img).then(
-                function successCallback(data) {
+            FormInstanceService.create(datax, img)
+                .then(function successCallback(data) {
                     if (data && data.data && data.data.message) {
                         $timeout(function() {
                             formUp.close();
@@ -1612,6 +1583,16 @@ angular.module($APP.name).controller('FormCtrl', [
 
                         }
                     }
+                }, function(err) {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Submision failed.',
+                        template: 'You are offline. Submit forms by syncing next time you are online'
+                    }).then(function(res) {
+                        $state.go('app.forms', {
+                            'projectId': $rootScope.projectId,
+                            'categoryId': $scope.formData.category_id
+                        });
+                    });
                 });
         }
     }

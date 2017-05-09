@@ -26,8 +26,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
                 }).then(function successCallback(payload) {
-                    console.log("form instance service SUCCESS:");
-                    console.log(payload);
                     if (!payload.data.message) {
                         var list = ConvertersService.photoList(imgUri, payload.data.id, requestForm.project_id);
                         if (list.length !== 0) {
@@ -38,8 +36,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                     }
                     return payload.data;
                 }, function errorCallback(payload) {
-                  console.log("form instance service ERROR:");
-                    console.log(payload)
                     if (payload.status === 0 || payload.status === 502 || payload.status === 403) {
                         var requestList = [];
                         var ppfsync = localStorage.getObject('ppfsync');
