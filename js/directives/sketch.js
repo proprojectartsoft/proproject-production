@@ -20,9 +20,7 @@ angular.module($APP.name).directive('scrollWatch', function ($rootScope, $window
 
         elem.bind('scroll', function (e) {
             $rootScope.slideHeaderHelper = true;
-            console.log(e);
-            console.log(elem);
-            if (e.detail.scrollTop - start > threshold) { //TODO:Cannot read property 'scrollTop' of undefined
+            if (e.detail.scrollTop - start > threshold) {
                 $rootScope.slideHeader = true;
             } else {
                 $rootScope.slideHeader = false;
