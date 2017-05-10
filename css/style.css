@@ -240,7 +240,7 @@ textarea {
     bottom: 0;
     right: 0;
     height: 480px;
-    width: 340px;
+    width: 100%;
     min-height: 490px;
     max-height: 490px;
 }
@@ -713,18 +713,18 @@ ion-refresher{
     }
 
     :-moz-placeholder { /* Firefox 18- */
-        color: #fff;  
+        color: #fff;
     }
 
     ::-moz-placeholder {  /* Firefox 19+ */
-        color: #fff;  
+        color: #fff;
     }
 
-    :-ms-input-placeholder {  
-        color: #fff;  
+    :-ms-input-placeholder {
+        color: #fff;
     }
 }
-.item-remove-padding .item-content{    
-    padding: 5px 10px; 
+.item-remove-padding .item-content{
+    padding: 5px 10px;
     height:100%;
 }
