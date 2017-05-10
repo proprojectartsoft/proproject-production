@@ -710,7 +710,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 }]
                             });
                         } else {
-                            return $scope.filter.email;
+                            // return $scope.filter.email;
+                            sendEmail($scope.filter.email, id);
                         }
                     }
                 }]
@@ -752,10 +753,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $timeout(function() {
                             var popup = $ionicPopup.show(createPopup(id));
 
-                            popup.then(function(res, id) {
-                                console.log("Tapped!", res);
-                                sendEmail(res, id);
-                            });
+                            // popup.then(function(res, id) {
+                            //     console.log("Tapped!", res);
+                            //     sendEmail(res, id);
+                            // });
                         });
                     } else {
                         var alertPopup1 = $ionicPopup.alert({
@@ -779,10 +780,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
         $scope.shareThis = function(predicate) {
             var popup = $ionicPopup.show(createPopup(predicate.id));
 
-            popup.then(function(res) {
-                console.log("Tapped!", res);
-                sendEmail(res, predicate.id);
-            });
+            // popup.then(function(res) {
+            //     console.log("Tapped!", res);
+            //     sendEmail(res, predicate.id);
+            // });
         };
 
         $scope.goToTop = function() {
