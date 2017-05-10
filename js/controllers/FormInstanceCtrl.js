@@ -710,7 +710,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 }]
                             });
                         } else {
-                            // return $scope.filter.email;
                             sendEmail($scope.filter.email, id);
                         }
                     }
@@ -727,21 +726,27 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     buttons: []
                 });
                 ShareService.form.create(id, res).then(function(response) {
-                    alertPopup1.close();
-                    if (response.message === "Form shared") {
-                        res = "";
+                        alertPopup1.close();
+                        if (response.message === "Form shared") {
+                            res = "";
+                            var alertPopupC = SecuredPopups.show('alert', {
+                                title: 'Share',
+                                template: 'Email sent.'
+                            });
+                        } else {
+                            res = "";
+                            var alertPopupC = SecuredPopups.show('alert', {
+                                title: 'Share',
+                                template: 'Form already shared to this user.'
+                            });
+                        }
+                    },
+                    function(err) {
                         var alertPopupC = SecuredPopups.show('alert', {
                             title: 'Share',
-                            template: 'Email sent.'
+                            template: 'An unexpected error occured while sending the e-mail.'
                         });
-                    } else {
-                        res = "";
-                        var alertPopupC = SecuredPopups.show('alert', {
-                            title: 'Share',
-                            template: 'Form already shared to this user.'
-                        });
-                    }
-                });
+                    });
             }
         }
 
@@ -752,38 +757,23 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $scope.filter.email = contact.emails[0].value;
                         $timeout(function() {
                             var popup = $ionicPopup.show(createPopup(id));
-
-                            // popup.then(function(res, id) {
-                            //     console.log("Tapped!", res);
-                            //     sendEmail(res, id);
-                            // });
                         });
                     } else {
-                        var alertPopup1 = $ionicPopup.alert({
+                        var alertPopup1 = SecuredPopups.show('alert', {
                             title: "No e-mail address",
-                            subTitle: "No e-mail address was found. Please enter one manually.",
-                            content: "",
-                            buttons: []
+                            template: 'No e-mail address was found. Please enter one manually.',
                         });
                     }
                 }, function(err) {
-                    console.log("Error pickContact");
-                    var alertPopup1 = $ionicPopup.alert({
+                    var alertPopup1 = SecuredPopups.show('alert', {
                         title: "Import contact failed",
-                        template: "<center><span>Some unexpected error occured while trying to inport contact</span></center>",
-                        content: "",
-                        buttons: []
+                        template: 'An unexpected error occured while trying to import contact',
                     });
                 });
             });
         }
         $scope.shareThis = function(predicate) {
             var popup = $ionicPopup.show(createPopup(predicate.id));
-
-            // popup.then(function(res) {
-            //     console.log("Tapped!", res);
-            //     sendEmail(res, predicate.id);
-            // });
         };
 
         $scope.goToTop = function() {
