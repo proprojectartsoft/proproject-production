@@ -738,7 +738,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     function(err) {
                         console.log(err);
                         alertPopup1.close();
-                        if (err.status == 442) {
+                        if (err.status == 422) {
                             res = "";
                             var alertPopupC = SecuredPopups.show('alert', {
                                 title: 'Share',
@@ -763,12 +763,18 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             var popup = $ionicPopup.show(createPopup(id));
                         });
                     } else {
-                        var alertPopup1 = SecuredPopups.show('alert', {
-                            title: "No e-mail address",
-                            template: 'No e-mail address was found. Please enter one manually.',
-                        });
-                        $timeout(function() {
-                            var popup = $ionicPopup.show(createPopup(id));
+                        var alertPopup1 = $ionicPopup.alert({
+                            title: 'Share',
+                            template: "",
+                            content: "No e-mail address was found. Please enter one manually.",
+                            buttons: [{
+                                text: 'OK',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    alertPopup1.close();
+                                    var popup = $ionicPopup.show(createPopup(id));
+                                }
+                            }]
                         });
                     }
                 }, function(err) {
