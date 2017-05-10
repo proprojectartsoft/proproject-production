@@ -733,28 +733,23 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 title: 'Share',
                                 template: 'Email sent.'
                             });
-                        } else {
+                        }
+                    },
+                    function(err) {
+                        console.log(err);
+                        alertPopup1.close();
+                        if (err.status == 442) {
                             res = "";
                             var alertPopupC = SecuredPopups.show('alert', {
                                 title: 'Share',
                                 template: 'Form already shared to this user.'
                             });
+                        } else {
+                            var alertPopupC = SecuredPopups.show('alert', {
+                                title: 'Share',
+                                template: 'An unexpected error occured while sending the e-mail.'
+                            });
                         }
-                    },
-                    function(err) {
-                        alertPopup1.close();
-                        var alertPopupC = $ionicPopup.alert({
-                            title: 'Share',
-                            template: "",
-                            content: "An unexpected error occured while sending the e-mail.",
-                            buttons: [{
-                                text: 'OK',
-                                type: 'button-positive',
-                                onTap: function(e) {
-                                    alertPopupC.close();
-                                }
-                            }]
-                        });
                     });
             }
         }
@@ -772,11 +767,17 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             title: "No e-mail address",
                             template: 'No e-mail address was found. Please enter one manually.',
                         });
+                        $timeout(function() {
+                            var popup = $ionicPopup.show(createPopup(id));
+                        });
                     }
                 }, function(err) {
                     var alertPopup1 = SecuredPopups.show('alert', {
                         title: "Import contact failed",
                         template: 'An unexpected error occured while trying to import contact',
+                    });
+                    $timeout(function() {
+                        var popup = $ionicPopup.show(createPopup(id));
                     });
                 });
             });
