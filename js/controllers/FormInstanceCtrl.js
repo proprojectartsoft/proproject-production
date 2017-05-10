@@ -775,9 +775,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             });
         }
         $scope.shareThis = function(predicate) {
-            var myPopup = $ionicPopup.show(myPopup);
+            var popup = $ionicPopup.show(myPopup);
 
-            myPopup.then(function(res) {
+            popup.then(function(res) {
                 console.log("Tapped!", res);
                 sendEmail(res, predicate.id);
             });
