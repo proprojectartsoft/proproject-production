@@ -742,9 +742,18 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         }
                     },
                     function(err) {
-                        var alertPopupC = SecuredPopups.show('alert', {
+                        alertPopup1.close();
+                        var alertPopupC = $ionicPopup.alert({
                             title: 'Share',
-                            template: 'An unexpected error occured while sending the e-mail.'
+                            template: "",
+                            content: "An unexpected error occured while sending the e-mail.",
+                            buttons: [{
+                                text: 'OK',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    alertPopupC.close();
+                                }
+                            }]
                         });
                     });
             }
