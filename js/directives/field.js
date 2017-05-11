@@ -51,7 +51,7 @@ angular.module($APP.name).directive('field', [
                         console.log($('div.button-bar').outerHeight());
                         var bottom = $('ion-content').outerHeight() - $('form.signature-form').outerHeight() - $('div.button-bar').outerHeight() + 5;
                         console.log('bottom: ' + bottom);
-                        $('div.button-bar').css('bottom': bottom + 'px');
+                        $('div.button-bar').css('bottom': bottom);
 
 
                         $scope.modal.show();
