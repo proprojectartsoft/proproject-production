@@ -139,8 +139,7 @@ angular.module($APP.name).factory('AuthService', [
                         return payload.data.data;
                     })
                     .error(function(response, status) {
-                        console.log("Error on login!!");
-                        if (status === 0) {
+                        if (status === 0 || status === -1) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Offline',
                                 template: 'No internet connection',

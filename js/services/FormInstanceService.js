@@ -26,8 +26,8 @@ angular.module($APP.name).factory('FormInstanceService', [
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
                 }).success(function(payload) {
-                    if (!payload.data.message) {
-                        var list = ConvertersService.photoList(imgUri, payload.data.id, requestForm.project_id);
+                    if (!payload.message) {
+                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
                             ImageService.create(list).then(function(x) {
                                 return x;
