@@ -41,6 +41,11 @@ angular.module($APP.name).directive('field', [
                         $scope.modal.hash = $scope.hash;
                         FieldUpdateService.addProduct($scope.modalHelper);
                         $rootScope.$broadcast('updateScopeFromDirective');
+
+                        var bottom = $('.Absolute-Center').height() - $('ion-header-bar').height() - $('canvas').height() + 5;
+                        $('.button-bar').css({'bottom': bottom});
+
+
                         $scope.modal.show();
                     });
                 };
