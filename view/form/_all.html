@@ -1,6 +1,5 @@
 <!--text-->
-<label for="{{hash}}" class="item item-input item-stacked-label calm-border"
-       ng-class="{required: data.required}" ng-if="data.type == 'text'">
+<label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required}" ng-if="data.type == 'text'">
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
@@ -12,9 +11,7 @@
 </label>
 
 <!--text area-->
-<label for="{{hash}}" class="item item-input item-stacked-label calm-border"
-       ng-class="{required: data.required, 'has-error': data.errors.length}"
-       ng-if="data.type == 'textarea'">
+<label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'textarea'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
@@ -26,9 +23,7 @@
 </label>
 
 <!--password-->
-<label for="{{hash}}" class=" item item-input item-stacked-label calm-border"
-       ng-class="{required: data.required, 'has-error': data.errors.length}"
-       ng-if="data.type == 'password'">
+<label for="{{hash}}" class=" item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'password'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.label}}</span>
@@ -40,9 +35,7 @@
 </label>
 
 <!--select-->
-<label class="item item-input item-stacked-label calm-border"
-       ng-class="{required: data.required, 'has-error': data.errors.length}"
-       ng-if="data.type == 'select'">
+<label class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'select'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">
@@ -57,9 +50,7 @@
 </label>
 
 <!--email-->
-<label for="{{hash}}" class="item item-input item-stacked-label calm-border"
-       ng-class="{required: data.required, 'has-error': data.errors.length}"
-       ng-if="data.type == 'email'">
+<label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'email'">
 
     <div class="inputLabel">
         <span class=" all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
@@ -71,9 +62,7 @@
 </label>
 
 <!--number-->
-<label for="{{hash}}" class="item item-input item-stacked-label calm-border"
-       ng-class="{required: data.required, 'has-error': data.errors.length}"
-       ng-if="data.type == 'number'">
+<label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'number'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
@@ -135,8 +124,7 @@
 </div>
 
 <!--signature-->
-<div for="{{hash}}" class="item item-input item-stacked-label signature calm-border"
-     ng-if="data.type == 'signature'">
+<div for="{{hash}}" class="item item-input item-stacked-label signature calm-border" ng-if="data.type == 'signature'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
@@ -145,14 +133,11 @@
     <div class="white-bgd">
         <img ng-if="data.value" ng-src="{{data.value}}" alt="signature">
     </div>
-    <a class="insert-sig"
-       ng-click="directiveClick(hash)">{{data.value ? "Edit signature" : "Insert signature"}}</a>
+    <a class="insert-sig" ng-click="directiveClick(hash)">{{data.value ? "Edit signature" : "Insert signature"}}</a>
 </div>
 
 <!--date-->
-<div for="{{hash}}" class="item item-input item-stacked-label calm-border"
-     ng-class="{required: data.required, 'has-error': data.errors.length}"
-     ng-if="data.type == 'date'" >
+<div for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'date'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
@@ -165,14 +150,10 @@
     <div ng-required="data.required" ion-datetime-picker date ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
         <input type="text" date='dd-MM-yyyy' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input date"><strong></strong>
     </div>
-
-
 </div>
 
 <!--time-->
-<div for="{{hash}}" class="item item-input item-stacked-label calm-border"
-     ng-class="{required: data.required, 'has-error': data.errors.length}"
-     ng-if="data.type == 'time'">
+<div for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'time'">
 
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
@@ -181,10 +162,11 @@
     <!--    <input input id="{{hash}}" type="time" name="{{data.name}}"
                ng-model="data.value" value="{{data.default_value}}" placeholder="{{data.placeholder}}"
                ng-required="data.required">-->
-
     <div ng-required="data.required" ion-datetime-picker time ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
         <!--        {{data.value| date: "H:mm"}}-->
-        <input type="text" date='HH:mm' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input time"><strong></strong>
+        <div ng-if="data.value" style='padding: 15px;'>{{data.value|'HH:mm'}}</div>
+        <div ng-if="!data.value" style='padding: 15px;'><span>tap here to input time</span></div>
+        <!-- <input type="text" date='HH:mm' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input time"><strong></strong> -->
     </div>
 
 </div>
