@@ -144,7 +144,9 @@
         <span class="all-description">{{data.guidance}}</span>
     </div>
     <div ng-required="data.required" ion-datetime-picker date ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
-        <input type="text" date='dd-MM-yyyy' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input date"><strong></strong>
+        <div ng-if="data.value" style='padding: 15px;'>{{data.value | date: 'dd-MM-yyyy'}}</div>
+        <div ng-if="!data.value" style='padding: 15px;color: #A4A4A4'><span>tap here to input date</span></div>
+        <!-- <input type="text" date='dd-MM-yyyy' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input date"><strong></strong> -->
     </div>
 </div>
 
@@ -157,8 +159,8 @@
     </div>
     <div ng-required="data.required" ion-datetime-picker time ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
         <!--        {{data.value| date: "H:mm"}}-->
-        <div ng-if="data.value" style='padding: 15px;'>{{data.value|'HH:mm'}}</div>
-        <div ng-if="!data.value" style='padding: 15px;'><span>tap here to input time</span></div>
+        <div ng-if="data.value" style='padding: 15px;'>{{data.value | date: 'HH:mm'}}</div>
+        <div ng-if="!data.value" style='padding: 15px;color: #A4A4A4'><span>tap here to input time</span></div>
         <!-- <input type="text" date='HH:mm' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input time"><strong></strong> -->
     </div>
 
