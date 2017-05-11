@@ -143,10 +143,6 @@
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
     </div>
-    <!--    <input input id="{{hash}}" type="date" name="{{data.name}}"
-               ng-model="data.value" value="{{data.default_value}}" placeholder="{{data.placeholder}}"
-               ng-required="data.required">-->
-
     <div ng-required="data.required" ion-datetime-picker date ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
         <input type="text" date='dd-MM-yyyy' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input date"><strong></strong>
     </div>
@@ -159,9 +155,6 @@
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
     </div>
-    <!--    <input input id="{{hash}}" type="time" name="{{data.name}}"
-               ng-model="data.value" value="{{data.default_value}}" placeholder="{{data.placeholder}}"
-               ng-required="data.required">-->
     <div ng-required="data.required" ion-datetime-picker time ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
         <!--        {{data.value| date: "H:mm"}}-->
         <div ng-if="data.value" style='padding: 15px;'>{{data.value|'HH:mm'}}</div>
@@ -170,10 +163,3 @@
     </div>
 
 </div>
-
-<!--test
-<div for="{{hash}}" class="item item-input item-stacked-label signature calm-border" ng-if="data.type == 'test'"  ng-model="data.value">
-    <div>{{data.value}}</div>
-    ng-click="modalfieldid(data.field_group_design_id, data.id) ; show()"
-    <a class="button button-calm button-outline all-button" ng-click="directiveClick()" >TEST</a>
-</div>-->
