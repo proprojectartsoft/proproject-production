@@ -8,7 +8,6 @@ angular.module($APP.name).controller('SharedCtrl', [
     'SchedulingService',
     'PayitemService',
     function($rootScope, $scope, FormInstanceService, ShareService, ResourceService, StaffService, SchedulingService, PayitemService) {
-
         $scope.filter = {
             stateshare: 'form',
             edit: false,

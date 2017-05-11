@@ -12,7 +12,6 @@
 
 <!--text area-->
 <label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'textarea'">
-
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
@@ -24,7 +23,6 @@
 
 <!--password-->
 <label for="{{hash}}" class=" item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'password'">
-
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.label}}</span>
         <span class="all-description">{{data.description}}</span>
@@ -36,7 +34,6 @@
 
 <!--select-->
 <label class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'select'">
-
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">
             {{data.name}}
@@ -51,7 +48,6 @@
 
 <!--email-->
 <label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'email'">
-
     <div class="inputLabel">
         <span class=" all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
@@ -63,7 +59,6 @@
 
 <!--number-->
 <label for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'number'">
-
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
@@ -76,7 +71,6 @@
 
 <!--radio-->
 <div ng-if="data.type == 'radio'" class="calm-border">
-
     <div class="inputLabel">
         <div class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}
         </div>
@@ -94,12 +88,10 @@
 <!--check box-->
 <div class="calm-border" ng-if="data.type == 'checkbox'">
     <label class="item item-checkbox all-padding-leftright">
-
         <div class="inputLabel checkbox-container">
             <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
             <span class="all-description">{{data.guidance}}</span>
         </div>
-
         <span class="checkbox all-checkbox">
             <input input id="{{hash}}" type="checkbox" name="{{data.name}}" ng-model="data.value"
                    value="1" ng-required="data.required">
@@ -125,7 +117,6 @@
 
 <!--signature-->
 <div for="{{hash}}" class="item item-input item-stacked-label signature calm-border" ng-if="data.type == 'signature'">
-
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
@@ -138,7 +129,6 @@
 
 <!--date-->
 <div for="{{hash}}" class="item item-input item-stacked-label calm-border" ng-class="{required: data.required, 'has-error': data.errors.length}" ng-if="data.type == 'date'">
-
     <div class="inputLabel">
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
@@ -146,7 +136,6 @@
     <div ng-required="data.required" ion-datetime-picker date ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
         <div ng-if="data.value" style='padding: 15px;'>{{data.value | date: 'dd-MM-yyyy'}}</div>
         <div ng-if="!data.value" style='padding: 15px;color: #A4A4A4'><span>tap here to input date</span></div>
-        <!-- <input type="text" date='dd-MM-yyyy' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input date"><strong></strong> -->
     </div>
 </div>
 
@@ -158,10 +147,7 @@
         <span class="all-description">{{data.guidance}}</span>
     </div>
     <div ng-required="data.required" ion-datetime-picker time ng-model="data.value" month-step="1" hour-step="1" minute-step="1" second-step="1" class="datetime-picker">
-        <!--        {{data.value| date: "H:mm"}}-->
         <div ng-if="data.value" style='padding: 15px;'>{{data.value | date: 'HH:mm'}}</div>
         <div ng-if="!data.value" style='padding: 15px;color: #A4A4A4'><span>tap here to input time</span></div>
-        <!-- <input type="text" date='HH:mm' ng-model="data.value" style='padding: 15px;' placeholder="tap here to input time"><strong></strong> -->
     </div>
-
 </div>
