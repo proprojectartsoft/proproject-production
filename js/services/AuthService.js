@@ -138,30 +138,30 @@ angular.module($APP.name).factory('AuthService', [
                         localStorage.setObject("ppuser", $rootScope.currentUser)
                         return payload.data.data;
                     })
-                    .error(function(response) {
+                    .error(function(response, status) {
                         console.log("Error on login!!");
-                        if (response.status === 0) {
+                        if (status === 0) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Offline',
                                 template: 'No internet connection',
                             });
                             alertPopup.then(function(res) {});
                         }
-                        if (response.status === 502) {
+                        if (status === 502) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Offline',
                                 template: 'Server offline',
                             });
                             alertPopup.then(function(res) {});
                         }
-                        if (response.status === 400) {
+                        if (status === 400) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Error',
                                 template: 'Incorrect user data.',
                             });
                             alertPopup.then(function(res) {});
                         }
-                        if (response.status === 401) {
+                        if (status === 401) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Error',
                                 template: 'Your account has been de-activated. Contact your supervisor for further information.',
