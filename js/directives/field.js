@@ -42,8 +42,16 @@ angular.module($APP.name).directive('field', [
                         FieldUpdateService.addProduct($scope.modalHelper);
                         $rootScope.$broadcast('updateScopeFromDirective');
 
-                        var bottom = $('.Absolute-Center').height() - $('ion-header-bar').height() - $('canvas').height() + 5;
-                        $('.button-bar').css({'bottom': bottom});
+
+                        console.log("ion-content");
+                        console.log($('ion-content').outerHeight());
+                        console.log('form');
+                        console.log($('form.signature-form').outerHeight());
+                        console.log('buttons');
+                        console.log($('div.button-bar').outerHeight());
+                        var bottom = $('ion-content').outerHeight() - $('form.signature-form').outerHeight() - $('div.button-bar').outerHeight() + 5;
+                        console.log('bottom: ' + bottom);
+                        $('div.button-bar').css('bottom': bottom + 'px');
 
 
                         $scope.modal.show();

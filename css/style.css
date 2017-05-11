@@ -244,6 +244,10 @@ textarea {
     max-height: 490px;
 }
 
+.Absolute-Center .button-bar {
+  position: relative;
+}
+
 .all-sketch-icon {
     font-size: 25px;
 }
