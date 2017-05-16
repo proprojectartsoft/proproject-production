@@ -398,6 +398,8 @@ angular.module($APP.name).factory('SyncService', [
                                 }
                             })
                     } else {
+                        console.log("sync - offline - remember obj:");
+                        console.log(localStorage.getObject('ppremember'));
                         if (localStorage.getObject('ppremember')) {
                             load();
                         }
