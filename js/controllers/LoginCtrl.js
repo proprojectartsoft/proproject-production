@@ -43,6 +43,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                     });
                 }
             }).error(function(err) {
+                console.log("login ctrl - error Auth login");
                 SyncService.sync_close();
             })
         };

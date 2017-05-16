@@ -140,23 +140,24 @@ angular.module($APP.name).factory('AuthService', [
                     })
                     .error(function(response, status) {
                         if (status === 0 || status === -1) {
+                          console.log("Auth login error - offline");
                             var alertPopup = $ionicPopup.alert({
-                                title: 'Offline',
-                                template: 'No internet connection',
+                                title: 'Please Note',
+                                template: "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.",
                             });
                             alertPopup.then(function(res) {});
                         }
                         if (status === 502) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Offline',
-                                template: 'Server offline',
+                                template: "<center>Server offline</center>",
                             });
                             alertPopup.then(function(res) {});
                         }
                         if (status === 400) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Error',
-                                template: 'Incorrect user data.',
+                                template: "<center>Incorrect user data.</center>",
                             });
                             alertPopup.then(function(res) {});
                         }
