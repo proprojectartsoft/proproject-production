@@ -402,10 +402,10 @@ angular.module($APP.name).factory('SyncService', [
                         console.log(localStorage.getObject('ppremember'));
                         if (localStorage.getObject('ppremember')) {
                             load();
-                        }
-                        $timeout(function() {
-                            DbService.popopen('Please Note', "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.")
-                        }, 300)
+                            $timeout(function() {
+                                DbService.popopen('Please Note', "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.")
+                            }, 300)
+                        }                        
                     }
                 });
             },
