@@ -104,7 +104,8 @@ textarea {
     background-color: #444;
     color: #fff;
 }
-.all-field-header .item-content{
+
+.all-field-header .item-content {
     background-color: #11C1F3!important;
     border-color: #11C1F3!important;
     border-radius: 5px!important;
@@ -114,23 +115,25 @@ textarea {
     width: 100%;
     padding: 10px 10px!important;
 }
+
 .all-field-header {
     background-color: #11C1F3!important;
     border-color: #11C1F3!important;
     border-radius: 5px!important;
     margin-bottom: 5px!important;
-    padding:10px 10px!important;
+    padding: 10px 10px!important;
     position: relative;
     color: #fff!important;
     box-shadow: 10px 0px 20px rgba(0, 0, 0, 0.19), 6px 0px 6px rgba(0, 0, 0, 0.23);
     z-index: 9001;
     width: 100%;
 }
-.isOpen + .blue-dropArrow,
-.view-item-blue + .blue-dropArrow{
+
+.isOpen+.blue-dropArrow, .view-item-blue+.blue-dropArrow {
     display: block;
 }
-.blue-dropArrow{
+
+.blue-dropArrow {
     display: none;
     position: relative;
     top: -5px;
@@ -142,16 +145,17 @@ textarea {
     border-color: #11C1F3 transparent transparent transparent;
     z-index: 9001;
     margin-bottom: -15px;
-
 }
-.all-field-header.isOpen,
-.view-item-blue {
+
+.all-field-header.isOpen, .view-item-blue {
     border-bottom-right-radius: 0px!important;
     border-bottom-left-radius: 0px!important;
 }
-.all-field-header.isOpen + .blue-dropArrow +.formContent .inputLabel{
+
+.all-field-header.isOpen+.blue-dropArrow+.formContent .inputLabel {
     padding-top: 20px;
 }
+
 .all-field-description {
     font-size: 14px;
     font-weight: 400;
@@ -168,7 +172,8 @@ textarea {
     white-space: normal;
     line-height: 1;
 }
-.all-name{
+
+.all-name {
     font-size: 16px;
     font-weight: 400;
     display: block;
@@ -189,7 +194,7 @@ textarea {
 }
 
 .all-padding-leftright {
-    padding:0;
+    padding: 0;
 }
 
 .all-chevron {
@@ -198,18 +203,23 @@ textarea {
     font-size: 18px;
     text-align: right;
 }
-.add-pic-icon{
-    height: 30px;
+
+.add-pic-icon {
+    height: 35px;
     float: right;
     display: inline-block;
     margin-right: 25px;
 }
-.mr-0{
+
+.mr-0 {
     margin-right: 0!important;
 }
-.add-pic-text{
-    line-height: 26px;
+
+.add-pic-text {
+    line-height: 35px;
+    font-size: 18px;
 }
+
 .all-checkbox {
     left: auto !important;
     right: 8px !important;
@@ -259,6 +269,7 @@ textarea {
         background-color: #000;
     }
 }
+
 
 /* Empty. Add your own CSS if you like */
 
@@ -361,9 +372,7 @@ textarea {
     direction: rtl;
 }
 
-.right_arrow {
-
-}
+.right_arrow {}
 
 .ionic_datepicker_modal_content .selected_date_full {
     font-size: 20px;
@@ -385,17 +394,17 @@ textarea {
     .ionic_datepicker_modal_content {
         padding-top: 0;
     }
-
     .ionic_datepicker_modal_content .selected_date_full {
         font-size: inherit;
     }
-
     .ionic_datepicker_modal_content .selected_date_full {
         padding: 10px 0 0 0;
     }
 }
 
+
 /* back */
+
 .modal-time {
     height: 255px;
     min-height: 0px;
@@ -610,7 +619,8 @@ textarea {
 .has-subheader {
     top: 88px;
 }
-.all-itemlist .item{
+
+.all-itemlist .item {
     height: 60px;
     padding: 5px 10px;
     margin-bottom: 5px;
@@ -618,17 +628,18 @@ textarea {
     border-bottom: 0px;
     border-left: 4px #1EBDF4 solid;
 }
-.form-name{
+
+.form-name {
     font-size: 18px;
-    color:#333;
+    color: #333;
     margin-bottom: 5px;
     font-weight: 400;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
-.form-code,
-.blue-label{
+
+.form-code, .blue-label {
     border-radius: 4px;
     background-color: #1EBDF4;
     color: #fff;
@@ -638,19 +649,23 @@ textarea {
     padding: 2px 5px;
     line-height: 1;
 }
-.label-right{
+
+.label-right {
     float: right;
     background-color: #31475A;
 }
-ion-refresher{
+
+ion-refresher {
     color: #fff;
 }
-.tabs-calm > .tabs, .tabs.tabs-calm{
+
+.tabs-calm>.tabs, .tabs.tabs-calm {
     border-color: #31475A;
     background-color: #31475A;
     background-image: none;
 }
-.formTitle{
+
+.formTitle {
     float: left;
     padding: 10px 5px 10px 8px;
     color: #fff;
@@ -658,72 +673,79 @@ ion-refresher{
     font-weight: 400;
     margin-bottom: 15px;
 }
-.formTitle .blue-label{
+
+.formTitle .blue-label {
     margin-top: 10px;
     float: left;
 }
-.formTitle .header-prj-text{
+
+.formTitle .header-prj-text {
     width: 100%;
 }
-.checkbox-container{
+
+.checkbox-container {
     background: #fff!important;
     padding: 5px 50px 15px 0!important;
 }
-.no-shadow{
+
+.no-shadow {
     box-shadow: 0!important;
 }
-.item-stacked-label textarea,
-.item-stacked-label input[type='date'],
-.item-stacked-label input[type='time'],
-.item-stacked-label input[type='number'],
-.item-checkbox{
+
+.item-stacked-label textarea, .item-stacked-label input[type='date'], .item-stacked-label input[type='time'], .item-stacked-label input[type='number'], .item-checkbox {
     padding: 15px;
     height: auto;
     border-radius: 0!important;
 }
-.item-stacked-label .input-label, .item-stacked-label .icon{
+
+.item-stacked-label .input-label, .item-stacked-label .icon {
     color: #fff;
 }
+
 .checkbox input:before, .checkbox .checkbox-icon:before {
     border-color: #11C0F2;
 }
-.white-bgd{
+
+.white-bgd {
     background-color: #fff;
     text-align: center;
 }
-.images-container{
+
+.images-container {
     background: #31475A;
     border: 0;
 }
-.save-img-btn{
+
+.save-img-btn {
     color: #fff;
     float: right;
     display: inline-block;
     font-size: 19px;
     font-weight: 400;
 }
+
 .inputLabel.checkbox-container {
     padding-bottom: 0px!important;
 }
 
-.white-placeholder{
-    ::-webkit-input-placeholder {
+.white-placeholder {
+     ::-webkit-input-placeholder {
         color: #fff;
     }
-
-    :-moz-placeholder { /* Firefox 18- */
+     :-moz-placeholder {
+        /* Firefox 18- */
         color: #fff;
     }
-
-    ::-moz-placeholder {  /* Firefox 19+ */
+     ::-moz-placeholder {
+        /* Firefox 19+ */
         color: #fff;
     }
-
-    :-ms-input-placeholder {
+     :-ms-input-placeholder {
         color: #fff;
     }
 }
-.item-remove-padding .item-content{
+
+.item-remove-padding .item-content {
     padding: 5px 10px;
-    height:100%;
+    height: 100%;
 }

@@ -173,7 +173,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.substate = 'gallery';
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'photos';
-                    pullDown(); //TODO:
+                    pullDown();
                     break;
                 case 'resource':
                     $scope.doTotal('resource', $scope.resourceField);
@@ -903,7 +903,7 @@ angular.module($APP.name).controller('EditCtrl', [
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
-            pullDown(); //TODO:
+            pullDown();
         }
 
         $scope.testPicture = function(item) {
@@ -995,7 +995,6 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
-                    pullDown(); //TODO:
                 });
             }, function(err) {
                 // An error occured. Show a message to the user
@@ -1030,7 +1029,6 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
-                    pullDown(); //TODO:
                 });
             }, function(err) {
                 // error
@@ -1040,7 +1038,7 @@ angular.module($APP.name).controller('EditCtrl', [
             if ($scope.imgURI.length !== 0) {
                 $scope.imgURI.splice(index, 1);
             }
-            pullDown(); //TODO:
+            pullDown(); 
         };
 
         $scope.convertToDataURLviaCanvas = function(url, callback) {
@@ -1691,7 +1689,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
         }
-        //TODO:
         function pullDown() {
             $('html').css({
                 'visibility': 'hidden'

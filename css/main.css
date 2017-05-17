@@ -458,7 +458,7 @@ label.item.img-description {
     border-top-left-radius: 0px;
     border-top-right-radius: 0px;
     overflow: hidden;
-    height: 46px;
+    /*height: 46px;*/
     font-size: 14px;
     color: #000;
     background-color: #fff;

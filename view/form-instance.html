@@ -1,14 +1,12 @@
-
-<ion-view title="Form Instance" id="form-instance" cache-view="false"
-          ng-class="{'bar-hide': slideHeader, 'bar-helper':slideHeaderHelper}">
-    <ion-header-bar align-title="left" class="bar-subheader item item-button-left subHeader-form-bar"  ng-click="backHelper()">
+<ion-view title="Form Instance" id="form-instance" cache-view="false" ng-class="{'bar-hide': slideHeader, 'bar-helper':slideHeaderHelper}">
+    <ion-header-bar align-title="left" class="bar-subheader item item-button-left subHeader-form-bar" ng-click="backHelper()">
         <div class="back-arrow ion-ios-arrow-left"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form'">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
-    <ion-content scroll-watch class="blue-bgd"  delegate-handle="mainScroll">
+    <ion-content scroll-watch class="blue-bgd" delegate-handle="mainScroll">
         <div class="content">
             <div class="list" ng-if="filter.state === 'form'">
-<!--                <a class="item item-button-left subHeader-form-bar" ng-click="back()">
+                <!--                <a class="item item-button-left subHeader-form-bar" ng-click="back()">
                     <div class="back-arrow ion-ios-arrow-left"></div>
                     <div class="header-prj-text">{{formData.category}}</div>
                 </a>-->
@@ -19,8 +17,7 @@
                 <i class="ion-android-share-alt" style="float: right;color: #fff;font-size: 30px;margin-top: 10px;margin-right: 10px;" ng-click="shareThis(formData)"></i>
                 <div class="form-container-bgd">
                     <div ng-repeat="fieldset in formData.field_group_instances" fs data="fieldset" style="margin-bottom: 5px">
-                        <a id="a{{fieldset.$$hashKey}}"
-                           class="item-stable item all-field-header fs view-item-blue">
+                        <a id="a{{fieldset.$$hashKey}}" class="item-stable item all-field-header fs view-item-blue">
                             <div class="fieldSet-name">
                                 {{fieldset.name}}
                                 <!--<div class="blue-label label-right">{{fieldset.id}}</div>-->
@@ -29,28 +26,26 @@
                             <span class="all-field-description">{{fieldset.guidance}}</span>
                         </a>
                         <div class="blue-dropArrow"></div>
-                        <view-field class="item-accordion" data="field"
-                                    ng-repeat="field in fieldset.field_instances"></view-field>
+                        <view-field class="item-accordion" data="field" ng-repeat="field in fieldset.field_instances"></view-field>
                     </div>
-                    <div class="item-stable item fs all-field-header" ng-if="formData.resource_field_id" >
-                        <span class="add-pic-text">Resource field</span>    
+                    <div class="item-stable item fs all-field-header" ng-if="formData.resource_field_id">
+                        <span class="add-pic-text">Resource field</span>
                         <button ng-click="goState('resource')">Open</button>
                     </div>
                     <div class="item-stable item fs all-field-header" ng-if="formData.scheduling_field_id">
-                        <span class="add-pic-text">Scheduling field</span>    
+                        <span class="add-pic-text">Scheduling field</span>
                         <button ng-click="goState('scheduling')">Open</button>
                     </div>
                     <div class="item-stable item fs all-field-header" ng-if="formData.pay_item_field_id">
-                        <span class="add-pic-text">Pay-item field</span>    
+                        <span class="add-pic-text">Pay-item field</span>
                         <button ng-click="goState('payitem')">Open</button>
                     </div>
                     <div class="item-stable item fs all-field-header" ng-if="formData.staff_field_id">
-                        <span class="add-pic-text">Staff field</span>    
+                        <span class="add-pic-text">Staff field</span>
                         <button ng-click="goState('staff')">Open</button>
                     </div>
-                    <div style="    padding: 5px;">
-                        <button class="button button-block button-calm"
-                                ng-disabled="formData.permission < 2" ng-click="edit()">Edit
+                    <div style="padding: 5px;">
+                        <button class="button button-block button-calm" ng-disabled="formData.permission < 2" ng-click="edit()">Edit
                         </button>
                     </div>
                 </div>
