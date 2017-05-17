@@ -28,7 +28,7 @@ angular.module($APP.name).controller('FormCtrl', [
         $ionicSideMenuDelegate.canDragContent(false);
 
         $scope.linkAux = 'forms';
-
+        pullDown();
         $scope.updateCalculation = function(data) {
             console.log(data)
             if (data.unit_obj.name === 'm' || data.unit_obj.name === 'ft') {
@@ -165,6 +165,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'photodetails':
                     $scope.filter.substate = 'gallery';
                     $scope.linkAux = 'photos';
+                    pullDown(); //TODO:
                     break;
                 case 'resource':
                     $scope.doTotal('resource', $scope.resourceField);
@@ -1166,6 +1167,7 @@ angular.module($APP.name).controller('FormCtrl', [
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
+            pullDown(); //TODO:
         }
 
         $scope.testPicture = function(item) {
@@ -1210,6 +1212,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
+                    pullDown(); //TODO:
                 });
             }, function(err) {
                 // An error occured. Show a message to the user
@@ -1256,17 +1259,17 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
+                    pullDown(); //TODO:
                 });
 
-            }, function(err) {
-                // error
-            });
+            }, function(err) {});
         };
 
         $scope.removePicture = function(index) {
             if ($scope.imgURI.length !== 0) {
                 $scope.imgURI.splice(index, 1);
             }
+            pullDown(); //TODO:
         };
 
         $scope.convertToDataURLviaCanvas = function(url, callback) {
@@ -1511,6 +1514,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (!$scope.formData.resource_field_design && !$scope.formData.scheduling_field_design && !$scope.formData.pay_item_field_design && !$scope.formData.staff_field_design) {
                             $scope.fastSave($scope.formData, $scope.imgURI);
                         }
+
                     });
                 }
             });
@@ -1544,6 +1548,10 @@ angular.module($APP.name).controller('FormCtrl', [
                             FormInstanceService.get($rootScope.formId).then(function(data) {
                                 $rootScope.rootForm = data;
                                 formUp.close();
+
+                                //TODO: sync
+
+
                                 $state.go('app.formInstance', {
                                     'projectId': $rootScope.projectId,
                                     'type': 'form',
@@ -1556,7 +1564,6 @@ angular.module($APP.name).controller('FormCtrl', [
                     formUp.close();
                     if (data && data.status === 400) {
                         $timeout(function() {
-                            formUp.close();
                             $timeout(function() {
                                 var alertPopup2 = $ionicPopup.alert({
                                     title: 'Submision failed',
@@ -1567,11 +1574,10 @@ angular.module($APP.name).controller('FormCtrl', [
                         });
                     } else {
                         $timeout(function() {
-                            formUp.close();
                             $timeout(function() {
                                 var alertPopup = $ionicPopup.alert({
                                     title: 'Submision failed',
-                                    template: 'You are offline. Submit forms by syncing next time you are online'
+                                    template: 'You are offline. Submit forms by syncing next time you are online.'
                                 }).then(function(res) {
                                     $state.go('app.forms', {
                                         'projectId': $rootScope.projectId,
@@ -1582,6 +1588,25 @@ angular.module($APP.name).controller('FormCtrl', [
                         });
                     }
                 });
+        }
+        //TODO:
+        function pullDown() {
+            $('html').css({
+                'visibility': 'hidden'
+            });
+            angular.element(document).ready(function() {
+                $timeout(function() {
+                    console.log("wait");
+                    $('.pull-down').each(function() {
+                        var $this = $(this);
+                        var h = $this.parent().height() - $this.height() - $this.next().height();
+                        $this.css({
+                            'padding-top': h
+                        });
+                    })
+                    document.getElementsByTagName("html")[0].style.visibility = "visible";
+                }, 100);
+            })
         }
     }
 ]);

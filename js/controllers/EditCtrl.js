@@ -173,6 +173,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.substate = 'gallery';
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'photos';
+                    pullDown(); //TODO:
                     break;
                 case 'resource':
                     $scope.doTotal('resource', $scope.resourceField);
@@ -902,6 +903,7 @@ angular.module($APP.name).controller('EditCtrl', [
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
+            pullDown(); //TODO:
         }
 
         $scope.testPicture = function(item) {
@@ -993,6 +995,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
+                    pullDown(); //TODO:
                 });
             }, function(err) {
                 // An error occured. Show a message to the user
@@ -1027,8 +1030,8 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
+                    pullDown(); //TODO:
                 });
-
             }, function(err) {
                 // error
             });
@@ -1037,6 +1040,7 @@ angular.module($APP.name).controller('EditCtrl', [
             if ($scope.imgURI.length !== 0) {
                 $scope.imgURI.splice(index, 1);
             }
+            pullDown(); //TODO:
         };
 
         $scope.convertToDataURLviaCanvas = function(url, callback) {
@@ -1092,8 +1096,8 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    //                                            var date = new Date(item.current_day_obj);
-                                    //                                            item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                    // var date = new Date(item.current_day_obj);
+                                    // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     item.current_day = item.current_day_obj;
                                 }
                             });
@@ -1118,8 +1122,8 @@ angular.module($APP.name).controller('EditCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        //                                                var date = new Date(res.current_day_obj);
-                                        //                                                res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                        // var date = new Date(res.current_day_obj);
+                                        // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -1686,6 +1690,25 @@ angular.module($APP.name).controller('EditCtrl', [
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
+        }
+        //TODO:
+        function pullDown() {
+            $('html').css({
+                'visibility': 'hidden'
+            });
+            angular.element(document).ready(function() {
+                $timeout(function() {
+                    console.log("wait");
+                    $('.pull-down').each(function() {
+                        var $this = $(this);
+                        var h = $this.parent().height() - $this.height() - $this.next().height();
+                        $this.css({
+                            'padding-top': h
+                        });
+                    })
+                    document.getElementsByTagName("html")[0].style.visibility = "visible";
+                }, 100);
+            })
         }
     }
 ]);
