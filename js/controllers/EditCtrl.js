@@ -20,7 +20,8 @@ angular.module($APP.name).controller('EditCtrl', [
     '$ionicPopover',
     '$stateParams',
     '$state',
-    function($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory, ResourceService, StaffService, SchedulingService, PayitemService, $ionicPopover, $stateParams, $state) {
+    '$filter',
+    function($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate, $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory, ResourceService, StaffService, SchedulingService, PayitemService, $ionicPopover, $stateParams, $state, $filter) {
 
         $scope.filter = {
             edit: true,
@@ -608,14 +609,22 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.popup_predicate.product_ref = item.product_ref;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
                     //TODO: use filter!!
-                    angular.forEach($rootScope.resource_type_list, function(restyp) {
-                        console.log(restyp.id, item.resource_type_id)
-                        if (restyp.name === item.resource_type_name) {
-                            $scope.filter.popup_predicate.res_type_obj = restyp;
-                            $scope.filter.popup_predicate.resource_type_id = restyp.id;
-                            $scope.filter.popup_predicate.resource_type_name = restyp.name;
-                        }
+
+                    var restyp = $filter('filter')($rootScope.resource_type_list, {
+                        name: item.resource_type_name
                     });
+                    $scope.filter.popup_predicate.res_type_obj = restyp[0];
+                    $scope.filter.popup_predicate.resource_type_id = restyp[0].id;
+                    $scope.filter.popup_predicate.resource_type_name = restyp[0].name;
+
+                    // angular.forEach($rootScope.resource_type_list, function(restyp) {
+                    //     console.log(restyp.id, item.resource_type_id)
+                    //     if (restyp.name === item.resource_type_name) {
+                    //         $scope.filter.popup_predicate.res_type_obj = restyp;
+                    //         $scope.filter.popup_predicate.resource_type_id = restyp.id;
+                    //         $scope.filter.popup_predicate.resource_type_name = restyp.name;
+                    //     }
+                    // });
                     angular.forEach($rootScope.unit_list, function(unt) {
                         if (unt.name === item.unit_name) {
                             $scope.filter.popup_predicate.unit_obj = unt;
@@ -1580,6 +1589,7 @@ angular.module($APP.name).controller('EditCtrl', [
                 }
             });
         };
+
         function elmYPosition(id) {
             var elm = document.getElementById(id);
             var y = elm.offsetTop;
@@ -1668,6 +1678,7 @@ angular.module($APP.name).controller('EditCtrl', [
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
         }
+
         function pullDown() {
             $('html').css({
                 'visibility': 'hidden'
