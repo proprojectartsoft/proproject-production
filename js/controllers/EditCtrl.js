@@ -1289,9 +1289,9 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    //                                            var date = new Date(item.current_day_obj);
-                                    //                                            item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    item.current_day = item.current_day_obj.getDate(); //TODO:
+                                    // var date = new Date(item.current_day_obj);
+                                    // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                    item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
                                 }
                             });
                             ResourceService.add_field($rootScope.resourceField).then(function(x) {
