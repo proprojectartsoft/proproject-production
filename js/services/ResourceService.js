@@ -16,18 +16,14 @@ angular.module($APP.name).factory('ResourceService', [
                     $rootScope.uploadStatus = 'error';
                 });
             },
+            //list all the resources
             list_manager: function() {
                 return $http.get($APP.server + '/api/resource').then(
                     function(payload) {
                         return payload.data;
                     });
             },
-            list_staff: function() {
-                return $http.get($APP.server + '/api/staff').then(
-                    function(payload) {
-                        return payload.data;
-                    });
-            },
+            //list all units
             list_unit: function() {
                 return $http.get($APP.server + '/api/unit').then(
                     function(payload) {
@@ -40,20 +36,16 @@ angular.module($APP.name).factory('ResourceService', [
                         return payload.data;
                     });
             },
+            //list all resource types
             list_resourcetype: function() {
                 return $http.get($APP.server + '/api/resourcetype').then(
                     function(payload) {
                         return payload.data;
                     });
             },
+            //list all absenteeism reasons
             list_absenteeism: function() {
                 return $http.get($APP.server + '/api/absenteeismreasons/list').then(
-                    function(payload) {
-                        return payload.data;
-                    });
-            },
-            list_resourcetype: function() {
-                return $http.get($APP.server + '/api/resourcetype').then(
                     function(payload) {
                         return payload.data;
                     });
@@ -67,6 +59,7 @@ angular.module($APP.name).factory('ResourceService', [
                     return payload.data;
                 });
             },
+            //list all resources added to a form given by id
             get_field: function(id) {
                 return $http.get($APP.server + '/api/resourcefield', {
                     params: {
@@ -76,6 +69,7 @@ angular.module($APP.name).factory('ResourceService', [
                     return payload.data;
                 });
             },
+            //add resources to a form
             add_field: function(data) {
                 return $http.post($APP.server + '/api/resourcefield', data, {}).then(function successCallback(response) {
                     return response.data;
@@ -83,6 +77,7 @@ angular.module($APP.name).factory('ResourceService', [
                     return response.data;
                 });
             },
+            //update the resources of a form
             update_field: function(data) {
                 return $http.put($APP.server + '/api/resourcefield', data, {}).then(function successCallback(response) {
                     return response.data;

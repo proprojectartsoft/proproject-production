@@ -545,9 +545,9 @@ angular.module($APP.name).controller('FormCtrl', [
             if (test !== 'pi') {
                 $scope.filter.pi = false;
                 if (predicate.staff) {
-                    $scope.filter.popup_list = $rootScope.staffField; //$rootScope.staff_list; $scop.
+                    $scope.filter.popup_list = $rootScope.staff_list;
                 } else {
-                    $scope.filter.popup_list = $rootScope.resourceField; //$rootScope.resource_list;
+                    $scope.filter.popup_list = $rootScope.resource_list;
                 }
             } else {
                 $scope.filter.pi = true;
@@ -673,6 +673,7 @@ angular.module($APP.name).controller('FormCtrl', [
             }
         };
 
+//TODO:
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
             function(rs) {
                 $scope.formData = JSON.parse(rs.rows.item(0).data)
@@ -718,7 +719,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             "abseteeism_reason_name": ''
                         }]
                     };
-                    $rootScope.resourceField = $scope.resourceField;
                     $scope.filter.substate = $scope.resourceField.resources[0];
                 }
                 if ($scope.formData.pay_item_field_design) {
@@ -1218,17 +1218,6 @@ angular.module($APP.name).controller('FormCtrl', [
         };
 
         $scope.addPicture = function(index) {
-            //            window.imagePicker.getPictures(
-            //                    function (results) {
-            //                        $scope.convertToDataURLviaCanvas(results[0], function (base64Img) {
-            //                            $scope.item.base64String = base64Img.replace(/^data:image\/(png|jpg);base64,/, "");
-            //                        });
-            //                    }, function (error) {
-            //            }, {
-            //                maximumImagesCount: 1,
-            //                width: 800,
-            //                quality: 10
-            //            });
             var options = {
                 maximumImagesCount: 1,
                 quality: 20,

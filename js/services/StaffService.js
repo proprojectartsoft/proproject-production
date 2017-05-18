@@ -2,6 +2,7 @@ angular.module($APP.name).factory('StaffService', [
     '$http', '$rootScope',
     function($http, $rootScope) {
         return {
+            //list the added staff for a form given by id
             get_field: function(id) {
                 return $http.get($APP.server + '/api/stafffield', {
                     params: {
@@ -11,6 +12,7 @@ angular.module($APP.name).factory('StaffService', [
                     return payload.data;
                 });
             },
+            //add staff for a form
             add_field: function(data) {
                 return $http.post($APP.server + '/api/stafffield', data, {}).then(function successCallback(response) {
                     return response.data;
@@ -18,6 +20,7 @@ angular.module($APP.name).factory('StaffService', [
                     return response.data;
                 });
             },
+            //update staff for a form
             update_field: function(data) {
                 return $http.put($APP.server + '/api/stafffield', data, {}).then(function successCallback(response) {
                     return response.data;
@@ -25,6 +28,7 @@ angular.module($APP.name).factory('StaffService', [
                     return response.data;
                 });
             },
+            //list all staffs
             list_manager: function() {
                 return $http.get($APP.server + '/api/staff').then(
                     function(payload) {
