@@ -47,87 +47,19 @@ angular.module($APP.name).controller('AppCtrl', [
         });
 
         ResourceService.list_manager().then(function(result) {
-            console.log("App Ctrl list resources");
-            console.log(result);
             $rootScope.resource_list = result;
         })
-
         ResourceService.list_unit().then(function(result) {
-            console.log("App Ctrl list units");
-            console.log(result);
             $rootScope.unit_list = result;
         })
-
         StaffService.list_manager().then(function(result) {
-          console.log("App Ctrl list staff");
-          console.log(result);
-          $rootScope.staff_list = result;
+            $rootScope.staff_list = result;
         })
-
-
-
-        $rootScope.resource_type_list = [{
-            "id": 1,
-            "name": "Labour"
-        }, {
-            "id": 2,
-            "name": "Material"
-        }, {
-            "id": 3,
-            "name": "Plant"
-        }, {
-            "id": 5,
-            "name": "Management"
-        }, {
-            "id": 4,
-            "name": "Subcontractor"
-        }, {
-            "id": 300,
-            "name": "Operative"
-        }];
-        $rootScope.abs_list = [{
-            "id": 1,
-            "reason": "Annual Leave"
-        }, {
-            "id": 2,
-            "reason": "Inclement Weather"
-        }, {
-            "id": 3,
-            "reason": "Job not ready"
-        }, {
-            "id": 4,
-            "reason": "Material Unavailable"
-        }, {
-            "id": 5,
-            "reason": "No show"
-        }, {
-            "id": 6,
-            "reason": "On other site"
-        }, {
-            "id": 7,
-            "reason": "Public Holiday"
-        }, {
-            "id": 8,
-            "reason": "Sick Leave"
-        }, {
-            "id": 9,
-            "reason": "Training"
-        }, {
-            "id": 10,
-            "reason": "Unfavourable site conditions"
-        }];
-
-
         ResourceService.list_resourcetype().then(function(result) {
-            console.log("App Ctrl list resource types: 1 - request, 2 - hardcoded");
-            console.log(result);
-            console.log($rootScope.resource_type_list);
+            $rootScope.resource_type_list = result;
         })
-
         ResourceService.list_absenteeism().then(function(result) {
-            console.log("App Ctrl list absenteeism: 1 - request, 2 - hardcoded");
-            console.log(result);
-            console.log($rootScope.abs_list);
+            $rootScope.abs_list = result;
         })
 
         var resourcesCache = CacheFactory.get('resourcesCache');
@@ -138,7 +70,6 @@ angular.module($APP.name).controller('AppCtrl', [
             });
         }
         var aux;
-        console.log(resourcesCache.keys())
         angular.forEach(resourcesCache.keys(), function(key) {
             aux = resourcesCache.get(key);
             $rootScope.resource_list.push(aux);
@@ -167,7 +98,5 @@ angular.module($APP.name).controller('AppCtrl', [
             aux = custSettCache.get(key);
             $rootScope.custSett[aux.name] = aux.value;
         });
-        console.log($rootScope.custSett)
-
     }
 ]);

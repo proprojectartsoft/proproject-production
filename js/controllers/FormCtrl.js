@@ -581,6 +581,8 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.popup_predicate.name = item.name;
                     $scope.filter.popup_predicate.product_ref = item.product_ref;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
+
+                    //TODO: use filter instead of foreach
                     angular.forEach($rootScope.resource_type_list, function(restyp) {
                         console.log(restyp.id, item.resource_type_id)
                         if (restyp.name === item.resource_type_name) {

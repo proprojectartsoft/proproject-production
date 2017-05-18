@@ -32,9 +32,9 @@ angular.module($APP.name).controller('EditCtrl', [
 
         $scope.linkAux = 'forms';
 
-        $scope.updateCalculation = function(data) {
-            console.log(data)
-        }
+        // $scope.updateCalculation = function(data) {
+        //     console.log(data)
+        // }
 
         $scope.updateCalculation = function(data) {
             console.log(data)
@@ -110,7 +110,6 @@ angular.module($APP.name).controller('EditCtrl', [
             }
             data.quantity = Math.round(data.quantity * 100) / 100
         }
-
         $scope.updateTitle = function(title, placeholder) {
             if (title) {
                 if (placeholder === 'Resource') {
@@ -153,7 +152,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 $scope.titleShow = placeholder;
             }
         }
-
         $scope.backHelper = function() {
             console.log($scope.linkAux)
             switch ($scope.linkAux) {
@@ -484,7 +482,6 @@ angular.module($APP.name).controller('EditCtrl', [
             }
         }
 
-
         $ionicPopover.fromTemplateUrl('view/search.html', {
             scope: $scope
         }).then(function(popover) {
@@ -584,7 +581,6 @@ angular.module($APP.name).controller('EditCtrl', [
                     $rootScope.payitem_list = data;
                     $scope.filter.popup_list = $rootScope.payitem_list;
                 });
-
             }
             $scope.popover.show($event);
         };
@@ -611,6 +607,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.popup_predicate.name = item.name;
                     $scope.filter.popup_predicate.product_ref = item.product_ref;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
+                    //TODO: use filter!!
                     angular.forEach($rootScope.resource_type_list, function(restyp) {
                         console.log(restyp.id, item.resource_type_id)
                         if (restyp.name === item.resource_type_name) {
@@ -907,12 +904,8 @@ angular.module($APP.name).controller('EditCtrl', [
         }
 
         $scope.testPicture = function(item) {
-            //            $scope.trim();
             $scope.filter.substate = 'pic';
-            console.log(item)
             $scope.filter.picture = item;
-            console.log($scope.imgURI)
-            //            console.log($scope.imgURI[item], $scope.filter.picture)
         }
         $scope.trim = function() {
             $scope.pictures = [];
@@ -1000,7 +993,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 // An error occured. Show a message to the user
             });
         };
-
         $scope.addPicture = function(index) {
             var options = {
                 maximumImagesCount: 1,
@@ -1038,9 +1030,8 @@ angular.module($APP.name).controller('EditCtrl', [
             if ($scope.imgURI.length !== 0) {
                 $scope.imgURI.splice(index, 1);
             }
-            pullDown(); 
+            pullDown();
         };
-
         $scope.convertToDataURLviaCanvas = function(url, callback) {
             var img = new Image();
             img.crossOrigin = 'Anonymous';
@@ -1094,9 +1085,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    // var date = new Date(item.current_day_obj);
-                                    // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    item.current_day = item.current_day_obj;
+                                    item.current_day = item.current_day_obj.getDate(); //TODO:
                                 }
                             });
                             ResourceService.update_field($rootScope.resourceField).then(function(x) {});
@@ -1302,7 +1291,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                 if (item.current_day_obj) {
                                     //                                            var date = new Date(item.current_day_obj);
                                     //                                            item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    item.current_day = item.current_day_obj;
+                                    item.current_day = item.current_day_obj.getDate(); //TODO:
                                 }
                             });
                             ResourceService.add_field($rootScope.resourceField).then(function(x) {
@@ -1590,9 +1579,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     });
                 }
             });
-
         };
-
         function elmYPosition(id) {
             var elm = document.getElementById(id);
             var y = elm.offsetTop;
@@ -1603,7 +1590,6 @@ angular.module($APP.name).controller('EditCtrl', [
             }
             return y;
         }
-
         $scope.goto = function(id) {
             if (id) {
                 $scope.scroll_ref = $timeout(function() { // we need little delay
@@ -1613,7 +1599,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 }, 50);
             }
         };
-
         $scope.toggleGroup = function(group, id) {
             if ($scope.isGroupShown(group)) {
                 $scope.shownGroup = null;
@@ -1622,7 +1607,6 @@ angular.module($APP.name).controller('EditCtrl', [
             }
             $scope.goto(id);
         };
-
         $scope.repeatGroup = function(x) {
             var aux = {};
             console.log(x);
@@ -1653,7 +1637,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 }
             }
         };
-
         $scope.repeatField = function(x, y) {
             var test = {};
             angular.copy(y, test);
@@ -1671,19 +1654,15 @@ angular.module($APP.name).controller('EditCtrl', [
                 }
             }
         };
-
         $scope.isGroupShown = function(group) {
             return $scope.shownGroup === group;
         };
-
         $scope.$on('updateScopeFromDirective', function() {
             FormUpdateService.addProduct($scope.formData, $scope.modalHelper);
         });
-
         $scope.$on('moduleSaveChanges', function() {
             $scope.formData = FormUpdateService.getProducts();
         });
-
         $scope.goToTop = function() {
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();

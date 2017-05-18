@@ -396,10 +396,12 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
+        //get all the fields for the current completed form
         FormInstanceService.get($rootScope.formId).then(function(data) {
             $rootScope.formData = data;
             $scope.formData = data;
             $scope.titleShow = $scope.formData.name;
+            //get resources data
             if (data.resource_field_id) {
                 ResourceService.get_field(data.resource_field_id).then(function(res) {
                     $scope.resourceField = res;
@@ -429,12 +431,13 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             var partsOfStr = item.current_day.split('-');
                             console.log(partsOfStr)
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            //                            item.current_day_obj = item.current_day;
+                            // item.current_day_obj = item.current_day;
                         }
                     });
                     $rootScope.resourceField = $scope.resourceField;
                 });
             }
+            //get staff data
             if (data.staff_field_id) {
                 StaffService.get_field(data.staff_field_id).then(function(res) {
                     $scope.staffField = res;
@@ -476,6 +479,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $rootScope.staffField = $scope.staffField;
                 });
             }
+            //get schedule data
             if (data.scheduling_field_id) {
                 SchedulingService.get_field(data.scheduling_field_id).then(function(res) {
                     $scope.payitemField = res;
@@ -563,6 +567,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $rootScope.payitemField = $scope.payitemField;
                 });
             }
+            //get payment data
             if (data.pay_item_field_id) {
                 PayitemService.get_field(data.pay_item_field_id).then(function(res) {
                     $scope.payitemField = res;
