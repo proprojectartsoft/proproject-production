@@ -1300,7 +1300,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                 if (item.current_day_obj) {
                                     // var date = new Date(item.current_day_obj);
                                     // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
+                                    item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); //TODO: REMOVE FILTER BUT FIND OUT WHY DATE HAS FORMAT JAN 1, YEAR!!!!
                                 }
                             });
                             ResourceService.add_field($rootScope.resourceField).then(function(x) {
