@@ -348,26 +348,11 @@ input[type='text'], input[type='number'], input[type='email'] {
     padding: 0 5px !important;
 }
 
-.popup-head {
-    background-color: #1EBDF4;
-    color: white;
-}
-
-.popup-buttons .button .button-positive {
-    border-color: #1EBDF4!important;
-    background-color: #1EBDF4!important;
-}
-
 .bar-header {
     .bar .buttons {
         display: inline-block;
         width: 30px;
     }
-}
-
-.popup-buttons .ion-person-add {
-    color: #444;
-    font-size: 22px;
 }
 
 form {
