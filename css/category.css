@@ -352,7 +352,7 @@ input[type='text'], input[type='number'], input[type='email'] {
     background-color: #1EBDF4;
 }
 
-.popup-buttons .button.button-positive {
+.popup-buttons .button .button-positive {
     border-color: #1EBDF4;
     background-color: #1EBDF4;
 }
