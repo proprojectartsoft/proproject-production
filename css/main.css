@@ -1,3 +1,18 @@
+.popup-head {
+    background-color: #1EBDF4;
+    color: white;
+}
+
+.popup-buttons .button .button-positive {
+    border-color: #1EBDF4!important;
+    background-color: #1EBDF4!important;
+}
+
+.popup-buttons .ion-person-add {
+    color: #444;
+    font-size: 22px;
+}
+
 .login-container ::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
     color: #fff;

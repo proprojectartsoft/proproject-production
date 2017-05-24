@@ -350,11 +350,12 @@ input[type='text'], input[type='number'], input[type='email'] {
 
 .popup-head {
     background-color: #1EBDF4;
+    color: white;
 }
 
 .popup-buttons .button .button-positive {
-    border-color: #1EBDF4;
-    background-color: #1EBDF4;
+    border-color: #1EBDF4!important;
+    background-color: #1EBDF4!important;
 }
 
 .bar-header {
