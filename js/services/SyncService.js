@@ -385,24 +385,14 @@ angular.module($APP.name).factory('SyncService', [
                                         }
                                     } else {
                                         load();
-                                        $timeout(function() {
-                                            DbService.popopen('Error', "<center>Server is offline</center>")
-                                            console.log('Server is offline');
-                                        }, 1000)
                                     }
                                 } else {
                                     load();
-                                    $timeout(function() {
-                                        DbService.popopen('Please Note', "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.")
-                                    }, 300)
                                 }
                             })
                     } else {
                         if (localStorage.getObject('ppremember')) {
                             load();
-                            $timeout(function() {
-                                DbService.popopen('Please Note', "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.")
-                            }, 300)
                         }
                     }
                 });
@@ -443,23 +433,13 @@ angular.module($APP.name).factory('SyncService', [
                                         }
                                     } else {
                                         load();
-                                        $timeout(function() {
-                                            DbService.popopen('Error', "<center>Server is offline</center>")
-                                            console.log('Server is offline');
-                                        }, 100)
                                     }
                                 } else {
                                     load();
-                                    $timeout(function() {
-                                        DbService.popopen('Please Note', "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.")
-                                    }, 100)
                                 }
                             })
                     } else {
                         load();
-                        $timeout(function() {
-                            DbService.popopen('Please Note', "You are offline.")
-                        }, 100)
                     }
                 });
             },

@@ -26,7 +26,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                     if (response) {
                         $timeout(function() {
                             SyncService.sync_close();
-                            SyncService.sync();
+                            SyncService.sync_button();
                         });
                     }
                 }).error(function(err) {
