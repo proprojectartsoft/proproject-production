@@ -8,6 +8,7 @@
                     <img src="img/new/logo.png">
                 </div>
             </div>
+            <div class="app-name welcome-big">ProProject - Login</div>
             <form class="login-form" ng-submit="login()" role="form" name="loginForm" novalidate="">
                 <div class="input-container">
                     <input type="email" ng-model="user.username" required="required"><strong></strong>
@@ -18,8 +19,7 @@
                     <label class="label-bar">Password</label>
                 </div>
                 <div class="input-container">
-                    <button class="button button-full button-calm" type="submit"
-                            ng-disabled="loginForm.$invalid">
+                    <button class="button button-full button-calm" type="submit" ng-disabled="loginForm.$invalid">
                         Login
                     </button>
                     <div class="remember-container">
