@@ -35,6 +35,7 @@ angular.module($APP.name).controller('AppCtrl', [
         $rootScope.resource_list = [];
         $rootScope.unit_list = [];
         $rootScope.custSett = [];
+        localStorage.removeItem('loggedOut');
 
         $rootScope.$watch('projectsCache.keys()', function(newValue, oldValue) {
             angular.forEach(projectsCache.keys(), function(key) {

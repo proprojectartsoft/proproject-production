@@ -65,19 +65,16 @@ angular.module($APP.name).controller('NavCtrl', [
         $scope.isDisconnect = {
             checked: false
         };
-
         $scope.pushIsDisconnectChange = function() {
             if ($scope.isDisconnect.checked) {
                 $scope.logout();
             }
         };
-
-
         $scope.logout = function() {
             if (navigator.onLine) {
-                SyncService.sync_close()
-
+                SyncService.sync_close();
                 AuthService.logout().success(function() {});
+                localStorage.setObject('loggedOut', true);
                 $state.go('login');
             } else {
                 $timeout(function() {
@@ -90,7 +87,6 @@ angular.module($APP.name).controller('NavCtrl', [
                 console.log('wutm8?')
             });
         }
-
         $scope.updateTitle = function(project) {
             $rootScope.navTitle = project.name;
             $rootScope.projectId = project.id;

@@ -127,7 +127,6 @@ angular.module($APP.name).factory('AuthService', [
                             role_title: payload.data.role.title,
                             active: payload.data.active
                         };
-
                         var settingsCache = CacheFactory.get('settings');
                         if (!settingsCache) {
                             settingsCache = CacheFactory('settings');
