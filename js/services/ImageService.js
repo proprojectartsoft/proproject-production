@@ -9,6 +9,8 @@ angular.module($APP.name).factory('ImageService', [
                     withCredentials: true
                 }).then(function(payload) {
                     return payload.data;
+                }, function(err) {
+                    return err;
                 });
             }
         }
