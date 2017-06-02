@@ -1542,7 +1542,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 content: "",
                 buttons: []
             });
-            FormInstanceService.create(datax)
+            FormInstanceService.create(datax, img)
                 .success(function(data) {
                     if (data && data.data && data.data.message) {
                         $timeout(function() {
@@ -1559,23 +1559,18 @@ angular.module($APP.name).controller('FormCtrl', [
                         });
                     } else {
                         $rootScope.formId = data.id;
-                        var list = ConvertersService.photoList(img, $rootScope.formId, $stateParams.projectId);
-                        if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) {
-                                if (!data.message && data.status !== 0) {
-                                    FormInstanceService.get($rootScope.formId).then(function(data) {
-                                        $rootScope.rootForm = data;
-                                        formUp.close();
-                                        //automatically sync previousely offline created forms
-                                        if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
-                                            SyncService.sync_button();
-                                        $state.go('app.formInstance', {
-                                            'projectId': $rootScope.projectId,
-                                            'type': 'form',
-                                            'formId': data.id
-                                        });
-                                    });
-                                }
+                        if (!data.message && data.status !== 0) {
+                            FormInstanceService.get($rootScope.formId).then(function(data) {
+                                $rootScope.rootForm = data;
+                                formUp.close();
+                                //automatically sync previousely offline created forms
+                                if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
+                                    SyncService.sync_button();
+                                $state.go('app.formInstance', {
+                                    'projectId': $rootScope.projectId,
+                                    'type': 'form',
+                                    'formId': data.id
+                                });
                             });
                         }
                     }

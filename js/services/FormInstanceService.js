@@ -21,11 +21,19 @@ angular.module($APP.name).factory('FormInstanceService', [
                     },
                     function(err) {});
             },
-            create: function(data) {
+            create: function(data, imgUri) {
                 var requestForm = ConvertersService.designToInstance(data);
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
                 }).success(function(payload) {
+                    if (!payload.message) {
+                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
+                        if (list.length !== 0) {
+                            ImageService.create(list).then(function(x) {
+                                return x;
+                            });
+                        }
+                    }
                     return payload.data;
                 }).error(function(payload) {
                     var requestList = [];

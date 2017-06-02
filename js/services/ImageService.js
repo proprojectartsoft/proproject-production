@@ -1,7 +1,6 @@
 angular.module($APP.name).factory('ImageService', [
     '$http',
     function($http) {
-
         return {
             create: function(data) {
                 console.log('create.data', data);
