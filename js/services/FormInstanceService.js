@@ -6,10 +6,9 @@ angular.module($APP.name).factory('FormInstanceService', [
     '$location',
     '$timeout',
     '$state',
-    '$q',
     'ConvertersService',
     'ImageService',
-    function($rootScope, $http, CacheFactory, $ionicPopup, $location, $timeout, $state, $q, ConvertersService, ImageService) {
+    function($rootScope, $http, CacheFactory, $ionicPopup, $location, $timeout, $state, ConvertersService, ImageService) {
         return {
             get: function(id) {
                 return $http.get($APP.server + '/api/forminstance', {
@@ -22,23 +21,12 @@ angular.module($APP.name).factory('FormInstanceService', [
                     },
                     function(err) {});
             },
-            create: function(data, imgUri) {
-                var prm = $q.defer();
+            create: function(data) {
                 var requestForm = ConvertersService.designToInstance(data);
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
                 }).success(function(payload) {
-                    if (!payload.message) {
-                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
-                        if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) {
-                                prm.resolve(payload);
-                                return x;
-                            });
-                        }
-                    }
-                    // return payload.data;
-                    return prm.promise;
+                    return payload.data;
                 }).error(function(payload) {
                     var requestList = [];
                     var ppfsync = localStorage.getObject('ppfsync');

@@ -16,11 +16,38 @@ angular.module($APP.name).controller('FormCtrl', [
     'SyncService',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
+    '$stateParams',
     'ResourceService',
     'PayitemService',
     'SchedulingService',
     '$ionicPopover',
-    function($scope, FormInstanceService, $timeout, FormUpdateService, StaffService, $rootScope, CacheFactory, $ionicScrollDelegate, $ionicPopup, $stateParams, $ionicListDelegate, $ionicModal, $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, ResourceService, PayitemService, SchedulingService, $ionicPopover) {
+    'ConvertersService',
+    'ImageService',
+    function($scope,
+        FormInstanceService,
+        $timeout,
+        FormUpdateService,
+        StaffService,
+        $rootScope,
+        CacheFactory,
+        $ionicScrollDelegate,
+        $ionicPopup,
+        $stateParams,
+        $ionicListDelegate,
+        $ionicModal,
+        $cordovaCamera,
+        $state,
+        SyncService,
+        $ionicSideMenuDelegate,
+        $ionicHistory,
+        $stateParams,
+        ResourceService,
+        PayitemService,
+        SchedulingService,
+        $ionicPopover,
+        ConvertersService,
+        ImageService
+    ) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
@@ -1515,7 +1542,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 content: "",
                 buttons: []
             });
-            FormInstanceService.create(datax, img)
+            FormInstanceService.create(datax)
                 .success(function(data) {
                     if (data && data.data && data.data.message) {
                         $timeout(function() {
@@ -1532,18 +1559,23 @@ angular.module($APP.name).controller('FormCtrl', [
                         });
                     } else {
                         $rootScope.formId = data.id;
-                        if (!data.message && data.status !== 0) {
-                            FormInstanceService.get($rootScope.formId).then(function(data) {
-                                $rootScope.rootForm = data;
-                                formUp.close();
-                                //automatically sync previousely offline created forms 
-                                if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
-                                    SyncService.sync_button();
-                                $state.go('app.formInstance', {
-                                    'projectId': $rootScope.projectId,
-                                    'type': 'form',
-                                    'formId': data.id
-                                });
+                        var list = ConvertersService.photoList(img, $rootScope.formId, $stateParams.project_id);
+                        if (list.length !== 0) {
+                            ImageService.create(list).then(function(x) {
+                                if (!data.message && data.status !== 0) {
+                                    FormInstanceService.get($rootScope.formId).then(function(data) {
+                                        $rootScope.rootForm = data;
+                                        formUp.close();
+                                        //automatically sync previousely offline created forms
+                                        if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
+                                            SyncService.sync_button();
+                                        $state.go('app.formInstance', {
+                                            'projectId': $rootScope.projectId,
+                                            'type': 'form',
+                                            'formId': data.id
+                                        });
+                                    });
+                                }
                             });
                         }
                     }
