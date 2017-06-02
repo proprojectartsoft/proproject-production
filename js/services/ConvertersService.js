@@ -332,7 +332,7 @@ angular.module($APP.name).service('ConvertersService', [
                     "customer_id": design.customer_id,
                     "category": design.category,
                     "category_id": design.category_id,
-                    "user_id": $rootScope.thisUser.id,
+                    "user_id": $rootScope.thisUser && $rootScope.thisUser.id,
                     "created_on": new Date().getTime(),
                     "updated_on": new Date().getTime(),
                     "formDesignId": design.id,

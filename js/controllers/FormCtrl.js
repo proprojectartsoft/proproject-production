@@ -675,7 +675,7 @@ angular.module($APP.name).controller('FormCtrl', [
             }
         };
 
-//TODO:
+        //TODO:
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
             function(rs) {
                 $scope.formData = JSON.parse(rs.rows.item(0).data)
@@ -1536,10 +1536,9 @@ angular.module($APP.name).controller('FormCtrl', [
                             FormInstanceService.get($rootScope.formId).then(function(data) {
                                 $rootScope.rootForm = data;
                                 formUp.close();
-
-                                //TODO: sync
-
-
+                                //automatically sync previousely offline created forms 
+                                if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
+                                    SyncService.sync_button();
                                 $state.go('app.formInstance', {
                                     'projectId': $rootScope.projectId,
                                     'type': 'form',
