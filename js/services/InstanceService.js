@@ -4,13 +4,6 @@ angular.module($APP.name).service('InstanceService', [
     'CacheFactory',
     function($http, $rootScope, CacheFactory) {
         return {
-            me: function() {
-                return $http.get($APP.server + '/api/me').then(
-                    function(payload) {
-                        return payload.data;
-                    }
-                );
-            },
             reload: function() {
                 var reloadCache = CacheFactory.get('reloadCache');
                 if (!reloadCache) {

@@ -25,7 +25,7 @@ angular.module($APP.name).controller('AppCtrl', [
                 storageMode: 'localStorage'
             });
         }
-        $scope.user = localStorage.getObject("ppuser");;
+        $scope.user = localStorage.getObject("ppuser");
 
         var projectsCache = CacheFactory('projectsCache');
         projectsCache.setOptions({

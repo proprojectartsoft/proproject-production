@@ -30,6 +30,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                         });
                     }
                 }).error(function(err) {
+                    $rootScope.thisUser = localStorage.getObject("ppuser");
                     localStorage.removeItem('loggedOut');
                     SyncService.sync_close();
                 })
