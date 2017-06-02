@@ -1559,7 +1559,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         });
                     } else {
                         $rootScope.formId = data.id;
-                        var list = ConvertersService.photoList(img, $rootScope.formId, $stateParams.project_id);
+                        var list = ConvertersService.photoList(img, $rootScope.formId, $stateParams.projectId);
                         if (list.length !== 0) {
                             ImageService.create(list).then(function(x) {
                                 if (!data.message && data.status !== 0) {
