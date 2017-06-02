@@ -21,6 +21,18 @@ angular.module($APP.name).factory('FormInstanceService', [
                     },
                     function(err) {});
             },
+            get_gallery: function(formInstanceId, projectId) {
+                return $http.get($APP.server + '/api/gallery/instance', {
+                    params: {
+                        formInstanceId: formInstanceId,
+                        projectId: projectId
+                    }
+                }).then(
+                    function(payload) {
+                        return payload.data;
+                    },
+                    function(err) {});
+            },
             create: function(data, imgUri) {
                 var requestForm = ConvertersService.designToInstance(data);
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
