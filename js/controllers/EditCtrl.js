@@ -914,6 +914,7 @@ angular.module($APP.name).controller('EditCtrl', [
             $scope.picModal.remove();
         };
         $scope.imgURI = [];
+        $scope.imgToAdd = [];
         $scope.takePicture = function(id) {
             var options = {
                 quality: 60,
@@ -942,6 +943,7 @@ angular.module($APP.name).controller('EditCtrl', [
                         "formInstanceId": 0
                     })
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
+                    $scope.imgToAdd.push($scope.imgURI[$scope.imgURI.length - 1]);
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
                 });
@@ -975,6 +977,7 @@ angular.module($APP.name).controller('EditCtrl', [
                         "formInstanceId": 0
                     })
                     $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
+                    $scope.imgToAdd.push($scope.imgURI[$scope.imgURI.length - 1]);
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
                 });
@@ -1194,7 +1197,8 @@ angular.module($APP.name).controller('EditCtrl', [
                         FormInstanceService.update($rootScope.formId, $scope.formData).then(function(data) {
                             if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
                                 $rootScope.formId = data;
-                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                                var list = ConvertersService.photoList($scope.imgToAdd, $scope.formData.id, $scope.formData.project_id);
+                                $scope.imgToAdd = [];
                                 if (list.length !== 0) {
                                     ImageService.create(list).then(function(x) {
                                         $timeout(function() {

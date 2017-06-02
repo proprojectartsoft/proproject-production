@@ -27,8 +27,8 @@
 </div>
 <div class="list" ng-show="filter.substate === 'pic'">
     <div style="padding-bottom: 80px">
-        <img ng-show="filter.picture.url" ng-src="{{filter.picture.url}}" style="width:100%;-webkit-user-drag: inherit;">
-        <img ng-show="!filter.picture.url" data-ng-src="data:image/png;base64,{{filter.picture.base64String}}" style="width:100%;-webkit-user-drag: inherit;">
+        <img ng-if="filter.picture.url" ng-src="{{filter.picture.url}}" style="width:100%;-webkit-user-drag: inherit;">
+        <img ng-if="!filter.picture.url" data-ng-src="data:image/png;base64,{{filter.picture.base64String}}" style="width:100%;-webkit-user-drag: inherit;">
         <div class="list" style="background-color:#fff;">
             <label class="item item-input item-stacked-label white-placeholder" style="background-color: #11C1F3">
                 <span class="input-label" style="padding:10px 15px 0px ;">Title</span>
