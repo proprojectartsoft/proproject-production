@@ -101,10 +101,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
 
         function addContact(id, contact) {
             $scope.filter.email = $scope.filter.email || "";
-            console.log($scope.filter.email.indexOf(contact));
-            console.log($scope.filter.email.includes(contact));
-            console.log(_.includes($scope.filter.email, contact));
-            if ($scope.filter.email.indexOf(contact) !== -1) {
+            if ($scope.filter.email.includes(contact)) {
                 $scope.filter.email = $scope.filter.email + "," + contact;
                 $timeout(function() {
                     var popup = $ionicPopup.show(createPopup(id));

@@ -759,14 +759,35 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             }
         }
 
+        function addContact(id, contact) {
+            $scope.filter.email = $scope.filter.email || "";
+            if ($scope.filter.email.includes(contact)) {
+                $scope.filter.email = $scope.filter.email + "," + contact;
+                $timeout(function() {
+                    var popup = $ionicPopup.show(createPopup(id));
+                });
+            } else {
+                var alertPopup1 = $ionicPopup.alert({
+                    title: 'Share',
+                    template: "",
+                    content: "E-mail already added to share list.",
+                    buttons: [{
+                        text: 'OK',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            alertPopup1.close();
+                            var popup = $ionicPopup.show(createPopup(id));
+                        }
+                    }]
+                });
+            }
+        }
+
         $scope.importContact = function(id) {
             $timeout(function() {
                 navigator.contacts.pickContact(function(contact) {
                     if (contact.emails) {
-                        $scope.filter.email = $scope.filter.email + "," + contact.emails[0].value;
-                        $timeout(function() {
-                            var popup = $ionicPopup.show(createPopup(id));
-                        });
+                        addContact(id, contact.emails[0].value);
                     } else {
                         var alertPopup1 = $ionicPopup.alert({
                             title: 'Share',
@@ -782,14 +803,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             }]
                         });
                     }
-                }, function(err) {
-                    var alertPopup1 = SecuredPopups.show('alert', {
-                        title: "Import contact failed",
-                        template: 'An unexpected error occured while trying to import contact',
-                    });
-                    $timeout(function() {
-                        var popup = $ionicPopup.show(createPopup(id));
-                    });
                 });
             });
         }
