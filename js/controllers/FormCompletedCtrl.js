@@ -101,25 +101,29 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
         }
 
         function addContact(id, contact) {
-            if ($scope.filter.email && $scope.filter.email != "" && !$scope.filter.email.includes(contact)) {
-                $scope.filter.email = $scope.filter.email + "," + contact;
-                $timeout(function() {
-                    var popup = $ionicPopup.show(createPopup(id));
-                });
+            if ($scope.filter.email && $scope.filter.email != "") {
+                if (!$scope.filter.email.includes(contact)) {
+                    $scope.filter.email = $scope.filter.email + "," + contact;
+                    $timeout(function() {
+                        var popup = $ionicPopup.show(createPopup(id));
+                    });
+                } else {
+                    var alertPopup1 = $ionicPopup.alert({
+                        title: 'Share',
+                        template: "",
+                        content: "E-mail already added to share list.",
+                        buttons: [{
+                            text: 'OK',
+                            type: 'button-positive',
+                            onTap: function(e) {
+                                alertPopup1.close();
+                                var popup = $ionicPopup.show(createPopup(id));
+                            }
+                        }]
+                    });
+                }
             } else {
-                var alertPopup1 = $ionicPopup.alert({
-                    title: 'Share',
-                    template: "",
-                    content: "E-mail already added to share list.",
-                    buttons: [{
-                        text: 'OK',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            alertPopup1.close();
-                            var popup = $ionicPopup.show(createPopup(id));
-                        }
-                    }]
-                });
+                $scope.filter.email = contact;
             }
         }
 
