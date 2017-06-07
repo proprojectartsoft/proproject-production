@@ -26,7 +26,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
 
         function createPopup(id) {
             return {
-                template: '<input type="email" ng-model="filter.email">',
+                template: '<input type="text" ng-model="filter.email">',
                 title: 'Share form',
                 subTitle: 'Please enter a valid e-mail address.',
                 scope: $scope,
@@ -124,6 +124,9 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                 }
             } else {
                 $scope.filter.email = contact;
+                $timeout(function() {
+                    var popup = $ionicPopup.show(createPopup(id));
+                });
             }
         }
 
