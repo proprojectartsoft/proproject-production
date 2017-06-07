@@ -388,7 +388,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             state: 'form',
             edit: false
         }
-
+        $scope.filter.email = "";
         $scope.isLoaded = false;
         $scope.hasData = false;
         $scope.formData = $rootScope.rootForm;
@@ -760,8 +760,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
         }
 
         function addContact(id, contact) {
-            $scope.filter.email = $scope.filter.email || "";
-            if (!$scope.filter.email.includes(contact)) {
+            if ($scope.filter.email && $scope.filter.email != "" && !$scope.filter.email.includes(contact)) {
                 $scope.filter.email = $scope.filter.email + "," + contact;
                 $timeout(function() {
                     var popup = $ionicPopup.show(createPopup(id));
