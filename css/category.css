@@ -359,7 +359,7 @@ form {
     position: relative;
 }
 
-form .signature-form {
+form.signature-form {
     height: 86%;
     margin-bottom: 2%;
 }

@@ -174,7 +174,6 @@ angular.module($APP.name).controller('FormCtrl', [
         }
 
         $scope.backHelper = function() {
-            console.log($scope.linkAux)
             switch ($scope.linkAux) {
                 case 'forms':
                     $state.go('app.forms', {

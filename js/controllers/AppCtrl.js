@@ -48,6 +48,8 @@ angular.module($APP.name).controller('AppCtrl', [
         });
 
         ResourceService.list_manager().then(function(result) {
+            console.log("Resources from server:");
+            console.log(result);
             $rootScope.resource_list = result;
         })
         ResourceService.list_unit().then(function(result) {
@@ -73,6 +75,8 @@ angular.module($APP.name).controller('AppCtrl', [
         var aux;
         angular.forEach(resourcesCache.keys(), function(key) {
             aux = resourcesCache.get(key);
+            console.log("push resource from cache");
+            console.log(aux);
             $rootScope.resource_list.push(aux);
         });
 
