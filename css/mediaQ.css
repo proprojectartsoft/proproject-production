@@ -20,3 +20,23 @@
         padding-top: 8%;
     }
 }
+
+@media (min-width: 680px) {
+    .ionic_datepicker_modal_content {
+        padding-top: 0;
+    }
+    .ionic_datepicker_modal_content .selected_date_full {
+        font-size: inherit;
+    }
+    .ionic_datepicker_modal_content .selected_date_full {
+        padding: 10px 0 0 0;
+    }
+}
+
+@media (max-width: 680px) {
+    .active .modal-backdrop-bg {
+        opacity: .5;
+        transition: opacity 300ms ease-in-out;
+        background-color: #000;
+    }
+}

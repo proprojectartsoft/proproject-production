@@ -250,7 +250,7 @@ textarea {
 
 .all-sketch {
     width: 340px;
-    height: 390px
+    height: 100%;
 }
 
 .all-button-bar {
@@ -276,15 +276,6 @@ textarea {
 .all-button {
     margin: 10px 0px;
 }
-
-@media (max-width: 680px) {
-    .active .modal-backdrop-bg {
-        opacity: .5;
-        transition: opacity 300ms ease-in-out;
-        background-color: #000;
-    }
-}
-
 
 /* Empty. Add your own CSS if you like */
 
@@ -404,19 +395,6 @@ textarea {
 .ionic_datepicker_modal_content .selected_date_full {
     padding: 20px;
 }
-
-@media (min-width: 680px) {
-    .ionic_datepicker_modal_content {
-        padding-top: 0;
-    }
-    .ionic_datepicker_modal_content .selected_date_full {
-        font-size: inherit;
-    }
-    .ionic_datepicker_modal_content .selected_date_full {
-        padding: 10px 0 0 0;
-    }
-}
-
 
 /* back */
 

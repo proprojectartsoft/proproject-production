@@ -359,6 +359,11 @@ form {
     position: relative;
 }
 
+form .signature-form {
+    height: 86%;
+    margin-bottom: 2%;
+}
+
 input[type='email']:focus+strong::before {}
 
 input[type='text']:focus+strong::after, input[type='email']:focus+strong::after, input[type='password']:focus+strong::after, input[type='number']:focus+strong::after, textarea:focus:focus+strong::after, select:focus+strong::after {
