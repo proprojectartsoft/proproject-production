@@ -433,7 +433,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (substate) {
                             $scope.filter.substate = substate;
                         }
-                        $scope.linkAux = 'resource';
+                        $scope.linkAux = 'resources'; //TODO: resource
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
                         } else {
@@ -451,7 +451,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (substate) {
                             $scope.filter.substate = substate;
                         }
-                        $scope.linkAux = 'staff';
+                        $scope.linkAux = 'staff'; //TODO: staffs
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
                         } else {
@@ -568,19 +568,21 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.openPopover = function($event, predicate, test) {
             $scope.filter.popup_predicate = predicate;
-            if (test !== 'pi') {
-                $scope.filter.pi = false;
-                if (predicate.staff) {
-                    $scope.filter.popup_list = $rootScope.staff_list;
-                } else {
-                    $scope.filter.popup_list = $rootScope.resource_list;
-                }
-            } else {
-                $scope.filter.pi = true;
-                PayitemService.list_payitems($stateParams.projectId).then(function(data) {
-                    $rootScope.payitem_list = data;
-                    $scope.filter.popup_list = $rootScope.payitem_list;
-                });
+            switch (test) {
+                case 'staff':
+                    $scope.filter.pi = false;
+                    $scope.filter.popup_list = localStorage.getObject('staff_list');
+                    break;
+                case 'resource':
+                    $scope.filter.pi = false;
+                    $scope.filter.popup_list = localStorage.getObject('resource_list'); //$rootScope.resource_list;
+                    break;
+                default:
+                    $scope.filter.pi = true;
+                    PayitemService.list_payitems($stateParams.projectId).then(function(data) {
+                        $rootScope.payitem_list = data;
+                        $scope.filter.popup_list = $rootScope.payitem_list;
+                    });
             }
             $scope.popover.show($event);
         };
@@ -609,7 +611,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
 
                     //TODO: use filter instead of foreach
-                    angular.forEach($rootScope.resource_type_list, function(restyp) {
+                    angular.forEach(localStorage.getObject('resource_type_list'), function(restyp) {
                         console.log(restyp.id, item.resource_type_id)
                         if (restyp.name === item.resource_type_name) {
                             $scope.filter.popup_predicate.res_type_obj = restyp;
@@ -617,7 +619,7 @@ angular.module($APP.name).controller('FormCtrl', [
                             $scope.filter.popup_predicate.resource_type_name = restyp.name;
                         }
                     });
-                    angular.forEach($rootScope.unit_list, function(unt) {
+                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                         if (unt.name === item.unit_name) {
                             $scope.filter.popup_predicate.unit_obj = unt;
                             $scope.filter.popup_predicate.unit_id = unt.id;
@@ -631,7 +633,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.popup_predicate.employer_name = item.employee_name;
                     $scope.filter.popup_predicate.staff_role = item.role;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    angular.forEach($rootScope.resource_type_list, function(restyp) {
+                    angular.forEach(localStorage.getObject('resource_type_list'), function(restyp) {
                         console.log(restyp.id, item.resource_type_id)
                         if (restyp.name === item.resource_type_name) {
                             $scope.filter.popup_predicate.res_type_obj = restyp;
@@ -650,7 +652,7 @@ angular.module($APP.name).controller('FormCtrl', [
 
                 $scope.filter.popup_predicate.description = item.description;
                 $scope.filter.popup_predicate.reference = item.reference;
-                angular.forEach($rootScope.unit_list, function(unt) {
+                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                     if (unt.name === item.unit_name) {
                         $scope.filter.popup_predicate.unit_obj = unt;
                         $scope.filter.popup_predicate.unit_id = unt.id;
@@ -688,12 +690,12 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.substate.name = item.name;
                 $scope.filter.substate.product_ref = item.product_ref;
                 $scope.filter.substate.direct_cost = item.direct_cost;
-                angular.forEach($rootScope.unit_list, function(unit) {
+                angular.forEach(localStorage.getObject('unit_list'), function(unit) {
                     if (unit.id === item.unit_id) {
                         $scope.filter.substate.unit_obj = unit;
                     }
                 });
-                angular.forEach($rootScope.resource_type_list, function(res_type) {
+                angular.forEach(localStorage.getObject('resource_type_list'), function(res_type) {
                     if (res_type.id === item.resource_type_id) {
                         $scope.filter.substate.resource_type_obj = res_type;
                     }
@@ -701,7 +703,6 @@ angular.module($APP.name).controller('FormCtrl', [
             }
         };
 
-        //TODO:
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
             function(rs) {
                 $scope.formData = JSON.parse(rs.rows.item(0).data)
@@ -729,10 +730,10 @@ angular.module($APP.name).controller('FormCtrl', [
                             "calculation": false,
                             "name": '',
                             "product_ref": '',
-                            "unit_id": $rootScope.unit_list[0].id,
-                            "unit_name": $rootScope.unit_list[0].name,
+                            "unit_id": localStorage.getObject('unit_list')[0].id,
+                            "unit_name": localStorage.getObject('unit_list')[0].name,
                             "resource_type_id": 0,
-                            "unit_obj": $rootScope.unit_list[0],
+                            "unit_obj": localStorage.getObject('unit_list')[0],
                             "resource_type_name": '',
                             "direct_cost": 0,
                             "resource_margin": 0,
@@ -817,7 +818,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     console.log($scope.staffField)
                     $scope.filter.substate = $scope.staffField.resources[0];
                 }
-            },
+            }, //TODO: if more that 1 field - set substrate accordingly!!
             function(error) {
                 console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
             });
@@ -875,9 +876,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 "position": 0,
                 "name": '',
                 "product_ref": '',
-                "unit_id": $rootScope.unit_list[0].id,
-                "unit_name": $rootScope.unit_list[0].name,
-                "unit_obj": $rootScope.unit_list[0],
+                "unit_id": localStorage.getObject('unit_list')[0].id,
+                "unit_name": localStorage.getObject('unit_list')[0].name,
+                "unit_obj": localStorage.getObject('unit_list')[0],
                 "resource_type_id": 0,
                 "resource_type_name": '',
                 "direct_cost": 0,
@@ -945,9 +946,9 @@ angular.module($APP.name).controller('FormCtrl', [
                         "position": 0,
                         "name": "",
                         "product_ref": "",
-                        "unit_id": $rootScope.unit_list[0].id,
-                        "unit_name": $rootScope.unit_list[0].name,
-                        "unit_obj": $rootScope.unit_list[0],
+                        "unit_id": localStorage.getObject('unit_list')[0].id,
+                        "unit_name": localStorage.getObject('unit_list')[0].name,
+                        "unit_obj": localStorage.getObject('unit_list')[0],
                         "resource_type_id": 0,
                         "resource_type_name": "",
                         "direct_cost": 0,
@@ -979,9 +980,9 @@ angular.module($APP.name).controller('FormCtrl', [
                     "position": 0,
                     "name": "",
                     "product_ref": "",
-                    "unit_obj": $rootScope.unit_list[0],
-                    "unit_id": $rootScope.unit_list[0].id,
-                    "unit_name": $rootScope.unit_list[0].name,
+                    "unit_obj": localStorage.getObject('unit_list')[0],
+                    "unit_id": localStorage.getObject('unit_list')[0].id,
+                    "unit_name": localStorage.getObject('unit_list')[0].name,
                     "resource_type_id": 0,
                     "resource_type_name": "",
                     "direct_cost": 0,
@@ -1012,9 +1013,9 @@ angular.module($APP.name).controller('FormCtrl', [
                     "position": 0,
                     "name": "",
                     "product_ref": "",
-                    "unit_id": $rootScope.unit_list[0].id,
-                    "unit_name": $rootScope.unit_list[0].name,
-                    "unit_obj": $rootScope.unit_list[0],
+                    "unit_id": localStorage.getObject('unit_list')[0].id,
+                    "unit_name": localStorage.getObject('unit_list')[0].name,
+                    "unit_obj": localStorage.getObject('unit_list')[0],
                     "resource_type_id": 0,
                     "resource_type_name": "",
                     "direct_cost": 0,

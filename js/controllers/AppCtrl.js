@@ -48,21 +48,20 @@ angular.module($APP.name).controller('AppCtrl', [
         });
 
         ResourceService.list_manager().then(function(result) {
-            console.log("Resources from server:");
-            console.log(result);
-            $rootScope.resource_list = result;
+            // $rootScope.resource_list = result;
+            localStorage.setObject(resource_list, result);
         })
         ResourceService.list_unit().then(function(result) {
-            $rootScope.unit_list = result;
+            localStorage.setObject(unit_list, result);
         })
         StaffService.list_manager().then(function(result) {
-            $rootScope.staff_list = result;
+            localStorage.setObject(staff_list, result);
         })
         ResourceService.list_resourcetype().then(function(result) {
-            $rootScope.resource_type_list = result;
+            localStorage.setObject(resource_type_list, result);
         })
         ResourceService.list_absenteeism().then(function(result) {
-            $rootScope.abs_list = result;
+            localStorage.setObject(abs_list, result);
         })
 
         var resourcesCache = CacheFactory.get('resourcesCache');
@@ -75,8 +74,6 @@ angular.module($APP.name).controller('AppCtrl', [
         var aux;
         angular.forEach(resourcesCache.keys(), function(key) {
             aux = resourcesCache.get(key);
-            console.log("push resource from cache");
-            console.log(aux);
             $rootScope.resource_list.push(aux);
         });
 

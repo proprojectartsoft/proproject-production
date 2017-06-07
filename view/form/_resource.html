@@ -62,7 +62,7 @@
                         </div>
                         <div style="position: relative">
                             <input ng-change="updateTitle(filter.substate.name, 'Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.name" ng-disabled="!filter.edit">
-                            <span  ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate);
+                            <span  ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'resource');
                                 $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                         </div>
                     </div>

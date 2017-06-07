@@ -565,9 +565,9 @@ angular.module($APP.name).controller('EditCtrl', [
             if (test !== 'pi') {
                 $scope.filter.pi = false;
                 if (predicate.staff) {
-                    $scope.filter.popup_list = $rootScope.staff_list;
+                    $scope.filter.popup_list = localStorage.getObject('staff_list');
                 } else {
-                    $scope.filter.popup_list = $rootScope.resource_list;
+                    $scope.filter.popup_list = localStorage.getObject('resource_list'); //$rootScope.resource_list;
                 }
             } else {
                 $scope.filter.pi = true;
@@ -603,14 +603,14 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
                     //TODO: use filter!!
 
-                    var restyp = $filter('filter')($rootScope.resource_type_list, {
+                    var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
                         name: item.resource_type_name
                     });
                     $scope.filter.popup_predicate.res_type_obj = restyp[0];
                     $scope.filter.popup_predicate.resource_type_id = restyp[0].id;
                     $scope.filter.popup_predicate.resource_type_name = restyp[0].name;
 
-                    // angular.forEach($rootScope.resource_type_list, function(restyp) {
+                    // angular.forEach(localStorage.getObject('resource_type_list'), function(restyp) {
                     //     console.log(restyp.id, item.resource_type_id)
                     //     if (restyp.name === item.resource_type_name) {
                     //         $scope.filter.popup_predicate.res_type_obj = restyp;
@@ -618,7 +618,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     //         $scope.filter.popup_predicate.resource_type_name = restyp.name;
                     //     }
                     // });
-                    angular.forEach($rootScope.unit_list, function(unt) {
+                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                         if (unt.name === item.unit_name) {
                             $scope.filter.popup_predicate.unit_obj = unt;
                             $scope.filter.popup_predicate.unit_id = unt.id;
@@ -632,7 +632,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.popup_predicate.employer_name = item.employee_name;
                     $scope.filter.popup_predicate.staff_role = item.role;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    angular.forEach($rootScope.resource_type_list, function(restyp) {
+                    angular.forEach(localStorage.getObject('resource_type_list'), function(restyp) {
                         console.log(restyp.id, item.resource_type_id)
                         if (restyp.name === item.resource_type_name) {
                             $scope.filter.popup_predicate.res_type_obj = restyp;
@@ -644,7 +644,7 @@ angular.module($APP.name).controller('EditCtrl', [
             } else {
                 $scope.filter.popup_predicate.description = item.description;
                 $scope.filter.popup_predicate.reference = item.reference;
-                angular.forEach($rootScope.unit_list, function(unt) {
+                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                     if (unt.name === item.unit_name) {
                         $scope.filter.popup_predicate.unit_obj = unt;
                         $scope.filter.popup_predicate.unit_id = unt.id;
