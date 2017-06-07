@@ -763,7 +763,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $timeout(function() {
                 navigator.contacts.pickContact(function(contact) {
                     if (contact.emails) {
-                        $scope.filter.email = contact.emails[0].value;
+                        $scope.filter.email = $scope.filter.email + "," + contact.emails[0].value;
                         $timeout(function() {
                             var popup = $ionicPopup.show(createPopup(id));
                         });
