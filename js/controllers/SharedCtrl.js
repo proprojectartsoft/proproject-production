@@ -30,21 +30,21 @@ angular.module($APP.name).controller('SharedCtrl', [
                         $scope.resourceField = res;
                         angular.forEach($scope.resourceField.resources, function(item) {
                             if (item.unit_id) {
-                                angular.forEach($rootScope.unit_list, function(unt) {
+                                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                     if (unt.id === item.unit_id) {
                                         item.unit_obj = unt;
                                     }
                                 })
                             }
                             if (item.resource_type_id) {
-                                angular.forEach($rootScope.resource_type_list, function(res) {
+                                angular.forEach(localStorage.getObject('resource_type_list'), function(res) {
                                     if (res.id === item.resource_type_id) {
                                         item.res_type_obj = res;
                                     }
                                 })
                             }
                             if (item.abseteeism_reason_name) {
-                                angular.forEach($rootScope.abs_list, function(abs) {
+                                angular.forEach(localStorage.getObject('abs_list'), function(abs) {
                                     if (abs.reason === item.abseteeism_reason_name) {
                                         item.absenteeism_obj = abs;
                                     }
@@ -65,21 +65,21 @@ angular.module($APP.name).controller('SharedCtrl', [
                         $scope.staffField = res;
                         angular.forEach($scope.staffField.resources, function(item) {
                             if (item.unit_id) {
-                                angular.forEach($rootScope.unit_list, function(unt) {
+                                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                     if (unt.id === item.unit_id) {
                                         item.unit_obj = unt;
                                     }
                                 })
                             }
                             if (item.resource_type_name) {
-                                angular.forEach($rootScope.resource_type_list, function(res) {
+                                angular.forEach(localStorage.getObject('resource_type_list'), function(res) {
                                     if (res.name === item.resource_type_name) {
                                         item.res_type_obj = res;
                                     }
                                 })
                             }
                             if (item.abseteeism_reason_name) {
-                                angular.forEach($rootScope.abs_list, function(abs) {
+                                angular.forEach(localStorage.getObject('abs_list'), function(abs) {
                                     if (abs.reason === item.abseteeism_reason_name) {
                                         item.absenteeism_obj = abs;
                                     }
@@ -106,7 +106,7 @@ angular.module($APP.name).controller('SharedCtrl', [
                         $scope.payitemField = res;
                         angular.forEach($scope.payitemField.pay_items, function(item) {
                             if (item.unit_id) {
-                                angular.forEach($rootScope.unit_list, function(unt) {
+                                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                     if (unt.id === item.unit_id) {
                                         item.unit_obj = unt;
                                     }
@@ -114,21 +114,21 @@ angular.module($APP.name).controller('SharedCtrl', [
                             }
                             angular.forEach(item.resources, function(res) {
                                 if (res.unit_id) {
-                                    angular.forEach($rootScope.unit_list, function(unt) {
+                                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                         if (unt.id === res.unit_id) {
                                             res.unit_obj = unt;
                                         }
                                     })
                                 }
                                 if (res.resource_type_name) {
-                                    angular.forEach($rootScope.resource_type_list, function(rest) {
+                                    angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
                                         if (rest.name === res.resource_type_name) {
                                             res.res_type_obj = rest;
                                         }
                                     })
                                 }
                                 if (res.abseteeism_reason_name) {
-                                    angular.forEach($rootScope.abs_list, function(abs) {
+                                    angular.forEach(localStorage.getObject('abs_list'), function(abs) {
                                         if (abs.reason === res.abseteeism_reason_name) {
                                             res.absenteeism_obj = abs;
                                         }
@@ -150,21 +150,21 @@ angular.module($APP.name).controller('SharedCtrl', [
                             angular.forEach(item.subtasks, function(subtask) {
                                 angular.forEach(subtask.resources, function(res) {
                                     if (res.unit_id) {
-                                        angular.forEach($rootScope.unit_list, function(unt) {
+                                        angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                             if (unt.id === res.unit_id) {
                                                 res.unit_obj = unt;
                                             }
                                         })
                                     }
                                     if (res.resource_type_name) {
-                                        angular.forEach($rootScope.resource_type_list, function(rest) {
+                                        angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
                                             if (rest.name === res.resource_type_name) {
                                                 res.res_type_obj = rest;
                                             }
                                         })
                                     }
                                     if (res.abseteeism_reason_name) {
-                                        angular.forEach($rootScope.abs_list, function(abs) {
+                                        angular.forEach(localStorage.getObject('abs_list'), function(abs) {
                                             if (abs.reason === res.abseteeism_reason_name) {
                                                 res.absenteeism_obj = abs;
                                             }
@@ -193,7 +193,7 @@ angular.module($APP.name).controller('SharedCtrl', [
                         $scope.payitemField = res;
                         angular.forEach($scope.payitemField.pay_items, function(item) {
                             if (item.unit_id) {
-                                angular.forEach($rootScope.unit_list, function(unt) {
+                                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                     if (unt.id === item.unit_id) {
                                         item.unit_obj = unt;
                                     }
@@ -201,21 +201,21 @@ angular.module($APP.name).controller('SharedCtrl', [
                             }
                             angular.forEach(item.resources, function(res) {
                                 if (res.unit_id) {
-                                    angular.forEach($rootScope.unit_list, function(unt) {
+                                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                         if (unt.id === res.unit_id) {
                                             res.unit_obj = unt;
                                         }
                                     })
                                 }
                                 if (res.resource_type_name) {
-                                    angular.forEach($rootScope.resource_type_list, function(rest) {
+                                    angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
                                         if (rest.name === res.resource_type_name) {
                                             res.res_type_obj = rest;
                                         }
                                     })
                                 }
                                 if (res.abseteeism_reason_name) {
-                                    angular.forEach($rootScope.abs_list, function(abs) {
+                                    angular.forEach(localStorage.getObject('abs_list'), function(abs) {
                                         if (abs.reason === res.abseteeism_reason_name) {
                                             res.absenteeism_obj = abs;
                                         }
@@ -237,21 +237,21 @@ angular.module($APP.name).controller('SharedCtrl', [
                             angular.forEach(item.subtasks, function(subtask) {
                                 angular.forEach(subtask.resources, function(res) {
                                     if (res.unit_id) {
-                                        angular.forEach($rootScope.unit_list, function(unt) {
+                                        angular.forEach(localStorage.getObject('unit_list'), function(unt) {
                                             if (unt.id === res.unit_id) {
                                                 res.unit_obj = unt;
                                             }
                                         })
                                     }
                                     if (res.resource_type_name) {
-                                        angular.forEach($rootScope.resource_type_list, function(rest) {
+                                        angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
                                             if (rest.name === res.resource_type_name) {
                                                 res.res_type_obj = rest;
                                             }
                                         })
                                     }
                                     if (res.abseteeism_reason_name) {
-                                        angular.forEach($rootScope.abs_list, function(abs) {
+                                        angular.forEach(localStorage.getObject('abs_list'), function(abs) {
                                             if (abs.reason === res.abseteeism_reason_name) {
                                                 res.absenteeism_obj = abs;
                                             }
