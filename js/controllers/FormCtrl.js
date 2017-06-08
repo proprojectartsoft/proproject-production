@@ -1569,7 +1569,7 @@ angular.module($APP.name).controller('FormCtrl', [
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
-                            }.error(function(err) {
+                            }).error(function(err) {
                                 staffOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
