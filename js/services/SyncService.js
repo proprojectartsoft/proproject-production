@@ -55,7 +55,7 @@ angular.module($APP.name).factory('SyncService', [
                 })
         }
 
-        var loadSettings = function() {
+        var loadSettings = function() { //TODO: delete comments
             ResourceService.list_manager().then(function(result) {
                 console.log(result);
 

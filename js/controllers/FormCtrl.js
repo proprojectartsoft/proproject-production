@@ -429,10 +429,9 @@ angular.module($APP.name).controller('FormCtrl', [
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    // if (substate || $scope.filter.substate) {
+                    if (substate || $scope.resourceField) {
+                        $scope.filter.substate = substate || $scope.resourceField;
                         $scope.linkAux = 'resource';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
@@ -447,10 +446,8 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'staff':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.staffField) {
+                        $scope.filter.substate = substate || $scope.staffField;
                         $scope.linkAux = 'staff';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
@@ -664,8 +661,14 @@ angular.module($APP.name).controller('FormCtrl', [
         }
 
         $scope.closePopover = function() {
-            if ($scope.filter.searchText) {
-                $scope.filter.substate.name = $scope.filter.searchText;
+            if ($scope.filter.searchText) { //TODO:
+                // $scope.filter.substate.name = $scope.filter.searchText;
+                if ($scope.filter.state == 'resource') {
+                    $scope.resourceField.name = $scope.filter.searchText;
+                } else if ($scope.filter.state == 'staff') {
+                    $scope.staffField.name = $scope.filter.searchText;
+                }
+                $scope.filter.searchText = '';
             }
             $scope.popover.hide();
         }
@@ -751,7 +754,7 @@ angular.module($APP.name).controller('FormCtrl', [
                             "abseteeism_reason_name": ''
                         }]
                     };
-                    $scope.filter.substate = $scope.resourceField.resources[0];
+                    // $scope.filter.substate = $scope.resourceField.resources[0];
                 }
                 if ($scope.formData.pay_item_field_design) {
                     $scope.payitemField = {
@@ -787,7 +790,7 @@ angular.module($APP.name).controller('FormCtrl', [
                             "resources": []
                         }]
                     };
-                    $scope.filter.substate = $scope.payitemField.pay_items[0];
+                    // $scope.filter.substate = $scope.payitemField.pay_items[0];
                 }
                 if ($scope.formData.staff_field_design) {
                     $scope.staffField = {
@@ -819,9 +822,9 @@ angular.module($APP.name).controller('FormCtrl', [
                         }]
                     };
                     console.log($scope.staffField)
-                    $scope.filter.substate = $scope.staffField.resources[0];
+                    // $scope.filter.substate = $scope.staffField.resources[0];
                 }
-            }, //TODO: if more that 1 field - set substrate accordingly!!
+            }, //TODO:
             function(error) {
                 console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
             });
@@ -1545,6 +1548,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 content: "",
                 buttons: []
             });
+            //automatically sync previousely offline created forms TODO: move inside success
+            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
+                SyncService.sync_button();
             FormInstanceService.create(datax, img)
                 .success(function(data) {
                     if (data && data.data && data.data.message) {
@@ -1566,9 +1572,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             FormInstanceService.get($rootScope.formId).then(function(data) {
                                 $rootScope.rootForm = data;
                                 formUp.close();
-                                //automatically sync previousely offline created forms
-                                if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
-                                    SyncService.sync_button();
                                 $state.go('app.formInstance', {
                                     'projectId': $rootScope.projectId,
                                     'type': 'form',

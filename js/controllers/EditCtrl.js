@@ -100,7 +100,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 } else {
                     data.quantity = data.length * data.width * data.depth * data.tm3;
                 }
-
             }
             data.quantity = Math.round(data.quantity * 100) / 100
         }
@@ -653,7 +652,13 @@ angular.module($APP.name).controller('EditCtrl', [
         }
         $scope.closePopover = function() {
             if ($scope.filter.searchText) {
-                $scope.filter.substate.name = $scope.filter.searchText;
+                // $scope.filter.substate.name = $scope.filter.searchText; //TODO:
+                if ($scope.filter.state == 'resource') {
+                    $scope.resourceField.name = $scope.filter.searchText;
+                } else if ($scope.filter.state == 'staff') {
+                    $scope.staffField.name = $scope.filter.searchText;
+                }
+                $scope.filter.searchText = '';
             }
             $scope.popover.hide();
         }
@@ -1050,7 +1055,8 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    item.current_day = item.current_day_obj.getDate(); //TODO:
+                                    // item.current_day = item.current_day_obj.getDate(); //TODO:
+                                    item.current_day = new Date(item.current_day_obj).getTime();
                                 }
                             });
                             ResourceService.update_field($rootScope.resourceField).then(function(x) {});
@@ -1174,10 +1180,10 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                     item.absenteeism_obj.reason;
                                 }
-                                if (item.current_day_obj) {
-                                    //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
-                                    item.current_day = item.current_day_obj.getTime();
-                                }
+                                // if (item.current_day_obj) {
+                                //     //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
+                                //     item.current_day = item.current_day_obj.getTime();
+                                // }
                                 if (item.expiry_date_obj) {
                                     //                                    item.expiry_date = item.expiry_date_obj.getDate() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getFullYear();
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
@@ -1260,6 +1266,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); //TODO: REMOVE FILTER BUT FIND OUT WHY DATE HAS FORMAT JAN 1, YEAR!!!!
                                 }
                             });
+                            //TODO:
                             ResourceService.add_field($rootScope.resourceField).then(function(x) {
                                 $scope.formData.resource_field_id = x.id;
                                 FormInstanceService.save_as($scope.formData).then(function(data) {
