@@ -15,7 +15,7 @@ angular.module($APP.name).factory('PayitemService', [
                 return $http.post($APP.server + '/api/payitemfield', data, {}).success(function(response) {
                     return response.data;
                 }).error(function(response) {
-                    return response.data;
+                    return response;
                 });
             },
             update_field: function(data) {

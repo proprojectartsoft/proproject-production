@@ -17,7 +17,7 @@ angular.module($APP.name).factory('StaffService', [
                 return $http.post($APP.server + '/api/stafffield', data, {}).success(function(response) {
                     return response.data;
                 }).error(function(response) {
-                    return response.data;
+                    return response;
                 });
             },
             //update staff for a form
