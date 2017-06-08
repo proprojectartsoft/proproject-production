@@ -601,30 +601,25 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.popup_predicate.name = item.name;
                     $scope.filter.popup_predicate.product_ref = item.product_ref;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    //TODO: use filter!!
 
+                    console.log(localStorage.getObject('resource_type_list'));
                     var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
                         name: item.resource_type_name
-                    });
-                    $scope.filter.popup_predicate.res_type_obj = restyp[0];
-                    $scope.filter.popup_predicate.resource_type_id = restyp[0].id;
-                    $scope.filter.popup_predicate.resource_type_name = restyp[0].name;
+                    })[0];
+                    if (restyp) {
+                        $scope.filter.popup_predicate.res_type_obj = restyp;
+                        $scope.filter.popup_predicate.resource_type_id = restyp.id;
+                        $scope.filter.popup_predicate.resource_type_name = restyp.name;
+                    }
 
-                    // angular.forEach(localStorage.getObject('resource_type_list'), function(restyp) {
-                    //     console.log(restyp.id, item.resource_type_id)
-                    //     if (restyp.name === item.resource_type_name) {
-                    //         $scope.filter.popup_predicate.res_type_obj = restyp;
-                    //         $scope.filter.popup_predicate.resource_type_id = restyp.id;
-                    //         $scope.filter.popup_predicate.resource_type_name = restyp.name;
-                    //     }
-                    // });
-                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                        if (unt.name === item.unit_name) {
-                            $scope.filter.popup_predicate.unit_obj = unt;
-                            $scope.filter.popup_predicate.unit_id = unt.id;
-                            $scope.filter.popup_predicate.unit_name = unt.name;
-                        }
-                    });
+                    var unt = $filter('filter')(localStorage.getObject('unit_list'), {
+                        name: item.unit_name
+                    })[0];
+                    if (unt) {
+                        $scope.filter.popup_predicate.unit_obj = unt;
+                        $scope.filter.popup_predicate.unit_id = unt.id;
+                        $scope.filter.popup_predicate.unit_name = unt.name;
+                    }
                 } else {
                     //staff
                     $scope.titleShow = 'Staff: ' + item.name;
@@ -632,25 +627,27 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.filter.popup_predicate.employer_name = item.employee_name;
                     $scope.filter.popup_predicate.staff_role = item.role;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    angular.forEach(localStorage.getObject('resource_type_list'), function(restyp) {
-                        console.log(restyp.id, item.resource_type_id)
-                        if (restyp.name === item.resource_type_name) {
-                            $scope.filter.popup_predicate.res_type_obj = restyp;
-                            $scope.filter.popup_predicate.resource_type_id = restyp.id;
-                            $scope.filter.popup_predicate.resource_type_name = restyp.name;
-                        }
-                    });
+
+                    var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
+                        name: item.resource_type_name
+                    })[0];
+                    if (restyp) {
+                        $scope.filter.popup_predicate.res_type_obj = restyp;
+                        $scope.filter.popup_predicate.resource_type_id = restyp.id;
+                        $scope.filter.popup_predicate.resource_type_name = restyp.name;
+                    }
                 }
             } else {
                 $scope.filter.popup_predicate.description = item.description;
                 $scope.filter.popup_predicate.reference = item.reference;
-                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                    if (unt.name === item.unit_name) {
-                        $scope.filter.popup_predicate.unit_obj = unt;
-                        $scope.filter.popup_predicate.unit_id = unt.id;
-                        $scope.filter.popup_predicate.unit_name = unt.name;
-                    }
-                });
+                var unt = $filter('filter')(localStorage.getObject('unit_list'), {
+                    name: item.unit_name
+                })[0];
+                if (unt) {
+                    $scope.filter.popup_predicate.unit_obj = unt;
+                    $scope.filter.popup_predicate.unit_id = unt.id;
+                    $scope.filter.popup_predicate.unit_name = unt.name;
+                }
             }
             $scope.popover.hide();
         }
