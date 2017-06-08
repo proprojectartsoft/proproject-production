@@ -430,8 +430,10 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'resource':
                     $scope.filter.state = state;
                     if (substate || $scope.filter.substate) {
-                        $scope.filter.substate = substate && substate;
-                        $scope.linkAux = 'resource';
+                        if (substate) {
+                            $scope.filter.substate = substate;
+                        }
+                        $scope.linkAux = 'resource'; 
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
                         } else {
@@ -446,7 +448,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'staff':
                     $scope.filter.state = state;
                     if (substate || $scope.filter.substate) {
-                        $scope.filter.substate = substate && substate;
+                        if (substate) {
+                            $scope.filter.substate = substate;
+                        }
                         $scope.linkAux = 'staff';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
@@ -462,7 +466,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'scheduling':
                     $scope.filter.state = state;
                     if (substate || $scope.filter.substate) {
-                        $scope.filter.substate = substate && substate;
+                        if (substate) {
+                            $scope.filter.substate = substate;
+                        }
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
                         } else {
@@ -478,7 +484,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'payitem':
                     $scope.filter.state = state;
                     if (substate || $scope.filter.substate) {
-                        $scope.filter.substate = substate && substrate;
+                        if (substate) {
+                            $scope.filter.substate = substate;
+                        }
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
                         } else {
@@ -567,7 +575,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'resource':
                     $scope.filter.pi = false;
-                    $scope.filter.popup_list = localStorage.getObject('resource_list');
+                    $scope.filter.popup_list = localStorage.getObject('resource_list'); //$rootScope.resource_list;
                     break;
                 default:
                     $scope.filter.pi = true;
@@ -707,8 +715,6 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.break = $rootScope.custSett.break;
                 $scope.filter.finish = $rootScope.custSett.finish;
                 if ($scope.formData.resource_field_design) {
-                    console.log(localStorage.getObject('unit_list'));
-                    console.log(localStorage.getObject('unit_list')[0]);
                     $scope.resourceField = {
                         'id': 0,
                         'customer_id': $scope.formData.customer_id,
@@ -1181,6 +1187,7 @@ angular.module($APP.name).controller('FormCtrl', [
         });
 
         $scope.goPicture = function() {
+            //            $scope.trim();
             $scope.linkAux = 'photos';
             $scope.titleShow = 'Photo Gallery';
             $scope.filter.state = 'photos';
@@ -1192,12 +1199,14 @@ angular.module($APP.name).controller('FormCtrl', [
         }
 
         $scope.testPicture = function(item) {
+            //            $scope.trim();
             $scope.linkAux = 'photodetails';
             $scope.titleShow = 'Photo Gallery';
             $scope.filter.substate = 'pic';
             console.log(item)
             $scope.filter.picture = item;
             console.log($scope.imgURI)
+            //            console.log($scope.imgURI[item], $scope.filter.picture)
         }
 
         $scope.imgURI = [];
@@ -1232,7 +1241,9 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.state = 'form';
                     $scope.filter.substate = null;
                 });
-            }, function(err) {});
+            }, function(err) {
+                // An error occured. Show a message to the user
+            });
         };
 
         $scope.addPicture = function(index) {
