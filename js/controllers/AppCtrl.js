@@ -6,6 +6,8 @@ angular.module($APP.name).controller('AppCtrl', [
     '$state',
     function($rootScope, $scope, CacheFactory, AuthService, $state) {
         console.log("App controller");
+        console.log(localStorage.getObject('unit_list'));
+        console.log(localStorage.getObject('resource_type_list'));
         var getAndroidVersion = function(ua) {
             ua = (ua || navigator.userAgent).toLowerCase();
             var match = ua.match(/android\s([0-9\.]*)/);
@@ -25,6 +27,7 @@ angular.module($APP.name).controller('AppCtrl', [
             });
         }
         $scope.user = localStorage.getObject("ppuser");
+        console.log(localStorage.getObject('unit_list'));
 
         var projectsCache = CacheFactory('projectsCache');
         projectsCache.setOptions({
@@ -35,6 +38,7 @@ angular.module($APP.name).controller('AppCtrl', [
         $rootScope.unit_list = [];
         $rootScope.custSett = [];
         localStorage.removeItem('loggedOut');
+        console.log(localStorage.getObject('unit_list'));
 
         $rootScope.$watch('projectsCache.keys()', function(newValue, oldValue) {
             angular.forEach(projectsCache.keys(), function(key) {

@@ -655,6 +655,9 @@ angular.module($APP.name).controller('EditCtrl', [
             $scope.popover.hide();
         }
         $scope.closePopover = function() {
+            if ($scope.filter.searchText) {
+                $scope.filter.substate.name = $scope.filter.searchText;
+            }
             $scope.popover.hide();
         }
         $scope.addResource = function() {

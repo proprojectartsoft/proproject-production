@@ -433,7 +433,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (substate) {
                             $scope.filter.substate = substate;
                         }
-                        $scope.linkAux = 'resource'; 
+                        $scope.linkAux = 'resource';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
                         } else {
@@ -664,6 +664,9 @@ angular.module($APP.name).controller('FormCtrl', [
         }
 
         $scope.closePopover = function() {
+            if ($scope.filter.searchText) {
+                $scope.filter.substate.name = $scope.filter.searchText;
+            }
             $scope.popover.hide();
         }
 
