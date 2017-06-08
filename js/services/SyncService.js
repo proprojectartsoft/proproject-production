@@ -15,7 +15,8 @@ angular.module($APP.name).factory('SyncService', [
     '$rootScope',
     '$state',
     'FormInstanceService',
-    function($q, $rootScope, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService) {
+    'StaffService',
+    function($q, $rootScope, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService, StaffService) {
         function servresp(name, timer, start, response) {
             this.name = name;
             this.timer = timer;
@@ -53,6 +54,25 @@ angular.module($APP.name).factory('SyncService', [
                     return status;
                 })
         }
+
+        var loadSettings = function() {
+            ResourceService.list_manager().then(function(result) {
+                localStorage.setObject('resource_list', result);
+            })
+            ResourceService.list_unit().then(function(result) {
+                localStorage.setObject('unit_list', result);
+            })
+            StaffService.list_manager().then(function(result) {
+                localStorage.setObject('staff_list', result);
+            })
+            ResourceService.list_resourcetype().then(function(result) {
+                localStorage.setObject('resource_type_list', result);
+            })
+            ResourceService.list_absenteeism().then(function(result) {
+                localStorage.setObject('abs_list', result);
+            })
+        }
+
         var down = function() {
             AuthService.version().then(function(result) {
                 localStorage.setObject('ppversion', result);
@@ -406,7 +426,8 @@ angular.module($APP.name).factory('SyncService', [
                         DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true)
                         getme()
                             .success(function(data) {
-                                localStorage.setObject("ppuser", data)
+                                localStorage.setObject("ppuser", data);
+                                loadSettings();
                                 down();
                             })
                             .error(function(data, status) {

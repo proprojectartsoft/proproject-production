@@ -3,10 +3,9 @@ angular.module($APP.name).controller('AppCtrl', [
     '$scope',
     'CacheFactory',
     'AuthService',
-    'ResourceService',
-    'StaffService',
     '$state',
-    function($rootScope, $scope, CacheFactory, AuthService, ResourceService, StaffService, $state) {
+    function($rootScope, $scope, CacheFactory, AuthService, $state) {
+        console.log("App controller");
         var getAndroidVersion = function(ua) {
             ua = (ua || navigator.userAgent).toLowerCase();
             var match = ua.match(/android\s([0-9\.]*)/);
@@ -46,23 +45,6 @@ angular.module($APP.name).controller('AppCtrl', [
                 $rootScope.projectId = $rootScope.projects[0].id;
             }
         });
-
-        ResourceService.list_manager().then(function(result) {
-            // $rootScope.resource_list = result;
-            localStorage.setObject('resource_list', result);
-        })
-        ResourceService.list_unit().then(function(result) {
-            localStorage.setObject('unit_list', result);
-        })
-        StaffService.list_manager().then(function(result) {
-            localStorage.setObject('staff_list', result);
-        })
-        ResourceService.list_resourcetype().then(function(result) {
-            localStorage.setObject('resource_type_list', result);
-        })
-        ResourceService.list_absenteeism().then(function(result) {
-            localStorage.setObject('abs_list', result);
-        })
 
         var resourcesCache = CacheFactory.get('resourcesCache');
         if (!resourcesCache || resourcesCache.length === 0) {
