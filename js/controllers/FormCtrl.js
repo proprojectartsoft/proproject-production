@@ -1376,13 +1376,13 @@ angular.module($APP.name).controller('FormCtrl', [
                                     item.current_day = item.current_day_obj;
                                 }
                             });
-                            ResourceService.add_field($scope.resourceField).then(function(x) {
+                            ResourceService.add_field($scope.resourceField).success(function(x) {
                                 $scope.formData.resource_field_id = x.id;
                                 resourceOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
-                            }, function(err) {
+                            }).error(function(err) {
                                 resourceOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
@@ -1447,14 +1447,14 @@ angular.module($APP.name).controller('FormCtrl', [
                                     });
                                 });
                             });
-                            PayitemService.add_field($scope.payitemField).then(function(x) {
+                            PayitemService.add_field($scope.payitemField).success(function(x) {
                                 $scope.formData.pay_item_field_id = x.id;
                                 // $scope.fastSave($scope.formData, $scope.imgURI);
                                 payOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
-                            }, function(err) {
+                            }).error(function(err) {
                                 payOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
@@ -1518,14 +1518,14 @@ angular.module($APP.name).controller('FormCtrl', [
                                     });
                                 });
                             });
-                            SchedulingService.add_field($scope.payitemField).then(function(x) {
+                            SchedulingService.add_field($scope.payitemField).success(function(x) {
                                 $scope.formData.scheduling_field_id = x.id;
                                 // $scope.fastSave($scope.formData, $scope.imgURI);
                                 schedulingOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
-                            }, function(err) {
+                            }).error(function(err) {
                                 schedulingOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
@@ -1562,14 +1562,14 @@ angular.module($APP.name).controller('FormCtrl', [
                                     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
                                 }
                             });
-                            StaffService.add_field($scope.staffField).then(function(x) {
+                            StaffService.add_field($scope.staffField).success(function(x) {
                                 $scope.formData.staff_field_id = x.id;
                                 // $scope.fastSave($scope.formData, $scope.imgURI);
                                 staffOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
-                            }, function(err) {
+                            }.error(function(err) {
                                 staffOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);

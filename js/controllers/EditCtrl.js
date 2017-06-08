@@ -1260,7 +1260,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                 }
                             });
                             //TODO:
-                            ResourceService.add_field($rootScope.resourceField).then(function(x) {
+                            ResourceService.add_field($rootScope.resourceField).success(function(x) {
                                 $scope.formData.resource_field_id = x.id;
                                 FormInstanceService.save_as($scope.formData).then(function(data) {
                                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
@@ -1343,7 +1343,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                     });
                                 });
                             });
-                            PayitemService.add_field($rootScope.payitemField).then(function(x) {
+                            PayitemService.add_field($rootScope.payitemField).success(function(x) {
                                 $scope.formData.pay_item_field_id = x.id;
                                 FormInstanceService.save_as($scope.formData).then(function(data) {
                                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
@@ -1425,7 +1425,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                     });
                                 });
                             });
-                            SchedulingService.add_field($rootScope.payitemField).then(function(x) {
+                            SchedulingService.add_field($rootScope.payitemField).success(function(x) {
                                 $scope.formData.scheduling_field_id = x.id;
                                 FormInstanceService.save_as($scope.formData).then(function(data) {
                                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
@@ -1484,7 +1484,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
                                 }
                             });
-                            StaffService.add_field($rootScope.staffField).then(function(x) {
+                            StaffService.add_field($rootScope.staffField).success(function(x) {
                                 $scope.formData.staff_field_id = x.id;
                                 FormInstanceService.save_as($scope.formData).then(function(data) {
                                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {

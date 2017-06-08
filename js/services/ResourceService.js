@@ -71,11 +71,11 @@ angular.module($APP.name).factory('ResourceService', [
             },
             //add resources to a form
             add_field: function(data) {
-                return $http.post($APP.server + '/api/resourcefield', data, {}).then(function successCallback(response) {
+                return $http.post($APP.server + '/api/resourcefield', data, {}).success(function(response) {
                     return response.data;
-                }, function errorCallback(response) {
+                }).error(function(response) {
                     return response.data;
-                });
+                })
             },
             //update the resources of a form
             update_field: function(data) {

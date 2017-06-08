@@ -14,9 +14,9 @@ angular.module($APP.name).factory('StaffService', [
             },
             //add staff for a form
             add_field: function(data) {
-                return $http.post($APP.server + '/api/stafffield', data, {}).then(function successCallback(response) {
+                return $http.post($APP.server + '/api/stafffield', data, {}).success(function(response) {
                     return response.data;
-                }, function errorCallback(response) {
+                }).error(function(response) {
                     return response.data;
                 });
             },

@@ -12,9 +12,9 @@ angular.module($APP.name).factory('SchedulingService', [
                 });
             },
             add_field: function(data) {
-                return $http.post($APP.server + '/api/schedulingfield', data, {}).then(function successCallback(response) {
+                return $http.post($APP.server + '/api/schedulingfield', data, {}).success(function(response) {
                     return response.data;
-                }, function errorCallback(response) {
+                }).error(function(response) {
                     return response.data;
                 });
             },
