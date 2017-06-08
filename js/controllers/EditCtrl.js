@@ -401,10 +401,9 @@ angular.module($APP.name).controller('EditCtrl', [
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    // if (substate || $scope.filter.substate) {
+                    if (substate || $scope.resourceField) {
+                        $scope.filter.substate = substate || $scope.resourceField;
                         $scope.linkAux = 'resource';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
@@ -419,10 +418,8 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 case 'staff':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.staffField) {
+                        $scope.filter.substate = substate || $scope.staffField;
                         $scope.linkAux = 'staff';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
@@ -437,10 +434,8 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 case 'scheduling':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.payitemField) {
+                        $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
                         } else {
@@ -455,10 +450,8 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.payitemField) {
+                        $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
                         } else {

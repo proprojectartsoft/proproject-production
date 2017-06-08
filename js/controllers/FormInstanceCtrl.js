@@ -282,10 +282,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    // if (substate || $scope.filter.substate) {
+                    if (substate || $scope.resourceField) {
+                        $scope.filter.substate = substate || $scope.resourceField;
                         $scope.linkAux = 'resource';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
@@ -296,15 +295,14 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $scope.linkAux = 'resources';
                         $scope.titleShow = 'Resources';
                     }
+                    $ionicScrollDelegate.resize();
                     break;
                 case 'staff':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.staffField) {
+                        $scope.filter.substate = substate || $scope.staffField;
                         $scope.linkAux = 'staff';
-                        if ($scope.filter.substate.nme) {
+                        if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
                         } else {
                             $scope.titleShow = 'Staff';
@@ -313,13 +311,12 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $scope.linkAux = 'staffs';
                         $scope.titleShow = 'Staffs';
                     }
+                    $ionicScrollDelegate.resize();
                     break;
                 case 'scheduling':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.payitemField) {
+                        $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
                         } else {
@@ -330,13 +327,12 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $scope.linkAux = 'schedulings';
                         $scope.titleShow = 'Schedulings';
                     }
+                    $ionicScrollDelegate.resize();
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.payitemField) {
+                        $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
                         } else {
@@ -347,7 +343,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $scope.linkAux = 'payitem';
                         $scope.titleShow = 'Pay-items';
                     }
-                    console.log($scope.linkAux)
+                    $ionicScrollDelegate.resize();
+                    $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
         }
@@ -657,7 +654,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                 });
             }
         });
-
         if ($scope.formData) {
             if ($scope.formData.length !== 0) {
                 $scope.hasData = true;
