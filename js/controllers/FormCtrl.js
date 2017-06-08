@@ -462,10 +462,8 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'scheduling':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.payitemField) {
+                        $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
                         } else {
@@ -480,10 +478,8 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
-                    if (substate || $scope.filter.substate) {
-                        if (substate) {
-                            $scope.filter.substate = substate;
-                        }
+                    if (substate || $scope.payitemField) {
+                        $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
                         } else {
@@ -574,7 +570,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.pi = false;
                     $scope.filter.popup_list = localStorage.getObject('resource_list'); //$rootScope.resource_list;
                     break;
-                default:
+                default: //TODO: check if data
                     $scope.filter.pi = true;
                     PayitemService.list_payitems($stateParams.projectId).then(function(data) {
                         $rootScope.payitem_list = data;
@@ -662,11 +658,15 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.closePopover = function() {
             if ($scope.filter.searchText) { //TODO:
-                // $scope.filter.substate.name = $scope.filter.searchText;
-                if ($scope.filter.state == 'resource') {
-                    $scope.resourceField.name = $scope.filter.searchText;
-                } else if ($scope.filter.state == 'staff') {
-                    $scope.staffField.name = $scope.filter.searchText;
+                switch ($scope.filter.state) {
+                    case 'resource':
+                        $scope.resourceField.name = $scope.filter.searchText;
+                        break;
+                    case 'staff':
+                        $scope.staffField.name = $scope.filter.searchText;
+                        break;
+                    default:
+                        $scope.payitemField.name = $scope.filter.searchText;
                 }
                 $scope.filter.searchText = '';
             }

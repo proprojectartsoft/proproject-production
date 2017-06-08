@@ -68,6 +68,7 @@ angular.module($APP.name).controller('AppCtrl', [
         angular.forEach(unitCache.keys(), function(key) {
             aux = unitCache.get(key);
             $rootScope.unit_list.push(aux);
+            console.log($rootScope.unit_list);
         });
 
         var custSettCache = CacheFactory.get('custSettCache');
