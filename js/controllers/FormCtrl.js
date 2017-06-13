@@ -312,6 +312,9 @@ angular.module($APP.name).controller('FormCtrl', [
                     pullDown();
                     break;
                 case 'resource':
+                    console.log($scope.filter.substate);
+                    $scope.resourceField.resources.push($scope.filter.substate);  //TODO: when submit, do not submit the first one [0] or replace it
+                    console.log($scope.resourceField.resources);
                     $scope.doTotal('resource', $scope.resourceField);
                     $scope.titleShow = 'Resources';
                     $scope.filter.state = 'resource';
@@ -705,7 +708,7 @@ angular.module($APP.name).controller('FormCtrl', [
             console.log($scope.filter.substate);
             console.log(item);
             if (!$scope.filter.pi) {
-                // $scope.filter.popup_predicate.name = item.name;
+                $scope.filter.popup_predicate.name = item.name;
                 if ($scope.filter.state == 'resource') { //!$scope.filter.popup_predicate.staff
                     //resource
                     if ($scope.titleShow.indexOf('Scheduling Resource') > -1) {
@@ -722,30 +725,26 @@ angular.module($APP.name).controller('FormCtrl', [
                     if ($scope.titleShow.indexOf('Staff') > -1) {
                         $scope.titleShow = 'Staff: ' + item.name;
                     }
-
-
-
-
-
-                    // $scope.filter.popup_predicate.product_ref = item.product_ref;
-                    // $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    //
-                    // var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
-                    //     name: item.resource_type_name
-                    // })[0];
-                    // if (restyp) {
-                    //     $scope.filter.popup_predicate.res_type_obj = restyp;
-                    //     $scope.filter.popup_predicate.resource_type_id = restyp.id;
-                    //     $scope.filter.popup_predicate.resource_type_name = restyp.name;
-                    // }
-                    // var unt = $filter('filter')(localStorage.getObject('unit_list'), {
-                    //     name: item.unit_name
-                    // })[0];
-                    // if (unt) {
-                    //     $scope.filter.popup_predicate.unit_obj = unt;
-                    //     $scope.filter.popup_predicate.unit_id = unt.id;
-                    //     $scope.filter.popup_predicate.unit_name = unt.name;
-                    // }
+                    $scope.filter.popup_predicate.product_ref = item.product_ref;
+                    $scope.filter.popup_predicate.direct_cost = item.direct_cost;
+                    var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
+                        name: item.resource_type_name
+                    })[0];
+                    if (restyp) {
+                        $scope.filter.popup_predicate.res_type_obj = restyp;
+                        $scope.filter.popup_predicate.resource_type_id = restyp.id;
+                        $scope.filter.popup_predicate.resource_type_name = restyp.name;
+                    }
+                    var unt = $filter('filter')(localStorage.getObject('unit_list'), {
+                        name: item.unit_name
+                    })[0];
+                    if (unt) {
+                        $scope.filter.popup_predicate.unit_obj = unt;
+                        $scope.filter.popup_predicate.unit_id = unt.id;
+                        $scope.filter.popup_predicate.unit_name = unt.name;
+                    }
+                    console.log($scope.filter.substate);
+                    console.log($scope.filter.popup_predicate);
                 }
                 // else {
                 if ($scope.filter.state == 'staff') {
@@ -1103,6 +1102,7 @@ angular.module($APP.name).controller('FormCtrl', [
             $scope.picModal.hide();
             $scope.picModal.remove();
         };
+
         function elmYPosition(id) {
             var elm = document.getElementById(id);
             var y = elm.offsetTop;
@@ -1642,6 +1642,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     }
                 });
         }
+
         function pullDown() {
             $('html').css({
                 'visibility': 'hidden'
