@@ -583,9 +583,11 @@ angular.module($APP.name).controller('FormCtrl', [
         };
 
         $scope.selectPopover = function(item) {
+            console.log($scope.filter.state);
+            console.log($scope.filter.substate);
             if (!$scope.filter.pi) {
                 $scope.filter.popup_predicate.name = item.name;
-                if (!$scope.filter.popup_predicate.staff) {
+                if ($scope.filter.state == 'resource') { //!$scope.filter.popup_predicate.staff
                     //resource
                     if ($scope.titleShow.indexOf('Scheduling Resource') > -1) {
                         $scope.titleShow = 'Scheduling Resource: ' + item.name;
@@ -621,7 +623,9 @@ angular.module($APP.name).controller('FormCtrl', [
                         $scope.filter.popup_predicate.unit_id = unt.id;
                         $scope.filter.popup_predicate.unit_name = unt.name;
                     }
-                } else {
+                }
+                // else {
+                if ($scope.filter.state == 'staff') {
                     //staff
                     $scope.titleShow = 'Staff: ' + item.name;
                     $scope.filter.popup_predicate.name = item.name;
