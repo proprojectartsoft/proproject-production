@@ -58,6 +58,9 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.linkAux = 'forms';
         pullDown();
+        $scope.resource_type_list = localStorage.getObject('resource_type_list');
+        $scope.unit_list = localStorage.getObject('unit_list');
+        $scope.abs_list = localStorage.getObject('abs_list');
 
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
@@ -312,9 +315,6 @@ angular.module($APP.name).controller('FormCtrl', [
                     pullDown();
                     break;
                 case 'resource':
-                    console.log($scope.filter.substate);
-                    $scope.resourceField.resources.push($scope.filter.substate);  //TODO: when submit, do not submit the first one [0] or replace it
-                    console.log($scope.resourceField.resources);
                     $scope.doTotal('resource', $scope.resourceField);
                     $scope.titleShow = 'Resources';
                     $scope.filter.state = 'resource';
@@ -551,7 +551,6 @@ angular.module($APP.name).controller('FormCtrl', [
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    // if (substate || $scope.filter.substate) {
                     if (substate || $scope.resourceField.resources[0]) {
                         $scope.filter.substate = substate || $scope.resourceField.resources[0];
                         $scope.linkAux = 'resource';
@@ -705,11 +704,9 @@ angular.module($APP.name).controller('FormCtrl', [
 
         //Select a resource from resource filter
         $scope.selectPopover = function(item) {
-            console.log($scope.filter.substate);
-            console.log(item);
             if (!$scope.filter.pi) {
                 $scope.filter.popup_predicate.name = item.name;
-                if ($scope.filter.state == 'resource') { //!$scope.filter.popup_predicate.staff
+                if ($scope.filter.state == 'resource') {
                     //resource
                     if ($scope.titleShow.indexOf('Scheduling Resource') > -1) {
                         $scope.titleShow = 'Scheduling Resource: ' + item.name;
@@ -743,10 +740,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         $scope.filter.popup_predicate.unit_id = unt.id;
                         $scope.filter.popup_predicate.unit_name = unt.name;
                     }
-                    console.log($scope.filter.substate);
-                    console.log($scope.filter.popup_predicate);
                 }
-                // else {
                 if ($scope.filter.state == 'staff') {
                     //staff
                     $scope.titleShow = 'Staff: ' + item.name;
@@ -762,7 +756,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         $scope.filter.popup_predicate.resource_type_name = restyp.name;
                     }
                 }
-            } else {
+            } else { //TODO: as for resource, staff
                 if ($scope.formData.scheduling_field_design) {
                     $scope.titleShow = 'Scheduling: ' + item.reference;
                 }
