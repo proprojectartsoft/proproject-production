@@ -446,7 +446,9 @@ angular.module($APP.name).controller('FormCtrl', [
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.linkAux, $scope.titleShow);
+                    var res = CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.linkAux, $scope.titleShow);
+                    console.log(res);
+
                     // if (substate || $scope.resourceField.resources[0]) {
                     //     $scope.filter.substate = substate || $scope.resourceField.resources[0];
                     //     $scope.linkAux = 'resource';

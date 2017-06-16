@@ -220,6 +220,7 @@ angular.module($APP.name).service('CommonServices', [
                     linkAux = 'resources';
                     titleShow = 'Resources';
                 }
+                return filter;
             },
             goToStaff: function(substate, filter, staffField, linkAux, titleShow) {
                 if (substate || staffField.resources[0]) {
