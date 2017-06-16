@@ -1051,6 +1051,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                 }
                             }).error(function(err) {
                                 resourceOK = true;
+                                $scope.formData.resourceField = $scope.formData.resourceField || [];
+                                $scope.formData.resourceField.push($scope.resourceField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
