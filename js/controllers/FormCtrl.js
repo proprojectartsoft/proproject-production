@@ -1125,6 +1125,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                 }
                             }).error(function(err) {
                                 payOK = true;
+                                $scope.formData.payitemField = $scope.formData.payitemField || [];
+                                $scope.formData.payitemField.push($scope.payitemField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
@@ -1196,6 +1198,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                 }
                             }).error(function(err) {
                                 schedulingOK = true;
+                                $scope.formData.schedField = $scope.formData.schedField || [];
+                                $scope.formData.schedField.push($scope.payitemField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                 }
@@ -1240,6 +1244,8 @@ angular.module($APP.name).controller('FormCtrl', [
                                 }
                             }).error(function(err) {
                                 staffOK = true;
+                                $scope.formData.staffField = $scope.formData.staffField || [];
+                                $scope.formData.staffField.push($scope.staffField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
                                     //TODO: keep locally for online sync and do that in SyncService

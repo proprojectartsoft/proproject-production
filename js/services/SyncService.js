@@ -16,7 +16,11 @@ angular.module($APP.name).factory('SyncService', [
     '$state',
     'FormInstanceService',
     'StaffService',
-    function($q, $rootScope, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService, StaffService) {
+    'SchedulingService',
+    'PayitemService',
+
+    function($q, $rootScope, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService, StaffService,
+        SchedulingService, PayitemService) {
         function servresp(name, timer, start, response) {
             this.name = name;
             this.timer = timer;
@@ -239,7 +243,19 @@ angular.module($APP.name).factory('SyncService', [
                     angular.forEach(form.form.resourceField, function(res) {
                         ResourceService.add_field(res).success(function(x) {}).error(function(err) {});
                     })
+                    angular.forEach(form.form.staffField, function(res) {
+                        StaffService.add_field(res);
+                    })
+                    angular.forEach(form.form.payitemField, function(res) {
+                        PayitemService.add_field(res);
+                    })
+                    angular.forEach(form.form.schedField, function(res) {
+                        SchedulingService.add_field(res);
+                    })
                     form.form.resourceField = [];
+                    form.form.staffField = [];
+                    form.form.schedField = [];
+                    form.form.payitemField = [];
                     picX = false;
                     formX = form.form;
                     angular.forEach(pics, function(pic) {

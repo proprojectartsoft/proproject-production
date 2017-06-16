@@ -336,7 +336,11 @@ angular.module($APP.name).service('ConvertersService', [
                     "created_on": new Date().getTime(),
                     "updated_on": new Date().getTime(),
                     "formDesignId": design.id,
-                    "field_group_instances": []
+                    "field_group_instances": [],
+                    "resourceField": design.resourceField,
+                    "staffField": design.staffField,
+                    "payitemField": design.payitemField,
+                    "schedField": design.schedField
                 };
                 var requestGroupList = [],
                     requestFieldList = [];
