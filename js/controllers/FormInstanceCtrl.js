@@ -182,7 +182,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $scope.linkAux = $scope.aux.linkAux;
             $scope.titleShow = $scope.aux.titleShow;
         }
-        $scope.goState = function(state, substate) { //TODO: commonservices
+        $scope.goState = function(state, substate) { 
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
@@ -230,73 +230,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
-            // switch (state) {
-            //     case 'resource':
-            //         $scope.filter.state = state;
-            //         if (substate) { // || $scope.resourceField && $scope.resourceField.resources[0]
-            //             $scope.filter.substate = substate || $scope.resourceField.resources[0];
-            //             $scope.linkAux = 'resource';
-            //             if ($scope.filter.substate.name) {
-            //                 $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
-            //             } else {
-            //                 $scope.titleShow = 'Resource';
-            //             }
-            //         } else {
-            //             $scope.linkAux = 'resources';
-            //             $scope.titleShow = 'Resources';
-            //         }
-            //         $ionicScrollDelegate.resize();
-            //         break;
-            //     case 'staff':
-            //         $scope.filter.state = state;
-            //         if (substate) { // || $scope.resourceField && $scope.staffField.resources[0]
-            //             $scope.filter.substate = substate || $scope.staffField.resources[0];
-            //             $scope.linkAux = 'staff';
-            //             if ($scope.filter.substate.name) {
-            //                 $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
-            //             } else {
-            //                 $scope.titleShow = 'Staff';
-            //             }
-            //         } else {
-            //             $scope.linkAux = 'staffs';
-            //             $scope.titleShow = 'Staffs';
-            //         }
-            //         $ionicScrollDelegate.resize();
-            //         break;
-            //     case 'scheduling':
-            //         $scope.filter.state = state;
-            //         if (substate || $scope.payitemField) { //TODO:
-            //             $scope.filter.substate = substate || $scope.payitemField;
-            //             if ($scope.filter.substate.description) {
-            //                 $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
-            //             } else {
-            //                 $scope.titleShow = 'Scheduling';
-            //             }
-            //             $scope.linkAux = 'scheduling';
-            //         } else {
-            //             $scope.linkAux = 'schedulings';
-            //             $scope.titleShow = 'Schedulings';
-            //         }
-            //         $ionicScrollDelegate.resize();
-            //         break;
-            //     case 'payitem':
-            //         $scope.filter.state = state;
-            //         if (substate || $scope.payitemField) { //TODO:
-            //             $scope.filter.substate = substate || $scope.payitemField;
-            //             if ($scope.filter.substate.description) {
-            //                 $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
-            //             } else {
-            //                 $scope.titleShow = 'Pay-item';
-            //             }
-            //             $scope.linkAux = 'payitem';
-            //         } else {
-            //             $scope.linkAux = 'payitem';
-            //             $scope.titleShow = 'Pay-items';
-            //         }
-            //         $ionicScrollDelegate.resize();
-            //         $scope.doTotal('pisubtask', $scope.filter.substate);
-            //         break;
-            // }
         }
 
         $scope.doTotal = function(predicate, data) {

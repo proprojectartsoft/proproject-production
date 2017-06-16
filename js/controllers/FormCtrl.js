@@ -456,7 +456,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         linkAux: $scope.linkAux,
                         titleShow: $scope.titleShow
                     }
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux);
+                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.linkAux, $scope.titleShow);
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
@@ -565,102 +565,12 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.openPopover = function($event, predicate, test) {
             $scope.filter.popup_predicate = predicate;
             CommonServices.openPopover(test, $scope.filter, $stateParams.projectId);
-
-            // switch (test) {
-            //     case 'staff':
-            //         $scope.filter.pi = false;
-            //         $scope.filter.popup_list = localStorage.getObject('staff_list');
-            //         break;
-            //     case 'resource':
-            //         $scope.filter.pi = false;
-            //         $scope.filter.popup_list = localStorage.getObject('resource_list');
-            //         break;
-            //     default: //TODO: check if data
-            //         $scope.filter.pi = true;
-            //         PayitemService.list_payitems($stateParams.projectId).then(function(data) {
-            //             $rootScope.payitem_list = data;
-            //             $scope.filter.popup_list = $rootScope.payitem_list;
-            //         });
-            // }
             $scope.popover.show($event);
         };
 
         //Select a resource from resource filter
-
         $scope.selectPopover = function(item) {
             CommonServices.selectPopover($scope.filter, item, $scope.titleShow);
-
-            // if (!$scope.filter.pi) {
-            //     $scope.filter.popup_predicate.name = item.name;
-            //     if ($scope.filter.state == 'resource') {
-            //         //resource
-            //         if ($scope.titleShow.indexOf('Scheduling Resource') > -1) {
-            //             $scope.titleShow = 'Scheduling Resource: ' + item.name;
-            //         } else {
-            //             if ($scope.titleShow.indexOf('Scheduling Subtask Resource') > -1) {
-            //                 $scope.titleShow = 'Scheduling Subtask Resource: ' + item.name;
-            //             } else {
-            //                 if ($scope.titleShow.indexOf('Resource') > -1) {
-            //                     $scope.titleShow = 'Resource: ' + item.name;
-            //                 }
-            //             }
-            //         }
-            //         if ($scope.titleShow.indexOf('Staff') > -1) {
-            //             $scope.titleShow = 'Staff: ' + item.name;
-            //         }
-            //         $scope.filter.popup_predicate.product_ref = item.product_ref;
-            //         $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-            //         var restyp = $filter('filter')($scope.resource_type_list, {
-            //             name: item.resource_type_name
-            //         })[0];
-            //         if (restyp) {
-            //             $scope.filter.popup_predicate.res_type_obj = restyp;
-            //             $scope.filter.popup_predicate.resource_type_id = restyp.id;
-            //             $scope.filter.popup_predicate.resource_type_name = restyp.name;
-            //         }
-            //         var unt = $filter('filter')($scope.unit_list, {
-            //             name: item.unit_name
-            //         })[0];
-            //         if (unt) {
-            //             $scope.filter.popup_predicate.unit_obj = unt;
-            //             $scope.filter.popup_predicate.unit_id = unt.id;
-            //             $scope.filter.popup_predicate.unit_name = unt.name;
-            //         }
-            //     }
-            //     if ($scope.filter.state == 'staff') {
-            //         //staff
-            //         $scope.titleShow = 'Staff: ' + item.name;
-            //         $scope.filter.popup_predicate.employer_name = item.employee_name;
-            //         $scope.filter.popup_predicate.staff_role = item.role;
-            //         $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-            //         var restyp = $filter('filter')($scope.resource_type_list, {
-            //             name: item.resource_type_name
-            //         })[0];
-            //         if (restyp) {
-            //             $scope.filter.popup_predicate.res_type_obj = restyp;
-            //             $scope.filter.popup_predicate.resource_type_id = restyp.id;
-            //             $scope.filter.popup_predicate.resource_type_name = restyp.name;
-            //         }
-            //     }
-            // } else { //TODO: as for resource, staff
-            //     if ($scope.formData.scheduling_field_design) {
-            //         $scope.titleShow = 'Scheduling: ' + item.reference;
-            //     }
-            //     if ($scope.formData.pay_item_field_design) {
-            //         $scope.titleShow = 'Pay-item: ' + item.reference;
-            //     }
-            //
-            //     $scope.filter.popup_predicate.description = item.description;
-            //     $scope.filter.popup_predicate.reference = item.reference;
-            //     var unt = $filter('filter')($scope.unit_list, {
-            //         name: item.unit_name
-            //     })[0];
-            //     if (unt) {
-            //         $scope.filter.popup_predicate.unit_obj = unt;
-            //         $scope.filter.popup_predicate.unit_id = unt.id;
-            //         $scope.filter.popup_predicate.unit_name = unt.name;
-            //     }
-            // }
             $scope.popover.hide();
         }
 
@@ -763,101 +673,24 @@ angular.module($APP.name).controller('FormCtrl', [
 
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {
-            // $scope.resourceField.resources.push({
-            //     "id": 0,
-            //     "resource_field_id": 0,
-            //     "resource_id": 0,
-            //     "position": 0,
-            //     "name": '',
-            //     "product_ref": '',
-            //     "unit_id": $scope.unit_list[0].id,
-            //     "unit_name": $scope.unit_list[0].name,
-            //     "unit_obj": $scope.unit_list[0],
-            //     "resource_type_id": 0,
-            //     "resource_type_name": '',
-            //     "direct_cost": 0,
-            //     "resource_margin": 0,
-            //     "stage_id": 1,
-            //     "stage_name": '',
-            //     "vat": 0,
-            //     "quantity": 0,
-            //     "current_day": '',
-            //     "total_cost": 0,
-            //     "calculation": false,
-            //     "open": true
-            // });
             CommonServices.addResource($scope.resourceField.resources);
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
         //Add new resource in staffField; initialized with start, break and finish times
         $scope.addStaff = function() {
             if ($scope.staffField) {
-                // $scope.staffField.resources.push({
-                //     name: "",
-                //     customerId: 0,
-                //     employer_name: "",
-                //     staff_role: "",
-                //     product_ref: "",
-                //     unit_name: "",
-                //     direct_cost: 0.0,
-                //     resource_type_name: "",
-                //     resource_margin: 0,
-                //     telephone_number: "",
-                //     email: "",
-                //     safety_card_number: "",
-                //     expiry_date: "",
-                //     staff: true,
-                //     current_day: "",
-                //     start_time: $scope.filter.start,
-                //     break_time: $scope.filter.break,
-                //     finish_time: $scope.filter.finish,
-                //     total_time: "",
-                //     comment: "",
-                //     vat: 0.0
-                // })
                 CommonServices.addStaff($scope.staffField.resources, $scope.filter.start, $scope.filter.break, $scope.filter.finish);
                 $scope.filter.substate = $scope.staffField.resources[$scope.staffField.resources.length - 1];
             }
         }
         //Add new resource in payitemField TODO: check if all fields completed
         $scope.addPayitem = function() {
-            // $scope.payitemField.pay_items.push({
-            //     "description": "",
-            //     "reference": "",
-            //     "unit": "",
-            //     "quantity": "",
-            //     "subtasks": [],
-            //     "resources": []
-            // })
             CommonServices.addPayitem($scope.payitemField.pay_items);
             $scope.filter.substate = $scope.payitemField.pay_items[$scope.payitemField.pay_items.length - 1]
         }
         //Add new subtask TODO: check if all fields completed
         $scope.addSubtask = function() {
             if ($scope.filter.substate && $scope.filter.substate.resources.length === 0) {
-                // $scope.filter.substate.subtasks.push({
-                //     "description": "",
-                //     "resources": [{
-                //         "open": false,
-                //         "resource_id": 0,
-                //         "position": 0,
-                //         "name": "",
-                //         "product_ref": "",
-                //         "unit_id": $scope.unit_list[0].id,
-                //         "unit_name": $scope.unit_list[0].name,
-                //         "unit_obj": $scope.unit_list[0],
-                //         "resource_type_id": 0,
-                //         "resource_type_name": "",
-                //         "direct_cost": 0,
-                //         "quantity": 0,
-                //         "resource_margin": 0,
-                //         "current_day": "",
-                //         "stage_id": 0,
-                //         "stage_name": "",
-                //         "calculation": true,
-                //         "vat": 0
-                //     }]
-                // });
                 CommonServices.addSubtask($scope.filter.substate.subtasks);
                 $scope.filter.substateStk = $scope.filter.substate.subtasks[$scope.filter.substate.subtasks.length - 1]
                 if ($scope.filter.state === 'scheduling') {
@@ -872,26 +705,6 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new resource in payitemField (as subtask) TODO: check if all fields completed
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
-                // $scope.filter.substate.resources.push({
-                //     "open": false,
-                //     "resource_id": 0,
-                //     "position": 0,
-                //     "name": "",
-                //     "product_ref": "",
-                //     "unit_obj": $scope.unit_list[0],
-                //     "unit_id": $scope.unit_list[0].id,
-                //     "unit_name": $scope.unit_list[0].name,
-                //     "resource_type_id": 0,
-                //     "resource_type_name": "",
-                //     "direct_cost": 0,
-                //     "quantity": 0,
-                //     "resource_margin": 0,
-                //     "current_day": "",
-                //     "stage_id": 0,
-                //     "stage_name": "",
-                //     "calculation": true,
-                //     "vat": 0
-                // });
                 CommonServices.addResourcePi($scope.filter.substate.resources);
                 $scope.filter.substateRes = $scope.filter.substate.resources[$scope.filter.substate.resources.length - 1]
                 if ($scope.filter.state === 'scheduling') {
@@ -906,26 +719,6 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new resource in payitemField subtask TODO: check if all fields completed
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
-                // $scope.filter.substateStk.resources.push({
-                //     "open": false,
-                //     "resource_id": 0,
-                //     "position": 0,
-                //     "name": "",
-                //     "product_ref": "",
-                //     "unit_id": $scope.unit_list[0].id,
-                //     "unit_name": $scope.unit_list[0].name,
-                //     "unit_obj": $scope.unit_list[0],
-                //     "resource_type_id": 0,
-                //     "resource_type_name": "",
-                //     "direct_cost": 0,
-                //     "quantity": 0,
-                //     "resource_margin": 0,
-                //     "current_day": "",
-                //     "stage_id": 0,
-                //     "stage_name": "",
-                //     "vat": 0,
-                //     "calculation": true,
-                // });
                 CommonServices.addResourceInSubtask($scope.filter.substateStk);
                 $scope.filter.substateStkRes = $scope.filter.substateStk.resources[$scope.filter.substateStk.resources.length - 1];
                 if ($scope.filter.state === 'scheduling') {
