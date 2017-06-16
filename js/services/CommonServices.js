@@ -207,20 +207,19 @@ angular.module($APP.name).service('CommonServices', [
                     "calculation": true,
                 });
             },
-            goToResource: function(substate, filter, resourceField, linkAux, titleShow) {
+            goToResource: function(substate, filter, resourceField, aux) { //linkAux, titleShow
                 if (substate || resourceField.resources[0]) {
                     filter.substate = substate || resourceField.resources[0];
-                    linkAux = 'resource';
+                    aux.linkAux = 'resource';
                     if (filter.substate.name) {
-                        titleShow = 'Resource: ' + filter.substate.name;
+                        aux.titleShow = 'Resource: ' + filter.substate.name;
                     } else {
-                        titleShow = 'Resource';
+                        aux.titleShow = 'Resource';
                     }
                 } else { //TODO: here if not creating a new resource
-                    linkAux = 'resources';
-                    titleShow = 'Resources';
+                    aux.linkAux = 'resources';
+                    aux.titleShow = 'Resources';
                 }
-                return filter;
             },
             goToStaff: function(substate, filter, staffField, linkAux, titleShow) {
                 if (substate || staffField.resources[0]) {
@@ -366,117 +365,117 @@ angular.module($APP.name).service('CommonServices', [
                 }
             },
             updateCalculations: function(data) {
-              if (data.unit_obj.name === 'm' || data.unit_obj.name === 'ft') {
-                  if (!data.length) {
-                      data.length = 0;
-                  }
-                  if (!data.wastage) {
-                      data.quantity = data.quantity + data.length;
-                  } else {
-                      data.quantity = data.quantity + data.length + data.length / data.wastage;
-                  }
-              }
-              if (data.unit_obj.name === 'Days') {
-                  if (!data.days) {
-                      data.days = 0;
-                  }
-                  if (!data.number_of) {
-                      data.number_of = 0;
-                  }
-                  data.quantity = data.days * data.number_of;
-              }
-              if (data.unit_obj.name === 'm2' || data.unit_obj.name === 'ft2') {
-                  if (!data.length) {
-                      data.length = 0;
-                  }
-                  if (!data.width) {
-                      data.width = 0;
-                  }
-                  if (data.wastage) {
-                      data.quantity = data.length * data.width + (data.length * data.width * data.wastage) / 100;
+                if (data.unit_obj.name === 'm' || data.unit_obj.name === 'ft') {
+                    if (!data.length) {
+                        data.length = 0;
+                    }
+                    if (!data.wastage) {
+                        data.quantity = data.quantity + data.length;
+                    } else {
+                        data.quantity = data.quantity + data.length + data.length / data.wastage;
+                    }
+                }
+                if (data.unit_obj.name === 'Days') {
+                    if (!data.days) {
+                        data.days = 0;
+                    }
+                    if (!data.number_of) {
+                        data.number_of = 0;
+                    }
+                    data.quantity = data.days * data.number_of;
+                }
+                if (data.unit_obj.name === 'm2' || data.unit_obj.name === 'ft2') {
+                    if (!data.length) {
+                        data.length = 0;
+                    }
+                    if (!data.width) {
+                        data.width = 0;
+                    }
+                    if (data.wastage) {
+                        data.quantity = data.length * data.width + (data.length * data.width * data.wastage) / 100;
 
-                  } else {
-                      data.quantity = data.length * data.width;
-                  }
-              }
-              if (data.unit_obj.name === 'm3' || data.unit_obj.name === 'ft3') {
-                  if (!data.length) {
-                      data.length = 0;
-                  }
-                  if (!data.width) {
-                      data.width = 0;
-                  }
-                  if (!data.depth) {
-                      data.depth = 0;
-                  }
-                  if (data.wastage) {
-                      data.quantity = data.length * data.width * data.depth + (data.length * data.width * data.depth * data.wastage) / 100;
-                  } else {
-                      data.quantity = data.length * data.width * data.depth;
-                  }
-              }
-              if (data.unit_obj.name === 'T') {
-                  if (!data.length) {
-                      data.length = 0;
-                  }
-                  if (!data.width) {
-                      data.width = 0;
-                  }
-                  if (!data.depth) {
-                      data.depth = 0;
-                  }
-                  if (!data.tm3) {
-                      data.tm3 = 0;
-                  }
-                  if (data.wastage) {
-                      data.quantity = data.length * data.width * data.depth * data.tm3 + (data.length * data.width * data.depth * data.tm3 * data.wastage) / 100;
-                  } else {
-                      data.quantity = data.length * data.width * data.depth * data.tm3;
-                  }
-              }
-              data.quantity = Math.round(data.quantity * 100) / 100
+                    } else {
+                        data.quantity = data.length * data.width;
+                    }
+                }
+                if (data.unit_obj.name === 'm3' || data.unit_obj.name === 'ft3') {
+                    if (!data.length) {
+                        data.length = 0;
+                    }
+                    if (!data.width) {
+                        data.width = 0;
+                    }
+                    if (!data.depth) {
+                        data.depth = 0;
+                    }
+                    if (data.wastage) {
+                        data.quantity = data.length * data.width * data.depth + (data.length * data.width * data.depth * data.wastage) / 100;
+                    } else {
+                        data.quantity = data.length * data.width * data.depth;
+                    }
+                }
+                if (data.unit_obj.name === 'T') {
+                    if (!data.length) {
+                        data.length = 0;
+                    }
+                    if (!data.width) {
+                        data.width = 0;
+                    }
+                    if (!data.depth) {
+                        data.depth = 0;
+                    }
+                    if (!data.tm3) {
+                        data.tm3 = 0;
+                    }
+                    if (data.wastage) {
+                        data.quantity = data.length * data.width * data.depth * data.tm3 + (data.length * data.width * data.depth * data.tm3 * data.wastage) / 100;
+                    } else {
+                        data.quantity = data.length * data.width * data.depth * data.tm3;
+                    }
+                }
+                data.quantity = Math.round(data.quantity * 100) / 100
             },
             updateTitle: function(title, placeholder, titleShow) {
-              if (title) {
-                  if (placeholder === 'Resource') {
+                if (title) {
+                    if (placeholder === 'Resource') {
                         titleShow = 'Resource: ' + title;
-                  }
-                  if (placeholder === 'Staff') {
+                    }
+                    if (placeholder === 'Staff') {
                         titleShow = 'Staff: ' + title;
-                  }
-                  if (placeholder === 'Scheduling') {
+                    }
+                    if (placeholder === 'Scheduling') {
                         titleShow = 'Scheduling: ' + title;
-                  }
-                  if (placeholder === 'Scheduling Subtask') {
+                    }
+                    if (placeholder === 'Scheduling Subtask') {
                         titleShow = 'Scheduling Subtask: ' + title;
-                  }
-                  if (placeholder === 'Scheduling Subtask') {
+                    }
+                    if (placeholder === 'Scheduling Subtask') {
                         titleShow = 'Scheduling Subtask: ' + title;
-                  }
-                  if (placeholder === 'Scheduling Subtask Resource') {
+                    }
+                    if (placeholder === 'Scheduling Subtask Resource') {
                         titleShow = 'Scheduling Subtask Resource: ' + title;
-                  }
-                  if (placeholder === 'Scheduling Resource') {
+                    }
+                    if (placeholder === 'Scheduling Resource') {
                         titleShow = 'Scheduling Resource: ' + title;
-                  }
-                  if (placeholder === 'Pay-item') {
+                    }
+                    if (placeholder === 'Pay-item') {
                         titleShow = 'Pay-item: ' + title;
-                  }
-                  if (placeholder === 'Pay-item Subtask') {
+                    }
+                    if (placeholder === 'Pay-item Subtask') {
                         titleShow = 'Pay-item Subtask: ' + title;
-                  }
-                  if (placeholder === 'Pay-item Subtask') {
+                    }
+                    if (placeholder === 'Pay-item Subtask') {
                         titleShow = 'Pay-item Subtask: ' + title;
-                  }
-                  if (placeholder === 'Pay-item Subtask Resource') {
+                    }
+                    if (placeholder === 'Pay-item Subtask Resource') {
                         titleShow = 'Pay-item Subtask Resource: ' + title;
-                  }
-                  if (placeholder === 'Pay-item Resource') {
+                    }
+                    if (placeholder === 'Pay-item Resource') {
                         titleShow = 'Pay-item Resource: ' + title;
-                  }
-              } else {
+                    }
+                } else {
                     titleShow = placeholder;
-              }
+                }
             }
         }
     }
