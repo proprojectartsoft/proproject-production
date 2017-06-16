@@ -1,11 +1,11 @@
 angular.module($APP.name).service('CommonServices', [
     '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope',
     function($stateParams, $filter, $ionicScrollDelegate, $rootScope) {
-        var resource_type_list = localStorage.getObject('resource_type_list');
-        var unit_list = localStorage.getObject('unit_list');
-        var abs_list = localStorage.getObject('abs_list');
         return {
             selectPopover: function(filter, item, titleShow) {
+                var resource_type_list = localStorage.getObject('resource_type_list');
+                var unit_list = localStorage.getObject('unit_list');
+                var abs_list = localStorage.getObject('abs_list');
                 if (!filter.pi) {
                     filter.popup_predicate.name = item.name;
                     if (filter.state == 'resource') {
@@ -207,7 +207,7 @@ angular.module($APP.name).service('CommonServices', [
                     "calculation": true,
                 });
             },
-            goToResource: function(substate, filter, resourceField, aux) { 
+            goToResource: function(substate, filter, resourceField, aux) {
                 if (substate || resourceField.resources[0]) {
                     filter.substate = substate || resourceField.resources[0];
                     aux.linkAux = 'resource';
