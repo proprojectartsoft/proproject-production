@@ -1,6 +1,6 @@
 angular.module($APP.name).service('CommonServices', [
-    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope',
-    function($stateParams, $filter, $ionicScrollDelegate, $rootScope) {
+    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PayitemService',
+    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService) {
         return {
             selectPopover: function(filter, item, titleShow) {
                 var resource_type_list = localStorage.getObject('resource_type_list');
