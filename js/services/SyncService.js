@@ -233,19 +233,12 @@ angular.module($APP.name).factory('SyncService', [
             forms = localStorage.getObject('ppfsync');
             pics = localStorage.getObject('pppsync');
             resourcesForm = localStorage.getObject('resourceToSync');
-            if(resourcesForm) {
-              ResourceService.add_field(resourcesForm).success(function(x) {
-                  // $scope.formData.resource_field_id = x.id;
-                  // resourceOK = true;
-                  // if (resourceOK && staffOK && schedulingOK && payOK) {
-                  //     $scope.fastSave($scope.formData, $scope.imgURI);
-                  // }
-              }).error(function(err) {
-                  // resourceOK = true;
-                  // if (resourceOK && staffOK && schedulingOK && payOK) {
-                  //     $scope.fastSave($scope.formData, $scope.imgURI);
-                  // }
-              });
+            if (resourcesForm) {
+                ResourceService.add_field(resourcesForm).success(function(x) {
+                    localStorage.setObject('resourceToSync', []);
+                }).error(function(err) {
+                    localStorage.setObject('resourceToSync', []);
+                });
             }
             if (forms) {
                 var upRequests = [];
