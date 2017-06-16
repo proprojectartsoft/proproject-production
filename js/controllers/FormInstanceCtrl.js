@@ -16,13 +16,17 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
     'SecuredPopups',
     '$timeout',
     '$state',
-    function($scope, $rootScope, $stateParams, $location, FormInstanceService, $ionicSideMenuDelegate, $ionicHistory, ResourceService, StaffService, SchedulingService, PayitemService, $ionicPopup, ShareService, $ionicScrollDelegate, SecuredPopups, $timeout, $state) {
+    '$filter',
+    function($scope, $rootScope, $stateParams, $location, FormInstanceService, $ionicSideMenuDelegate, $ionicHistory, ResourceService, StaffService, SchedulingService, PayitemService, $ionicPopup, ShareService, $ionicScrollDelegate, SecuredPopups, $timeout, $state, $filter) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
         $scope.linkAux = 'forms';
+        $scope.resource_type_list = localStorage.getObject('resource_type_list');
+        $scope.unit_list = localStorage.getObject('unit_list');
+        $scope.abs_list = localStorage.getObject('abs_list');
 
         $scope.updateTitle = function(title, placeholder) {
             if (title) {
@@ -282,9 +286,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    // if (substate || $scope.filter.substate) {
-                    if (substate || $scope.resourceField) {
-                        $scope.filter.substate = substate || $scope.resourceField;
+                    if (substate || $scope.resourceField.resources[0]) {
+                        $scope.filter.substate = substate || $scope.resourceField.resources[0];
                         $scope.linkAux = 'resource';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
@@ -299,8 +302,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     break;
                 case 'staff':
                     $scope.filter.state = state;
-                    if (substate || $scope.staffField) {
-                        $scope.filter.substate = substate || $scope.staffField;
+                    if (substate || $scope.staffField.resources[0]) {
+                        $scope.filter.substate = substate || $scope.staffField.resources[0];
                         $scope.linkAux = 'staff';
                         if ($scope.filter.substate.name) {
                             $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
@@ -315,7 +318,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     break;
                 case 'scheduling':
                     $scope.filter.state = state;
-                    if (substate || $scope.payitemField) {
+                    if (substate || $scope.payitemField) { //TODO:
                         $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
@@ -331,7 +334,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
-                    if (substate || $scope.payitemField) {
+                    if (substate || $scope.payitemField) { //TODO:
                         $scope.filter.substate = substate || $scope.payitemField;
                         if ($scope.filter.substate.description) {
                             $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
@@ -403,27 +406,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                 ResourceService.get_field(data.resource_field_id).then(function(res) {
                     $scope.resourceField = res;
                     angular.forEach($scope.resourceField.resources, function(item) {
-                        if (item.unit_id) {
-                            angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                if (unt.id === item.unit_id) {
-                                    item.unit_obj = unt;
-                                }
-                            })
-                        }
-                        if (item.resource_type_id) {
-                            angular.forEach(localStorage.getObject('resource_type_list'), function(res) {
-                                if (res.id === item.resource_type_id) {
-                                    item.res_type_obj = res;
-                                }
-                            })
-                        }
-                        if (item.abseteeism_reason_name) {
-                            angular.forEach(localStorage.getObject('abs_list'), function(abs) {
-                                if (abs.reason === item.abseteeism_reason_name) {
-                                    item.absenteeism_obj = abs;
-                                }
-                            })
-                        }
+                        setResourceType(item);
+                        setUnit(item);
+                        setAbsenteeism(item);
                         if (item.current_day) {
                             var partsOfStr = item.current_day.split('-');
                             console.log(partsOfStr)
@@ -439,27 +424,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                 StaffService.get_field(data.staff_field_id).then(function(res) {
                     $scope.staffField = res;
                     angular.forEach($scope.staffField.resources, function(item) {
-                        if (item.unit_id) {
-                            angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                if (unt.id === item.unit_id) {
-                                    item.unit_obj = unt;
-                                }
-                            })
-                        }
-                        if (item.resource_type_name) {
-                            angular.forEach(localStorage.getObject('resource_type_list'), function(res) {
-                                if (res.name === item.resource_type_name) {
-                                    item.res_type_obj = res;
-                                }
-                            })
-                        }
-                        if (item.abseteeism_reason_name) {
-                            angular.forEach(localStorage.getObject('abs_list'), function(abs) {
-                                if (abs.reason === item.abseteeism_reason_name) {
-                                    item.absenteeism_obj = abs;
-                                }
-                            })
-                        }
+                        setResourceType(item);
+                        setUnit(item);
+                        setAbsenteeism(item);
                         if (item.current_day) {
                             var partsOfStr = item.current_day.split('-');
                             console.log(partsOfStr)
@@ -481,35 +448,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                 SchedulingService.get_field(data.scheduling_field_id).then(function(res) {
                     $scope.payitemField = res;
                     angular.forEach($scope.payitemField.pay_items, function(item) {
-                        if (item.unit_id) {
-                            angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                if (unt.id === item.unit_id) {
-                                    item.unit_obj = unt;
-                                }
-                            })
-                        }
+                        setUnit(item);
                         angular.forEach(item.resources, function(res) {
-                            if (res.unit_id) {
-                                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                    if (unt.id === res.unit_id) {
-                                        res.unit_obj = unt;
-                                    }
-                                })
-                            }
-                            if (res.resource_type_name) {
-                                angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
-                                    if (rest.name === res.resource_type_name) {
-                                        res.res_type_obj = rest;
-                                    }
-                                })
-                            }
-                            if (res.abseteeism_reason_name) {
-                                angular.forEach(localStorage.getObject('abs_list'), function(abs) {
-                                    if (abs.reason === res.abseteeism_reason_name) {
-                                        res.absenteeism_obj = abs;
-                                    }
-                                })
-                            }
+                            setResourceType(res);
+                            setUnit(res);
+                            setAbsenteeism(res);
                             if (res.current_day) {
                                 var partsOfStr = res.current_day.split('-');
                                 console.log(partsOfStr)
@@ -525,27 +468,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             angular.forEach(subtask.resources, function(res) {
-                                if (res.unit_id) {
-                                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                        if (unt.id === res.unit_id) {
-                                            res.unit_obj = unt;
-                                        }
-                                    })
-                                }
-                                if (res.resource_type_name) {
-                                    angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
-                                        if (rest.name === res.resource_type_name) {
-                                            res.res_type_obj = rest;
-                                        }
-                                    })
-                                }
-                                if (res.abseteeism_reason_name) {
-                                    angular.forEach(localStorage.getObject('abs_list'), function(abs) {
-                                        if (abs.reason === res.abseteeism_reason_name) {
-                                            res.absenteeism_obj = abs;
-                                        }
-                                    })
-                                }
+                                setResourceType(res);
+                                setUnit(res);
+                                setAbsenteeism(res);
                                 if (res.current_day) {
                                     var partsOfStr = res.current_day.split('-');
                                     console.log(partsOfStr)
@@ -570,35 +495,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $scope.payitemField = res;
                     $scope.doTotal('payitem', $scope.payitemField)
                     angular.forEach($scope.payitemField.pay_items, function(item) {
-                        if (item.unit_id) {
-                            angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                if (unt.id === item.unit_id) {
-                                    item.unit_obj = unt;
-                                }
-                            })
-                        }
+                        setUnit(item);
                         angular.forEach(item.resources, function(res) {
-                            if (res.unit_id) {
-                                angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                    if (unt.id === res.unit_id) {
-                                        res.unit_obj = unt;
-                                    }
-                                })
-                            }
-                            if (res.resource_type_name) {
-                                angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
-                                    if (rest.name === res.resource_type_name) {
-                                        res.res_type_obj = rest;
-                                    }
-                                })
-                            }
-                            if (res.abseteeism_reason_name) {
-                                angular.forEach(localStorage.getObject('abs_list'), function(abs) {
-                                    if (abs.reason === res.abseteeism_reason_name) {
-                                        res.absenteeism_obj = abs;
-                                    }
-                                })
-                            }
+                            setResourceType(res);
+                            setUnit(res);
+                            setAbsenteeism(res);
                             if (res.current_day) {
                                 var partsOfStr = res.current_day.split('-');
                                 console.log(partsOfStr)
@@ -614,27 +515,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             angular.forEach(subtask.resources, function(res) {
-                                if (res.unit_id) {
-                                    angular.forEach(localStorage.getObject('unit_list'), function(unt) {
-                                        if (unt.id === res.unit_id) {
-                                            res.unit_obj = unt;
-                                        }
-                                    })
-                                }
-                                if (res.resource_type_name) {
-                                    angular.forEach(localStorage.getObject('resource_type_list'), function(rest) {
-                                        if (rest.name === res.resource_type_name) {
-                                            res.res_type_obj = rest;
-                                        }
-                                    })
-                                }
-                                if (res.abseteeism_reason_name) {
-                                    angular.forEach(localStorage.getObject('abs_list'), function(abs) {
-                                        if (abs.reason === res.abseteeism_reason_name) {
-                                            res.absenteeism_obj = abs;
-                                        }
-                                    })
-                                }
+                                setResourceType(res);
+                                setUnit(res);
+                                setAbsenteeism(res);
                                 if (res.current_day) {
                                     var partsOfStr = res.current_day.split('-');
                                     console.log(partsOfStr)
@@ -659,6 +542,31 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                 $scope.hasData = true;
             }
         }
+
+        function setResourceType(item) {
+            var restyp = $filter('filter')($scope.resource_type_list, {
+                id: item.resource_type_id
+            })[0];
+            if (restype)
+                item.res_type_obj = restype;
+        }
+
+        function setUnit(item) {
+            var unt = $filter('filter')($scope.unit_list, {
+                id: item.unit_id
+            })[0];
+            if (unt)
+                item.unit_obj = unt;
+        }
+
+        function setAbsenteeism(item) {
+            var abs = $filter('filter')($scope.abs_list, {
+                reason: item.abseteeism_reason_name
+            })[0];
+            if (abs)
+                item.absenteeism_obj = abs;
+        }
+
         $scope.back = function() {
             if ($stateParams.type === "register") {
                 $location.path("/app/register/" + $rootScope.projectId + "/" + $scope.formData.category_id + "/" + $scope.formData.code);

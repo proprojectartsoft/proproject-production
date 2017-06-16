@@ -724,7 +724,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     }
                     $scope.filter.popup_predicate.product_ref = item.product_ref;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
+                    var restyp = $filter('filter')($scope.resource_type_list, {
                         name: item.resource_type_name
                     })[0];
                     if (restyp) {
@@ -732,7 +732,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         $scope.filter.popup_predicate.resource_type_id = restyp.id;
                         $scope.filter.popup_predicate.resource_type_name = restyp.name;
                     }
-                    var unt = $filter('filter')(localStorage.getObject('unit_list'), {
+                    var unt = $filter('filter')($scope.unit_list, {
                         name: item.unit_name
                     })[0];
                     if (unt) {
@@ -747,7 +747,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.filter.popup_predicate.employer_name = item.employee_name;
                     $scope.filter.popup_predicate.staff_role = item.role;
                     $scope.filter.popup_predicate.direct_cost = item.direct_cost;
-                    var restyp = $filter('filter')(localStorage.getObject('resource_type_list'), {
+                    var restyp = $filter('filter')($scope.resource_type_list, {
                         name: item.resource_type_name
                     })[0];
                     if (restyp) {
@@ -766,7 +766,7 @@ angular.module($APP.name).controller('FormCtrl', [
 
                 $scope.filter.popup_predicate.description = item.description;
                 $scope.filter.popup_predicate.reference = item.reference;
-                var unt = $filter('filter')(localStorage.getObject('unit_list'), {
+                var unt = $filter('filter')($scope.unit_list, {
                     name: item.unit_name
                 })[0];
                 if (unt) {
@@ -816,12 +816,12 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.substate.name = item.name;
                 $scope.filter.substate.product_ref = item.product_ref;
                 $scope.filter.substate.direct_cost = item.direct_cost;
-                angular.forEach(localStorage.getObject('unit_list'), function(unit) {
+                angular.forEach($scope.unit_list, function(unit) {
                     if (unit.id === item.unit_id) {
                         $scope.filter.substate.unit_obj = unit;
                     }
                 });
-                angular.forEach(localStorage.getObject('resource_type_list'), function(res_type) {
+                angular.forEach($scope.resource_type_list, function(res_type) {
                     if (res_type.id === item.resource_type_id) {
                         $scope.filter.substate.resource_type_obj = res_type;
                     }
@@ -884,9 +884,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 "position": 0,
                 "name": '',
                 "product_ref": '',
-                "unit_id": localStorage.getObject('unit_list')[0].id,
-                "unit_name": localStorage.getObject('unit_list')[0].name,
-                "unit_obj": localStorage.getObject('unit_list')[0],
+                "unit_id": $scope.unit_list[0].id,
+                "unit_name": $scope.unit_list[0].name,
+                "unit_obj": $scope.unit_list[0],
                 "resource_type_id": 0,
                 "resource_type_name": '',
                 "direct_cost": 0,
@@ -931,7 +931,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.substate = $scope.staffField.resources[$scope.staffField.resources.length - 1];
             }
         }
-        //Add new resource in payintemField TODO: check if all fields completed
+        //Add new resource in payitemField TODO: check if all fields completed
         $scope.addPayitem = function() {
             $scope.payitemField.pay_items.push({
                 "description": "",
@@ -954,9 +954,9 @@ angular.module($APP.name).controller('FormCtrl', [
                         "position": 0,
                         "name": "",
                         "product_ref": "",
-                        "unit_id": localStorage.getObject('unit_list')[0].id,
-                        "unit_name": localStorage.getObject('unit_list')[0].name,
-                        "unit_obj": localStorage.getObject('unit_list')[0],
+                        "unit_id": $scope.unit_list[0].id,
+                        "unit_name": $scope.unit_list[0].name,
+                        "unit_obj": $scope.unit_list[0],
                         "resource_type_id": 0,
                         "resource_type_name": "",
                         "direct_cost": 0,
@@ -979,7 +979,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
-        //Add new resource in payintemField (as subtask) TODO: check if all fields completed
+        //Add new resource in payitemField (as subtask) TODO: check if all fields completed
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
                 $scope.filter.substate.resources.push({
@@ -988,9 +988,9 @@ angular.module($APP.name).controller('FormCtrl', [
                     "position": 0,
                     "name": "",
                     "product_ref": "",
-                    "unit_obj": localStorage.getObject('unit_list')[0],
-                    "unit_id": localStorage.getObject('unit_list')[0].id,
-                    "unit_name": localStorage.getObject('unit_list')[0].name,
+                    "unit_obj": $scope.unit_list[0],
+                    "unit_id": $scope.unit_list[0].id,
+                    "unit_name": $scope.unit_list[0].name,
                     "resource_type_id": 0,
                     "resource_type_name": "",
                     "direct_cost": 0,
@@ -1012,7 +1012,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
-        //Add new resource in payintemField subtask TODO: check if all fields completed
+        //Add new resource in payitemField subtask TODO: check if all fields completed
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
                 $scope.filter.substateStk.resources.push({
@@ -1021,9 +1021,9 @@ angular.module($APP.name).controller('FormCtrl', [
                     "position": 0,
                     "name": "",
                     "product_ref": "",
-                    "unit_id": localStorage.getObject('unit_list')[0].id,
-                    "unit_name": localStorage.getObject('unit_list')[0].name,
-                    "unit_obj": localStorage.getObject('unit_list')[0],
+                    "unit_id": $scope.unit_list[0].id,
+                    "unit_name": $scope.unit_list[0].name,
+                    "unit_obj": $scope.unit_list[0],
                     "resource_type_id": 0,
                     "resource_type_name": "",
                     "direct_cost": 0,
