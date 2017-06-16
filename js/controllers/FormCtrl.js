@@ -1261,7 +1261,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 buttons: []
             });
             //automatically sync previousely offline created forms TODO: move inside success
-            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
+            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync') || localStorage.getObject('resourceToSync'))
                 SyncService.sync_button();
             FormInstanceService.create(datax, img)
                 .success(function(data) {

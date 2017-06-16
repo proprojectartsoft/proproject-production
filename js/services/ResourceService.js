@@ -74,6 +74,9 @@ angular.module($APP.name).factory('ResourceService', [
                 return $http.post($APP.server + '/api/resourcefield', data, {}).success(function(response) {
                     return response.data;
                 }).error(function(response) {
+                    var field = localStorage.getObject('resourceToSync') || [];
+                    field.push(data);
+                    localStorage.setObject('resourceToSync', field);
                     return response;
                 })
             },
