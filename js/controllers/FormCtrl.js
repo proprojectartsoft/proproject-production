@@ -358,7 +358,13 @@ angular.module($APP.name).controller('FormCtrl', [
         };
         //Navigate to subtasks for scheduling and pay item fields
         $scope.goStateDown = function(state, substate, data) {
-            CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.linkAux, $scopetitleShow);
+            $scope.aux = {
+                linkAux: $scope.linkAux,
+                titleShow: $scope.titleShow
+            }
+            CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.aux);
+            $scope.linkAux = $scope.aux.linkAux;
+            $scope.titleShow = $scope.aux.titleShow;
             // if (state === 'scheduling') {
             //     switch (substate) {
             //         case 'subtask':
@@ -447,78 +453,45 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'resource':
                     $scope.filter.state = state;
                     $scope.aux = {
-                        linkAux: "",
-                        titleShow: ""
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
                     }
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux); //$scope.linkAux, $scope.titleShow
+                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux);
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
-
-                    // if (substate || $scope.resourceField.resources[0]) {
-                    //     $scope.filter.substate = substate || $scope.resourceField.resources[0];
-                    //     $scope.linkAux = 'resource';
-                    //     if ($scope.filter.substate.name) {
-                    //         $scope.titleShow = 'Resource: ' + $scope.filter.substate.name;
-                    //     } else {
-                    //         $scope.titleShow = 'Resource';
-                    //     }
-                    // } else { //TODO: here if not creating a new resource
-                    //     $scope.linkAux = 'resources';
-                    //     $scope.titleShow = 'Resources';
-                    // }
                     $ionicScrollDelegate.resize();
                     break;
                 case 'staff':
                     $scope.filter.state = state;
-                    CommonServices.goToStaff(substate, $scope.filter, $scope.staffField, $scope.linkAux, $scope.titleShow);
-                    // if (substate || $scope.staffField.resources[0]) {
-                    //     $scope.filter.substate = substate || $scope.staffField.resources[0];
-                    //     $scope.linkAux = 'staff';
-                    //     if ($scope.filter.substate.name) {
-                    //         $scope.titleShow = 'Staff: ' + $scope.filter.substate.name;
-                    //     } else {
-                    //         $scope.titleShow = 'Staff';
-                    //     }
-                    // } else {
-                    //     $scope.linkAux = 'staffs'; //TODO: here if not creating a new staff
-                    //     $scope.titleShow = 'Staffs';
-                    // }
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToStaff(substate, $scope.filter, $scope.staffField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     break;
                 case 'scheduling':
                     $scope.filter.state = state;
-                    CommonServices.goToScheduling(substate, $scope.filter, $scope.payitemField, $scope.linkAux, $scope.titleShow);
-
-                    // if (substate || $scope.payitemField) {
-                    //     $scope.filter.substate = substate || {}; //$scope.payitemField;
-                    //     if ($scope.filter.substate.description) {
-                    //         $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
-                    //     } else {
-                    //         $scope.titleShow = 'Scheduling';
-                    //     }
-                    //     $scope.linkAux = 'scheduling';
-                    // } else {
-                    //     $scope.linkAux = 'schedulings'; //TODO: here if not creating a new sched
-                    //     $scope.titleShow = 'Schedulings';
-                    // }
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToScheduling(substate, $scope.filter, $scope.payitemField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
-                    CommonServices.goToPayitem(substate, $scope.filter, $scope.payitemField, $scope.linkAux, $scope.titleShow);
-
-                    // if (substate || $scope.payitemField) {
-                    //     $scope.filter.substate = substate || {}; //$scope.payitemField;
-                    //     if ($scope.filter.substate.description) {
-                    //         $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
-                    //     } else {
-                    //         $scope.titleShow = 'Pay-item';
-                    //     }
-                    //     $scope.linkAux = 'payitem';
-                    // } else {
-                    //     $scope.linkAux = 'payitem'; //TODO: here if not creating a new payitem
-                    //     $scope.titleShow = 'Pay-items';
-                    // }
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToPayitem(substate, $scope.filter, $scope.payitemField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;

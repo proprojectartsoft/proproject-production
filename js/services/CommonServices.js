@@ -221,58 +221,58 @@ angular.module($APP.name).service('CommonServices', [
                     aux.titleShow = 'Resources';
                 }
             },
-            goToStaff: function(substate, filter, staffField, linkAux, titleShow) {
+            goToStaff: function(substate, filter, staffField, aux) {
                 if (substate || staffField.resources[0]) {
                     filter.substate = substate || staffField.resources[0];
-                    linkAux = 'staff';
+                    aux.linkAux = 'staff';
                     if (filter.substate.name) {
-                        titleShow = 'Staff: ' + filter.substate.name;
+                        aux.titleShow = 'Staff: ' + filter.substate.name;
                     } else {
-                        titleShow = 'Staff';
+                        aux.titleShow = 'Staff';
                     }
                 } else {
-                    linkAux = 'staffs'; //TODO: here if not creating a new staff
-                    titleShow = 'Staffs';
+                    aux.linkAux = 'staffs'; //TODO: here if not creating a new staff
+                    aux.titleShow = 'Staffs';
                 }
             },
-            goToPayitem: function(substate, filter, payitemField, linkAux, titleShow) {
+            goToPayitem: function(substate, filter, payitemField, aux) {
                 if (substate || payitemField) {
                     filter.substate = substate || {}; //$scope.payitemField;
                     if (filter.substate.description) {
-                        titleShow = 'Pay-item: ' + filter.substate.description;
+                        aux.titleShow = 'Pay-item: ' + filter.substate.description;
                     } else {
-                        titleShow = 'Pay-item';
+                        aux.titleShow = 'Pay-item';
                     }
-                    linkAux = 'payitem';
+                    aux.linkAux = 'payitem';
                 } else {
-                    linkAux = 'payitem'; //TODO: here if not creating a new payitem
-                    titleShow = 'Pay-items';
+                    aux.linkAux = 'payitem'; //TODO: here if not creating a new payitem
+                    aux.titleShow = 'Pay-items';
                 }
             },
-            goToScheduling: function(substate, filter, payitemField, linkAux, titleShow, projectId) {
+            goToScheduling: function(substate, filter, payitemField, aux, projectId) {
                 if (substate || payitemField) {
                     filter.substate = substate || {}; //$scope.payitemField;
                     if (filter.substate.description) {
-                        titleShow = 'Scheduling: ' + filter.substate.description;
+                        aux.titleShow = 'Scheduling: ' + filter.substate.description;
                     } else {
-                        titleShow = 'Scheduling';
+                        aux.titleShow = 'Scheduling';
                     }
-                    linkAux = 'scheduling';
+                    aux.linkAux = 'scheduling';
                 } else {
-                    linkAux = 'schedulings'; //TODO: here if not creating a new sched
-                    titleShow = 'Schedulings';
+                    aux.linkAux = 'schedulings'; //TODO: here if not creating a new sched
+                    aux.titleShow = 'Schedulings';
                 }
             },
-            goStateDown: function(state, substate, data, filter, linkAux, titleShow) {
+            goStateDown: function(state, substate, data, filter, aux) {
                 if (state === 'scheduling') {
                     switch (substate) {
                         case 'subtask':
                             filter.state = state;
-                            linkAux = 'schedulingStk';
+                            aux.linkAux = 'schedulingStk';
                             if (data.description) {
-                                titleShow = 'Scheduling Subtask: ' + data.description;
+                                aux.titleShow = 'Scheduling Subtask: ' + data.description;
                             } else {
-                                titleShow = 'Scheduling Subtask';
+                                aux.titleShow = 'Scheduling Subtask';
                             }
                             filter.substateStk = data;
                             $ionicScrollDelegate.resize();
@@ -280,11 +280,11 @@ angular.module($APP.name).service('CommonServices', [
                         case 'subres':
                             filter.actionBtnShow = false;
                             filter.state = state;
-                            linkAux = 'schedulingSubRes';
+                            aux.linkAux = 'schedulingSubRes';
                             if (data.name) {
-                                titleShow = 'Scheduling Subtask Resource: ' + data.name;
+                                aux.titleShow = 'Scheduling Subtask Resource: ' + data.name;
                             } else {
-                                titleShow = 'Scheduling Subtask Resource';
+                                aux.titleShow = 'Scheduling Subtask Resource';
                             }
                             filter.substateStkRes = data;
                             $ionicScrollDelegate.resize();
@@ -292,13 +292,13 @@ angular.module($APP.name).service('CommonServices', [
                         case 'res':
                             filter.actionBtnShow = false;
                             filter.state = state;
-                            linkAux = 'schedulingRes';
+                            aux.linkAux = 'schedulingRes';
                             if (data.name) {
                                 console.log(data.name)
-                                titleShow = 'Scheduling Resource: ' + data.name;
+                                aux.titleShow = 'Scheduling Resource: ' + data.name;
                             } else {
                                 console.log('wut?')
-                                titleShow = 'Scheduling Resource';
+                                aux.titleShow = 'Scheduling Resource';
                             }
                             filter.substateRes = data;
                             $ionicScrollDelegate.resize();
@@ -309,11 +309,11 @@ angular.module($APP.name).service('CommonServices', [
                     switch (substate) {
                         case 'subtask':
                             filter.state = state;
-                            linkAux = 'payitemStk';
+                            aux.linkAux = 'payitemStk';
                             if (data.description) {
-                                titleShow = 'Pay-item Subtask: ' + data.description;
+                                aux.titleShow = 'Pay-item Subtask: ' + data.description;
                             } else {
-                                titleShow = 'Pay-item Subtask';
+                                aux.titleShow = 'Pay-item Subtask';
                             }
                             filter.substateStk = data;
                             $ionicScrollDelegate.resize();
@@ -321,11 +321,11 @@ angular.module($APP.name).service('CommonServices', [
                         case 'subres':
                             filter.actionBtnShow = false;
                             filter.state = state;
-                            linkAux = 'payitemSubRes';
+                            aux.linkAux = 'payitemSubRes';
                             if (data.name) {
-                                titleShow = 'Pay-item Subtask Resource: ' + data.name;
+                                aux.titleShow = 'Pay-item Subtask Resource: ' + data.name;
                             } else {
-                                titleShow = 'Pay-item Subtask Resource';
+                                aux.titleShow = 'Pay-item Subtask Resource';
                             }
                             filter.substateStkRes = data;
                             $ionicScrollDelegate.resize();
@@ -333,12 +333,12 @@ angular.module($APP.name).service('CommonServices', [
                         case 'res':
                             filter.actionBtnShow = false;
                             filter.state = state;
-                            linkAux = 'payitemRes';
+                            aux.linkAux = 'payitemRes';
                             if (data.name) {
                                 console.log(data.name)
-                                titleShow = 'Pay-item Resource: ' + data.name;
+                                aux.titleShow = 'Pay-item Resource: ' + data.name;
                             } else {
-                                titleShow = 'Pay-item Resource';
+                                aux.titleShow = 'Pay-item Resource';
                             }
                             filter.substateRes = data;
                             $ionicScrollDelegate.resize();

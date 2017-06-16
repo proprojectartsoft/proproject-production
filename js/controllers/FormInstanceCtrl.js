@@ -174,28 +174,58 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             }
         };
         $scope.goStateDown = function(state, substate, data) { //TODO: no $ionicScrollDelegate.resize();
-            CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.linkAux, $scopetitleShow);
+            $scope.aux = {
+                linkAux: $scope.linkAux,
+                titleShow: $scope.titleShow
+            }
+            CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.aux);
+            $scope.linkAux = $scope.aux.linkAux;
+            $scope.titleShow = $scope.aux.titleShow;
         }
         $scope.goState = function(state, substate) { //TODO: commonservices
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.linkAux, $scope.titleShow);
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     break;
                 case 'staff':
                     $scope.filter.state = state;
-                    CommonServices.goToStaff(substate, $scope.filter, $scope.staffField, $scope.linkAux, $scope.titleShow);
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToStaff(substate, $scope.filter, $scope.staffField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     break;
                 case 'scheduling':
                     $scope.filter.state = state;
-                    CommonServices.goToScheduling(substate, $scope.filter, $scope.payitemField, $scope.linkAux, $scope.titleShow);
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToScheduling(substate, $scope.filter, $scope.payitemField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
-                    CommonServices.goToPayitem(substate, $scope.filter, $scope.payitemField, $scope.linkAux, $scope.titleShow);
+                    $scope.aux = {
+                        linkAux: $scope.linkAux,
+                        titleShow: $scope.titleShow
+                    }
+                    CommonServices.goToPayitem(substate, $scope.filter, $scope.payitemField, $scope.aux);
+                    $scope.linkAux = $scope.aux.linkAux;
+                    $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
