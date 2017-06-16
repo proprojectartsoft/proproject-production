@@ -456,7 +456,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         linkAux: $scope.linkAux,
                         titleShow: $scope.titleShow
                     }
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.linkAux, $scope.titleShow);
+                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux);
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();

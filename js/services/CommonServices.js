@@ -207,18 +207,18 @@ angular.module($APP.name).service('CommonServices', [
                     "calculation": true,
                 });
             },
-            goToResource: function(substate, filter, resourceField, linkAux, titleShow) { //linkAux, titleShow
+            goToResource: function(substate, filter, resourceField, aux) { 
                 if (substate || resourceField.resources[0]) {
                     filter.substate = substate || resourceField.resources[0];
-                    linkAux = 'resource';
+                    aux.linkAux = 'resource';
                     if (filter.substate.name) {
-                        titleShow = 'Resource: ' + filter.substate.name;
+                        aux.titleShow = 'Resource: ' + filter.substate.name;
                     } else {
-                        titleShow = 'Resource';
+                        aux.titleShow = 'Resource';
                     }
                 } else { //TODO: here if not creating a new resource
-                    linkAux = 'resources';
-                    titleShow = 'Resources';
+                    aux.linkAux = 'resources';
+                    aux.titleShow = 'Resources';
                 }
             },
             goToStaff: function(substate, filter, staffField, aux) {
