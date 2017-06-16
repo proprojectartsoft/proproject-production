@@ -233,13 +233,13 @@ angular.module($APP.name).factory('SyncService', [
             forms = localStorage.getObject('ppfsync');
             pics = localStorage.getObject('pppsync');
             resourcesForm = localStorage.getObject('resourceToSync');
-            if (resourcesForm) {
-                ResourceService.add_field(resourcesForm).success(function(x) {
+            angular.forEach(resourcesForm, function(res) {
+                ResourceService.add_field(res).success(function(x) {
                     localStorage.setObject('resourceToSync', []);
                 }).error(function(err) {
                     localStorage.setObject('resourceToSync', []);
                 });
-            }
+            })
             if (forms) {
                 var upRequests = [];
                 angular.forEach(forms, function(form) {
