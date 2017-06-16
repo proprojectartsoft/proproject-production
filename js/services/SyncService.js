@@ -236,10 +236,10 @@ angular.module($APP.name).factory('SyncService', [
             if (forms) {
                 var upRequests = [];
                 angular.forEach(forms, function(form) {
-                    angular.forEach(form.resourceField, function(res) {
+                    angular.forEach(form.form.resourceField, function(res) {
                         ResourceService.add_field(res).success(function(x) {}).error(function(err) {});
                     })
-                    form.resourceField = [];
+                    form.form.resourceField = [];
                     picX = false;
                     formX = form.form;
                     angular.forEach(pics, function(pic) {
