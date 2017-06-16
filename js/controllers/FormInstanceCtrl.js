@@ -544,7 +544,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
         }
 
         function setResourceType(item) {
-            var restyp = $filter('filter')($scope.resource_type_list, {
+            var restype = $filter('filter')($scope.resource_type_list, {
                 id: item.resource_type_id
             })[0];
             if (restype)
