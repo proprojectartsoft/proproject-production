@@ -59,7 +59,8 @@ angular.module($APP.name).factory('SyncService', [
                 })
         }
 
-        var loadSettings = function() { //TODO: delete comments
+        var loadSettings = function() {
+            console.log("load settitngs");
             ResourceService.list_manager().then(function(result) {
                 console.log(result);
                 localStorage.setObject('resource_list', result);
