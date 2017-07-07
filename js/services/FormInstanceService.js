@@ -72,7 +72,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                         id: $rootScope.toBeUploadedCount,
                         form: requestForm
                     });
-                    console.log(aux_f);
                     localStorage.setObject('ppfsync', aux_f);
                     if (requestList.length !== 0) {
                         var aux_p = localStorage.getObject('pppsync');

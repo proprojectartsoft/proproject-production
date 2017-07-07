@@ -1248,7 +1248,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                 $scope.formData.staffField.push($scope.staffField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
-                                    //TODO: keep locally for online sync and do that in SyncService
                                 }
                             });
                         } else {
@@ -1268,8 +1267,8 @@ angular.module($APP.name).controller('FormCtrl', [
                 content: "",
                 buttons: []
             });
-            //automatically sync previousely offline created forms TODO: move inside success
-            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync') || localStorage.getObject('resourceToSync'))
+            //automatically sync previousely offline created forms TODO: move inside success || localStorage.getObject('resourceToSync')
+            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
                 SyncService.sync_button();
             FormInstanceService.create(datax, img)
                 .success(function(data) {

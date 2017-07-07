@@ -83,6 +83,87 @@ angular.module($APP.name).factory('SyncService', [
             })
         }
 
+        var addSpecialFields(formsToAdd) {
+            var def = $q.defer();
+            var resourceOK = false,
+                staffOK = false,
+                schedulingOK = false,
+                payOK = false;
+            if (!formsToAdd.resourceField || formsToAdd.resourceField.length == 0)
+                resourceOK = true;
+            if (!formsToAdd.staffField || formsToAdd.staffField.length == 0)
+                staffOK = true;
+            if (!formsToAdd.schedField || formsToAdd.schedField.length == 0)
+                schedulingOK = true;
+            if (!formsToAdd.payitemField || formsToAdd.payitemField.length == 0)
+                payOK = true;
+
+            angular.forEach(formsToAdd.resourceField, function(resField) {
+                ResourceService.add_field(resField).success(function(x) {
+                    formsToAdd.resource_field_id = x.id;
+                    if (formsToAdd.resourceField[formsToAdd.resourceField.length - 1] == resField)
+                        resourceOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                }).error(function(err) {
+                    if (formsToAdd.resourceField[formsToAdd.resourceField.length - 1] == resField)
+                        resourceOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                });
+            })
+            angular.forEach(formsToAdd.staffField, function(staff) {
+                StaffService.add_field(staff).success(function(x) {
+                    formsToAdd.staff_field_id = x.id;
+                    if (formsToAdd.staffField[formsToAdd.staffField.length - 1] == staff)
+                        staffOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                }).error(function(err) {
+                    if (formsToAdd.staffField[formsToAdd.staffField.length - 1] == staff)
+                        staffOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                });
+            })
+            angular.forEach(formsToAdd.payitemField, function(pay) {
+                PayitemService.add_field(pay).success(function(x) {
+                    formsToAdd.pay_item_field_id = x.id;
+                    if (formsToAdd.payitemField[formsToAdd.payitemField.length - 1] == pay)
+                        payOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                }).error(function(err) {
+                    if (formsToAdd.payitemField[formsToAdd.payitemField.length - 1] == pay)
+                        payOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                });
+            })
+            angular.forEach(formsToAdd.schedField, function(sched) {
+                SchedulingService.add_field(sched).success(function(x) {
+                    formsToAdd.scheduling_field_id = x.id;
+                    if (formsToAdd.schedField[formsToAdd.schedField.length - 1] == sched)
+                        schedulingOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                }).error(function(err) {
+                    if (formsToAdd.schedField[formsToAdd.schedField.length - 1] == sched)
+                        schedulingOK = true;
+                    if (resourceOK && staffOK && schedulingOK && payOK) {
+                        def.resolve();
+                    }
+                });
+            })
+            return def.promise;
+        }
         var down = function() {
             AuthService.version().then(function(result) {
                 localStorage.setObject('ppversion', result);
@@ -148,7 +229,6 @@ angular.module($APP.name).factory('SyncService', [
                             localStorage.setObject('ppnavTitle', auxTitle.name);
                             localStorage.setObject('ppprojectId', auxTitle.id);
                         }
-
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
@@ -241,52 +321,43 @@ angular.module($APP.name).factory('SyncService', [
             if (forms) {
                 var upRequests = [];
                 angular.forEach(forms, function(form) {
-                    angular.forEach(form.form.resourceField, function(res) {
-                        ResourceService.add_field(res).success(function(x) {}).error(function(err) {});
-                    })
-                    angular.forEach(form.form.staffField, function(res) {
-                        StaffService.add_field(res);
-                    })
-                    angular.forEach(form.form.payitemField, function(res) {
-                        PayitemService.add_field(res);
-                    })
-                    angular.forEach(form.form.schedField, function(res) {
-                        SchedulingService.add_field(res);
-                    })
-                    form.form.resourceField = [];
-                    form.form.staffField = [];
-                    form.form.schedField = [];
-                    form.form.payitemField = [];
-                    picX = false;
-                    formX = form.form;
-                    angular.forEach(pics, function(pic) {
-                        if (pic.id === form.id) {
-                            picX = pic.imgs;
+                    addSpecialFields(form.form).then(function(r) {
+                        form.form.resourceField = [];
+                        form.form.staffField = [];
+                        form.form.schedField = [];
+                        form.form.payitemField = [];
+                        picX = false;
+                        formX = form.form;
+                        angular.forEach(pics, function(pic) {
+                            if (pic.id === form.id) {
+                                picX = pic.imgs;
+                            }
+                        })
+                        if (formX) {
+                            var formsToAdd = angular.copy(formX);
+                            var picsToAdd = angular.copy(picX);
+                            upRequests.push(FormInstanceService.create_sync(formsToAdd, picsToAdd).then(function() {
+                                console.log('help', formsToAdd, picsToAdd)
+                            }));
+                        }
+
+                        if (forms[forms.length - 1] == form) {
+                            doRequest = doRequest.concat(upRequests);
+                            localStorage.removeItem('ppfsync')
+                            localStorage.removeItem('pppsync')
+                            asyncCall(doRequest,
+                                function error(result) {
+                                    console.log('Some error occurred, but we get going:', result);
+                                },
+                                function success(result) {
+                                    DbService.popclose();
+                                    console.log(result)
+                                }
+                            );
                         }
                     })
-                    if (formX) {
-                        var help1 = angular.copy(formX);
-                        var help2 = angular.copy(picX);
-                        upRequests.push(FormInstanceService.create_sync(help1, help2).then(function() {
-                            console.log('help', help1, help2)
-                        }));
-                    }
                 });
-                doRequest = doRequest.concat(upRequests);
             }
-
-            localStorage.removeItem('ppfsync')
-            localStorage.removeItem('pppsync')
-
-            asyncCall(doRequest,
-                function error(result) {
-                    console.log('Some error occurred, but we get going:', result);
-                },
-                function success(result) {
-                    DbService.popclose();
-                    console.log(result)
-                }
-            );
         }
         var load = function() {
             var aux;
