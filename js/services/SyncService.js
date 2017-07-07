@@ -89,6 +89,8 @@ angular.module($APP.name).factory('SyncService', [
                 staffOK = false,
                 schedulingOK = false,
                 payOK = false;
+            if (!formsToAdd.resourceField && !formsToAdd.staffField && !formsToAdd.payitemField && !formsToAdd.schedField)
+                def.resolve();
             if (!formsToAdd.resourceField || formsToAdd.resourceField.length == 0)
                 resourceOK = true;
             if (!formsToAdd.staffField || formsToAdd.staffField.length == 0)
@@ -568,7 +570,7 @@ angular.module($APP.name).factory('SyncService', [
                                 }
                             })
                     } else {
-                      var offlinePopup = $ionicPopup.alert({
+                        var offlinePopup = $ionicPopup.alert({
                             title: "You are offline",
                             template: "<center>You cannot sync your data when offline</center>",
                             content: "",
