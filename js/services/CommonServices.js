@@ -209,7 +209,7 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToResource: function(substate, filter, resourceField, aux) {
                 if (substate || resourceField && resourceField.id == 0) {
-                    filter.substate = substate;
+                    filter.substate = substate || resourceField.resources[0];
                     aux.linkAux = 'resource';
                     if (filter.substate && filter.substate.name) {
                         aux.titleShow = 'Resource: ' + filter.substate.name;
@@ -223,7 +223,7 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToStaff: function(substate, filter, staffField, aux) {
                 if (substate || staffField && staffField.id == 0) {
-                    filter.substate = substate;
+                    filter.substate = substate || staffField.resources[0];
                     aux.linkAux = 'staff';
                     if (filter.substate && filter.substate.name) {
                         aux.titleShow = 'Staff: ' + filter.substate.name;
@@ -237,7 +237,7 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToPayitem: function(substate, filter, payitemField, aux) {
                 if (substate || payitemField && payitemField.id == 0) {
-                    filter.substate = substate;
+                    filter.substate = substate || payitemField.resources[0];
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Pay-item: ' + filter.substate.description;
                     } else {
@@ -251,7 +251,7 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToScheduling: function(substate, filter, payitemField, aux, projectId) {
                 if (substate || payitemField && payitemField.id == 0) {
-                    filter.substate = substate;
+                    filter.substate = substate || payitemField.resources[0];
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Scheduling: ' + filter.substate.description;
                     } else {
@@ -259,7 +259,7 @@ angular.module($APP.name).service('CommonServices', [
                     }
                     aux.linkAux = 'scheduling';
                 } else {
-                    aux.linkAux = 'schedulings'; 
+                    aux.linkAux = 'schedulings';
                     aux.titleShow = 'Schedulings';
                 }
             },
