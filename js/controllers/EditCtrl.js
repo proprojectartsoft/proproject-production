@@ -353,7 +353,7 @@ angular.module($APP.name).controller('EditCtrl', [
                 $scope.addStaff();
             }
         };
-        $scope.openPopover = function($event, predicate, test) { //TODO: test predicate = ???
+        $scope.openPopover = function($event, predicate, test) {
             $scope.filter.popup_predicate = predicate;
             CommonServices.openPopover(test, $scope.filter, $stateParams.projectId);
             $scope.popover.show($event);
@@ -450,8 +450,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 }
             }
         }
-
-
         //        ==========================================================================================
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -460,7 +458,6 @@ angular.module($APP.name).controller('EditCtrl', [
         $scope.formData = angular.copy($rootScope.rootForm);
         $scope.titleShow = $scope.formData.name;
         $scope.goPicture = function() {
-            //            $scope.trim();
             $scope.filter.state = 'photos';
             $scope.filter.substate = 'gallery'
             $timeout(function() { // we need little delay
@@ -660,7 +657,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    // item.current_day = item.current_day_obj.getDate(); //TODO:
                                     item.current_day = new Date(item.current_day_obj).getTime();
                                 }
                             });
@@ -685,8 +681,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        // var date = new Date(res.current_day_obj);
-                                        // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -708,8 +702,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            //                                                    var date = new Date(res.current_day_obj);
-                                            //                                                    res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                             res.current_day = res.current_day_obj;
                                         }
                                         if (res.expiry_date_obj) {
@@ -740,8 +732,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        //                                                var date = new Date(res.current_day_obj);
-                                        //                                                res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -763,7 +753,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
                                             res.current_day = res.current_day_obj.getTime();
                                         }
                                         if (res.expiry_date_obj) {
@@ -785,12 +774,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                     item.absenteeism_obj.reason;
                                 }
-                                // if (item.current_day_obj) {
-                                //     //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
-                                //     item.current_day = item.current_day_obj.getTime();
-                                // }
                                 if (item.expiry_date_obj) {
-                                    //                                    item.expiry_date = item.expiry_date_obj.getDate() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getFullYear();
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
                                 if (item.start_time_obj) {
@@ -866,8 +850,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    // var date = new Date(item.current_day_obj);
-                                    // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); //TODO: REMOVE FILTER BUT FIND OUT WHY DATE HAS FORMAT JAN 1, YEAR!!!!
                                 }
                             });
@@ -921,8 +903,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        //                                                var date = new Date(res.current_day_obj);
-                                        //                                                res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -944,8 +924,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            //                                                    var date = new Date(res.current_day_obj);
-                                            //                                                    res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                             res.current_day = res.current_day_obj;
                                         }
                                         if (res.expiry_date_obj) {
@@ -1004,8 +982,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        //                                                var date = new Date(res.current_day_obj);
-                                        //                                                res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -1027,7 +1003,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
                                             res.current_day = res.current_day_obj.getTime();
                                         }
                                         if (res.expiry_date_obj) {
@@ -1078,12 +1053,9 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    //                                    item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
-                                    //                                    console.log(typeof(item.current_day_obj))
                                     item.current_day = item.current_day_obj.getTime();
                                 }
                                 if (item.expiry_date_obj) {
-                                    //                                    item.expiry_date = item.expiry_date_obj.getDate() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getFullYear();
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
                                 if (item.start_time_obj) {

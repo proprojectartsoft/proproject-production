@@ -365,87 +365,6 @@ angular.module($APP.name).controller('FormCtrl', [
             CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.aux);
             $scope.linkAux = $scope.aux.linkAux;
             $scope.titleShow = $scope.aux.titleShow;
-            // if (state === 'scheduling') {
-            //     switch (substate) {
-            //         case 'subtask':
-            //             $scope.filter.state = state;
-            //             $scope.linkAux = 'schedulingStk';
-            //             if (data.description) {
-            //                 $scope.titleShow = 'Scheduling Subtask: ' + data.description;
-            //             } else {
-            //                 $scope.titleShow = 'Scheduling Subtask';
-            //             }
-            //             $scope.filter.substateStk = data;
-            //             $ionicScrollDelegate.resize();
-            //             break;
-            //         case 'subres':
-            //             $scope.filter.actionBtnShow = false;
-            //             $scope.filter.state = state;
-            //             $scope.linkAux = 'schedulingSubRes';
-            //             if (data.name) {
-            //                 $scope.titleShow = 'Scheduling Subtask Resource: ' + data.name;
-            //             } else {
-            //                 $scope.titleShow = 'Scheduling Subtask Resource';
-            //             }
-            //             $scope.filter.substateStkRes = data;
-            //             $ionicScrollDelegate.resize();
-            //             break;
-            //         case 'res':
-            //             $scope.filter.actionBtnShow = false;
-            //             $scope.filter.state = state;
-            //             $scope.linkAux = 'schedulingRes';
-            //             if (data.name) {
-            //                 console.log(data.name)
-            //                 $scope.titleShow = 'Scheduling Resource: ' + data.name;
-            //             } else {
-            //                 console.log('wut?')
-            //                 $scope.titleShow = 'Scheduling Resource';
-            //             }
-            //             $scope.filter.substateRes = data;
-            //             $ionicScrollDelegate.resize();
-            //             break;
-            //     }
-            // }
-            // if (state === 'payitem') {
-            //     switch (substate) {
-            //         case 'subtask':
-            //             $scope.filter.state = state;
-            //             $scope.linkAux = 'payitemStk';
-            //             if (data.description) {
-            //                 $scope.titleShow = 'Pay-item Subtask: ' + data.description;
-            //             } else {
-            //                 $scope.titleShow = 'Pay-item Subtask';
-            //             }
-            //             $scope.filter.substateStk = data;
-            //             $ionicScrollDelegate.resize();
-            //             break;
-            //         case 'subres':
-            //             $scope.filter.actionBtnShow = false;
-            //             $scope.filter.state = state;
-            //             $scope.linkAux = 'payitemSubRes';
-            //             if (data.name) {
-            //                 $scope.titleShow = 'Pay-item Subtask Resource: ' + data.name;
-            //             } else {
-            //                 $scope.titleShow = 'Pay-item Subtask Resource';
-            //             }
-            //             $scope.filter.substateStkRes = data;
-            //             $ionicScrollDelegate.resize();
-            //             break;
-            //         case 'res':
-            //             $scope.filter.actionBtnShow = false;
-            //             $scope.filter.state = state;
-            //             $scope.linkAux = 'payitemRes';
-            //             if (data.name) {
-            //                 console.log(data.name)
-            //                 $scope.titleShow = 'Pay-item Resource: ' + data.name;
-            //             } else {
-            //                 $scope.titleShow = 'Pay-item Resource';
-            //             }
-            //             $scope.filter.substateRes = data;
-            //             $ionicScrollDelegate.resize();
-            //             break;
-            //     }
-            // }
         }
         //Navigate to given state
         $scope.goState = function(state, substate) {
@@ -630,7 +549,11 @@ angular.module($APP.name).controller('FormCtrl', [
             console.log($scope.filter.state, $scope.filter.substate)
             if ($scope.filter.state === 'payitem' || $scope.filter.state === 'scheduling') {
                 if ($scope.filter.substate && !$scope.filter.substateStk) {
-                    if ($scope.filter.substate.resources && $scope.filter.substate.subtasks && $scope.filter.substate.resources.length === 0 && $scope.filter.substate.subtasks.length === 0) {
+                    if (!$scope.filter.substate.resources)
+                        $scope.filter.substate.resources = [];
+                    if (!$scope.filter.substate.subtasks)
+                        $scope.filter.substate.subtasks = [];
+                    if ($scope.filter.substate.resources.length === 0 && $scope.filter.substate.subtasks.length === 0) {
                         $scope.filter.actionBtn = !$scope.filter.actionBtn;
                     } else {
                         if ($scope.filter.substate.resources.length !== 0 && $scope.filter.substate.subtasks.length === 0) {
@@ -650,7 +573,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             $scope.linkAux = 'scheduling';
                             $scope.titleAux = 'Scheduling';
                         }
-
                         $scope.addPayitem();
                     }
                 }
@@ -683,12 +605,12 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.substate = $scope.staffField.resources[$scope.staffField.resources.length - 1];
             }
         }
-        //Add new resource in payitemField TODO: check if all fields completed
+        //Add new resource in payitemField
         $scope.addPayitem = function() {
             CommonServices.addPayitem($scope.payitemField.pay_items);
             $scope.filter.substate = $scope.payitemField.pay_items[$scope.payitemField.pay_items.length - 1]
         }
-        //Add new subtask TODO: check if all fields completed
+        //Add new subtask
         $scope.addSubtask = function() {
             if ($scope.filter.substate && $scope.filter.substate.resources.length === 0) {
                 CommonServices.addSubtask($scope.filter.substate.subtasks);
@@ -702,7 +624,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
-        //Add new resource in payitemField (as subtask) TODO: check if all fields completed
+        //Add new resource in payitemField (as subtask)
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
                 CommonServices.addResourcePi($scope.filter.substate.resources);
@@ -716,7 +638,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             }
         }
-        //Add new resource in payitemField subtask TODO: check if all fields completed
+        //Add new resource in payitemField subtask
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
                 CommonServices.addResourceInSubtask($scope.filter.substateStk);
@@ -868,7 +790,6 @@ angular.module($APP.name).controller('FormCtrl', [
             $scope.formData = FormUpdateService.getProducts();
         });
         $scope.goPicture = function() {
-            //            $scope.trim();
             $scope.linkAux = 'photos';
             $scope.titleShow = 'Photo Gallery';
             $scope.filter.state = 'photos';
@@ -879,14 +800,10 @@ angular.module($APP.name).controller('FormCtrl', [
             pullDown();
         }
         $scope.testPicture = function(item) {
-            //            $scope.trim();
             $scope.linkAux = 'photodetails';
             $scope.titleShow = 'Photo Gallery';
             $scope.filter.substate = 'pic';
-            console.log(item)
             $scope.filter.picture = item;
-            console.log($scope.imgURI)
-            //            console.log($scope.imgURI[item], $scope.filter.picture)
         }
         $scope.imgURI = [];
         $scope.takePicture = function() {
@@ -1038,8 +955,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                     item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    // var date = new Date(item.current_day_obj);
-                                    // item.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     item.current_day = item.current_day_obj;
                                 }
                             });
@@ -1082,8 +997,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        // var date = new Date(res.current_day_obj);
-                                        // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -1105,8 +1018,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            // var date = new Date(res.current_day_obj);
-                                            // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                             res.current_day = res.current_day_obj;
                                         }
                                         if (res.expiry_date_obj) {
@@ -1118,7 +1029,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             });
                             PayitemService.add_field($scope.payitemField).success(function(x) {
                                 $scope.formData.pay_item_field_id = x.id;
-                                // $scope.fastSave($scope.formData, $scope.imgURI);
                                 payOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
@@ -1156,8 +1066,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                         res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
                                     if (res.current_day_obj) {
-                                        // var date = new Date(res.current_day_obj);
-                                        // res.current_day = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         res.current_day = res.current_day_obj;
                                     }
                                     if (res.expiry_date_obj) {
@@ -1179,7 +1087,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            // item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
                                             res.current_day = res.current_day_obj.getTime();
                                         }
                                         if (res.expiry_date_obj) {
@@ -1191,7 +1098,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             });
                             SchedulingService.add_field($scope.payitemField).success(function(x) {
                                 $scope.formData.scheduling_field_id = x.id;
-                                // $scope.fastSave($scope.formData, $scope.imgURI);
                                 schedulingOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);
@@ -1218,11 +1124,9 @@ angular.module($APP.name).controller('FormCtrl', [
                                     item.absenteeism_obj.reason;
                                 }
                                 if (item.current_day_obj) {
-                                    // item.current_day = item.current_day_obj.getDate() + '-' + (item.current_day_obj.getMonth() + 1) + '-' + item.current_day_obj.getFullYear();
                                     item.current_day = item.current_day_obj.getTime();
                                 }
                                 if (item.expiry_date_obj) {
-                                    // item.expiry_date = item.expiry_date_obj.getDate() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getFullYear();
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
                                 if (item.start_time_obj) {
@@ -1237,7 +1141,6 @@ angular.module($APP.name).controller('FormCtrl', [
                             });
                             StaffService.add_field($scope.staffField).success(function(x) {
                                 $scope.formData.staff_field_id = x.id;
-                                // $scope.fastSave($scope.formData, $scope.imgURI);
                                 staffOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
                                     $scope.fastSave($scope.formData, $scope.imgURI);

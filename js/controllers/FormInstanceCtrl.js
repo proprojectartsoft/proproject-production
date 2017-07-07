@@ -182,7 +182,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $scope.linkAux = $scope.aux.linkAux;
             $scope.titleShow = $scope.aux.titleShow;
         }
-        $scope.goState = function(state, substate) { 
+        $scope.goState = function(state, substate) {
             switch (state) {
                 case 'resource':
                     $scope.filter.state = state;
@@ -227,7 +227,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
-                    $scope.doTotal('pisubtask', $scope.filter.substate);
+                    if ($scope.filter.substate)
+                        $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
         }
@@ -293,7 +294,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             var partsOfStr = item.current_day.split('-');
                             console.log(partsOfStr)
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            // item.current_day_obj = item.current_day;
                         }
                     });
                     $rootScope.resourceField = $scope.resourceField;
@@ -311,13 +311,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             var partsOfStr = item.current_day.split('-');
                             console.log(partsOfStr)
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            //                            item.current_day_obj = item.current_day;
                         }
                         if (item.expiry_date) {
                             var partsOfStr = item.expiry_date.split('-');
                             console.log(partsOfStr)
                             item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            //                            item.expiry_date_obj = item.expiry_date;
                         }
                     });
                     $rootScope.staffField = $scope.staffField;
@@ -337,13 +335,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var partsOfStr = res.current_day.split('-');
                                 console.log(partsOfStr)
                                 item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                //                                res.current_day_obj = res.current_day;
                             }
                             if (res.expiry_date) {
                                 var partsOfStr = res.expiry_date.split('-');
                                 console.log(partsOfStr)
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                //                                res.expiry_date_obj = res.expiry_date;
                             }
                         });
                         angular.forEach(item.subtasks, function(subtask) {
@@ -384,13 +380,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var partsOfStr = res.current_day.split('-');
                                 console.log(partsOfStr)
                                 item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                //                                res.current_day_obj = res.current_day;
                             }
                             if (res.expiry_date) {
                                 var partsOfStr = res.expiry_date.split('-');
                                 console.log(partsOfStr)
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                //                                res.expiry_date_obj = res.expiry_date;
                             }
                         });
                         angular.forEach(item.subtasks, function(subtask) {
@@ -402,13 +396,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     var partsOfStr = res.current_day.split('-');
                                     console.log(partsOfStr)
                                     item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                    //                                    res.current_day_obj = res.current_day;
                                 }
                                 if (res.expiry_date) {
                                     var partsOfStr = res.expiry_date.split('-');
                                     console.log(partsOfStr)
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                    //                                    res.expiry_date_obj = res.expiry_date;
                                 }
                             });
                         });

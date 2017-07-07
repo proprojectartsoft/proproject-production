@@ -209,9 +209,9 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToResource: function(substate, filter, resourceField, aux) {
                 if (substate || resourceField.resources[0]) {
-                    filter.substate = substate || resourceField.resources[0];
+                    filter.substate = substate;// || resourceField.resources[0];
                     aux.linkAux = 'resource';
-                    if (filter.substate.name) {
+                    if (filter.substate && filter.substate.name) {
                         aux.titleShow = 'Resource: ' + filter.substate.name;
                     } else {
                         aux.titleShow = 'Resource';
@@ -223,9 +223,9 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToStaff: function(substate, filter, staffField, aux) {
                 if (substate || staffField.resources[0]) {
-                    filter.substate = substate || staffField.resources[0];
+                    filter.substate = substate;// || staffField.resources[0];
                     aux.linkAux = 'staff';
-                    if (filter.substate.name) {
+                    if (filter.substate && filter.substate.name) {
                         aux.titleShow = 'Staff: ' + filter.substate.name;
                     } else {
                         aux.titleShow = 'Staff';
@@ -237,8 +237,8 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToPayitem: function(substate, filter, payitemField, aux) {
                 if (substate || payitemField) {
-                    filter.substate = substate || {}; //$scope.payitemField;
-                    if (filter.substate.description) {
+                    filter.substate = substate;// || {}; //$scope.payitemField;
+                    if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Pay-item: ' + filter.substate.description;
                     } else {
                         aux.titleShow = 'Pay-item';
@@ -251,8 +251,8 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToScheduling: function(substate, filter, payitemField, aux, projectId) {
                 if (substate || payitemField) {
-                    filter.substate = substate || {}; //$scope.payitemField;
-                    if (filter.substate.description) {
+                    filter.substate = substate;// || {}; //$scope.payitemField;
+                    if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Scheduling: ' + filter.substate.description;
                     } else {
                         aux.titleShow = 'Scheduling';
