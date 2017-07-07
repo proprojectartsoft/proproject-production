@@ -83,7 +83,7 @@ angular.module($APP.name).factory('SyncService', [
             })
         }
 
-        var addSpecialFields(formsToAdd) {
+        var addSpecialFields = function(formsToAdd) {
             var def = $q.defer();
             var resourceOK = false,
                 staffOK = false,
