@@ -208,22 +208,22 @@ angular.module($APP.name).service('CommonServices', [
                 });
             },
             goToResource: function(substate, filter, resourceField, aux) {
-                if (substate) { // || resourceField.resources[0]
-                    filter.substate = substate;// || resourceField.resources[0];
+                if (substate || resourceField && resourceField.id == 0) {
+                    filter.substate = substate;
                     aux.linkAux = 'resource';
                     if (filter.substate && filter.substate.name) {
                         aux.titleShow = 'Resource: ' + filter.substate.name;
                     } else {
                         aux.titleShow = 'Resource';
                     }
-                } else { //TODO: here if not creating a new resource
+                } else {
                     aux.linkAux = 'resources';
                     aux.titleShow = 'Resources';
                 }
             },
             goToStaff: function(substate, filter, staffField, aux) {
-                if (substate) { // || staffField.resources[0]
-                    filter.substate = substate;// || staffField.resources[0];
+                if (substate || staffField && staffField.id == 0) {
+                    filter.substate = substate;
                     aux.linkAux = 'staff';
                     if (filter.substate && filter.substate.name) {
                         aux.titleShow = 'Staff: ' + filter.substate.name;
@@ -231,13 +231,13 @@ angular.module($APP.name).service('CommonServices', [
                         aux.titleShow = 'Staff';
                     }
                 } else {
-                    aux.linkAux = 'staffs'; //TODO: here if not creating a new staff
+                    aux.linkAux = 'staffs';
                     aux.titleShow = 'Staffs';
                 }
             },
             goToPayitem: function(substate, filter, payitemField, aux) {
-                if (substate) { // || payitemField
-                    filter.substate = substate;// || {}; //$scope.payitemField;
+                if (substate || payitemField && payitemField.id == 0) {
+                    filter.substate = substate;
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Pay-item: ' + filter.substate.description;
                     } else {
@@ -245,13 +245,13 @@ angular.module($APP.name).service('CommonServices', [
                     }
                     aux.linkAux = 'payitem';
                 } else {
-                    aux.linkAux = 'payitem'; //TODO: here if not creating a new payitem
+                    aux.linkAux = 'payitem';
                     aux.titleShow = 'Pay-items';
                 }
             },
             goToScheduling: function(substate, filter, payitemField, aux, projectId) {
-                if (substate) { // || payitemField
-                    filter.substate = substate;// || {}; //$scope.payitemField;
+                if (substate || payitemField && payitemField.id == 0) {
+                    filter.substate = substate;
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Scheduling: ' + filter.substate.description;
                     } else {
@@ -259,7 +259,7 @@ angular.module($APP.name).service('CommonServices', [
                     }
                     aux.linkAux = 'scheduling';
                 } else {
-                    aux.linkAux = 'schedulings'; //TODO: here if not creating a new sched
+                    aux.linkAux = 'schedulings'; 
                     aux.titleShow = 'Schedulings';
                 }
             },
