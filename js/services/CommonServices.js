@@ -186,7 +186,7 @@ angular.module($APP.name).service('CommonServices', [
                 });
             },
             addResourceInSubtask: function(resources) {
-                resources.push({
+                resources.resources.push({
                     "open": false,
                     "resource_id": 0,
                     "position": 0,
@@ -237,7 +237,7 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToPayitem: function(substate, filter, payitemField, aux) {
                 if (substate || payitemField && payitemField.id == 0) {
-                    filter.substate = substate || payitemField.resources[0];
+                    filter.substate = substate || payitemField.pay_items[0];
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Pay-item: ' + filter.substate.description;
                     } else {
@@ -251,7 +251,7 @@ angular.module($APP.name).service('CommonServices', [
             },
             goToScheduling: function(substate, filter, payitemField, aux, projectId) {
                 if (substate || payitemField && payitemField.id == 0) {
-                    filter.substate = substate || payitemField.resources[0];
+                    filter.substate = substate || payitemField.pay_items[0];
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Scheduling: ' + filter.substate.description;
                     } else {
