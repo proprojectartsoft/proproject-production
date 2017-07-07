@@ -357,6 +357,16 @@ angular.module($APP.name).factory('SyncService', [
                         }
                     })
                 });
+            } else {
+                asyncCall(doRequest,
+                    function error(result) {
+                        console.log('Some error occurred, but we get going:', result);
+                    },
+                    function success(result) {
+                        DbService.popclose();
+                        console.log(result)
+                    }
+                );
             }
         }
         var load = function() {

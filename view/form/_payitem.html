@@ -2,12 +2,12 @@
     <form class="form-new-fields">
         <ion-list show-delete="data.showDelete">
             <ion-item ng-repeat="payitem in payitemField.pay_items" item="resource" class="item-remove-animate" ng-click="goState('payitem', payitem)">
-                <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>  
+                <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>
                 <span ng-if="!payitem.description">Pay-item {{$index + 1}}</span>
                 <span ng-if="payitem.description">{{payitem.description}}</span>
                 <ion-option-button class="button-assertive" ng-click="deleteElement(payitemField.pay_items, payitem)" ng-if="filter.edit">
                     Delete
-                </ion-option-button>                
+                </ion-option-button>
             </ion-item>
         </ion-list>
         <div class="item item-total">
@@ -18,7 +18,7 @@
                     <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
                 </i>
             </div>
-        </div> 
+        </div>
     </form>
 </div>
 <!--=======================================pay-item edit===================================================================-->
@@ -34,23 +34,23 @@
                 <div class="fieldSet-name" ng-if="!filter.substate.name">Pay-item field</div>
             </div>
             <div class="blue-dropArrow"></div>
-            <div class="formContent">               
+            <div class="formContent">
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Description</span>
-                        </div>                                    
+                        </div>
                         <input ng-change="updateTitle(filter.substate.description, 'Pay-item')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.description" ng-disabled="!filter.edit">
                     </label>
-                </div>                                                    
+                </div>
                 <div class="item item-input item-stacked-label calm-border">
                     <div class="inputLabel" style="padding-top: 10px;">
                         <span class="all-name">Reference</span>
-                    </div>         
+                    </div>
                     <div style="position: relative">
                         <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.reference" ng-disabled="!filter.edit">
-                        <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'pi');
-                            $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
+                        <!-- <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'pi');
+                            $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span> -->
                     </div>
                 </div>
                 <div class="calm-border">
@@ -68,7 +68,7 @@
                         </div>
                         <input type="number" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.quantity" ng-disabled="!filter.edit">
                     </label>
-                </div> 
+                </div>
                 <div class="form-new-fields"  style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete" ng-if="filter.substate.subtasks.length !== 0">
                         <ion-item ng-repeat="stk in filter.substate.subtasks" item="stk" class="item-remove-animate" ng-click="goStateDown('payitem', 'subtask', stk)" >
@@ -77,7 +77,7 @@
                             <span ng-if="stk.description">{{stk.description}}</span>
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.subtasks, stk)" ng-if="filter.edit">
                                 Delete
-                            </ion-option-button>                
+                            </ion-option-button>
                         </ion-item>
                     </ion-list>
                     <ion-list show-delete="data.showDelete" ng-if="filter.substate.resources.length !== 0">
@@ -87,7 +87,7 @@
                             <span ng-if="res.name">{{res.name}}</span>
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.resources, res)" ng-if="filter.edit">
                                 Delete
-                            </ion-option-button>                
+                            </ion-option-button>
                         </ion-item>
                     </ion-list>
 
@@ -99,11 +99,11 @@
                                 <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
                             </i>
                         </div>
-                    </div> 
+                    </div>
                 </div>
-            </div>                   
+            </div>
         </div>
-    </form>                
+    </form>
 </div>
 <!--=================================================subtasks=============================================================-->
 <div class="list" ng-if="filter.substate && filter.substateStk && !filter.substateRes && !filter.substateStkRes">
@@ -118,15 +118,15 @@
                 <div class="fieldSet-name" ng-if="!filter.substate.name">Pay-item Subtask</div>
             </div>
             <div class="blue-dropArrow" style="border-color: #287BA7 transparent transparent transparent;"></div>
-            <div class="formContent">               
+            <div class="formContent">
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Description</span>
-                        </div>                                    
+                        </div>
                         <input ng-change="updateTitle(filter.substateStk.description, 'Pay-item Subtask')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStk.description" ng-disabled="!filter.edit">
                     </label>
-                </div>                
+                </div>
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete">
                         <ion-item ng-repeat="stkres in filter.substateStk.resources" item="stkres" class="item-remove-animate" ng-click="goStateDown('payitem', 'subres', stkres)">
@@ -135,7 +135,7 @@
                             <span ng-if="stkres.name">{{stkres.name}}</span>
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substateStk.resources, stkres)" ng-if="filter.edit">
                                 Delete
-                            </ion-option-button>                
+                            </ion-option-button>
                         </ion-item>
                     </ion-list>
                     <div class="item item-total">
@@ -146,11 +146,11 @@
                                 <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
                             </i>
                         </div>
-                    </div> 
+                    </div>
                 </div>
-            </div>                   
+            </div>
         </div>
-    </form>                
+    </form>
 </div>
 <div class="list" ng-if="filter.substate && filter.substateStk && !filter.substateRes && filter.substateStkRes">
     <div class="formTitle">
@@ -164,13 +164,13 @@
                 <div class="fieldSet-name" ng-if="!filter.substate.name">Pay-item Subtask Resource</div>
             </div>
             <div class="blue-dropArrow"  style="border-color: #ed9100 transparent transparent transparent;"></div>
-            <div class="formContent">               
+            <div class="formContent">
                 <div class="calm-border">
                     <div class="calm-border">
                         <div class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
                                 <span class="all-name">Name</span>
-                            </div>         
+                            </div>
                             <div style="position: relative">
                                 <input ng-change="updateTitle(filter.substateStkRes.name, 'Pay-item Subtask Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStkRes.name" ng-disabled="!filter.edit">
                                 <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateStkRes);
@@ -180,7 +180,7 @@
                         <label class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
                                 <span class="all-name">Product ref</span>
-                            </div>                                    
+                            </div>
                             <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStkRes.product_ref" ng-disabled="!filter.edit">
                         </label>
                         <label class="item item-input item-stacked-label calm-border">
@@ -255,11 +255,11 @@
                             </div>
                             <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.direct_cost" ng-disabled="!filter.edit">
                         </label>
-                    </div>  
-                </div>                             
-            </div>                   
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>                
+    </form>
 </div>
 <div class="list" ng-if="filter.substate && !filter.substateStk && filter.substateRes && !filter.substateStkRes">
     <div class="formTitle">
@@ -273,12 +273,12 @@
                 <div class="fieldSet-name" ng-if="!filter.substate.name">Pay-item Resource</div>
             </div>
             <div class="blue-dropArrow" style="border-color: #287BA7 transparent transparent transparent;"></div>
-            <div class="formContent">               
+            <div class="formContent">
                 <div class="calm-border">
                     <div class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Name</span>
-                        </div>                                    
+                        </div>
                         <div style="position: relative">
                             <input ng-change="updateTitle(filter.substateRes.name, 'Pay-item Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateRes.name" ng-disabled="!filter.edit">
                             <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateRes);
@@ -288,7 +288,7 @@
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Product ref</span>
-                        </div>                                    
+                        </div>
                         <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateRes.product_ref" ng-disabled="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
@@ -363,8 +363,8 @@
                         </div>
                         <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.direct_cost" ng-disabled="!filter.edit">
                     </label>
-                </div>                             
-            </div>                   
+                </div>
+            </div>
         </div>
-    </form>                
+    </form>
 </div>
