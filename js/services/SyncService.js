@@ -568,7 +568,19 @@ angular.module($APP.name).factory('SyncService', [
                                 }
                             })
                     } else {
-                        load();
+                      var offlinePopup = $ionicPopup.alert({
+                            title: "You are offline",
+                            template: "<center>You cannot sync your data when offline</center>",
+                            content: "",
+                            buttons: [{
+                                text: 'Ok',
+                                type: 'button-positive',
+                                onTap: function(e) {
+                                    offlinePopup.close();
+                                    load();
+                                }
+                            }]
+                        });
                     }
                 });
             },
