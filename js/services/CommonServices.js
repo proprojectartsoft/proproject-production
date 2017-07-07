@@ -208,7 +208,7 @@ angular.module($APP.name).service('CommonServices', [
                 });
             },
             goToResource: function(substate, filter, resourceField, aux) {
-                if (substate || resourceField.resources[0]) {
+                if (substate) { // || resourceField.resources[0]
                     filter.substate = substate;// || resourceField.resources[0];
                     aux.linkAux = 'resource';
                     if (filter.substate && filter.substate.name) {
@@ -222,7 +222,7 @@ angular.module($APP.name).service('CommonServices', [
                 }
             },
             goToStaff: function(substate, filter, staffField, aux) {
-                if (substate || staffField.resources[0]) {
+                if (substate) { // || staffField.resources[0]
                     filter.substate = substate;// || staffField.resources[0];
                     aux.linkAux = 'staff';
                     if (filter.substate && filter.substate.name) {
@@ -236,7 +236,7 @@ angular.module($APP.name).service('CommonServices', [
                 }
             },
             goToPayitem: function(substate, filter, payitemField, aux) {
-                if (substate || payitemField) {
+                if (substate) { // || payitemField
                     filter.substate = substate;// || {}; //$scope.payitemField;
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Pay-item: ' + filter.substate.description;
@@ -250,7 +250,7 @@ angular.module($APP.name).service('CommonServices', [
                 }
             },
             goToScheduling: function(substate, filter, payitemField, aux, projectId) {
-                if (substate || payitemField) {
+                if (substate) { // || payitemField
                     filter.substate = substate;// || {}; //$scope.payitemField;
                     if (filter.substate && filter.substate.description) {
                         aux.titleShow = 'Scheduling: ' + filter.substate.description;
