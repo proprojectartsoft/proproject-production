@@ -358,11 +358,9 @@ angular.module($APP.name).service('CommonServices', [
                         break;
                     default: //TODO: check if data
                         filter.pi = true;
-                        if (filter.substateStk && filter.substateStkRes || filter.substateRes)
-                            filter.popup_list = localStorage.getObject('resource_list');
                         PayitemService.list_payitems(projectId).then(function(data) {
                             $rootScope.payitem_list = data;
-                            filter.popup_list = $rootScope.payitem_list;
+                            // filter.popup_list = $rootScope.payitem_list;
                         });
                 }
             },
