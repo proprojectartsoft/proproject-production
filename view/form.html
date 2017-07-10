@@ -76,10 +76,12 @@
         </div>
     </ion-content>
     <div ng-if="!filter.substateRes && !filter.substateStkRes && filter.state !== 'form' && filter.state !== 'staff' && filter.state !== 'resource' && filter.state !== 'photos' || (!filter.substate && filter.state === 'staff') || (!filter.substate && filter.state === 'resource')">
-        <button class="btn-add-resource" ng-click="addResourcePi()" ng-if="filter.actionBtn && filter.substate.subtasks.length === 0 && filter.substate.resources.length === 0">
+        <button class="btn-add-resource" ng-click="addResourcePi()" ng-if="filter.actionBtn">
+           <!-- && filter.substate.subtasks.length === 0 && filter.substate.resources.length === 0 -->
             Add resource
         </button>
-        <button class="btn-add-subtask" ng-click="addSubtask()" ng-if="filter.actionBtn && filter.substate.resources.length === 0 && filter.substate.subtasks.length === 0">
+        <button class="btn-add-subtask" ng-click="addSubtask()" ng-if="filter.actionBtn">
+           <!-- && filter.substate.resources.length === 0 && filter.substate.subtasks.length === 0 -->
             Add subtask
         </button>
         <button class="btn-add" ng-click="actionBtnPayitem();">
