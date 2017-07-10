@@ -553,16 +553,15 @@ angular.module($APP.name).controller('FormCtrl', [
                         $scope.filter.substate.resources = [];
                     if (!$scope.filter.substate.subtasks)
                         $scope.filter.substate.subtasks = [];
-                    $scope.filter.actionBtn = !$scope.filter.actionBtn;
-                    // if ($scope.filter.substate.resources.length === 0 && $scope.filter.substate.subtasks.length === 0) {
-                    //     $scope.filter.actionBtn = !$scope.filter.actionBtn;
-                    // } else {
-                    //     if ($scope.filter.substate.resources.length !== 0 && $scope.filter.substate.subtasks.length === 0) {
-                    //         $scope.addResourcePi();
-                    //     } else {
-                    //         $scope.addSubtask();
-                    //     }
-                    // }
+                    if ($scope.filter.substate.resources.length === 0 && $scope.filter.substate.subtasks.length === 0) {
+                        $scope.filter.actionBtn = !$scope.filter.actionBtn;
+                    } else {
+                        if ($scope.filter.substate.resources.length !== 0 && $scope.filter.substate.subtasks.length === 0) {
+                            $scope.addResourcePi();
+                        } else {
+                            $scope.addSubtask();
+                        }
+                    }
                 } else {
                     if ($scope.filter.substateStk) {
                         $scope.addResourceInSubtask();
