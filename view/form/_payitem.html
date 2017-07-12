@@ -40,7 +40,7 @@
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Description</span>
                         </div>
-                        <input ng-change="updateTitle(filter.substate.description, 'Pay-item')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.description" ng-disabled="!filter.edit">
+                        <input ng-change="updateTitle(filter.substate.description, 'Pay-item')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.description" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="item item-input item-stacked-label calm-border">
@@ -48,7 +48,7 @@
                         <span class="all-name">Reference</span>
                     </div>
                     <div style="position: relative">
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.reference" ng-disabled="!filter.edit">
+                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.reference" ng-readonly="!filter.edit">
                         <!-- <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'pi');
                             $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span> -->
                     </div>
@@ -66,7 +66,7 @@
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input type="number" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.quantity" ng-disabled="!filter.edit">
+                        <input type="number" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="form-new-fields"  style="margin-top:10px;">
@@ -124,7 +124,7 @@
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Description</span>
                         </div>
-                        <input ng-change="updateTitle(filter.substateStk.description, 'Pay-item Subtask')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStk.description" ng-disabled="!filter.edit">
+                        <input ng-change="updateTitle(filter.substateStk.description, 'Pay-item Subtask')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStk.description" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">
@@ -172,7 +172,7 @@
                                 <span class="all-name">Name</span>
                             </div>
                             <div style="position: relative">
-                                <input ng-change="updateTitle(filter.substateStkRes.name, 'Pay-item Subtask Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStkRes.name" ng-disabled="!filter.edit">
+                                <input ng-change="updateTitle(filter.substateStkRes.name, 'Pay-item Subtask Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStkRes.name" ng-readonly="!filter.edit">
                                 <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateStkRes, 'resource');
                                     $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                             </div>
@@ -181,7 +181,7 @@
                             <div class="inputLabel" style="padding-top: 10px;">
                                 <span class="all-name">Product ref</span>
                             </div>
-                            <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStkRes.product_ref" ng-disabled="!filter.edit">
+                            <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStkRes.product_ref" ng-readonly="!filter.edit">
                         </label>
                         <label class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
@@ -193,7 +193,7 @@
                             <div class="inputLabel" style="padding-top: 10px;">
                                 <span class="all-name">Unit</span>
                             </div>
-                            <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substateStkRes.unit_obj" nng-disabled="!filter.edit"></select>
+                            <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substateStkRes.unit_obj" ng-disabled="!filter.edit"></select>
                         </label>
 
                         <label class="item item-input item-stacked-label calm-border" ng-if="filter.substateStkRes.calculation && (!filter.substateStkRes.unit_obj || filter.substateStkRes.unit_obj.name === '' || filter.substateStkRes.unit_obj.name === 'm' || filter.substateStkRes.unit_obj.name === 'm2' || filter.substateStkRes.unit_obj.name === 'm3'
@@ -247,13 +247,13 @@
                             <div class="inputLabel" style="padding-top: 10px;">
                                 <span class="all-name">Quantity</span>
                             </div>
-                            <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.quantity" ng-disabled="!filter.edit || filter.substateStkRes.calculation">
+                            <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.quantity" ng-readonly="!filter.edit || filter.substateStkRes.calculation">
                         </label>
                         <label class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
                                 <span class="all-name">Direct cost</span>
                             </div>
-                            <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.direct_cost" ng-disabled="!filter.edit">
+                            <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.direct_cost" ng-readonly="!filter.edit">
                         </label>
                     </div>
                 </div>
@@ -280,7 +280,7 @@
                             <span class="all-name">Name</span>
                         </div>
                         <div style="position: relative">
-                            <input ng-change="updateTitle(filter.substateRes.name, 'Pay-item Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateRes.name" ng-disabled="!filter.edit">
+                            <input ng-change="updateTitle(filter.substateRes.name, 'Pay-item Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateRes.name" ng-readonly="!filter.edit">
                             <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateRes, 'resource');
                                 $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                         </div>
@@ -289,7 +289,7 @@
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Product ref</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateRes.product_ref" ng-disabled="!filter.edit">
+                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateRes.product_ref" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
@@ -355,13 +355,13 @@
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.quantity" ng-disabled="!filter.edit || filter.substateRes.calculation">
+                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.quantity" ng-readonly="!filter.edit || filter.substateRes.calculation">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Direct cost</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.direct_cost" ng-disabled="!filter.edit">
+                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.direct_cost" ng-readonly="!filter.edit">
                     </label>
                 </div>
             </div>
