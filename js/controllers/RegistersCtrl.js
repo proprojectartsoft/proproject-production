@@ -18,7 +18,6 @@ angular.module($APP.name).controller('RegistersCtrl', [
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
-        $rootScope.tab = 'regs'
         $scope.hasData = '';
         $rootScope.slideHeader = false;
         $rootScope.slideHeaderPrevious = 0;

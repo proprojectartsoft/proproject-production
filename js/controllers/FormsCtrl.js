@@ -19,7 +19,6 @@ angular.module($APP.name).controller('FormsCtrl', [
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
-        $rootScope.tab = 'new';
         $scope.isLoaded = false;
         $scope.hasData = '';
         $scope.categoryId = $stateParams.categoryId;
