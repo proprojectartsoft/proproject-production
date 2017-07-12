@@ -24,13 +24,13 @@
         </div>
     </ion-content>
     <div class="tabs tabs-calm tabs-icon-only">
-        <a class="tab-item" ng-class="'active-tab' : tab == 'new';">
+        <a class="tab-item" ng-class="{'active-tab' : tab == 'new'};">
             <img src="img/new/all forms.png">
         </a>
-        <a class="tab-item" ui-sref="app.completed({projectId:projectId, categoryId:categoryId})" ui-sref-opts="{reload: true}" ng-class="'active-tab': tab == 'compl';">
+        <a class="tab-item" ui-sref="app.completed({projectId:projectId, categoryId:categoryId})" ui-sref-opts="{reload: true}" ng-class="{'active-tab': tab == 'compl'};">
             <img src="img/new/completed forms.png">
         </a>
-        <a class="tab-item" ui-sref="app.registers({projectId:projectId, categoryId:categoryId})" ui-sref-opts="{reload: true}" ng-class="'active-tab' : tab == 'regs';">
+        <a class="tab-item" ui-sref="app.registers({projectId:projectId, categoryId:categoryId})" ui-sref-opts="{reload: true}" ng-class="{'active-tab' : tab == 'regs'};">
             <img src="img/new/registers.png">
         </a>
     </div>
