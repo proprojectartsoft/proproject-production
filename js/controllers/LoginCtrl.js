@@ -2,12 +2,11 @@ angular.module($APP.name).controller('LoginCtrl', [
     '$scope',
     '$state',
     'AuthService',
-    'CacheFactory',
     '$rootScope',
     '$timeout',
     '$ionicPopup',
     'SyncService',
-    function($scope, $state, AuthService, CacheFactory, $rootScope, $timeout, $ionicPopup, SyncService) {
+    function($scope, $state, AuthService, $rootScope, $timeout, $ionicPopup, SyncService) {
         $scope.user = [];
         $scope.user.username = "";
         $scope.user.password = "";

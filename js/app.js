@@ -47,9 +47,12 @@ angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService
         if (!sync) {
             sync = CacheFactory('sync');
         }
+        console.log(localStorage.getObject('resource_list'));
         sync.setOptions({
             storageMode: 'localStorage'
         });
+        console.log(localStorage.getObject('resource_list'));
+        
     });
 });
 angular.module($APP.name).config([

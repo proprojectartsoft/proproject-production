@@ -6,6 +6,8 @@ angular.module($APP.name).controller('AppCtrl', [
     '$state',
     function($rootScope, $scope, CacheFactory, AuthService, $state) {
         console.log("App controller");
+        console.log(localStorage.getObject('resource_list'));
+
         var getAndroidVersion = function(ua) {
             ua = (ua || navigator.userAgent).toLowerCase();
             var match = ua.match(/android\s([0-9\.]*)/);
@@ -24,6 +26,8 @@ angular.module($APP.name).controller('AppCtrl', [
                 storageMode: 'localStorage'
             });
         }
+        console.log(localStorage.getObject('resource_list'));
+        
         $scope.user = localStorage.getObject("ppuser");
         var projectsCache = CacheFactory('projectsCache');
         projectsCache.setOptions({

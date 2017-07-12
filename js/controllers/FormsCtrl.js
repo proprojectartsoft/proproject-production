@@ -3,7 +3,6 @@ angular.module($APP.name).controller('FormsCtrl', [
     '$stateParams',
     'FormDesignService',
     '$rootScope',
-    'CacheFactory',
     'AuthService',
     '$state',
     '$ionicPopup',
@@ -12,7 +11,7 @@ angular.module($APP.name).controller('FormsCtrl', [
     '$ionicSideMenuDelegate',
     'SyncService',
     'DbService',
-    function($scope, $stateParams, FormDesignService, $rootScope, CacheFactory, AuthService, $state, $ionicPopup, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, DbService) {
+    function($scope, $stateParams, FormDesignService, $rootScope, AuthService, $state, $ionicPopup, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, DbService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
