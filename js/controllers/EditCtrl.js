@@ -364,12 +364,7 @@ angular.module($APP.name).controller('EditCtrl', [
         }
         $scope.closePopover = function() {
             if ($scope.filter.searchText) {
-                // $scope.filter.substate.name = $scope.filter.searchText; //TODO:
-                if ($scope.filter.state == 'resource') {
-                    $scope.resourceField.name = $scope.filter.searchText;
-                } else if ($scope.filter.state == 'staff') {
-                    $scope.staffField.name = $scope.filter.searchText;
-                }
+                CommonServices.addResourceManually($scope.filter);
                 $scope.filter.searchText = '';
             }
             $scope.popover.hide();

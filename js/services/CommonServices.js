@@ -364,6 +364,29 @@ angular.module($APP.name).service('CommonServices', [
                         });
                 }
             },
+            addResourceManually: function(filter) {
+                switch (filter.state) {
+                    case 'resource':
+                        filter.substate.name = filter.searchText;
+                        break;
+                    case 'payitem':
+                        if (filter.substateRes) {
+                            filter.substateRes.name = filter.searchText;
+                        }
+                        if (filter.substateStk && filter.substateStkRes) {
+                            filter.substateStkRes.name = filter.searchText;
+                        }
+                        break;
+                    case 'scheduling':
+                        if (filter.substateRes) {
+                            filter.substateRes.name = filter.searchText;
+                        }
+                        if (filter.substateStk && filter.substateStkRes) {
+                            filter.substateStkRes.name = filter.searchText;
+                        }
+                        break;
+                }
+            },
             updateCalculations: function(data) {
                 if (data.unit_obj.name === 'm' || data.unit_obj.name === 'ft') {
                     if (!data.length) {

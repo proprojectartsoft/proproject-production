@@ -494,28 +494,8 @@ angular.module($APP.name).controller('FormCtrl', [
         }
 
         $scope.closePopover = function() {
-            if ($scope.filter.searchText) { //TODO:
-                switch ($scope.filter.state) {
-                    case 'resource':
-                        $scope.filter.substate.name = $scope.filter.searchText;
-                        break;
-                    case 'payitem':
-                        if ($scope.filter.substateRes) {
-                            $scope.filter.substateRes.name = $scope.filter.searchText;
-                        }
-                        if ($scope.filter.substateStk && $scope.filter.substateStkRes) {
-                            $scope.filter.substateStkRes = $scope.filter.searchText;
-                        }
-                        break;
-                    case 'scheduling':
-                        if ($scope.filter.substateRes) {
-                            $scope.filter.substateRes.name = $scope.filter.searchText;
-                        }
-                        if ($scope.filter.substateStk && $scope.filter.substateStkRes) {
-                            $scope.filter.substateStkRes = $scope.filter.searchText;
-                        }
-                        break;
-                }
+            if ($scope.filter.searchText) {
+                CommonServices.addResourceManually($scope.filter);
                 $scope.filter.searchText = '';
             }
             $scope.popover.hide();
