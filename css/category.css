@@ -349,9 +349,9 @@ input[type='text'], input[type='number'], input[type='email'] {
     }
 }
 
-form {
+/*form {
     position: relative;
-}
+}*/
 
 form.signature-form {
     height: 86%;
