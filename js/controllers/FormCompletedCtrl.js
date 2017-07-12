@@ -20,7 +20,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
-
+        $rootScope.tab = 'compl'
         $scope.filter = {};
         $scope.filter.email = "";
 

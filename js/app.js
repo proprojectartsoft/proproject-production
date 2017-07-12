@@ -34,7 +34,6 @@ angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService
             location: 'default'
         });
         SyncService.sync();
-
         // if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         // }

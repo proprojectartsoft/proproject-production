@@ -277,6 +277,7 @@ textarea {
     margin: 10px 0px;
 }
 
+
 /* Empty. Add your own CSS if you like */
 
 .timePickerColon {
@@ -395,6 +396,7 @@ textarea {
 .ionic_datepicker_modal_content .selected_date_full {
     padding: 20px;
 }
+
 
 /* back */
 
@@ -741,4 +743,8 @@ ion-refresher {
 .item-remove-padding .item-content {
     padding: 5px 10px;
     height: 100%;
+}
+
+.active-tab {
+    background-color: #1EBDF4
 }
