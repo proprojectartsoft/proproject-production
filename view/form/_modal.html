@@ -9,7 +9,7 @@
     </ion-header-bar>
     <ion-content class="has-header" scroll="false">
         <form class="signature-form" name="x" data="value">
-            <canvas id="{{hash}}" class="all-sketch" width="340px" input ng-model="value" ng-required="data.required" sketch></canvas>
+            <canvas id="{{hash}}" class="all-sketch" width="340" height="340" input ng-model="value" ng-required="data.required" sketch></canvas>
         </form>
         <div class="button-bar" style="margin-top:-1%;height:10.5%">
             <a class="button button-calm button-outline" sketch-erase="{{hash}}"  ng-click="erase()">Clear</a>
