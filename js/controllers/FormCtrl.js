@@ -497,13 +497,24 @@ angular.module($APP.name).controller('FormCtrl', [
             if ($scope.filter.searchText) { //TODO:
                 switch ($scope.filter.state) {
                     case 'resource':
-                        $scope.resourceField.name = $scope.filter.searchText;
+                        $scope.filter.substate.name = $scope.filter.searchText;
                         break;
-                    case 'staff':
-                        $scope.staffField.name = $scope.filter.searchText;
+                    case 'payitem':
+                        if ($scope.filter.substateRes) {
+                            $scope.filter.substateRes.name = $scope.filter.searchText;
+                        }
+                        if ($scope.filter.substateStk && $scope.filter.substateStkRes) {
+                            $scope.filter.substateStkRes = $scope.filter.searchText;
+                        }
                         break;
-                    default:
-                        $scope.payitemField.name = $scope.filter.searchText;
+                    case 'scheduling':
+                        if ($scope.filter.substateRes) {
+                            $scope.filter.substateRes.name = $scope.filter.searchText;
+                        }
+                        if ($scope.filter.substateStk && $scope.filter.substateStkRes) {
+                            $scope.filter.substateStkRes = $scope.filter.searchText;
+                        }
+                        break;
                 }
                 $scope.filter.searchText = '';
             }
@@ -1170,7 +1181,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 content: "",
                 buttons: []
             });
-            //automatically sync previousely offline created forms TODO: move inside success || localStorage.getObject('resourceToSync')
+            //automatically sync previousely offline created forms
             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
                 SyncService.sync_button();
             FormInstanceService.create(datax, img)

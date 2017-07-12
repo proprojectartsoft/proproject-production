@@ -356,7 +356,7 @@ angular.module($APP.name).service('CommonServices', [
                         filter.pi = false;
                         filter.popup_list = localStorage.getObject('resource_list');
                         break;
-                    default: //TODO: check if data
+                    default:
                         filter.pi = true;
                         PayitemService.list_payitems(projectId).then(function(data) {
                             $rootScope.payitem_list = data;

@@ -853,7 +853,6 @@ angular.module($APP.name).controller('EditCtrl', [
                                     item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); //TODO: REMOVE FILTER BUT FIND OUT WHY DATE HAS FORMAT JAN 1, YEAR!!!!
                                 }
                             });
-                            //TODO:
                             ResourceService.add_field($rootScope.resourceField).success(function(x) {
                                 $scope.formData.resource_field_id = x.id;
                                 FormInstanceService.save_as($scope.formData).then(function(data) {

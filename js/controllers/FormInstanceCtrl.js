@@ -173,7 +173,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     break;
             }
         };
-        $scope.goStateDown = function(state, substate, data) { //TODO: no $ionicScrollDelegate.resize();
+        $scope.goStateDown = function(state, substate, data) {
             $scope.aux = {
                 linkAux: $scope.linkAux,
                 titleShow: $scope.titleShow
