@@ -138,13 +138,6 @@ angular.module($APP.name).factory('AuthService', [
                         return payload.data.data;
                     })
                     .error(function(response, status) {
-                        if (status === 0 || status === -1) {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Please Note',
-                                template: "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.",
-                            });
-                            alertPopup.then(function(res) {});
-                        }
                         if (status === 502) {
                             var alertPopup = $ionicPopup.alert({
                                 title: 'Offline',

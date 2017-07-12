@@ -5,8 +5,9 @@ angular.module($APP.name).controller('LoginCtrl', [
     'CacheFactory',
     '$rootScope',
     '$timeout',
+    '$ionicPopup',
     'SyncService',
-    function($scope, $state, AuthService, CacheFactory, $rootScope, $timeout, SyncService) {
+    function($scope, $state, AuthService, CacheFactory, $rootScope, $timeout, $ionicPopup, SyncService) {
         $scope.user = [];
         $scope.user.username = "";
         $scope.user.password = "";
@@ -29,7 +30,14 @@ angular.module($APP.name).controller('LoginCtrl', [
                             SyncService.sync_button();
                         });
                     }
-                }).error(function(err) {
+                }).error(function(err, status) {
+                    if (status === 0 || status === -1) {
+                        var alertPopup = $ionicPopup.alert({
+                            title: 'Please Note',
+                            template: "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.",
+                        });
+                        alertPopup.then(function(res) {});
+                    }
                     $rootScope.thisUser = localStorage.getObject("ppuser");
                     localStorage.removeItem('loggedOut');
                     SyncService.sync_close();
@@ -61,7 +69,14 @@ angular.module($APP.name).controller('LoginCtrl', [
                         SyncService.sync_button();
                     });
                 }
-            }).error(function(err) {
+            }).error(function(err, status) {
+                if (status === 0 || status === -1) {
+                    var alertPopup = $ionicPopup.alert({
+                        title: 'Error',
+                        template: "You are offline. You can login when online.",
+                    });
+                    alertPopup.then(function(res) {});
+                }
                 localStorage.removeItem('loggedOut');
                 SyncService.sync_close();
             })

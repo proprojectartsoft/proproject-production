@@ -7,9 +7,10 @@ angular.module($APP.name).controller('NavCtrl', [
     'CacheFactory',
     '$timeout',
     '$http',
+    '$ionicPopup',
     'SyncService',
     'DbService',
-    function($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, $timeout, $http, SyncService, DbService) {
+    function($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, $timeout, $http, $ionicPopup, SyncService, DbService) {
         $scope.toggleLeft = function($event) {
             $ionicSideMenuDelegate.toggleLeft();
             $($event.target)
@@ -95,7 +96,22 @@ angular.module($APP.name).controller('NavCtrl', [
         };
 
         $scope.sync = function() {
-            SyncService.sync_button();
+            if (navigator.onLine) {
+                SyncService.sync_button();
+            } else {
+                var offlinePopup = $ionicPopup.alert({
+                    title: "You are offline",
+                    template: "<center>You cannot sync your data when offline</center>",
+                    content: "",
+                    buttons: [{
+                        text: 'Ok',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            offlinePopup.close();
+                        }
+                    }]
+                });
+            }
         };
         $rootScope.$on('sync.todo', function() {
             $state.go('app.categories', {
