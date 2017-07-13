@@ -378,10 +378,12 @@ angular.module($APP.name).factory('SyncService', [
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(JSON.parse(rs.rows.item(i).data));
                 }
+                console.log(aux);
             }, function(error) {
                 console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
             });
             $APP.db.executeSql('SELECT * FROM ProjectsTable', [], function(rs) {
+                console.log(rs);
                 $rootScope.projects = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     $rootScope.projects.push(rs.rows.item(i));
@@ -414,6 +416,7 @@ angular.module($APP.name).factory('SyncService', [
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(rs.rows.item(i));
                 }
+                console.log(aux);
                 DbService.add('custsett', aux);
             }, function(error) {
                 console.log('SELECT SQL CustsettTable statement ERROR: ' + error.message);
@@ -423,6 +426,8 @@ angular.module($APP.name).factory('SyncService', [
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(rs.rows.item(i));
                 }
+                console.log(aux);
+
                 DbService.add('resources', aux);
             }, function(error) {
                 console.log('SELECT SQL ResourcesTable statement ERROR: ' + error.message);
@@ -433,6 +438,8 @@ angular.module($APP.name).factory('SyncService', [
                     aux.push(JSON.parse(rs.rows.item(i).data));
                 }
                 $rootScope.unit_list = aux;
+                console.log(aux);
+
                 DbService.add('unit', aux);
             }, function(error) {
                 console.log('SELECT SQL UnitTable statement ERROR: ' + error.message);
@@ -570,7 +577,7 @@ angular.module($APP.name).factory('SyncService', [
                                 }
                             })
                     } else {
-                      load();
+                        load();
                     }
                 });
             },
