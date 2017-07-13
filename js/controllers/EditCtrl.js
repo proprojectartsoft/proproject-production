@@ -26,7 +26,7 @@ angular.module($APP.name).controller('EditCtrl', [
     function($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory, ResourceService, StaffService, SchedulingService,
         PayitemService, CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService) {
-        $rootScope.custSett = DbService.get('custsett');
+        var custSett = DbService.get('custsett');
         $scope.filter = {
             edit: true,
             state: 'form',
@@ -277,12 +277,21 @@ angular.module($APP.name).controller('EditCtrl', [
             $scope.popover = popover;
         });
 
-        $scope.filter.vat = $rootScope.custSett.vat;
-        $scope.filter.currency = $rootScope.custSett.currency;
-        $scope.filter.margin = $rootScope.custSett.margin;
-        $scope.filter.start = $rootScope.custSett.start;
-        $scope.filter.break = $rootScope.custSett.break;
-        $scope.filter.finish = $rootScope.custSett.finish;
+        $scope.filter.currency = $filter('filter')(custSett, {
+            name: 'currency'
+        })[0].value;
+        $scope.filter.margin = $filter('filter')(custSett, {
+            name: 'margin'
+        })[0].value;
+        $scope.filter.start = $filter('filter')(custSett, {
+            name: 'start'
+        })[0].value;
+        $scope.filter.break = $filter('filter')(custSett, {
+            name: 'break'
+        })[0].value;
+        $scope.filter.finish = $filter('filter')(custSett, {
+            name: 'finish'
+        })[0].value;
         $scope.doTotal = function(type, parent) {
             if (parent) {
                 parent.total_cost = 0;

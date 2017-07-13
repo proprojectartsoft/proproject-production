@@ -280,9 +280,9 @@ angular.module($APP.name).factory('SyncService', [
                         obj.response = result;
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ResourcesTable');
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS ResourcesTable (id int primary key, name text, data text)');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS ResourcesTable (id int primary key, name text, product_ref text, direct_cost int)');
                             angular.forEach(result, function(res) {
-                                tx.executeSql('INSERT INTO ResourcesTable VALUES (?,?,?)', [res.id, res.name, JSON.stringify(res)]);
+                                tx.executeSql('INSERT INTO ResourcesTable VALUES (?,?,?,?)', [res.id, res.name, res.product_ref, res.direct_cost]);
                             });
                         }, function(error) {
                             console.log('Transaction ERROR: ' + error.message);

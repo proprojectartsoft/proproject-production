@@ -27,9 +27,9 @@ angular.module($APP.name).controller('AppCtrl', [
             storageMode: 'localStorage'
         });
         $rootScope.projects = [];
-        $rootScope.resource_list = [];
-        $rootScope.unit_list = [];
-        $rootScope.custSett = [];
+        // $rootScope.resource_list = [];
+        // $rootScope.unit_list = [];
+        // $rootScope.custSett = [];
         localStorage.removeItem('loggedOut');
         $rootScope.$watch('projectsCache.keys()', function(newValue, oldValue) {
             angular.forEach(projectsCache.keys(), function(key) {
@@ -40,39 +40,39 @@ angular.module($APP.name).controller('AppCtrl', [
                 $rootScope.projectId = $rootScope.projects[0].id;
             }
         });
-        var resourcesCache = CacheFactory.get('resourcesCache');
-        if (!resourcesCache || resourcesCache.length === 0) {
-            resourcesCache = CacheFactory('resourcesCache');
-            resourcesCache.setOptions({
-                storageMode: 'localStorage'
-            });
-        }
-        var aux;
-        angular.forEach(resourcesCache.keys(), function(key) {
-            aux = resourcesCache.get(key);
-            $rootScope.resource_list.push(aux);
-        });
-        var unitCache = CacheFactory.get('unitCache');
-        if (!unitCache || unitCache.length === 0) {
-            unitCache = CacheFactory('unitCache');
-            unitCache.setOptions({
-                storageMode: 'localStorage'
-            });
-        }
-        angular.forEach(unitCache.keys(), function(key) {
-            aux = unitCache.get(key);
-            $rootScope.unit_list.push(aux);
-        });
-        var custSettCache = CacheFactory.get('custSettCache');
-        if (!custSettCache || custSettCache.length === 0) {
-            custSettCache = CacheFactory('custSettCache');
-            custSettCache.setOptions({
-                storageMode: 'localStorage'
-            });
-        }
-        angular.forEach(custSettCache.keys(), function(key) {
-            aux = custSettCache.get(key);
-            $rootScope.custSett[aux.name] = aux.value;
-        });
+        // var resourcesCache = CacheFactory.get('resourcesCache');
+        // if (!resourcesCache || resourcesCache.length === 0) {
+        //     resourcesCache = CacheFactory('resourcesCache');
+        //     resourcesCache.setOptions({
+        //         storageMode: 'localStorage'
+        //     });
+        // }
+        // var aux;
+        // angular.forEach(resourcesCache.keys(), function(key) {
+        //     aux = resourcesCache.get(key);
+        //     $rootScope.resource_list.push(aux);
+        // });
+        // var unitCache = CacheFactory.get('unitCache');
+        // if (!unitCache || unitCache.length === 0) {
+        //     unitCache = CacheFactory('unitCache');
+        //     unitCache.setOptions({
+        //         storageMode: 'localStorage'
+        //     });
+        // }
+        // angular.forEach(unitCache.keys(), function(key) {
+        //     aux = unitCache.get(key);
+        //     $rootScope.unit_list.push(aux);
+        // });
+        // var custSettCache = CacheFactory.get('custSettCache');
+        // if (!custSettCache || custSettCache.length === 0) {
+        //     custSettCache = CacheFactory('custSettCache');
+        //     custSettCache.setOptions({
+        //         storageMode: 'localStorage'
+        //     });
+        // }
+        // angular.forEach(custSettCache.keys(), function(key) {
+        //     aux = custSettCache.get(key);
+        //     $rootScope.custSett[aux.name] = aux.value;
+        // });
     }
 ]);

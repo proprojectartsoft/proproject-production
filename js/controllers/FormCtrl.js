@@ -62,7 +62,7 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.linkAux = 'forms';
         pullDown();
-        $rootScope.custSett = DbService.get('custsett');
+        var custSett = DbService.get('custsett');
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
         $scope.abs_list = DbService.get('absenteeism');
@@ -74,12 +74,24 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.formData = JSON.parse(rs.rows.item(0).data)
                 $scope.titleShow = $scope.formData.name;
                 $scope.shownGroup = $scope.formData.field_group_designs[0];
-                $scope.filter.vat = $rootScope.custSett.vat;
-                $scope.filter.currency = $rootScope.custSett.currency;
-                $scope.filter.margin = $rootScope.custSett.margin;
-                $scope.filter.start = $rootScope.custSett.start;
-                $scope.filter.break = $rootScope.custSett.break;
-                $scope.filter.finish = $rootScope.custSett.finish;
+                $scope.filter.vat = $filter('filter')(custSett, {
+                    name: 'vat'
+                })[0].value;
+                $scope.filter.currency = $filter('filter')(custSett, {
+                    name: 'currency'
+                })[0].value;
+                $scope.filter.margin = $filter('filter')(custSett, {
+                    name: 'margin'
+                })[0].value;
+                $scope.filter.start = $filter('filter')(custSett, {
+                    name: 'start'
+                })[0].value;
+                $scope.filter.break = $filter('filter')(custSett, {
+                    name: 'break'
+                })[0].value;
+                $scope.filter.finish = $filter('filter')(custSett, {
+                    name: 'finish'
+                })[0].value;
                 if ($scope.formData.resource_field_design) {
                     $scope.resourceField = {
                         'id': 0,
