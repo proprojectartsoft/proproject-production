@@ -25,7 +25,7 @@ angular.module($APP.name).service('CommonServices', [
                         }
                         filter.popup_predicate.product_ref = item.product_ref;
                         filter.popup_predicate.direct_cost = item.direct_cost;
-                        var restyp = $filter('filter')(resource_type_list, {  
+                        var restyp = $filter('filter')(resource_type_list, {
                             name: item.resource_type_name
                         })[0];
                         if (restyp) {
