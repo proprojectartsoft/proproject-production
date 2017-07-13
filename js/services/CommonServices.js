@@ -56,6 +56,26 @@ angular.module($APP.name).service('CommonServices', [
                             filter.popup_predicate.resource_type_name = restyp.name;
                         }
                     }
+                    if ((filter.state == 'scheduling' || filter.state == 'payitem') && (filter.substateRes || filter.substateStk && filter.substateStkRes)) {
+                        filter.popup_predicate.product_ref = item.product_ref;
+                        filter.popup_predicate.direct_cost = item.direct_cost;
+                        var restyp = $filter('filter')(resource_type_list, {
+                            name: item.resource_type_name
+                        })[0];
+                        if (restyp) {
+                            filter.popup_predicate.res_type_obj = restyp;
+                            filter.popup_predicate.resource_type_id = restyp.id;
+                            filter.popup_predicate.resource_type_name = restyp.name;
+                        }
+                        var unt = $filter('filter')(unit_list, {
+                            name: item.unit_name
+                        })[0];
+                        if (unt) {
+                            filter.popup_predicate.unit_obj = unt;
+                            filter.popup_predicate.unit_id = unt.id;
+                            filter.popup_predicate.unit_name = unt.name;
+                        }
+                    }
                 } else { //TODO:
                     // if ($scope.formData.scheduling_field_design) {
                     //     titleShow = 'Scheduling: ' + item.reference;
