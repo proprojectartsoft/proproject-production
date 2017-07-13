@@ -490,7 +490,7 @@ angular.module($APP.name).factory('SyncService', [
             $APP.db.executeSql('SELECT * FROM UnitTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
-                    aux.push(JSON.parse(rs.rows.item(i).data));
+                    aux.push(rs.rows.item(i));//JSON.parse(rs.rows.item(i).data)
                 }
                 // $rootScope.unit_list = aux;
                 DbService.add('unit', aux);

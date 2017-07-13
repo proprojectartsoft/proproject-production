@@ -91,7 +91,7 @@
                     </label>
                 </div>
                 <div class="calm-border" ng-if="staffField.withTimes && filter.edit">
-                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.start_time_obj" month-step="1" hour-step="1" minute-step="1" second-step="1">
+                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.start_time" month-step="1" hour-step="1" minute-step="1" second-step="1">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Start</span>
                         </div>
@@ -101,7 +101,7 @@
                     </label>
                 </div>
                 <div class="calm-border" ng-if="staffField.withTimes && !filter.edit">
-                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.start_time_obj" month-step="1" hour-step="1" minute-step="1" second-step="1">
+                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.start_time" month-step="1" hour-step="1" minute-step="1" second-step="1">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Start</span>
                         </div>
@@ -110,8 +110,8 @@
                         </div>
                     </label>
                 </div>
-                <div class="calm-border" ng-if="staffField.withTimes && filter.edit" ng-model="filter.substate.break_time_obj">
-                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.break_time_obj" month-step="1" hour-step="1" minute-step="1" second-step="1">
+                <div class="calm-border" ng-if="staffField.withTimes && filter.edit" ng-model="filter.substate.break_time">
+                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.break_time" month-step="1" hour-step="1" minute-step="1" second-step="1">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Break</span>
                         </div>
@@ -121,7 +121,7 @@
                     </label>
                 </div>
                 <div class="calm-border" ng-if="staffField.withTimes && !filter.edit">
-                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.break_time_obj" month-step="1" hour-step="1" minute-step="1" second-step="1">
+                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.break_time" month-step="1" hour-step="1" minute-step="1" second-step="1">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Break</span>
                         </div>
@@ -131,7 +131,7 @@
                     </label>
                 </div>
                 <div class="calm-border"   ng-if="staffField.withTimes && filter.edit">
-                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.finish_time_obj" month-step="1" hour-step="1" minute-step="1" second-step="1">
+                    <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker time ng-model="filter.substate.finish_time" month-step="1" hour-step="1" minute-step="1" second-step="1">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">End</span>
                         </div>
@@ -140,7 +140,7 @@
                         </div>
                     </label>
                 </div>
-                <div class="calm-border"  ng-model="filter.substate.finish_time_obj" ng-if="staffField.withTimes && !filter.edit">
+                <div class="calm-border"  ng-model="filter.substate.finish_time" ng-if="staffField.withTimes && !filter.edit">
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">End</span>

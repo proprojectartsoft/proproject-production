@@ -783,15 +783,15 @@ angular.module($APP.name).controller('EditCtrl', [
                                 if (item.expiry_date_obj) {
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
-                                if (item.start_time_obj) {
-                                    item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
-                                }
-                                if (item.break_time_obj) {
-                                    item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
-                                }
-                                if (item.finish_time_obj) {
-                                    item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
-                                }
+                                // if (item.start_time_obj) {
+                                //     item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
+                                // }
+                                // if (item.break_time_obj) {
+                                //     item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
+                                // }
+                                // if (item.finish_time_obj) {
+                                //     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
+                                // }
                             });
                             StaffService.update_field($rootScope.staffField).then(function(x) {});
                         }
@@ -1063,15 +1063,15 @@ angular.module($APP.name).controller('EditCtrl', [
                                 if (item.expiry_date_obj) {
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
-                                if (item.start_time_obj) {
-                                    item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
-                                }
-                                if (item.break_time_obj) {
-                                    item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
-                                }
-                                if (item.finish_time_obj) {
-                                    item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
-                                }
+                                // if (item.start_time_obj) {
+                                //     item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
+                                // }
+                                // if (item.break_time_obj) {
+                                //     item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
+                                // }
+                                // if (item.finish_time_obj) {
+                                //     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
+                                // }
                             });
                             StaffService.add_field($rootScope.staffField).success(function(x) {
                                 $scope.formData.staff_field_id = x.id;
