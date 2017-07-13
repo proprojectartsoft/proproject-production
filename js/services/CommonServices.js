@@ -1,6 +1,6 @@
 angular.module($APP.name).service('CommonServices', [
-    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PayitemService',
-    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService) {
+    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PayitemService', 'DbService',
+    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService, DbService) {
         return {
             selectPopover: function(filter, item, titleShow) {
                 var resource_type_list = localStorage.getObject('resource_type_list');
@@ -26,7 +26,7 @@ angular.module($APP.name).service('CommonServices', [
                         }
                         filter.popup_predicate.product_ref = item.product_ref;
                         filter.popup_predicate.direct_cost = item.direct_cost;
-                        var restyp = $filter('filter')(resource_type_list, {
+                        var restyp = $filter('filter')(resource_type_list, {  //TODO: modify 
                             name: item.resource_type_name
                         })[0];
                         if (restyp) {
@@ -350,10 +350,13 @@ angular.module($APP.name).service('CommonServices', [
                 switch (test) {
                     case 'staff':
                         filter.pi = false;
+                        console.log(DbService.get('staff'));
                         filter.popup_list = localStorage.getObject('staff_list');
                         break;
                     case 'resource':
                         filter.pi = false;
+                        console.log(DbService.get('resources'));
+
                         filter.popup_list = localStorage.getObject('resource_list');
                         break;
                     default:

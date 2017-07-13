@@ -60,27 +60,27 @@ angular.module($APP.name).factory('SyncService', [
         }
 
         var loadSettings = function() {
-            console.log("load settitngs");
-            ResourceService.list_manager().then(function(result) {
-                console.log(result);
-                localStorage.setObject('resource_list', result);
-            })
-            ResourceService.list_unit().then(function(result) {
-                console.log(result);
-                localStorage.setObject('unit_list', result);
-            })
-            StaffService.list_manager().then(function(result) {
-                console.log(result);
-                localStorage.setObject('staff_list', result);
-            })
-            ResourceService.list_resourcetype().then(function(result) {
-                console.log(result);
-                localStorage.setObject('resource_type_list', result);
-            })
-            ResourceService.list_absenteeism().then(function(result) {
-                console.log(result);
-                localStorage.setObject('abs_list', result);
-            })
+            // console.log("load settitngs");
+            // ResourceService.list_manager().then(function(result) {
+            //     console.log(result);
+            //     localStorage.setObject('resource_list', result);
+            // })
+            // ResourceService.list_unit().then(function(result) {
+            //     console.log(result);
+            //     localStorage.setObject('unit_list', result);
+            // })
+            // StaffService.list_manager().then(function(result) {
+            //     console.log(result);
+            //     localStorage.setObject('staff_list', result);
+            // })
+            // ResourceService.list_resourcetype().then(function(result) {
+            //     console.log(result);
+            //     localStorage.setObject('resource_type_list', result);
+            // })
+            // ResourceService.list_absenteeism().then(function(result) {
+            //     console.log(result);
+            //     localStorage.setObject('abs_list', result);
+            // })
         }
 
         var addSpecialFields = function(formsToAdd) {
@@ -301,7 +301,7 @@ angular.module($APP.name).factory('SyncService', [
                         DbService.add('unit', result);
                         $interval.cancel(ping)
                         obj.response = result;
-                        $rootScope.unit_list = result;
+                        // $rootScope.unit_list = result;
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS UnitTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS UnitTable (id int primary key, name text, type text)');
@@ -315,7 +315,76 @@ angular.module($APP.name).factory('SyncService', [
                     }
                 });
             }
-            var doRequest = [designs(), projects(), custsett(), resources(), unit()]
+            var staff = function() {
+                var obj = new servresp('staff', 0, []);
+                var ping = $interval(function() {
+                    obj.timer += 1;
+                }, 1);
+                return StaffService.list_manager().then(function(result) {
+                    if (result) {
+                        DbService.add('staff', result);
+                        $interval.cancel(ping)
+                        obj.response = result;
+                        $APP.db.transaction(function(tx) {
+                            tx.executeSql('DROP TABLE IF EXISTS StaffTable');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS StaffTable (id int primary key, name text, role text, employer_name text, direct_cost int, unit_name text, unit_id int, resource_type text, resource_id int)');
+                            angular.forEach(result, function(res) {
+                                tx.executeSql('INSERT INTO StaffTable VALUES (?,?,?,?,?,?,?,?,?)', [res.id, res.name, res.role, res.employer_name, res.direct_cost, res.unit_name, res.unit_id, res.resource_type, res.resource_id]);
+                            });
+                        }, function(error) {
+                            console.log('Transaction ERROR: ' + error.message);
+                        }, function() {});
+                        return obj;
+                    }
+                });
+            }
+            var resourceType = function() {
+                var obj = new servresp('resource_type', 0, []);
+                var ping = $interval(function() {
+                    obj.timer += 1;
+                }, 1);
+                return ResourceService.list_resourcetype().then(function(result) {
+                    if (result) {
+                        DbService.add('resource_type', result);
+                        $interval.cancel(ping)
+                        obj.response = result;
+                        $APP.db.transaction(function(tx) {
+                            tx.executeSql('DROP TABLE IF EXISTS ResourceTypeTable');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS ResourceTypeTable (id int primary key, name text)');
+                            angular.forEach(result, function(res) {
+                                tx.executeSql('INSERT INTO ResourceTypeTable VALUES (?,?)', [res.id, res.name]);
+                            });
+                        }, function(error) {
+                            console.log('Transaction ERROR: ' + error.message);
+                        }, function() {});
+                        return obj;
+                    }
+                });
+            }
+            var absenteeism = function() {
+                var obj = new servresp('absenteeism', 0, []);
+                var ping = $interval(function() {
+                    obj.timer += 1;
+                }, 1);
+                return ResourceService.list_absenteeism().then(function(result) {
+                    if (result) {
+                        DbService.add('absenteeism', result);
+                        $interval.cancel(ping)
+                        obj.response = result;
+                        $APP.db.transaction(function(tx) {
+                            tx.executeSql('DROP TABLE IF EXISTS AbsenteeismTable');
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS AbsenteeismTable (id int primary key, reason text)');
+                            angular.forEach(result, function(res) {
+                                tx.executeSql('INSERT INTO AbsenteeismTable VALUES (?,?)', [res.id, res.reason]);
+                            });
+                        }, function(error) {
+                            console.log('Transaction ERROR: ' + error.message);
+                        }, function() {});
+                        return obj;
+                    }
+                });
+            }
+            var doRequest = [designs(), projects(), custsett(), resources(), unit(), staff(), resourceType(), absenteeism()]
 
             forms = localStorage.getObject('ppfsync');
             pics = localStorage.getObject('pppsync');
@@ -338,9 +407,7 @@ angular.module($APP.name).factory('SyncService', [
                         if (formX) {
                             var formsToAdd = angular.copy(formX);
                             var picsToAdd = angular.copy(picX);
-                            upRequests.push(FormInstanceService.create_sync(formsToAdd, picsToAdd).then(function() {
-                                console.log('help', formsToAdd, picsToAdd)
-                            }));
+                            upRequests.push(FormInstanceService.create_sync(formsToAdd, picsToAdd).then(function() {}));
                         }
 
                         if (forms[forms.length - 1] == form) {
@@ -353,7 +420,6 @@ angular.module($APP.name).factory('SyncService', [
                                 },
                                 function success(result) {
                                     DbService.popclose();
-                                    console.log(result)
                                 }
                             );
                         }
@@ -366,24 +432,21 @@ angular.module($APP.name).factory('SyncService', [
                     },
                     function success(result) {
                         DbService.popclose();
-                        console.log(result)
                     }
                 );
             }
         }
         var load = function() {
             var aux;
+            //Select the form templates
             $APP.db.executeSql('SELECT * FROM DesignsTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(JSON.parse(rs.rows.item(i).data));
                 }
-                console.log(aux);
-            }, function(error) {
-                console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
-            });
+            }, function(error) {});
+            //Select projects
             $APP.db.executeSql('SELECT * FROM ProjectsTable', [], function(rs) {
-                console.log(rs);
                 $rootScope.projects = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     $rootScope.projects.push(rs.rows.item(i));
@@ -408,42 +471,51 @@ angular.module($APP.name).factory('SyncService', [
                     localStorage.setObject('ppprojectId', rs.rows.item(0).id);
                 }
                 DbService.add('projects', aux);
-            }, function(error) {
-                console.log('SELECT SQL ProjectsTable statement ERROR: ' + error.message);
-            });
+            }, function(error) {});
+            //Select customer settings: currency, start, finish, break
             $APP.db.executeSql('SELECT * FROM CustsettTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(rs.rows.item(i));
                 }
-                console.log(aux);
                 DbService.add('custsett', aux);
-            }, function(error) {
-                console.log('SELECT SQL CustsettTable statement ERROR: ' + error.message);
-            });
+            }, function(error) {});
             $APP.db.executeSql('SELECT * FROM ResourcesTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(rs.rows.item(i));
                 }
-                console.log(aux);
-
                 DbService.add('resources', aux);
-            }, function(error) {
-                console.log('SELECT SQL ResourcesTable statement ERROR: ' + error.message);
-            });
+            }, function(error) {});
             $APP.db.executeSql('SELECT * FROM UnitTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(JSON.parse(rs.rows.item(i).data));
                 }
-                $rootScope.unit_list = aux;
-                console.log(aux);
-
+                // $rootScope.unit_list = aux;
                 DbService.add('unit', aux);
-            }, function(error) {
-                console.log('SELECT SQL UnitTable statement ERROR: ' + error.message);
-            });
+            }, function(error) {});
+            $APP.db.executeSql('SELECT * FROM StaffTable', [], function(rs) {
+                aux = [];
+                for (var i = 0; i < rs.rows.length; i++) {
+                    aux.push(rs.rows.item(i));
+                }
+                DbService.add('staff', aux);
+            }, function(error) {});
+            $APP.db.executeSql('SELECT * FROM ResourceTypeTable', [], function(rs) {
+                aux = [];
+                for (var i = 0; i < rs.rows.length; i++) {
+                    aux.push(rs.rows.item(i));
+                }
+                DbService.add('resource_type', aux);
+            }, function(error) {});
+            $APP.db.executeSql('SELECT * FROM AbsenteeismTable', [], function(rs) {
+                aux = [];
+                for (var i = 0; i < rs.rows.length; i++) {
+                    aux.push(rs.rows.item(i));
+                }
+                DbService.add('absenteeism', aux);
+            }, function(error) {});
             $state.go('app.categories', {
                 'projectId': $rootScope.projectId
             });
@@ -544,7 +616,6 @@ angular.module($APP.name).factory('SyncService', [
                         getme()
                             .success(function(data) {
                                 localStorage.setObject("ppuser", data);
-                                loadSettings();
                                 down();
                             })
                             .error(function(data, status) {
