@@ -29,19 +29,25 @@ angular.module($APP.name, [
 angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
     // AuthService.init();
     $ionicPlatform.ready(function() {
+      console.log(localStorage.getObject('resource_list'));
+
         $APP.db = window.sqlitePlugin.openDatabase({
             name: 'demo.db',
             location: 'default'
         });
+        console.log(localStorage.getObject('resource_list'));
+
         SyncService.sync();
         // if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
         // }
+        console.log(localStorage.getObject('resource_list'));
 
         if (window.StatusBar) {
             StatusBar.styleDefault();
             StatusBar.overlaysWebView(false);
         }
+        console.log(localStorage.getObject('resource_list'));
 
         var sync = CacheFactory.get('sync');
         if (!sync) {
@@ -52,7 +58,7 @@ angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService
             storageMode: 'localStorage'
         });
         console.log(localStorage.getObject('resource_list'));
-        
+
     });
 });
 angular.module($APP.name).config([
@@ -60,7 +66,7 @@ angular.module($APP.name).config([
     'CacheFactoryProvider',
     '$urlRouterProvider',
     function($stateProvider, CacheFactoryProvider, $urlRouterProvider) {
-
+        console.log("module");
         angular.extend(CacheFactoryProvider.defaults, {
             maxAge: 15 * 60 * 1000
         });

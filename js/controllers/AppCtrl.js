@@ -27,12 +27,14 @@ angular.module($APP.name).controller('AppCtrl', [
             });
         }
         console.log(localStorage.getObject('resource_list'));
-        
+
         $scope.user = localStorage.getObject("ppuser");
         var projectsCache = CacheFactory('projectsCache');
         projectsCache.setOptions({
             storageMode: 'localStorage'
         });
+        console.log(localStorage.getObject('resource_list'));
+
         $rootScope.projects = [];
         $rootScope.resource_list = [];
         $rootScope.unit_list = [];
@@ -48,6 +50,8 @@ angular.module($APP.name).controller('AppCtrl', [
                 $rootScope.projectId = $rootScope.projects[0].id;
             }
         });
+        console.log(localStorage.getObject('resource_list'));
+
 
         var resourcesCache = CacheFactory.get('resourcesCache');
         if (!resourcesCache || resourcesCache.length === 0) {
@@ -69,6 +73,8 @@ angular.module($APP.name).controller('AppCtrl', [
                 storageMode: 'localStorage'
             });
         }
+        console.log(localStorage.getObject('resource_list'));
+
         angular.forEach(unitCache.keys(), function(key) {
             aux = unitCache.get(key);
             $rootScope.unit_list.push(aux);
@@ -82,9 +88,13 @@ angular.module($APP.name).controller('AppCtrl', [
                 storageMode: 'localStorage'
             });
         }
+        console.log(localStorage.getObject('resource_list'));
+
         angular.forEach(custSettCache.keys(), function(key) {
             aux = custSettCache.get(key);
             $rootScope.custSett[aux.name] = aux.value;
         });
+        console.log(localStorage.getObject('resource_list'));
+        
     }
 ]);
