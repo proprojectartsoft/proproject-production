@@ -18,17 +18,18 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
     '$timeout',
     '$state',
     '$filter',
+    'DbService',
     function($scope, $rootScope, $stateParams, $location, FormInstanceService, $ionicSideMenuDelegate, $ionicHistory, ResourceService, StaffService,
-        SchedulingService, PayitemService, $ionicPopup, ShareService, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter) {
+        SchedulingService, PayitemService, $ionicPopup, ShareService, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, DbService) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
         $scope.linkAux = 'forms';
-        $scope.resource_type_list = localStorage.getObject('resource_type_list');
-        $scope.unit_list = localStorage.getObject('unit_list');
-        $scope.abs_list = localStorage.getObject('abs_list');
+        $scope.resource_type_list = DbService.get('resource_type');
+        $scope.unit_list = DbService.get('unit');
+        $scope.abs_list = DbService.get('absenteeism');
 
         $scope.updateTitle = function(title, placeholder) {
             CommonServices.updateTitle(title, placeholder, $scope.titleShow);

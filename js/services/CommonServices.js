@@ -3,13 +3,12 @@ angular.module($APP.name).service('CommonServices', [
     function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService, DbService) {
         return {
             selectPopover: function(filter, item, titleShow) {
-                var resource_type_list = localStorage.getObject('resource_type_list');
-                var unit_list = localStorage.getObject('unit_list');
-                var abs_list = localStorage.getObject('abs_list');
+                var resource_type_list = DbService.get('resource_type');
+                var unit_list = DbService.get('unit');
+                var abs_list = DbService.get('absenteeism');
                 if (!filter.pi) {
                     filter.popup_predicate.name = item.name;
                     if (filter.state == 'resource') {
-                        //resource
                         if (titleShow.indexOf('Scheduling Resource') > -1) {
                             titleShow = 'Scheduling Resource: ' + item.name;
                         } else {
@@ -26,7 +25,7 @@ angular.module($APP.name).service('CommonServices', [
                         }
                         filter.popup_predicate.product_ref = item.product_ref;
                         filter.popup_predicate.direct_cost = item.direct_cost;
-                        var restyp = $filter('filter')(resource_type_list, {  //TODO: modify 
+                        var restyp = $filter('filter')(resource_type_list, {  
                             name: item.resource_type_name
                         })[0];
                         if (restyp) {
@@ -44,7 +43,6 @@ angular.module($APP.name).service('CommonServices', [
                         }
                     }
                     if (filter.state == 'staff') {
-                        //staff
                         titleShow = 'Staff: ' + item.name;
                         filter.popup_predicate.employer_name = item.employee_name;
                         filter.popup_predicate.staff_role = item.role;
@@ -350,14 +348,11 @@ angular.module($APP.name).service('CommonServices', [
                 switch (test) {
                     case 'staff':
                         filter.pi = false;
-                        console.log(DbService.get('staff'));
-                        filter.popup_list = localStorage.getObject('staff_list');
+                        filter.popup_list = DbService.get('staff');
                         break;
                     case 'resource':
                         filter.pi = false;
-                        console.log(DbService.get('resources'));
-
-                        filter.popup_list = localStorage.getObject('resource_list');
+                        filter.popup_list = DbService.get('resources');
                         break;
                     default:
                         filter.pi = true;

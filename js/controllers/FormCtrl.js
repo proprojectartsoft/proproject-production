@@ -25,6 +25,7 @@ angular.module($APP.name).controller('FormCtrl', [
     'ImageService',
     'CommonServices',
     '$filter',
+    'DbService',
     function($scope,
         FormInstanceService,
         $timeout,
@@ -51,6 +52,7 @@ angular.module($APP.name).controller('FormCtrl', [
         ImageService,
         CommonServices,
         $filter,
+        DbService,
     ) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -60,9 +62,10 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.linkAux = 'forms';
         pullDown();
-        $scope.resource_type_list = localStorage.getObject('resource_type_list');
-        $scope.unit_list = localStorage.getObject('unit_list');
-        $scope.abs_list = localStorage.getObject('abs_list');
+        $rootScope.custSett = DbService.get('custsett');
+        $scope.resource_type_list = DbService.get('resource_type');
+        $scope.unit_list = DbService.get('unit');
+        $scope.abs_list = DbService.get('absenteeism');
 
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field

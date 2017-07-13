@@ -22,9 +22,11 @@ angular.module($APP.name).controller('EditCtrl', [
     '$stateParams',
     '$state',
     '$filter',
+    'DbService',
     function($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory, ResourceService, StaffService, SchedulingService,
-        PayitemService, CommonServices, $ionicPopover, $stateParams, $state, $filter) {
+        PayitemService, CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService) {
+        $rootScope.custSett = DbService.get('custsett');
         $scope.filter = {
             edit: true,
             state: 'form',
@@ -33,9 +35,9 @@ angular.module($APP.name).controller('EditCtrl', [
             searchText: ''
         }
         $scope.linkAux = 'forms';
-        $scope.resource_type_list = localStorage.getObject('resource_type_list');
-        $scope.unit_list = localStorage.getObject('unit_list');
-        $scope.abs_list = localStorage.getObject('abs_list');
+        $scope.resource_type_list = DbService.get('resource_type');
+        $scope.unit_list = DbService.get('unit');
+        $scope.abs_list = DbService.get('absenteeism');
         $scope.updateCalculation = function(data) {
             CommonServices.updateCalculation(data);
         }
@@ -375,7 +377,7 @@ angular.module($APP.name).controller('EditCtrl', [
         };
         $scope.addStaff = function() {
             if ($scope.staffField) {
-                CommonServices.addStaff($scope.staffField.resources, $scope.filte.start, $scope.filter.break, $scope.filter.finish);
+                CommonServices.addStaff($scope.staffField.resources, $scope.filter.start, $scope.filter.break, $scope.filter.finish);
                 $scope.filter.substate = $scope.staffField.resources[$scope.staffField.resources.length - 1];
             }
         }
