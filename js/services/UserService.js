@@ -36,7 +36,6 @@ angular.module($APP.name).service('UserService', [
                 });
             },
             signUp: function(dataIn) {
-                console.log(dataIn)
                 return $http({
                     method: 'POST',
                     url: $APP.server + '/pub/signup',

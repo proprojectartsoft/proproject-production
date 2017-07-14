@@ -312,10 +312,8 @@ angular.module($APP.name).service('CommonServices', [
                             filter.state = state;
                             aux.linkAux = 'schedulingRes';
                             if (data.name) {
-                                console.log(data.name)
                                 aux.titleShow = 'Scheduling Resource: ' + data.name;
                             } else {
-                                console.log('wut?')
                                 aux.titleShow = 'Scheduling Resource';
                             }
                             filter.substateRes = data;

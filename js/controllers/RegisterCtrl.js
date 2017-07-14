@@ -50,7 +50,6 @@ angular.module($APP.name).controller('RegisterCtrl', [
 
         $scope.change = function(id) {
             $rootScope.formId = id;
-            console.log(id)
             FormInstanceService.get($rootScope.formId).then(function(data) {
                 $rootScope.rootForm = data;
                 $location.path("/app/view/" + $rootScope.projectId + "/register/" + $rootScope.formId);

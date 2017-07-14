@@ -194,11 +194,8 @@ angular.module($APP.name).controller('FormCtrl', [
                     };
                 }
             },
-            function(error) {
-                console.log('SELECT SQL DesignsTable statement ERROR: ' + error.message);
-            });
+            function(error) {});
         $scope.updateCalculation = function(data) {
-            console.log(data)
             CommonServices.updateCalculation(data);
         }
         $scope.updateTitle = function(title, placeholder) {
@@ -453,7 +450,6 @@ angular.module($APP.name).controller('FormCtrl', [
                     });
                 }
                 if (type === 'piresource') {
-                    console.log('piresource', parent)
                     angular.forEach(parent.resources, function(res) {
                         if (isNaN(res.quantity)) {
                             res.total_cost = 0;
@@ -476,7 +472,6 @@ angular.module($APP.name).controller('FormCtrl', [
                     });
                 }
                 if (type === 'pisubtask') {
-                    console.log(parent)
                     angular.forEach(parent.subtasks, function(stk) {
                         if (isNaN(stk.total_cost)) {
                             stk.total_cost = 0;
@@ -531,8 +526,6 @@ angular.module($APP.name).controller('FormCtrl', [
             searchText: ''
         };
         $scope.onSelect = function(item) {
-            console.log("On select - FORM CTRL");
-            console.log('item', item);
             if ($scope.filter.state === 'resource') {
                 $scope.filter.substate.name = item.name;
                 $scope.filter.substate.product_ref = item.product_ref;
@@ -552,7 +545,6 @@ angular.module($APP.name).controller('FormCtrl', [
 
         //Special fields - add button pressed (+)
         $scope.actionBtnPayitem = function() {
-            console.log($scope.filter.state, $scope.filter.substate)
             if ($scope.filter.state === 'payitem' || $scope.filter.state === 'scheduling') {
                 if ($scope.filter.substate && !$scope.filter.substateStk) {
                     if (!$scope.filter.substate.resources)

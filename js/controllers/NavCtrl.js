@@ -84,9 +84,7 @@ angular.module($APP.name).controller('NavCtrl', [
             }
         };
         $scope.force_logout = function() {
-            AuthService.logout().success(function() {
-                console.log('wutm8?')
-            });
+            AuthService.logout().success(function() {});
         }
         $scope.updateTitle = function(project) {
             $rootScope.navTitle = project.name;

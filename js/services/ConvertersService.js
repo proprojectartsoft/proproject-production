@@ -197,7 +197,6 @@ angular.module($APP.name).service('ConvertersService', [
         var instanceToInstanceValuesFormat = function(field) {
             var field_values, field_helper;
             if (field.type === 'date') {
-                console.log(field)
                 if (field.field_values[0].value && field.field_values[0].value != 'Invalid Date') {
                     var x;
                     if (typeof field.field_values[0].value === 'object') {
@@ -212,7 +211,6 @@ angular.module($APP.name).service('ConvertersService', [
                         }
                         x = dd + '-' + MM + '-' + yyyy;
                     } else {
-                        //                        console.log(field.field_values[0])
                         x = field.field_values[0].name
                     }
 
@@ -225,7 +223,6 @@ angular.module($APP.name).service('ConvertersService', [
                 field_values = field.field_values;
             }
             if (field.type === 'time' && field.field_values[0].value != 'Invalid Date') {
-                console.log(field)
                 if (field.field_values[0].value) {
                     var hh = field.field_values[0].value.getHours();
                     var mm = field.field_values[0].value.getMinutes();
@@ -248,7 +245,6 @@ angular.module($APP.name).service('ConvertersService', [
             if (field.type === 'select') {
                 field_values = [];
                 angular.forEach(field.field_values, function(option_value) {
-                    console.log(option_value, field)
                     if (field.value) {
                         if (option_value.name === field.value.name) {
                             option_value.value = true;
@@ -595,7 +591,6 @@ angular.module($APP.name).service('ConvertersService', [
                         }
                     }
                 }
-                console.log(requestList)
                 return requestList;
             }
         };

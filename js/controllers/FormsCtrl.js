@@ -37,11 +37,7 @@ angular.module($APP.name).controller('FormsCtrl', [
                 });
 
             }
-        }, function errorCallback(error) {
-            console.log(error, error.status);
-        });
-
-
+        }, function errorCallback(error) {});
         $rootScope.formDesigns = [];
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE category_id=' + $stateParams.categoryId, [], function(rs) {
             var aux = [];

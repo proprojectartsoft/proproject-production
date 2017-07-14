@@ -45,7 +45,6 @@ angular.module($APP.name).controller('EditCtrl', [
             CommonServices.updateTitle(title, placeholder, $scope.titleShow);
         }
         $scope.backHelper = function() {
-            console.log($scope.linkAux)
             switch ($scope.linkAux) {
                 case 'forms':
                     $state.go('app.completed', {
@@ -301,11 +300,8 @@ angular.module($APP.name).controller('EditCtrl', [
                     });
                 }
                 if (type === 'piresource') {
-                    console.log('piresource', parent)
                     angular.forEach(parent.resources, function(res) {
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
-                        console.log(parent.total_cost, res.quantity, res.direct_cost)
-
                     });
                 }
                 if (type === 'pisubresource') {
@@ -314,7 +310,6 @@ angular.module($APP.name).controller('EditCtrl', [
                     });
                 }
                 if (type === 'pisubtask') {
-                    console.log(parent)
                     angular.forEach(parent.subtasks, function(stk) {
                         parent.total_cost = parent.total_cost + stk.total_cost;
                     });
@@ -1161,7 +1156,6 @@ angular.module($APP.name).controller('EditCtrl', [
         };
         $scope.repeatGroup = function(x) {
             var aux = {};
-            console.log(x);
             angular.copy(x, aux);
             aux.repeatable = true;
             aux.id = 0;
@@ -1181,7 +1175,6 @@ angular.module($APP.name).controller('EditCtrl', [
                     aux.field_instances[i].field_values[j].field_instance_id = 0;
                 }
             }
-            console.log(aux);
             for (var i = 0; i < $scope.formData.field_group_instances.length; i++) {
                 if (x === $scope.formData.field_group_instances[i]) {
                     $scope.formData.field_group_instances.splice(i + 1, 0, aux);

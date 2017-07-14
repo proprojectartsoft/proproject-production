@@ -36,7 +36,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
         }
 
         $scope.backHelper = function() {
-            console.log($scope.linkAux)
             switch ($scope.linkAux) {
                 case 'forms':
                     $scope.back();
@@ -293,7 +292,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         setAbsenteeism(item);
                         if (item.current_day) {
                             var partsOfStr = item.current_day.split('-');
-                            console.log(partsOfStr)
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                         }
                     });
@@ -310,12 +308,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         setAbsenteeism(item);
                         if (item.current_day) {
                             var partsOfStr = item.current_day.split('-');
-                            console.log(partsOfStr)
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                         }
                         if (item.expiry_date) {
                             var partsOfStr = item.expiry_date.split('-');
-                            console.log(partsOfStr)
                             item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                         }
                     });
@@ -334,12 +330,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             setAbsenteeism(res);
                             if (res.current_day) {
                                 var partsOfStr = res.current_day.split('-');
-                                console.log(partsOfStr)
                                 item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
                             if (res.expiry_date) {
                                 var partsOfStr = res.expiry_date.split('-');
-                                console.log(partsOfStr)
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
                         });
@@ -350,13 +344,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 setAbsenteeism(res);
                                 if (res.current_day) {
                                     var partsOfStr = res.current_day.split('-');
-                                    console.log(partsOfStr)
                                     item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                     res.current_day_obj = res.current_day;
                                 }
                                 if (res.expiry_date) {
                                     var partsOfStr = res.expiry_date.split('-');
-                                    console.log(partsOfStr)
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                     res.expiry_date_obj = res.expiry_date;
                                 }
@@ -379,12 +371,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             setAbsenteeism(res);
                             if (res.current_day) {
                                 var partsOfStr = res.current_day.split('-');
-                                console.log(partsOfStr)
                                 item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
                             if (res.expiry_date) {
                                 var partsOfStr = res.expiry_date.split('-');
-                                console.log(partsOfStr)
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
                         });
@@ -395,12 +385,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 setAbsenteeism(res);
                                 if (res.current_day) {
                                     var partsOfStr = res.current_day.split('-');
-                                    console.log(partsOfStr)
                                     item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                 }
                                 if (res.expiry_date) {
                                     var partsOfStr = res.expiry_date.split('-');
-                                    console.log(partsOfStr)
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                 }
                             });
@@ -518,7 +506,6 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         }
                     },
                     function(err) {
-                        console.log(err);
                         alertPopup1.close();
                         if (err.status == 422) {
                             res = "";

@@ -85,7 +85,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                 });
             },
             create_sync: function(dataIn, pic) {
-                console.log('create_sync')
                 return $http({
                     method: 'POST',
                     url: $APP.server + '/api/forminstance',
@@ -140,8 +139,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                     }
                     return payload.data;
                 }, function(payload) {
-                    //                    formUp.close();
-                    console.log(payload)
                     if (payload.status === 0 || payload.status === 502) {
                         var sync = CacheFactory.get('sync');
                         if (!sync) {
@@ -165,7 +162,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                             });
                         }, 100);
                     } else {
-                        //                        formUp.close();
                         var alertPopup2 = $ionicPopup.alert({
                             title: 'Submision failed.',
                             template: 'Incorrect data, try again'

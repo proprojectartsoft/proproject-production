@@ -81,7 +81,6 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                         }
                     },
                     function(err) {
-                        console.log(err);
                         alertPopup1.close();
                         if (err.status == 422) {
                             res = "";
@@ -217,9 +216,7 @@ angular.module($APP.name).controller('FormCompletedCtrl', [
                 });
 
             }
-        }, function errorCallback(error) {
-            console.log(error, error.status);
-        });
+        }, function errorCallback(error) {});
 
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
         $rootScope.categoryId = $stateParams.categoryId;

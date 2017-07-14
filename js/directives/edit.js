@@ -29,14 +29,11 @@ angular.module($APP.name).directive('edit', [
                         hardwareBackButtonClose: false,
                     }).then(function (modal) {
                         $scope.modal = modal;
-                        console.log(modal)
-//                        $scope.modal.hash = $scope.hash;
-//                        FieldUpdateService.addProduct($scope.modalHelper);
                         $rootScope.$broadcast('updateScopeFromDirective');
                         $scope.modal.show();
                     });
                 };
-                
+
                 if ($scope.data.type === "select") {
                     if ($scope.data.field_values[0]) {
                         for (var i = 0; i < $scope.data.field_values.length; i++) {
@@ -45,7 +42,6 @@ angular.module($APP.name).directive('edit', [
                             }
                         }
                     }
-                    console.log($scope.data.value)
                 }
                 if ($scope.data.type === "number" && $scope.data.field_values[0]) {
                     $scope.data.field_values[0].value = parseInt($scope.data.field_values[0].value);
@@ -72,7 +68,7 @@ angular.module($APP.name).directive('edit', [
                         var aux = '';
                         if ($scope.data.field_values[0].value !== 0) {
                             aux = $scope.data.field_values[0].value.substr(0, 4);
-                            var array = [];                            
+                            var array = [];
                             array.push($scope.data.field_values[0].value.substr(3, 2));
                             array.push($scope.data.field_values[0].value.substr(0, 2));
                             array.push($scope.data.field_values[0].value.substr(6, 4));
@@ -90,9 +86,7 @@ angular.module($APP.name).directive('edit', [
 
                 if ($scope.data.type === "time") {
                     if ($scope.data.field_values[0] && $scope.data.field_values[0].value !== '0' && $scope.data.field_values[0].value !== 0 && $scope.data.field_values[0].value !== "") {
-//                        $scope.data.field_values[0].value = new Date("01 " + $scope.data.field_values[0].value)
                         $scope.data.field_values[0].value = new Date("Mon, 25 Dec 1995 " + $scope.data.field_values[0].value);
-                        console.log($scope.data.field_values[0].value)
                     }
                 }
                 if ($scope.data.type === "radio" && $scope.data.field_values.length > 0) {

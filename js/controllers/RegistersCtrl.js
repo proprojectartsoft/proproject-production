@@ -23,12 +23,7 @@ angular.module($APP.name).controller('RegistersCtrl', [
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
-        $scope.$on('$stateChangeSuccess', function() {
-            console.log('state change registers');
-            //            $timeout(function () {
-            ////                $ionicScrollDelegate.scrollTop();
-            //            });
-        });
+        $scope.$on('$stateChangeSuccess', function() {});
 
 
         AuthService.me().then(function(user) {
@@ -78,9 +73,7 @@ angular.module($APP.name).controller('RegistersCtrl', [
                 });
 
             }
-        }, function errorCallback(error) {
-            console.log(error, error.status);
-        });
+        }, function errorCallback(error) {});
         if ($stateParams.categoryId) {
             $rootScope.categoryId = $stateParams.categoryId;
             RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
