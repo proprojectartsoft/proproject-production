@@ -417,6 +417,7 @@ angular.module($APP.name).factory('SyncService', [
                             asyncCall(doRequest,
                                 function error(result) {
                                     console.log('Some error occurred, but we get going:', result);
+                                    DbService.popclose(); //TODO: not
                                 },
                                 function success(result) {
                                     DbService.popclose();
@@ -428,6 +429,7 @@ angular.module($APP.name).factory('SyncService', [
             } else {
                 asyncCall(doRequest,
                     function error(result) {
+                        DbService.popclose(); //TODO: not
                         console.log('Some error occurred, but we get going:', result);
                     },
                     function success(result) {
@@ -490,7 +492,7 @@ angular.module($APP.name).factory('SyncService', [
             $APP.db.executeSql('SELECT * FROM UnitTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
-                    aux.push(rs.rows.item(i));//JSON.parse(rs.rows.item(i).data)
+                    aux.push(rs.rows.item(i)); //JSON.parse(rs.rows.item(i).data)
                 }
                 // $rootScope.unit_list = aux;
                 DbService.add('unit', aux);
@@ -589,8 +591,6 @@ angular.module($APP.name).factory('SyncService', [
                                                     };
                                                     down();
                                                 })
-                                        } else {
-                                            DbService.popclose();
                                         }
                                     } else {
                                         load();
@@ -621,8 +621,6 @@ angular.module($APP.name).factory('SyncService', [
                             .error(function(data, status) {
                                 if (navigator.onLine) {
                                     if (status === 403) {
-                                        //TO DO autologin
-                                        console.log('you have been disconnected');
                                         var user = localStorage.getObject('ppreload');
                                         if (user) {
                                             $state.go('app.categories', {
@@ -638,7 +636,11 @@ angular.module($APP.name).factory('SyncService', [
                                                         active: user.data.active
                                                     };
                                                     down();
+                                                }).error(function() {
+                                                    DbService.popclose();
                                                 })
+                                        } else {
+                                            DbService.popclose();
                                         }
                                     } else {
                                         load();

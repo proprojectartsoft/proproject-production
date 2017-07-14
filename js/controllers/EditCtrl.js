@@ -632,70 +632,55 @@ angular.module($APP.name).controller('EditCtrl', [
         });
 
         $scope.submit = function(help) {
-            var confirmPopup = $ionicPopup.confirm({
-                title: 'Edit form',
-                template: 'Are you sure you want to edit this form?'
-            });
-            confirmPopup.then(function(res) {
-                if (res) {
-                    $timeout(function() {
-                        var formUp = $ionicPopup.alert({
-                            title: "Submitting",
-                            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                            content: "",
-                            buttons: []
-                        });
-                        if ($scope.formData.resource_field_id) {
-                            angular.forEach($rootScope.resourceField.resources, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit_id = item.unit_obj.id;
-                                    item.unit_name = item.unit_obj.name;
-                                }
-                                if (item.res_type_obj) {
-                                    item.resource_type_id = item.res_type_obj.id;
-                                    item.resource_type_name = item.res_type_obj.name;
-                                }
-                                if (item.stage_obj) {
-                                    item.stage_id = item.stage_obj.id;
-                                    item.stage_name = item.stage_obj.name;
-                                }
-                                if (item.absenteeism_obj) {
-                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                }
-                                if (item.current_day_obj) {
-                                    item.current_day = new Date(item.current_day_obj).getTime();
-                                }
+            if (!navigator.onLine) {
+                var confirmPopup = $ionicPopup.alert({
+                    title: 'Please note',
+                    template: 'You are offline. You can modify forms when online.'
+                });
+            } else {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Edit form',
+                    template: 'Are you sure you want to edit this form?'
+                });
+                confirmPopup.then(function(res) {
+                    if (res) {
+                        $timeout(function() {
+                            var formUp = $ionicPopup.alert({
+                                title: "Submitting",
+                                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                content: "",
+                                buttons: []
                             });
-                            ResourceService.update_field($rootScope.resourceField).then(function(x) {});
-                        }
-                        if ($scope.formData.pay_item_field_id) {
-                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit = item.unit_obj.name;
-                                    item.unit_id = item.unit_obj.id;
-                                }
-                                angular.forEach(item.resources, function(res) {
-                                    if (res.unit_obj) {
-                                        res.unit_id = res.unit_obj.id;
-                                        res.unit_name = res.unit_obj.name;
+                            if ($scope.formData.resource_field_id) {
+                                angular.forEach($rootScope.resourceField.resources, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit_id = item.unit_obj.id;
+                                        item.unit_name = item.unit_obj.name;
                                     }
-                                    if (res.res_type_obj) {
-                                        res.resource_type_id = res.res_type_obj.id;
-                                        res.resource_type_name = res.res_type_obj.name;
+                                    if (item.res_type_obj) {
+                                        item.resource_type_id = item.res_type_obj.id;
+                                        item.resource_type_name = item.res_type_obj.name;
                                     }
-                                    if (res.absenteeism_obj) {
-                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                    if (item.stage_obj) {
+                                        item.stage_id = item.stage_obj.id;
+                                        item.stage_name = item.stage_obj.name;
                                     }
-                                    if (res.current_day_obj) {
-                                        res.current_day = res.current_day_obj;
+                                    if (item.absenteeism_obj) {
+                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                     }
-                                    if (res.expiry_date_obj) {
-                                        var date = new Date(res.expiry_date_obj);
-                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                    if (item.current_day_obj) {
+                                        item.current_day = new Date(item.current_day_obj).getTime();
                                     }
                                 });
-                                angular.forEach(item.subtasks, function(subtask) {
-                                    angular.forEach(subtask.resources, function(res) {
+                                ResourceService.update_field($rootScope.resourceField).then(function(x) {});
+                            }
+                            if ($scope.formData.pay_item_field_id) {
+                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit = item.unit_obj.name;
+                                        item.unit_id = item.unit_obj.id;
+                                    }
+                                    angular.forEach(item.resources, function(res) {
                                         if (res.unit_obj) {
                                             res.unit_id = res.unit_obj.id;
                                             res.unit_name = res.unit_obj.name;
@@ -715,38 +700,38 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
                                     });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        angular.forEach(subtask.resources, function(res) {
+                                            if (res.unit_obj) {
+                                                res.unit_id = res.unit_obj.id;
+                                                res.unit_name = res.unit_obj.name;
+                                            }
+                                            if (res.res_type_obj) {
+                                                res.resource_type_id = res.res_type_obj.id;
+                                                res.resource_type_name = res.res_type_obj.name;
+                                            }
+                                            if (res.absenteeism_obj) {
+                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                            }
+                                            if (res.current_day_obj) {
+                                                res.current_day = res.current_day_obj;
+                                            }
+                                            if (res.expiry_date_obj) {
+                                                var date = new Date(res.expiry_date_obj);
+                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                            }
+                                        });
+                                    });
                                 });
-                            });
-                            PayitemService.update_field($rootScope.payitemField).then(function(x) {});
-                        }
-                        if ($scope.formData.scheduling_field_id) {
-                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit = item.unit_obj.name;
-                                    item.unit_id = item.unit_obj.id;
-                                }
-                                angular.forEach(item.resources, function(res) {
-                                    if (res.unit_obj) {
-                                        res.unit_id = res.unit_obj.id;
-                                        res.unit_name = res.unit_obj.name;
+                                PayitemService.update_field($rootScope.payitemField).then(function(x) {});
+                            }
+                            if ($scope.formData.scheduling_field_id) {
+                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit = item.unit_obj.name;
+                                        item.unit_id = item.unit_obj.id;
                                     }
-                                    if (res.res_type_obj) {
-                                        res.resource_type_id = res.res_type_obj.id;
-                                        res.resource_type_name = res.res_type_obj.name;
-                                    }
-                                    if (res.absenteeism_obj) {
-                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                    }
-                                    if (res.current_day_obj) {
-                                        res.current_day = res.current_day_obj;
-                                    }
-                                    if (res.expiry_date_obj) {
-                                        var date = new Date(res.expiry_date_obj);
-                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    }
-                                });
-                                angular.forEach(item.subtasks, function(subtask) {
-                                    angular.forEach(subtask.resources, function(res) {
+                                    angular.forEach(item.resources, function(res) {
                                         if (res.unit_obj) {
                                             res.unit_id = res.unit_obj.id;
                                             res.unit_name = res.unit_obj.name;
@@ -759,362 +744,145 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj.getTime();
+                                            res.current_day = res.current_day_obj;
                                         }
                                         if (res.expiry_date_obj) {
                                             var date = new Date(res.expiry_date_obj);
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
                                     });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        angular.forEach(subtask.resources, function(res) {
+                                            if (res.unit_obj) {
+                                                res.unit_id = res.unit_obj.id;
+                                                res.unit_name = res.unit_obj.name;
+                                            }
+                                            if (res.res_type_obj) {
+                                                res.resource_type_id = res.res_type_obj.id;
+                                                res.resource_type_name = res.res_type_obj.name;
+                                            }
+                                            if (res.absenteeism_obj) {
+                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                            }
+                                            if (res.current_day_obj) {
+                                                res.current_day = res.current_day_obj.getTime();
+                                            }
+                                            if (res.expiry_date_obj) {
+                                                var date = new Date(res.expiry_date_obj);
+                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                            }
+                                        });
+                                    });
                                 });
-                            });
-                            SchedulingService.update_field($rootScope.payitemField).then(function(x) {});
-                        }
-                        if ($scope.formData.staff_field_id) {
-                            angular.forEach($rootScope.staffField.resources, function(item) {
-                                if (item.res_type_obj) {
-                                    item.resource_type_id = item.res_type_obj.id;
-                                    item.resource_type_name = item.res_type_obj.name;
-                                }
-                                if (item.absenteeism_obj) {
-                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                    item.absenteeism_obj.reason;
-                                }
-                                if (item.expiry_date_obj) {
-                                    item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
-                                }
-                                // if (item.start_time_obj) {
-                                //     item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
-                                // }
-                                // if (item.break_time_obj) {
-                                //     item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
-                                // }
-                                // if (item.finish_time_obj) {
-                                //     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
-                                // }
-                            });
-                            StaffService.update_field($rootScope.staffField).then(function(x) {});
-                        }
-                        FormInstanceService.update($rootScope.formId, $scope.formData).then(function(data) {
-                            if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                $rootScope.formId = data;
-                                var list = ConvertersService.photoList($scope.imgToAdd, $scope.formData.id, $scope.formData.project_id);
-                                $scope.imgToAdd = [];
-                                if (list.length !== 0) {
-                                    ImageService.create(list).then(function(x) {
+                                SchedulingService.update_field($rootScope.payitemField).then(function(x) {});
+                            }
+                            if ($scope.formData.staff_field_id) {
+                                angular.forEach($rootScope.staffField.resources, function(item) {
+                                    if (item.res_type_obj) {
+                                        item.resource_type_id = item.res_type_obj.id;
+                                        item.resource_type_name = item.res_type_obj.name;
+                                    }
+                                    if (item.absenteeism_obj) {
+                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                        item.absenteeism_obj.reason;
+                                    }
+                                    if (item.expiry_date_obj) {
+                                        item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
+                                    }
+                                });
+                                StaffService.update_field($rootScope.staffField).then(function(x) {});
+                            }
+                            FormInstanceService.update($rootScope.formId, $scope.formData).then(function(data) {
+                                if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                                    $rootScope.formId = data;
+                                    var list = ConvertersService.photoList($scope.imgToAdd, $scope.formData.id, $scope.formData.project_id);
+                                    $scope.imgToAdd = [];
+                                    if (list.length !== 0) {
+                                        ImageService.create(list).then(function(x) {
+                                            $timeout(function() {
+                                                formUp.close();
+                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                            });
+                                        });
+                                    } else {
                                         $timeout(function() {
                                             formUp.close();
                                             $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                         });
-                                    });
+                                    }
                                 } else {
                                     $timeout(function() {
                                         formUp.close();
                                         $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                     });
                                 }
-                            } else {
-                                $timeout(function() {
-                                    formUp.close();
-                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                });
-                            }
+                            });
                         });
-                    });
-                }
-            });
+                    }
+                });
+            }
         };
         $scope.saveAsNew = function() {
-            var confirmPopup = $ionicPopup.confirm({
-                title: 'Edit form',
-                template: 'Are you sure you want to save this form?'
-            });
-            confirmPopup.then(function(res) {
-                if (res) {
-                    $timeout(function() {
-                        var formUp = $ionicPopup.alert({
-                            title: "Submitting",
-                            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                            content: "",
-                            buttons: []
-                        });
-                        if ($scope.formData.resource_field_id) {
-                            angular.forEach($rootScope.resourceField.resources, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit_id = item.unit_obj.id;
-                                    item.unit_name = item.unit_obj.name;
-                                }
-                                if (item.res_type_obj) {
-                                    item.resource_type_id = item.res_type_obj.id;
-                                    item.resource_type_name = item.res_type_obj.name;
-                                }
-                                if (item.stage_obj) {
-                                    item.stage_id = item.stage_obj.id;
-                                    item.stage_name = item.stage_obj.name;
-                                }
-                                if (item.absenteeism_obj) {
-                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                }
-                                if (item.current_day_obj) {
-                                    item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); //TODO: REMOVE FILTER BUT FIND OUT WHY DATE HAS FORMAT JAN 1, YEAR!!!!
-                                }
+            if (!navigator.onLine) {
+                var confirmPopup = $ionicPopup.alert({
+                    title: 'Please note',
+                    template: 'You are offline. You can modify forms when online.'
+                });
+            } else {
+                var confirmPopup = $ionicPopup.confirm({
+                    title: 'Edit form',
+                    template: 'Are you sure you want to save this form?'
+                });
+                confirmPopup.then(function(res) {
+                    if (res) {
+                        $timeout(function() {
+                            var formUp = $ionicPopup.alert({
+                                title: "Submitting",
+                                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                                content: "",
+                                buttons: []
                             });
-                            ResourceService.add_field($rootScope.resourceField).success(function(x) {
-                                $scope.formData.resource_field_id = x.id;
-                                FormInstanceService.save_as($scope.formData).then(function(data) {
-                                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                        $rootScope.formId = data.id;
-                                        FormInstanceService.get($rootScope.formId).then(function(data) {
-                                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                            if (list.length !== 0) {
-                                                ImageService.create(list).then(function(x) {
+                            if ($scope.formData.resource_field_id) {
+                                angular.forEach($rootScope.resourceField.resources, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit_id = item.unit_obj.id;
+                                        item.unit_name = item.unit_obj.name;
+                                    }
+                                    if (item.res_type_obj) {
+                                        item.resource_type_id = item.res_type_obj.id;
+                                        item.resource_type_name = item.res_type_obj.name;
+                                    }
+                                    if (item.stage_obj) {
+                                        item.stage_id = item.stage_obj.id;
+                                        item.stage_name = item.stage_obj.name;
+                                    }
+                                    if (item.absenteeism_obj) {
+                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                    }
+                                    if (item.current_day_obj) {
+                                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); //TODO: REMOVE FILTER BUT FIND OUT WHY DATE HAS FORMAT JAN 1, YEAR!!!!
+                                    }
+                                });
+                                ResourceService.add_field($rootScope.resourceField).success(function(x) {
+                                    $scope.formData.resource_field_id = x.id;
+                                    FormInstanceService.save_as($scope.formData).then(function(data) {
+                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                                            $rootScope.formId = data.id;
+                                            FormInstanceService.get($rootScope.formId).then(function(data) {
+                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                                                if (list.length !== 0) {
+                                                    ImageService.create(list).then(function(x) {
+                                                        $timeout(function() {
+                                                            formUp.close();
+                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                        });
+                                                    });
+                                                } else {
                                                     $timeout(function() {
                                                         formUp.close();
                                                         $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                                     });
-                                                });
-                                            } else {
-                                                $timeout(function() {
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        $timeout(function() {
-                                            formUp.close();
-                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                        if ($scope.formData.pay_item_field_id) {
-                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit = item.unit_obj.name;
-                                    item.unit_id = item.unit_obj.id;
-                                }
-                                angular.forEach(item.resources, function(res) {
-                                    if (res.unit_obj) {
-                                        res.unit_id = res.unit_obj.id;
-                                        res.unit_name = res.unit_obj.name;
-                                    }
-                                    if (res.res_type_obj) {
-                                        res.resource_type_id = res.res_type_obj.id;
-                                        res.resource_type_name = res.res_type_obj.name;
-                                    }
-                                    if (res.absenteeism_obj) {
-                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                    }
-                                    if (res.current_day_obj) {
-                                        res.current_day = res.current_day_obj;
-                                    }
-                                    if (res.expiry_date_obj) {
-                                        var date = new Date(res.expiry_date_obj);
-                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    }
-                                });
-                                angular.forEach(item.subtasks, function(subtask) {
-                                    angular.forEach(subtask.resources, function(res) {
-                                        if (res.unit_obj) {
-                                            res.unit_id = res.unit_obj.id;
-                                            res.unit_name = res.unit_obj.name;
-                                        }
-                                        if (res.res_type_obj) {
-                                            res.resource_type_id = res.res_type_obj.id;
-                                            res.resource_type_name = res.res_type_obj.name;
-                                        }
-                                        if (res.absenteeism_obj) {
-                                            res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                        }
-                                        if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj;
-                                        }
-                                        if (res.expiry_date_obj) {
-                                            var date = new Date(res.expiry_date_obj);
-                                            res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                        }
-                                    });
-                                });
-                            });
-                            PayitemService.add_field($rootScope.payitemField).success(function(x) {
-                                $scope.formData.pay_item_field_id = x.id;
-                                FormInstanceService.save_as($scope.formData).then(function(data) {
-                                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                        $rootScope.formId = data.id;
-                                        FormInstanceService.get($rootScope.formId).then(function(data) {
-                                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                            if (list.length !== 0) {
-                                                ImageService.create(list).then(function(x) {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                });
-                                            } else {
-                                                $timeout(function() {
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        $timeout(function() {
-                                            formUp.close();
-                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                        if ($scope.formData.scheduling_field_id) {
-                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit = item.unit_obj.name;
-                                    item.unit_id = item.unit_obj.id;
-                                }
-                                angular.forEach(item.resources, function(res) {
-                                    if (res.unit_obj) {
-                                        res.unit_id = res.unit_obj.id;
-                                        res.unit_name = res.unit_obj.name;
-                                    }
-                                    if (res.res_type_obj) {
-                                        res.resource_type_id = res.res_type_obj.id;
-                                        res.resource_type_name = res.res_type_obj.name;
-                                    }
-                                    if (res.absenteeism_obj) {
-                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                    }
-                                    if (res.current_day_obj) {
-                                        res.current_day = res.current_day_obj;
-                                    }
-                                    if (res.expiry_date_obj) {
-                                        var date = new Date(res.expiry_date_obj);
-                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    }
-                                });
-                                angular.forEach(item.subtasks, function(subtask) {
-                                    angular.forEach(subtask.resources, function(res) {
-                                        if (res.unit_obj) {
-                                            res.unit_id = res.unit_obj.id;
-                                            res.unit_name = res.unit_obj.name;
-                                        }
-                                        if (res.res_type_obj) {
-                                            res.resource_type_id = res.res_type_obj.id;
-                                            res.resource_type_name = res.res_type_obj.name;
-                                        }
-                                        if (res.absenteeism_obj) {
-                                            res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                        }
-                                        if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj.getTime();
-                                        }
-                                        if (res.expiry_date_obj) {
-                                            var date = new Date(res.expiry_date_obj);
-                                            res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                        }
-                                    });
-                                });
-                            });
-                            SchedulingService.add_field($rootScope.payitemField).success(function(x) {
-                                $scope.formData.scheduling_field_id = x.id;
-                                FormInstanceService.save_as($scope.formData).then(function(data) {
-                                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                        $rootScope.formId = data.id;
-                                        FormInstanceService.get($rootScope.formId).then(function(data) {
-                                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                            if (list.length !== 0) {
-                                                ImageService.create(list).then(function(x) {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                });
-                                            } else {
-                                                $timeout(function() {
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        $timeout(function() {
-                                            formUp.close();
-                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                        if ($scope.formData.staff_field_id) {
-                            angular.forEach($rootScope.staffField.resources, function(item) {
-                                if (item.res_type_obj) {
-                                    item.resource_type_id = item.res_type_obj.id;
-                                    item.resource_type_name = item.res_type_obj.name;
-                                }
-                                if (item.absenteeism_obj) {
-                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                    item.absenteeism_obj.reason;
-                                }
-                                if (item.current_day_obj) {
-                                    item.current_day = item.current_day_obj.getTime();
-                                }
-                                if (item.expiry_date_obj) {
-                                    item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
-                                }
-                                // if (item.start_time_obj) {
-                                //     item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
-                                // }
-                                // if (item.break_time_obj) {
-                                //     item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
-                                // }
-                                // if (item.finish_time_obj) {
-                                //     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
-                                // }
-                            });
-                            StaffService.add_field($rootScope.staffField).success(function(x) {
-                                $scope.formData.staff_field_id = x.id;
-                                FormInstanceService.save_as($scope.formData).then(function(data) {
-                                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                        $rootScope.formId = data.id;
-                                        FormInstanceService.get($rootScope.formId).then(function(data) {
-                                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                            if (list.length !== 0) {
-                                                ImageService.create(list).then(function(x) {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                });
-                                            } else {
-                                                $timeout(function() {
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        $timeout(function() {
-                                            formUp.close();
-                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                        });
-                                    }
-                                });
-                            });
-                        }
-                        if (!$scope.formData.scheduling_field_id && !$scope.formData.staff_field_id && !$scope.formData.resource_field_id && !$scope.formData.pay_item_field_id) {
-                            FormInstanceService.save_as($scope.formData).then(function(data) {
-                                if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                    $rootScope.formId = data.id;
-                                    FormInstanceService.get($rootScope.formId).then(function(data) {
-                                        var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                        if (list.length !== 0) {
-                                            ImageService.create(list).then(function(x) {
-                                                $timeout(function() {
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
+                                                }
                                             });
                                         } else {
                                             $timeout(function() {
@@ -1123,17 +891,245 @@ angular.module($APP.name).controller('EditCtrl', [
                                             });
                                         }
                                     });
-                                } else {
-                                    $timeout(function() {
-                                        formUp.close();
-                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                });
+                            }
+                            if ($scope.formData.pay_item_field_id) {
+                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit = item.unit_obj.name;
+                                        item.unit_id = item.unit_obj.id;
+                                    }
+                                    angular.forEach(item.resources, function(res) {
+                                        if (res.unit_obj) {
+                                            res.unit_id = res.unit_obj.id;
+                                            res.unit_name = res.unit_obj.name;
+                                        }
+                                        if (res.res_type_obj) {
+                                            res.resource_type_id = res.res_type_obj.id;
+                                            res.resource_type_name = res.res_type_obj.name;
+                                        }
+                                        if (res.absenteeism_obj) {
+                                            res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                        }
+                                        if (res.current_day_obj) {
+                                            res.current_day = res.current_day_obj;
+                                        }
+                                        if (res.expiry_date_obj) {
+                                            var date = new Date(res.expiry_date_obj);
+                                            res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                        }
                                     });
-                                }
-                            });
-                        }
-                    });
-                }
-            });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        angular.forEach(subtask.resources, function(res) {
+                                            if (res.unit_obj) {
+                                                res.unit_id = res.unit_obj.id;
+                                                res.unit_name = res.unit_obj.name;
+                                            }
+                                            if (res.res_type_obj) {
+                                                res.resource_type_id = res.res_type_obj.id;
+                                                res.resource_type_name = res.res_type_obj.name;
+                                            }
+                                            if (res.absenteeism_obj) {
+                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                            }
+                                            if (res.current_day_obj) {
+                                                res.current_day = res.current_day_obj;
+                                            }
+                                            if (res.expiry_date_obj) {
+                                                var date = new Date(res.expiry_date_obj);
+                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                            }
+                                        });
+                                    });
+                                });
+                                PayitemService.add_field($rootScope.payitemField).success(function(x) {
+                                    $scope.formData.pay_item_field_id = x.id;
+                                    FormInstanceService.save_as($scope.formData).then(function(data) {
+                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                                            $rootScope.formId = data.id;
+                                            FormInstanceService.get($rootScope.formId).then(function(data) {
+                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                                                if (list.length !== 0) {
+                                                    ImageService.create(list).then(function(x) {
+                                                        $timeout(function() {
+                                                            formUp.close();
+                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                        });
+                                                    });
+                                                } else {
+                                                    $timeout(function() {
+                                                        formUp.close();
+                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            $timeout(function() {
+                                                formUp.close();
+                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                            if ($scope.formData.scheduling_field_id) {
+                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit = item.unit_obj.name;
+                                        item.unit_id = item.unit_obj.id;
+                                    }
+                                    angular.forEach(item.resources, function(res) {
+                                        if (res.unit_obj) {
+                                            res.unit_id = res.unit_obj.id;
+                                            res.unit_name = res.unit_obj.name;
+                                        }
+                                        if (res.res_type_obj) {
+                                            res.resource_type_id = res.res_type_obj.id;
+                                            res.resource_type_name = res.res_type_obj.name;
+                                        }
+                                        if (res.absenteeism_obj) {
+                                            res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                        }
+                                        if (res.current_day_obj) {
+                                            res.current_day = res.current_day_obj;
+                                        }
+                                        if (res.expiry_date_obj) {
+                                            var date = new Date(res.expiry_date_obj);
+                                            res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                        }
+                                    });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        angular.forEach(subtask.resources, function(res) {
+                                            if (res.unit_obj) {
+                                                res.unit_id = res.unit_obj.id;
+                                                res.unit_name = res.unit_obj.name;
+                                            }
+                                            if (res.res_type_obj) {
+                                                res.resource_type_id = res.res_type_obj.id;
+                                                res.resource_type_name = res.res_type_obj.name;
+                                            }
+                                            if (res.absenteeism_obj) {
+                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                            }
+                                            if (res.current_day_obj) {
+                                                res.current_day = res.current_day_obj.getTime();
+                                            }
+                                            if (res.expiry_date_obj) {
+                                                var date = new Date(res.expiry_date_obj);
+                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                            }
+                                        });
+                                    });
+                                });
+                                SchedulingService.add_field($rootScope.payitemField).success(function(x) {
+                                    $scope.formData.scheduling_field_id = x.id;
+                                    FormInstanceService.save_as($scope.formData).then(function(data) {
+                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                                            $rootScope.formId = data.id;
+                                            FormInstanceService.get($rootScope.formId).then(function(data) {
+                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                                                if (list.length !== 0) {
+                                                    ImageService.create(list).then(function(x) {
+                                                        $timeout(function() {
+                                                            formUp.close();
+                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                        });
+                                                    });
+                                                } else {
+                                                    $timeout(function() {
+                                                        formUp.close();
+                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            $timeout(function() {
+                                                formUp.close();
+                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                            if ($scope.formData.staff_field_id) {
+                                angular.forEach($rootScope.staffField.resources, function(item) {
+                                    if (item.res_type_obj) {
+                                        item.resource_type_id = item.res_type_obj.id;
+                                        item.resource_type_name = item.res_type_obj.name;
+                                    }
+                                    if (item.absenteeism_obj) {
+                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                        item.absenteeism_obj.reason;
+                                    }
+                                    if (item.current_day_obj) {
+                                        item.current_day = item.current_day_obj.getTime();
+                                    }
+                                    if (item.expiry_date_obj) {
+                                        item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
+                                    }
+                                });
+                                StaffService.add_field($rootScope.staffField).success(function(x) {
+                                    $scope.formData.staff_field_id = x.id;
+                                    FormInstanceService.save_as($scope.formData).then(function(data) {
+                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                                            $rootScope.formId = data.id;
+                                            FormInstanceService.get($rootScope.formId).then(function(data) {
+                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                                                if (list.length !== 0) {
+                                                    ImageService.create(list).then(function(x) {
+                                                        $timeout(function() {
+                                                            formUp.close();
+                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                        });
+                                                    });
+                                                } else {
+                                                    $timeout(function() {
+                                                        formUp.close();
+                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                    });
+                                                }
+                                            });
+                                        } else {
+                                            $timeout(function() {
+                                                formUp.close();
+                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                            });
+                                        }
+                                    });
+                                });
+                            }
+                            if (!$scope.formData.scheduling_field_id && !$scope.formData.staff_field_id && !$scope.formData.resource_field_id && !$scope.formData.pay_item_field_id) {
+                                FormInstanceService.save_as($scope.formData).then(function(data) {
+                                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                                        $rootScope.formId = data.id;
+                                        FormInstanceService.get($rootScope.formId).then(function(data) {
+                                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                                            if (list.length !== 0) {
+                                                ImageService.create(list).then(function(x) {
+                                                    $timeout(function() {
+                                                        formUp.close();
+                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                    });
+                                                });
+                                            } else {
+                                                $timeout(function() {
+                                                    formUp.close();
+                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        $timeout(function() {
+                                            formUp.close();
+                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
         };
 
         function elmYPosition(id) {
