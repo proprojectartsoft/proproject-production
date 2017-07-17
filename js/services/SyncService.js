@@ -550,6 +550,9 @@ angular.module($APP.name).factory('SyncService', [
                                 if (navigator.onLine) {
                                     if (status === 403) {
                                         //TO DO autologin
+                                        console.log(localStorage.getObject('userToLog'));
+                                        console.log(localStorage.getObject('ppreload'));
+                                        console.log(localStorage.getObject('ppremember'));
                                         var user = localStorage.getObject('userToLog'); //ppreload
                                         console.log(user);
                                         if (user) {

@@ -38,6 +38,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                             'username': $scope.user.username,
                             'password': $scope.user.password
                         })
+
                         localStorage.setObject('ppreload', {
                             'username': $scope.user.username,
                             'password': $scope.user.password
@@ -46,6 +47,11 @@ angular.module($APP.name).controller('LoginCtrl', [
                             title: 'Please Note',
                             template: "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.",
                         });
+
+                        console.log(localStorage.getObject('userToLog'));
+                        console.log(localStorage.getObject('ppreload'));
+
+
                         alertPopup.then(function(res) {});
                     }
                     $rootScope.thisUser = localStorage.getObject("ppuser");
