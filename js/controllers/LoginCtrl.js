@@ -31,7 +31,6 @@ angular.module($APP.name).controller('LoginCtrl', [
                     }
                 }).error(function(err, status) {
                     console.log(status);
-                    console.log(error);
                     if (status === 0 || status === -1) {
                         console.log($scope.user.username);
                         console.log($scope.user.password);
