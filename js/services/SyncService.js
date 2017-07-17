@@ -549,11 +549,7 @@ angular.module($APP.name).factory('SyncService', [
                             .error(function(data, status) {
                                 if (navigator.onLine) {
                                     if (status === 403) {
-                                        //TO DO autologin
-                                        console.log(localStorage.getObject('userToLog'));
-                                        console.log(localStorage.getObject('ppreload'));
-                                        console.log(localStorage.getObject('ppremember'));
-                                        var user = localStorage.getObject('userToLog'); //ppreload
+                                        var user = localStorage.getObject('ppremember');
                                         console.log(user);
                                         if (user) {
                                             $state.go('app.categories', {
@@ -601,10 +597,7 @@ angular.module($APP.name).factory('SyncService', [
                             .error(function(data, status) {
                                 if (navigator.onLine) {
                                     if (status === 403) {
-                                        console.log(localStorage.getObject('userToLog'));
-                                        console.log(localStorage.getObject('ppreload'));
-                                        console.log(localStorage.getObject('ppremember'));
-                                        var user = localStorage.getObject('userToLog'); //ppreload
+                                        var user = localStorage.getObject('ppremember'); 
                                         if (user) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
