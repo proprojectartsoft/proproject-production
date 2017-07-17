@@ -550,7 +550,8 @@ angular.module($APP.name).factory('SyncService', [
                                 if (navigator.onLine) {
                                     if (status === 403) {
                                         //TO DO autologin
-                                        var user = localStorage.getObject('ppreload');
+                                        var user = localStorage.getObject('userToLog'); //ppreload
+                                        console.log(user);
                                         if (user) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
