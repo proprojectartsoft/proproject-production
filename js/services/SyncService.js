@@ -59,30 +59,6 @@ angular.module($APP.name).factory('SyncService', [
                 })
         }
 
-        var loadSettings = function() {
-            // console.log("load settitngs");
-            // ResourceService.list_manager().then(function(result) {
-            //     console.log(result);
-            //     localStorage.setObject('resource_list', result);
-            // })
-            // ResourceService.list_unit().then(function(result) {
-            //     console.log(result);
-            //     localStorage.setObject('unit_list', result);
-            // })
-            // StaffService.list_manager().then(function(result) {
-            //     console.log(result);
-            //     localStorage.setObject('staff_list', result);
-            // })
-            // ResourceService.list_resourcetype().then(function(result) {
-            //     console.log(result);
-            //     localStorage.setObject('resource_type_list', result);
-            // })
-            // ResourceService.list_absenteeism().then(function(result) {
-            //     console.log(result);
-            //     localStorage.setObject('abs_list', result);
-            // })
-        }
-
         var addSpecialFields = function(formsToAdd) {
             var def = $q.defer();
             var resourceOK = false,
