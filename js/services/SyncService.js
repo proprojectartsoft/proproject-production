@@ -601,7 +601,10 @@ angular.module($APP.name).factory('SyncService', [
                             .error(function(data, status) {
                                 if (navigator.onLine) {
                                     if (status === 403) {
-                                        var user = localStorage.getObject('ppreload');
+                                        console.log(localStorage.getObject('userToLog'));
+                                        console.log(localStorage.getObject('ppreload'));
+                                        console.log(localStorage.getObject('ppremember'));
+                                        var user = localStorage.getObject('userToLog'); //ppreload
                                         if (user) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
