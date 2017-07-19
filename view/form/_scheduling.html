@@ -76,12 +76,17 @@
                             <span ng-if="!res.name">Resource {{$index + 1}}</span>
                             <span ng-if="res.name">{{res.name}}</span>
 
-                            <span> {{resource.quantity}} </span>
-                            <span> {{resource.unit_name}} </span>
-                            <span ng-if="resource.total_cost">
+
+                            <span> {{res.quantity}} </span>
+                            <span> {{res.unit_name}} </span>
+                            <span ng-if="res.total_cost">
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </span>
-                            <span> {{resource.total_cost}} </span>
+                            <span> {{res.total_cost}} </span>
+
+
+
+
 
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.resources, res)" ng-if="filter.edit">
                                 Delete
@@ -120,6 +125,16 @@
                             <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #ed9100;color:#fff">{{$index + 1}}</span>
                             <span ng-if="!stkres.name">Resource {{$index + 1}}</span>
                             <span ng-if="stkres.name">{{stkres.name}}</span>
+
+                            <span> {{stkres.quantity}} </span>
+                            <span> {{stkres.unit_name}} </span>
+                            <span ng-if="stkres.total_cost">
+                                <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
+                            </span>
+                            <span> {{stkres.total_cost}} </span>
+
+
+
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substateStk.resources, stkres)" ng-if="filter.edit">
                                 Delete
                             </ion-option-button>
