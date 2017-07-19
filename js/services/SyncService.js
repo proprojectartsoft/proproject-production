@@ -604,7 +604,6 @@ angular.module($APP.name).factory('SyncService', [
                             .success(function(data) {
                                 localStorage.setObject("ppuser", data);
                                 down(defer);
-                                defer.resolve();
                             })
                             .error(function(data, status) {
                                 if (navigator.onLine) {
@@ -623,7 +622,7 @@ angular.module($APP.name).factory('SyncService', [
                                                         role_title: user.data.role.title,
                                                         active: user.data.active
                                                     };
-                                                    down(defer); //defer.resolve
+                                                    down(defer);
                                                 }).error(function() {
                                                     DbService.popclose();
                                                     defer.resolve();
