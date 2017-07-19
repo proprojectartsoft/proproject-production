@@ -76,9 +76,9 @@
                             <span ng-if="!res.name">Resource {{$index + 1}}</span>
                             <span ng-if="res.name">{{res.name}}</span>
 
-                            <span ng-if="resource.name"> {{resource.quantity}} </span>
-                            <span ng-if="resource.name"> {{resource.unit_name}} </span>
-                            <span ng-if="resource.name">{{resource.total_cost}} </span>
+                            <span> {{resource.quantity}} </span>
+                            <span> {{resource.unit_name}} </span>
+                            <span> {{resource.total_cost}} </span>
                             <span ng-if="custSett">
                                 <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
                             </span>

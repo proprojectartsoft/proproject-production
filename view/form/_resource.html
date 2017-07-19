@@ -6,11 +6,11 @@
                 <span ng-if="!resource.name">Resource {{$index + 1}}</span>
                 <span ng-if="resource.name">{{resource.name}} </span>
 
-                <span ng-if="resource.name"> {{resource.quantity}} </span>
-                <span ng-if="resource.name"> {{resource.unit_name}} </span>
-                <span ng-if="resource.name">{{resource.total_cost}}</span>
+                <span> {{resource.quantity}} </span>
+                <span> {{resource.unit_name}} </span>
+                <span> {{resource.total_cost}} </span>
                 <span ng-if="custSett">
-                    <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
+                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                 </span>
 
                 <ion-option-button class="button-assertive" ng-click="deleteElement(resourceField.resources, resource)" ng-if="filter.edit">
@@ -23,8 +23,8 @@
             Total
             <div>
                 {{resourceField.total_cost}}
-                <i ng-if="custSett">
-                    <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
+                <i ng-if="currency">
+                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                 </i>
             </div>
         </div>
