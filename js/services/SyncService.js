@@ -142,7 +142,8 @@ angular.module($APP.name).factory('SyncService', [
             })
             return def.promise;
         }
-        var down = function() {
+        //get data from server
+        var down = function(defer) {
             AuthService.version().then(function(result) {
                 localStorage.setObject('ppversion', result);
             })
@@ -393,9 +394,13 @@ angular.module($APP.name).factory('SyncService', [
                             asyncCall(doRequest,
                                 function error(result) {
                                     console.log('Some error occurred, but we get going:', result);
+                                    if (defer)
+                                        defer.resolve();
                                     DbService.popclose(); //TODO: not
                                 },
                                 function success(result) {
+                                    if (defer)
+                                        defer.resolve();
                                     DbService.popclose();
                                 }
                             );
@@ -405,15 +410,20 @@ angular.module($APP.name).factory('SyncService', [
             } else {
                 asyncCall(doRequest,
                     function error(result) {
+                        if (defer)
+                            defer.resolve();
                         DbService.popclose(); //TODO: not
                         console.log('Some error occurred, but we get going:', result);
                     },
                     function success(result) {
+                        if (defer)
+                            defer.resolve();
                         DbService.popclose();
                     }
                 );
             }
         }
+        //store data locally
         var load = function() {
             var aux;
             //Select the form templates
@@ -583,6 +593,7 @@ angular.module($APP.name).factory('SyncService', [
                 });
             },
             sync_button: function() {
+                var defer = $q.defer();
                 $timeout(function() {
                     if (navigator.onLine) {
                         $state.go('app.categories', {
@@ -592,12 +603,13 @@ angular.module($APP.name).factory('SyncService', [
                         getme()
                             .success(function(data) {
                                 localStorage.setObject("ppuser", data);
-                                down();
+                                down(defer);
+                                defer.resolve();
                             })
                             .error(function(data, status) {
                                 if (navigator.onLine) {
                                     if (status === 403) {
-                                        var user = localStorage.getObject('ppremember'); 
+                                        var user = localStorage.getObject('ppremember');
                                         if (user) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
@@ -611,24 +623,30 @@ angular.module($APP.name).factory('SyncService', [
                                                         role_title: user.data.role.title,
                                                         active: user.data.active
                                                     };
-                                                    down();
+                                                    down(defer); //defer.resolve
                                                 }).error(function() {
                                                     DbService.popclose();
+                                                    defer.resolve();
                                                 })
                                         } else {
                                             DbService.popclose();
+                                            defer.resolve();
                                         }
                                     } else {
                                         load();
+                                        defer.resolve();
                                     }
                                 } else {
                                     load();
+                                    defer.resolve();
                                 }
                             })
                     } else {
                         load();
+                        defer.resolve()
                     }
                 });
+                return defer.promise;
             },
             sync_local: function() {
                 testConnection()

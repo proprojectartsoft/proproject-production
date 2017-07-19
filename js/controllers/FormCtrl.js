@@ -1127,15 +1127,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                 if (item.expiry_date_obj) {
                                     item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                 }
-                                // if (item.start_time_obj) {
-                                //     item.start_time = item.start_time_obj.getHours() + ':' + item.start_time_obj.getMinutes();
-                                // }
-                                // if (item.break_time_obj) {
-                                //     item.break_time = item.break_time_obj.getHours() + ':' + item.break_time_obj.getMinutes();
-                                // }
-                                // if (item.finish_time_obj) {
-                                //     item.finish_time = item.finish_time_obj.getHours() + ':' + item.finish_time_obj.getMinutes();
-                                // }
                             });
                             StaffService.add_field($scope.staffField).success(function(x) {
                                 $scope.formData.staff_field_id = x.id;
@@ -1169,65 +1160,73 @@ angular.module($APP.name).controller('FormCtrl', [
                 buttons: []
             });
             //automatically sync previousely offline created forms
-            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync'))
-                SyncService.sync_button();
-            FormInstanceService.create(datax, img)
-                .success(function(data) {
-                    if (data && data.data && data.data.message) {
-                        $timeout(function() {
-                            formUp.close();
+            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
+                SyncService.sync_button().then(function() {
+                    create();
+                })
+            } else {
+                create();
+            }
+
+            var create = function() {
+                FormInstanceService.create(datax, img)
+                    .success(function(data) {
+                        if (data && data.data && data.data.message) {
                             $timeout(function() {
-                                var alertPopup3 = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'You do not have permission to perform this operation'
-                                });
-                                alertPopup3.then(function(res) {
-                                    $rootScope.$broadcast('sync.todo');
-                                });
-                            });
-                        });
-                    } else {
-                        $rootScope.formId = data.id;
-                        if (!data.message && data.status !== 0) {
-                            FormInstanceService.get($rootScope.formId).then(function(data) {
-                                $rootScope.rootForm = data;
                                 formUp.close();
-                                $state.go('app.formInstance', {
-                                    'projectId': $rootScope.projectId,
-                                    'type': 'form',
-                                    'formId': data.id
-                                });
-                            });
-                        }
-                    }
-                }).error(function(data) {
-                    formUp.close();
-                    if (data && data.status === 400) {
-                        $timeout(function() {
-                            $timeout(function() {
-                                var alertPopup2 = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'Incorrect data, try again'
-                                });
-                                alertPopup2.then(function(res) {});
-                            });
-                        });
-                    } else {
-                        $timeout(function() {
-                            $timeout(function() {
-                                var alertPopup = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'You are offline. Submit forms by syncing next time you are online.'
-                                }).then(function(res) {
-                                    $state.go('app.forms', {
-                                        'projectId': $rootScope.projectId,
-                                        'categoryId': $scope.formData.category_id
+                                $timeout(function() {
+                                    var alertPopup3 = $ionicPopup.alert({
+                                        title: 'Submision failed',
+                                        template: 'You do not have permission to perform this operation'
+                                    });
+                                    alertPopup3.then(function(res) {
+                                        $rootScope.$broadcast('sync.todo');
                                     });
                                 });
                             });
-                        });
-                    }
-                });
+                        } else {
+                            $rootScope.formId = data.id;
+                            if (!data.message && data.status !== 0) {
+                                FormInstanceService.get($rootScope.formId).then(function(data) {
+                                    $rootScope.rootForm = data;
+                                    formUp.close();
+                                    $state.go('app.formInstance', {
+                                        'projectId': $rootScope.projectId,
+                                        'type': 'form',
+                                        'formId': data.id
+                                    });
+                                });
+                            }
+                        }
+                    }).error(function(data) {
+                        formUp.close();
+                        if (data && data.status === 400) {
+                            $timeout(function() {
+                                $timeout(function() {
+                                    var alertPopup2 = $ionicPopup.alert({
+                                        title: 'Submision failed',
+                                        template: 'Incorrect data, try again'
+                                    });
+                                    alertPopup2.then(function(res) {});
+                                });
+                            });
+                        } else {
+                            $timeout(function() {
+                                $timeout(function() {
+                                    var alertPopup = $ionicPopup.alert({
+                                        title: 'Submision failed',
+                                        template: 'You are offline. Submit forms by syncing next time you are online.'
+                                    }).then(function(res) {
+                                        $state.go('app.forms', {
+                                            'projectId': $rootScope.projectId,
+                                            'categoryId': $scope.formData.category_id
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    });
+            }
         }
 
         function pullDown() {
