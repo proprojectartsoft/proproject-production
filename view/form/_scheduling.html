@@ -1,7 +1,7 @@
 <div class="list" ng-if="!filter.substate && !filter.substateStk && !filter.substateRes && !filter.substateStkRes">
     <form class="form-new-fields">
         <ion-list show-delete="data.showDelete">
-            <ion-item ng-repeat="payitem in payitemField.pay_items" item="resource" class="item-remove-animate" ng-click="goState('scheduling', payitem)" >
+            <ion-item ng-repeat="payitem in payitemField.pay_items" item="resource" class="item-remove-animate" ng-click="goState('scheduling', payitem)">
                 <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>
                 <span ng-if="!payitem.description">Scheduling {{$index + 1}}</span>
                 <span ng-if="payitem.description">{{payitem.description}}</span>
@@ -59,7 +59,7 @@
                         <input type="number" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
                     </label>
                 </div>
-                <div class="form-new-fields"  style="margin-top:10px;">
+                <div class="form-new-fields" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete" ng-if="filter.substate.subtasks.length !== 0">
                         <ion-item ng-repeat="stk in filter.substate.subtasks" item="stk" class="item-remove-animate" ng-click="goStateDown('scheduling', 'subtask', stk)">
                             <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span>
@@ -75,6 +75,14 @@
                             <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span>
                             <span ng-if="!res.name">Resource {{$index + 1}}</span>
                             <span ng-if="res.name">{{res.name}}</span>
+
+                            <span ng-if="resource.name"> {{resource.quantity}} </span>
+                            <span ng-if="resource.name"> {{resource.unit_name}} </span>
+                            <span ng-if="resource.name">{{resource.total_cost}} </span>
+                            <span ng-if="custSett">
+                                <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
+                            </span>
+
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.resources, res)" ng-if="filter.edit">
                                 Delete
                             </ion-option-button>
@@ -108,7 +116,7 @@
                 </div>
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete">
-                        <ion-item ng-repeat="stkres in filter.substateStk.resources" item="stkres" class="item-remove-animate" ng-click="goStateDown('scheduling', 'subres', stkres)" >
+                        <ion-item ng-repeat="stkres in filter.substateStk.resources" item="stkres" class="item-remove-animate" ng-click="goStateDown('scheduling', 'subres', stkres)">
                             <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #ed9100;color:#fff">{{$index + 1}}</span>
                             <span ng-if="!stkres.name">Resource {{$index + 1}}</span>
                             <span ng-if="stkres.name">{{stkres.name}}</span>
@@ -191,7 +199,8 @@
         <div style="position: relative; margin-bottom:5px">
             <div class="item-stable item fs all-field-header isOpen" style="width:100%;background-color: #287BA7!important;border-color: #287BA7!important;">
                 <div class="fieldSet-name" ng-if="filter.substate.name">{{filter.substate.name}}</div>
-                <div class="fieldSet-name" ng-if="!filter.substate.name">Scheduling Resource</span></div>
+                <div class="fieldSet-name" ng-if="!filter.substate.name">Scheduling Resource</span>
+                </div>
             </div>
             <div class="blue-dropArrow" style="    border-color: #287BA7 transparent transparent transparent;"></div>
             <div class="formContent">

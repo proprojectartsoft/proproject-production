@@ -26,6 +26,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
+        $scope.custSett = DbService.get('custsett');
         $scope.linkAux = 'forms';
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');

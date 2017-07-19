@@ -20,7 +20,7 @@ angular.module($APP.name).controller('NavCtrl', [
 
         var mrg = $('.menu-btn').width();
         console.log(mrg);
-        $('.header-title').css('margin-left', mrg + 'px');
+        $('.header-title').css('left', mrg + 'px');
 
 
         var settingsCache = CacheFactory.get('settings');

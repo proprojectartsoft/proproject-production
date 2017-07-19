@@ -4,7 +4,15 @@
             <ion-item ng-repeat="resource in resourceField.resources" item="resource" class="item-remove-animate" ng-click="goState('resource', resource)">
                 <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>
                 <span ng-if="!resource.name">Resource {{$index + 1}}</span>
-                <span ng-if="resource.name">{{resource.name}}</span>
+                <span ng-if="resource.name">{{resource.name}} </span>
+
+                <span ng-if="resource.name"> {{resource.quantity}} </span>
+                <span ng-if="resource.name"> {{resource.unit_name}} </span>
+                <span ng-if="resource.name">{{resource.total_cost}}</span>
+                <span ng-if="custSett">
+                    <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
+                </span>
+
                 <ion-option-button class="button-assertive" ng-click="deleteElement(resourceField.resources, resource)" ng-if="filter.edit">
                     Delete
                 </ion-option-button>
@@ -60,7 +68,7 @@
                         </div>
                         <div style="position: relative">
                             <input ng-change="updateTitle(filter.substate.name, 'Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.name" ng-readonly="!filter.edit">
-                            <span  ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'resource');
+                            <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'resource');
                                 $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                         </div>
                     </div>
