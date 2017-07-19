@@ -406,7 +406,7 @@ angular.module($APP.name).service('CommonServices', [
                         break;
                 }
             },
-            updateCalculations: function(data) {
+            updateCalculation: function(data) {
                 if (data.unit_obj.name === 'm' || data.unit_obj.name === 'ft') {
                     if (!data.length) {
                         data.length = 0;
