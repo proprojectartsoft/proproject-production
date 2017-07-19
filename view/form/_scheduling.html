@@ -78,10 +78,10 @@
 
                             <span> {{resource.quantity}} </span>
                             <span> {{resource.unit_name}} </span>
-                            <span> {{resource.total_cost}} </span>
-                            <span ng-if="custSett">
-                                <i ng-if="custSett.currency === 'pound'">£</i><i ng-if="custSett.currency === 'dolar'">$</i><i ng-if="custSett.currency === 'euro'">€</i>
+                            <span ng-if="resource.total_cost">
+                                <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </span>
+                            <span> {{resource.total_cost}} </span>
 
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.resources, res)" ng-if="filter.edit">
                                 Delete

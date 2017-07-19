@@ -26,7 +26,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
-        $scope.currency = $scope.filter.currency = $filter('filter')(DbService.get('custsett'), {
+        $scope.currency = $filter('filter')(DbService.get('custsett'), {
             name: 'currency'
         })[0].value;
         $scope.linkAux = 'forms';
