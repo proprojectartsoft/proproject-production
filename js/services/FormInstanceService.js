@@ -34,25 +34,24 @@ angular.module($APP.name).factory('FormInstanceService', [
                     function(err) {});
             },
             create: function(data, imgUri) {
-                console.log(data);
-                console.log(imgUri);
                 var requestForm = ConvertersService.designToInstance(data);
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
                 }).success(function(payload) {
                     if (!payload.message) {
+                        console.log(imgUri);
+                        console.log(payload);
+                        console.log(requestForm.project_id);
                         var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
                             ImageService.create(list).then(function(x) {
-                                console.log("Pic created");
-                                console.log(list);
-                                console.log(x);
                                 return x;
                             });
                         }
                     }
                     return payload.data;
                 }).error(function(payload) {
+                    console.log("error on create");
                     var requestList = [];
                     var ppfsync = localStorage.getObject('ppfsync');
                     var pppsync = localStorage.getObject('pppsync');
@@ -90,8 +89,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                 });
             },
             create_sync: function(dataIn, pic) {
-                console.log(dataIn);
-                console.log(pic);
                 return $http({
                     method: 'POST',
                     url: $APP.server + '/api/forminstance',
@@ -99,10 +96,9 @@ angular.module($APP.name).factory('FormInstanceService', [
                 }).then(function(response) {
                     if (pic) {
                         var list = ConvertersService.photoList(pic, response.data.id, dataIn.project_id);
+                        console.log(pic);
+                        console.log(response.data);
                         ImageService.create(list).then(function(x) {
-                            console.log("Pic synced");
-                            console.log(list);
-                            console.log(x);
                             return x;
                         });
                     }
