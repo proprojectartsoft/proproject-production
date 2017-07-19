@@ -1168,7 +1168,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 create();
             }
 
-            var create = function() {
+            function create () {
                 FormInstanceService.create(datax, img)
                     .success(function(data) {
                         if (data && data.data && data.data.message) {
