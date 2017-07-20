@@ -34,6 +34,9 @@ angular.module($APP.name).controller('EditCtrl', [
             popup_list: [],
             searchText: ''
         }
+        $scope.currency = $filter('filter')(DbService.get('custsett'), {
+            name: 'currency'
+        })[0].value;
         $scope.linkAux = 'forms';
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
@@ -296,16 +299,20 @@ angular.module($APP.name).controller('EditCtrl', [
                 parent.total_cost = 0;
                 if (type === 'resource') {
                     angular.forEach(parent.resources, function(res) {
+                        res.total_cost = res.quantity * res.direct_cost;
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
                 if (type === 'piresource') {
                     angular.forEach(parent.resources, function(res) {
+                        res.total_cost = res.quantity * res.direct_cost;
+
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
                 if (type === 'pisubresource') {
                     angular.forEach(parent.resources, function(res) {
+                        res.total_cost = res.quantity * res.direct_cost;
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
