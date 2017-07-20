@@ -293,6 +293,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         setResourceType(item);
                         setUnit(item);
                         setAbsenteeism(item);
+                        item.total_cost = item.direct_cost * item.quantity;
                         if (item.current_day) {
                             var partsOfStr = item.current_day.split('-');
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
@@ -339,6 +340,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var partsOfStr = res.expiry_date.split('-');
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
+                            res.total_cost = res.direct_cost * res.quantity;
+                            item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             angular.forEach(subtask.resources, function(res) {
@@ -355,7 +358,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                     res.expiry_date_obj = res.expiry_date;
                                 }
+                                res.total_cost = res.direct_cost * res.quantity;
+                                subtask.total_cost += res.total_cost;
                             });
+                            item.total_cost += subtask.total_cost;
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
@@ -380,6 +386,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var partsOfStr = res.expiry_date.split('-');
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
+                            res.total_cost = res.direct_cost * res.quantity;
+                            item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             angular.forEach(subtask.resources, function(res) {
@@ -394,7 +402,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     var partsOfStr = res.expiry_date.split('-');
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                 }
+                                res.total_cost = res.direct_cost * res.quantity;
+                                subtask.total_cost += res.total_cost;
                             });
+                            item.total_cost += subtask.total_cost;
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;

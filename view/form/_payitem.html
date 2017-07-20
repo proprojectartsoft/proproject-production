@@ -114,10 +114,10 @@
                     <div class="item item-total" ng-if="filter.substate.resources.length !== 0 || filter.substate.subtasks.length !== 0">
                         Total
                         <div>
-                            {{filter.substate.total_cost}}
                             <i ng-if="currency">
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </i>
+                            {{filter.substate.total_cost}}
                         </div>
                     </div>
                 </div>

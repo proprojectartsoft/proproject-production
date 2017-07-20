@@ -21,10 +21,10 @@
         <div class="item item-total" ng-if="resourceField.financial_option">
             Total
             <div>
-                {{resourceField.total_cost}}
                 <i ng-if="currency">
                     <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                 </i>
+                {{resourceField.total_cost}}
             </div>
         </div>
     </form>
