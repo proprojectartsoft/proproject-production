@@ -6,13 +6,12 @@
                 <span ng-if="!resource.name">Resource {{$index + 1}}</span>
                 <span ng-if="resource.name">{{resource.name}} </span>
 
-                <span> {{resource.quantity}} </span>
-                <span> {{resource.unit_name}} </span>
-                <span>
+                <div class="item-subtotal">
+                    <span> {{resource.quantity}} </span>
+                    <span> {{resource.unit_name}} </span>
                     <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                </span>
-                <span> {{resource.quantity * res.direct_cost}} </span>
-
+                    <span> {{resource.total_cost}} </span>
+                </div>
                 <ion-option-button class="button-assertive" ng-click="deleteElement(resourceField.resources, resource)" ng-if="filter.edit">
                     Delete
                 </ion-option-button>
