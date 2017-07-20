@@ -95,6 +95,7 @@ angular.module($APP.name).controller('EditCtrl', [
                 case 'scheduling':
                     if ($scope.filter.substate) {
                         $scope.filter.state = 'scheduling';
+                        $scope.doTotal('pi', $scope.payitemField);
                         $scope.filter.substateStkRes = null;
                         $scope.filter.substateStk = null;
                         $scope.filter.substateRes = null;
@@ -117,6 +118,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 case 'schedulingStk':
                     $scope.filter.state = 'scheduling';
+                    $scope.doTotal('pisubtask', $scope.filter.substate);
                     $scope.filter.substateStk = null;
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'scheduling';
@@ -128,6 +130,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 case 'schedulingSubRes':
                     $scope.filter.state = 'scheduling';
+                    $scope.doTotal('pisubtask', $scope.filter.substateStk);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateStkRes = null;
                     $ionicScrollDelegate.resize();
@@ -140,6 +143,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     break;
                 case 'schedulingRes':
                     $scope.filter.state = 'scheduling';
+                    $scope.doTotal('piresource', $scope.filter.substate);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateRes = null;
                     $ionicScrollDelegate.resize();
@@ -257,6 +261,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
+                    $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
@@ -312,12 +317,16 @@ angular.module($APP.name).controller('EditCtrl', [
                 if (type === 'pisubresource') {
                     angular.forEach(parent.resources, function(res) {
                         res.total_cost = res.quantity * res.direct_cost;
-                        parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
+                        parent.total_cost = parent.total_cost + res.total_cost;
                     });
                 }
                 if (type === 'pisubtask') {
                     angular.forEach(parent.subtasks, function(stk) {
                         parent.total_cost = parent.total_cost + stk.total_cost;
+                    });
+                    angular.forEach(parent.resources, function(res) {
+                        res.total_cost = res.quantity * res.direct_cost;
+                        parent.total_cost = parent.total_cost + res.total_cost;
                     });
                 }
                 if (type === 'pi') {

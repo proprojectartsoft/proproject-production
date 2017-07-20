@@ -254,6 +254,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 case 'scheduling':
                     if ($scope.filter.substate) {
                         $scope.filter.state = 'scheduling';
+                        $scope.doTotal('pi', $scope.payitemField);
                         $scope.filter.substateStkRes = null;
                         $scope.filter.substateStk = null;
                         $scope.filter.substateRes = null;
@@ -276,6 +277,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'schedulingStk':
                     $scope.filter.state = 'scheduling';
+                    $scope.doTotal('pisubtask', $scope.filter.substate);
                     $scope.filter.substateStk = null;
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'scheduling';
@@ -287,6 +289,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'schedulingSubRes':
                     $scope.filter.state = 'scheduling';
+                    $scope.doTotal('pisubtask', $scope.filter.substateStk);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateStkRes = null;
                     $ionicScrollDelegate.resize();
@@ -299,6 +302,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     break;
                 case 'schedulingRes':
                     $scope.filter.state = 'scheduling';
+                    $scope.doTotal('piresource', $scope.filter.substate);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateRes = null;
                     $ionicScrollDelegate.resize();
@@ -418,6 +422,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
+                    $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
@@ -463,7 +468,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (isNaN(res.direct_cost)) {
                             res.total_cost = 0;
                         }
-                        res.total_cost =  res.quantity * res.direct_cost;
+                        res.total_cost = res.quantity * res.direct_cost;
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
@@ -485,6 +490,10 @@ angular.module($APP.name).controller('FormCtrl', [
                             stk.total_cost = 0;
                         }
                         parent.total_cost = parent.total_cost + stk.total_cost;
+                    });
+                    angular.forEach(parent.resources, function(res) {
+                        res.total_cost = res.quantity * res.direct_cost;
+                        parent.total_cost = parent.total_cost + res.total_cost;
                     });
                 }
                 if (type === 'pi') {
