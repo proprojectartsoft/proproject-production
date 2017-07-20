@@ -306,7 +306,6 @@ angular.module($APP.name).controller('EditCtrl', [
                 if (type === 'piresource') {
                     angular.forEach(parent.resources, function(res) {
                         res.total_cost = res.quantity * res.direct_cost;
-
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }

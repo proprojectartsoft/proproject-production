@@ -328,6 +328,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $scope.payitemField = res;
                     angular.forEach($scope.payitemField.pay_items, function(item) {
                         setUnit(item);
+                        item.total_cost = 0;
                         angular.forEach(item.resources, function(res) {
                             setResourceType(res);
                             setUnit(res);
@@ -344,6 +345,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
+                            subtask.total_cost = 0;
                             angular.forEach(subtask.resources, function(res) {
                                 setResourceType(res);
                                 setUnit(res);
@@ -374,6 +376,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     $scope.doTotal('payitem', $scope.payitemField)
                     angular.forEach($scope.payitemField.pay_items, function(item) {
                         setUnit(item);
+                        item.total_cost = 0;
                         angular.forEach(item.resources, function(res) {
                             setResourceType(res);
                             setUnit(res);
@@ -390,6 +393,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
+                            subtask.total_cost = 0;
                             angular.forEach(subtask.resources, function(res) {
                                 setResourceType(res);
                                 setUnit(res);
