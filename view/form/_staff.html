@@ -5,13 +5,6 @@
                 <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>
                 <span ng-if="!resource.name">Staff {{$index + 1}}</span>
                 <span ng-if="resource.name">{{resource.name}}</span>
-                <!-- <span> {{resource.quantity}} </span> //TODO
-                <span> {{resource.unit_name}} </span>
-                <span ng-if="resource.total_cost">
-                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                </span>
-                <span> {{resource.total_cost}} </span> -->
-
                 <ion-option-button class="button-assertive" ng-click="deleteElement(staffField.resources, resource)" ng-if="filter.edit">
                     Delete
                 </ion-option-button>

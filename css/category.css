@@ -282,6 +282,10 @@
     top: 17px;
 }
 
+.form-new-fields .item-subtotal {
+    right: 17px;
+}
+
 .btn-add {
     position: fixed;
     bottom: 20px;

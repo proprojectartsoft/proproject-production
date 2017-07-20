@@ -153,7 +153,8 @@ angular.module($APP.name).service('CommonServices', [
                     "unit": "",
                     "quantity": "",
                     "subtasks": [],
-                    "resources": []
+                    "resources": [],
+                    "total_cost": 0
                 })
             },
             addSubtask: function(subtasks) {
@@ -177,7 +178,8 @@ angular.module($APP.name).service('CommonServices', [
                         "stage_id": 0,
                         "stage_name": "",
                         "calculation": true,
-                        "vat": 0
+                        "vat": 0,
+                        "total_cost": 0
                     }]
                 });
             },
@@ -200,7 +202,8 @@ angular.module($APP.name).service('CommonServices', [
                     "stage_id": 0,
                     "stage_name": "",
                     "calculation": true,
-                    "vat": 0
+                    "vat": 0,
+                    "total_cost": 0
                 });
             },
             addResourceInSubtask: function(resources) {
@@ -223,6 +226,7 @@ angular.module($APP.name).service('CommonServices', [
                     "stage_name": "",
                     "vat": 0,
                     "calculation": true,
+                    "total_cost": 0
                 });
             },
             goToResource: function(substate, filter, resourceField, aux) {
