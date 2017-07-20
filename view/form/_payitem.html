@@ -6,10 +6,10 @@
                 <span ng-if="!payitem.description">Pay-item {{$index + 1}}</span>
                 <span ng-if="payitem.description">{{payitem.description}}</span>
                 <div class="item-subtotal">
-                    {{payitem.total_cost}}
                     <i ng-if="currency">
                       <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                     </i>
+                    {{payitem.total_cost}}
                 </div>
                 <ion-option-button class="button-assertive" ng-click="deleteElement(payitemField.pay_items, payitem)" ng-if="filter.edit">
                     Delete
@@ -19,10 +19,10 @@
         <div class="item item-total">
             Total
             <div>
-                {{payitemField.total_cost}}
                 <i ng-if="currency">
                     <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                 </i>
+                {{payitemField.total_cost}}
             </div>
         </div>
     </form>
@@ -81,10 +81,12 @@
                             <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span>
                             <span ng-if="!stk.description">Subtask {{$index + 1}}</span>
                             <span ng-if="stk.description">{{stk.description}}</span>
-                            <span ng-if="stk.total_cost">
-                                <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                            </span>
-                            <span> {{stk.total_cost}} </span>
+                            <div class="item-subtotal">
+                                <i ng-if="currency">
+                                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
+                                </i>
+                                {{stk.total_cost}}
+                            </div>
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.subtasks, stk)" ng-if="filter.edit">
                                 Delete
                             </ion-option-button>
@@ -96,12 +98,12 @@
                             <span ng-if="!res.name">Resource {{$index + 1}}</span>
                             <span ng-if="res.name">{{res.name}}</span>
 
-                            <span ng-if="resource.quantity"> {{resource.quantity}} </span>
-                            <span ng-if="resource.unit_name"> {{resource.unit_name}} </span>
-                            <span ng-if="resource.total_cost">
+                            <div class="item-subtotal">
+                                <span> {{res.quantity}} </span>
+                                <span> {{res.unit_name}} </span>
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                            </span>
-                            <span> {{resource.total_cost}} </span>
+                                <span> {{res.total_cost}} </span>
+                            </div>
 
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.resources, res)" ng-if="filter.edit">
                                 Delete
@@ -152,15 +154,12 @@
                             <span ng-if="!stkres.name">Resource {{$index + 1}}</span>
                             <span ng-if="stkres.name">{{stkres.name}}</span>
 
-
-                            <span> {{stkres.quantity}} </span>
-                            <span> {{stkres.unit_name}} </span>
-                            <span ng-if="stkres.total_cost">
+                            <div class="item-subtotal">
+                                <span> {{stkres.quantity}} </span>
+                                <span> {{stkres.unit_name}} </span>
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                            </span>
-                            <span> {{stkres.total_cost}} </span>
-
-
+                                <span> {{stkres.total_cost}} </span>
+                            </div>
 
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substateStk.resources, stkres)" ng-if="filter.edit">
                                 Delete
@@ -170,10 +169,10 @@
                     <div class="item item-total">
                         Total
                         <div>
-                            {{filter.substateStk.total_cost}}
                             <i ng-if="currency">
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </i>
+                            {{filter.substateStk.total_cost}}
                         </div>
                     </div>
                 </div>

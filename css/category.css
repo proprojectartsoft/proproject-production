@@ -276,14 +276,10 @@
     border-bottom-color: #ddd;
 }
 
-.form-new-fields .item.item-total div {
+.form-new-fields .item.item-total div, .form-new-fields .item-subtotal {
     position: absolute;
     right: 17px;
     top: 17px;
-}
-
-.form-new-fields .item-subtotal {
-    right: 17px;
 }
 
 .btn-add {
