@@ -41,9 +41,10 @@
         <span class="all-description">{{data.guidance}}<br>Please select</span>
     </div>
     <select class="form-select" input id="{{hash}}" ng-model="data.value"
-            ng-init="data.value = data.default_value"
+
             ng-options="option.value as option.name for option in data.option_designs">
     </select><strong></strong>
+      <!-- ng-init="data.value = data.default_value" -->
 </label>
 
 <!--email-->

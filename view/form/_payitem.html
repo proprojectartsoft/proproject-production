@@ -166,7 +166,7 @@
                             <i ng-if="currency">
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </i>
-                            {{filter.substateStk.total_cost}}
+                            {{filter.substateStk.total_cost || 0}}
                         </div>
                     </div>
                 </div>
