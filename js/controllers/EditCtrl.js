@@ -328,7 +328,7 @@ angular.module($APP.name).controller('EditCtrl', [
                         parent.total_cost = parent.total_cost + stk.total_cost;
                     });
                     angular.forEach(parent.resources, function(res) {
-                        res.total_cost = res.quantity * res.direct_cost;
+                        res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
                         parent.total_cost = parent.total_cost + res.total_cost;
                     });
                 }
