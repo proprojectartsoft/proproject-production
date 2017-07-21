@@ -456,7 +456,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (isNaN(res.direct_cost)) {
                             res.total_cost = 0;
                         }
-                        res.total_cost = res.quantity * res.direct_cost;
+                        res.total_cost = res.quantity * res.direct_cost * res.vat / 100;
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
@@ -468,7 +468,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (isNaN(res.direct_cost)) {
                             res.total_cost = 0;
                         }
-                        res.total_cost = res.quantity * res.direct_cost;
+                        res.total_cost = res.quantity * res.direct_cost * res.vat / 100;
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
@@ -480,7 +480,7 @@ angular.module($APP.name).controller('FormCtrl', [
                         if (isNaN(res.direct_cost)) {
                             res.total_cost = 0;
                         }
-                        res.total_cost = res.quantity * res.direct_cost;
+                        res.total_cost = res.quantity * res.direct_cost * res.vat / 100;
                         parent.total_cost = parent.total_cost + res.quantity * res.direct_cost;
                     });
                 }
