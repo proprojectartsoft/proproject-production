@@ -120,7 +120,7 @@ angular.module($APP.name).controller('FormCtrl', [
                             "resource_margin": 0,
                             "stage_id": 1,
                             "stage_name": '',
-                            "vat": 0,
+                            "vat": $scope.filter.vat,
                             "quantity": 0,
                             "current_day": '',
                             "total_cost": 0,
@@ -194,7 +194,7 @@ angular.module($APP.name).controller('FormCtrl', [
                             "total_time": "",
                             "comment": "",
                             "open": true,
-                            "vat": 0.0
+                            "vat": $scope.filter.vat
                         }]
                     };
                 }
@@ -610,13 +610,13 @@ angular.module($APP.name).controller('FormCtrl', [
 
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {
-            CommonServices.addResource($scope.resourceField.resources);
+            CommonServices.addResource($scope.resourceField.resources, $scope.vat);
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
         //Add new resource in staffField; initialized with start, break and finish times
         $scope.addStaff = function() {
             if ($scope.staffField) {
-                CommonServices.addStaff($scope.staffField.resources, $scope.filter.start, $scope.filter.break, $scope.filter.finish);
+                CommonServices.addStaff($scope.staffField.resources, $scope.filter.start, $scope.filter.break, $scope.filter.finish, $scope.vat);
                 $scope.filter.substate = $scope.staffField.resources[$scope.staffField.resources.length - 1];
             }
         }
@@ -628,7 +628,7 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new subtask
         $scope.addSubtask = function() {
             if ($scope.filter.substate && $scope.filter.substate.resources.length === 0) {
-                CommonServices.addSubtask($scope.filter.substate.subtasks);
+                CommonServices.addSubtask($scope.filter.substate.subtasks, $scope.vat);
                 $scope.filter.substateStk = $scope.filter.substate.subtasks[$scope.filter.substate.subtasks.length - 1]
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingStk';
@@ -642,7 +642,7 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new resource in payitemField (as subtask)
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
-                CommonServices.addResourcePi($scope.filter.substate.resources);
+                CommonServices.addResourcePi($scope.filter.substate.resources, $scope.vat);
                 $scope.filter.substateRes = $scope.filter.substate.resources[$scope.filter.substate.resources.length - 1]
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingRes';
@@ -656,7 +656,7 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new resource in payitemField subtask
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
-                CommonServices.addResourceInSubtask($scope.filter.substateStk);
+                CommonServices.addResourceInSubtask($scope.filter.substateStk, $scope.vat);
                 $scope.filter.substateStkRes = $scope.filter.substateStk.resources[$scope.filter.substateStk.resources.length - 1];
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingSubRes';

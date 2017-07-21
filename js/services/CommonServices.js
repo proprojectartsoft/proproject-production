@@ -96,7 +96,7 @@ angular.module($APP.name).service('CommonServices', [
                     }
                 }
             },
-            addResource: function(resources) {
+            addResource: function(resources, vat) {
                 resources.push({
                     "id": 0,
                     "resource_field_id": 0,
@@ -113,7 +113,7 @@ angular.module($APP.name).service('CommonServices', [
                     "resource_margin": 0,
                     "stage_id": 1,
                     "stage_name": '',
-                    "vat": 0,
+                    "vat": vat,
                     "quantity": 0,
                     "current_day": '',
                     "total_cost": 0,
@@ -121,7 +121,7 @@ angular.module($APP.name).service('CommonServices', [
                     "open": true
                 });
             },
-            addStaff: function(resources, startTime, breakTime, finishTime) {
+            addStaff: function(resources, startTime, breakTime, finishTime, vat) {
                 resources.push({
                     name: "",
                     customerId: 0,
@@ -143,7 +143,7 @@ angular.module($APP.name).service('CommonServices', [
                     finish_time: finishTime,
                     total_time: "",
                     comment: "",
-                    vat: 0.0
+                    vat: vat
                 })
             },
             addPayitem: function(items) {
@@ -157,7 +157,7 @@ angular.module($APP.name).service('CommonServices', [
                     "total_cost": 0
                 })
             },
-            addSubtask: function(subtasks) {
+            addSubtask: function(subtasks, vat) {
                 subtasks.push({
                     "description": "",
                     "resources": [{
@@ -178,12 +178,12 @@ angular.module($APP.name).service('CommonServices', [
                         "stage_id": 0,
                         "stage_name": "",
                         "calculation": true,
-                        "vat": 0,
+                        "vat": vat,
                         "total_cost": 0
                     }]
                 });
             },
-            addResourcePi: function(resources) {
+            addResourcePi: function(resources, vat) {
                 resources.push({
                     "open": false,
                     "resource_id": 0,
@@ -202,11 +202,11 @@ angular.module($APP.name).service('CommonServices', [
                     "stage_id": 0,
                     "stage_name": "",
                     "calculation": true,
-                    "vat": 0,
+                    "vat": vat,
                     "total_cost": 0
                 });
             },
-            addResourceInSubtask: function(resources) {
+            addResourceInSubtask: function(resources, vat) {
                 resources.resources.push({
                     "open": false,
                     "resource_id": 0,
@@ -224,7 +224,7 @@ angular.module($APP.name).service('CommonServices', [
                     "current_day": "",
                     "stage_id": 0,
                     "stage_name": "",
-                    "vat": 0,
+                    "vat": vat,
                     "calculation": true,
                     "total_cost": 0
                 });
