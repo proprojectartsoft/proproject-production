@@ -343,7 +343,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
                             // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                            // item.total_cost += res.total_cost;
+                            item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             subtask.total_cost = 0;
@@ -362,9 +362,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     res.expiry_date_obj = res.expiry_date;
                                 }
                                 // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                                // subtask.total_cost += res.total_cost;
+                                subtask.total_cost += res.total_cost;
                             });
-                            // item.total_cost += subtask.total_cost;
+                            item.total_cost += subtask.total_cost;
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
@@ -391,7 +391,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
                             // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                            // item.total_cost += res.total_cost;
+                            item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             subtask.total_cost = 0;
@@ -408,9 +408,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                 }
                                 // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                                // subtask.total_cost += res.total_cost;
+                                subtask.total_cost += res.total_cost;
                             });
-                            // item.total_cost += subtask.total_cost;
+                            item.total_cost += subtask.total_cost;
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
