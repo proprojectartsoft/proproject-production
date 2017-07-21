@@ -77,9 +77,9 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.formData = JSON.parse(rs.rows.item(0).data)
                 $scope.titleShow = $scope.formData.name;
                 $scope.shownGroup = $scope.formData.field_group_designs[0];
-                $scope.filter.vat = $filter('filter')(custSett, {
+                $scope.filter.vat = parseInt($filter('filter')(custSett, {
                     name: 'vat'
-                })[0].value;
+                })[0].value, 10);
                 $scope.filter.currency = $filter('filter')(custSett, {
                     name: 'currency'
                 })[0].value;

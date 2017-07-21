@@ -34,9 +34,9 @@ angular.module($APP.name).controller('EditCtrl', [
             popup_list: [],
             searchText: ''
         }
-        $scope.vat = $filter('filter')(custSett, {
+        $scope.vat = parseInt($filter('filter')(custSett, {
             name: 'vat'
-        })[0].value;
+        })[0].value, 10);
         $scope.currency = $filter('filter')(DbService.get('custsett'), {
             name: 'currency'
         })[0].value;
