@@ -973,11 +973,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                 if (item.current_day_obj) {
                                     item.current_day = item.current_day_obj;
                                 }
-                                if (isNaN(item.quantity) || isNaN(item.direct_cost)) {
-                                    item.total_cost = 0;
-                                } else {
-                                    item.total_cost = item.quantity * item.direct_cost;
-                                }
                             });
                             ResourceService.add_field($scope.resourceField).success(function(x) {
                                 $scope.formData.resource_field_id = x.id;
@@ -1024,12 +1019,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                         var date = new Date(res.expiry_date_obj);
                                         res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     }
-                                    if (isNaN(res.quantity) || isNaN(res.direct_cost)) {
-                                        res.total_cost = 0;
-                                    } else {
-                                        res.total_cost = res.quantity * res.direct_cost;
-                                    }
-                                    item.total_cost += res.total_cost;
                                 });
                                 angular.forEach(item.subtasks, function(subtask) {
                                     angular.forEach(subtask.resources, function(res) {
@@ -1051,14 +1040,7 @@ angular.module($APP.name).controller('FormCtrl', [
                                             var date = new Date(res.expiry_date_obj);
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
-                                        if (isNaN(res.quantity) || isNaN(res.direct_cost)) {
-                                            res.total_cost = 0;
-                                        } else {
-                                            res.total_cost = res.quantity * res.direct_cost;
-                                        }
-                                        subtask.total_cost += res.total_cost;
                                     });
-                                    item.total_cost += subtask.total_cost;
                                 });
                             });
                             PayitemService.add_field($scope.payitemField).success(function(x) {
@@ -1106,12 +1088,6 @@ angular.module($APP.name).controller('FormCtrl', [
                                         var date = new Date(res.expiry_date_obj);
                                         res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     }
-                                    if (isNaN(res.quantity) || isNaN(res.direct_cost)) {
-                                        res.total_cost = 0;
-                                    } else {
-                                        res.total_cost = res.quantity * res.direct_cost;
-                                    }
-                                    item.total_cost += res.total_cost;
                                 });
                                 angular.forEach(item.subtasks, function(subtask) {
                                     angular.forEach(subtask.resources, function(res) {
@@ -1133,14 +1109,7 @@ angular.module($APP.name).controller('FormCtrl', [
                                             var date = new Date(res.expiry_date_obj);
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
-                                        if (isNaN(res.quantity) || isNaN(res.direct_cost)) {
-                                            res.total_cost = 0;
-                                        } else {
-                                            res.total_cost = res.quantity * res.direct_cost;
-                                        }
-                                        subtask.total_cost += res.total_cost;
                                     });
-                                    item.total_cost += subtask.total_cost;
                                 });
                             });
                             SchedulingService.add_field($scope.payitemField).success(function(x) {

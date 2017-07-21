@@ -244,7 +244,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     if (item.resources.length !== 0) {
                         angular.forEach(item.resources, function(res) {
                             if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
-                                res.total_cost = res.quantity * res.direct_cost;
+                                res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
                                 item.total_cost = item.total_cost + res.total_cost;
                             }
                         })
@@ -254,7 +254,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             stk.total_cost = 0;
                             angular.forEach(stk.resources, function(res) {
                                 if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
-                                    res.total_cost = res.quantity * res.direct_cost;
+                                    res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
                                     stk.total_cost = stk.total_cost + res.total_cost;
                                 }
                             })
@@ -293,7 +293,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         setResourceType(item);
                         setUnit(item);
                         setAbsenteeism(item);
-                        item.total_cost = item.direct_cost * item.quantity;
+                        item.total_cost = item.direct_cost * item.quantity + item.direct_cost * item.quantity * item.vat / 100;
                         if (item.current_day) {
                             var partsOfStr = item.current_day.split('-');
                             item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
@@ -326,6 +326,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             if (data.scheduling_field_id) {
                 SchedulingService.get_field(data.scheduling_field_id).then(function(res) {
                     $scope.payitemField = res;
+                    $scope.doTotal('payitem', $scope.payitemField);
                     angular.forEach($scope.payitemField.pay_items, function(item) {
                         setUnit(item);
                         item.total_cost = 0;
@@ -341,8 +342,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var partsOfStr = res.expiry_date.split('-');
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
-                            res.total_cost = res.direct_cost * res.quantity;
-                            item.total_cost += res.total_cost;
+                            // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                            // item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             subtask.total_cost = 0;
@@ -360,10 +361,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                     res.expiry_date_obj = res.expiry_date;
                                 }
-                                res.total_cost = res.direct_cost * res.quantity;
-                                subtask.total_cost += res.total_cost;
+                                // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                // subtask.total_cost += res.total_cost;
                             });
-                            item.total_cost += subtask.total_cost;
+                            // item.total_cost += subtask.total_cost;
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
@@ -389,8 +390,8 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 var partsOfStr = res.expiry_date.split('-');
                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                             }
-                            res.total_cost = res.direct_cost * res.quantity;
-                            item.total_cost += res.total_cost;
+                            // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                            // item.total_cost += res.total_cost;
                         });
                         angular.forEach(item.subtasks, function(subtask) {
                             subtask.total_cost = 0;
@@ -406,10 +407,10 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     var partsOfStr = res.expiry_date.split('-');
                                     item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
                                 }
-                                res.total_cost = res.direct_cost * res.quantity;
-                                subtask.total_cost += res.total_cost;
+                                // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                // subtask.total_cost += res.total_cost;
                             });
-                            item.total_cost += subtask.total_cost;
+                            // item.total_cost += subtask.total_cost;
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
