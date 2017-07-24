@@ -48,6 +48,10 @@ angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService
         sync.setOptions({
             storageMode: 'localStorage'
         });
+
+        $rootScope.$on("$routeChangeSuccess", function(event, currentRoute, previousRoute) {
+            window.scrollTo(0, 0);
+        });
     });
 });
 angular.module($APP.name).config([
