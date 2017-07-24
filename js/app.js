@@ -24,9 +24,10 @@ angular.module($APP.name, [
     'ion-datetime-picker',
     'angularMoment',
     'angular-cache',
-    'ngCordova'
+    'ngCordova',
+    '$rootScope'
 ]);
-angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
+angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService, $rootScope) {
     // AuthService.init();
     $ionicPlatform.ready(function() {
         $APP.db = window.sqlitePlugin.openDatabase({
