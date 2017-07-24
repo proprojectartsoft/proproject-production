@@ -20,14 +20,14 @@ Storage.prototype.getObject = function(key) {
 }
 
 angular.module($APP.name, [
+    '$rootScope',
     'ionic',
     'ion-datetime-picker',
     'angularMoment',
     'angular-cache',
     'ngCordova',
-    '$rootScope'
 ]);
-angular.module($APP.name).run(function($ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService, $rootScope) {
+angular.module($APP.name).run(function($rootScope, $ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
     // AuthService.init();
     $ionicPlatform.ready(function() {
         $APP.db = window.sqlitePlugin.openDatabase({
