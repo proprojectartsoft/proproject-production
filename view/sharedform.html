@@ -26,19 +26,19 @@
                 </form>
                 <div class="form-container-bgd">
                     <div class="item-stable item fs all-field-header" ng-if="formData.resource_field_id" ng-click="filter.state = 'resource'">
-                        <span class="add-pic-text">Resource field</span>    
+                        <span class="add-pic-text">Resource field</span>
                         <button >Open</button>
                     </div>
                     <div class="item-stable item fs all-field-header" ng-if="formData.scheduling_field_id">
-                        <span class="add-pic-text">Scheduling field</span>    
+                        <span class="add-pic-text">Scheduling field</span>
                         <button ng-click="filter.state = 'scheduling'">Open</button>
                     </div>
                     <div class="item-stable item fs all-field-header" ng-if="formData.pay_item_field_id">
-                        <span class="add-pic-text">Pay-item field</span>    
+                        <span class="add-pic-text">Pay-item field</span>
                         <button ng-click="filter.state = 'payitem'">Open</button>
                     </div>
                     <div class="item-stable item fs all-field-header" ng-if="formData.staff_field_id">
-                        <span class="add-pic-text">Staff field</span>    
+                        <span class="add-pic-text">Staff field</span>
                         <button ng-click="filter.state = 'staff'">Open</button>
                     </div>
                     <div style="    padding: 5px;">
@@ -64,7 +64,7 @@
                         <small style="    font-size: 12px;color: #aaa;">{{comm.date| date:'EEE, dd MMM yyyy hh:mm a'}}</small>
                     </div>
                     <div class="item">
-                        <textarea ng-model="filter.comment"></textarea>                        
+                        <textarea ng-model="filter.comment"></textarea>
                     </div>
                     <button class="button button-block button-calm" ng-click="sendComment()">Send</button>
                 </div>
@@ -74,7 +74,6 @@
             <div class="list" ng-if="filter.state === 'payitem'" ng-include="'view/form/_payitem.html'"></div>
             <div class="list" ng-if="filter.state === 'scheduling'" ng-include="'view/form/_scheduling.html'"></div>
             <div class="list" ng-if="filter.state === 'photos'" ng-include="'view/form/_photos.html'"></div>
-
         </div>
     </ion-content>
 </ion-view>
