@@ -20,7 +20,6 @@ Storage.prototype.getObject = function(key) {
 }
 
 angular.module($APP.name, [
-    '$rootScope',
     'ionic',
     'ion-datetime-picker',
     'angularMoment',
