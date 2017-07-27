@@ -1,10 +1,15 @@
-* {
-    font-family: 'Roboto Condensed', sans-serif !important;
+@font-face {
+    font-family: 'Roboto Condensed';
+    src: url("../fonts/Roboto-Condensed.ttf");
 }
 
 @font-face {
     font-family: 'FreightLight';
     src: url("../fonts/FreigSanLig.otf");
+}
+
+* {
+    font-family: 'Roboto Condensed', sans-serif !important;
 }
 
 .popup-head {
@@ -750,5 +755,5 @@ ion-refresher {
 }
 
 .header-title {
-  left: 57px;
+    left: 57px;
 }
