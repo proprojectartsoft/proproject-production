@@ -748,3 +748,7 @@ ion-refresher {
 .active-tab {
     background-color: #1EBDF4
 }
+
+.header-title {
+  left: 57px;
+}
