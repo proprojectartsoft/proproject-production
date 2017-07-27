@@ -220,6 +220,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     }
                     break;
             }
+            $scope.goToTop();
         };
         $scope.goStateDown = function(state, substate, data) {
             $scope.aux = {

@@ -376,6 +376,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     }
                     break;
             }
+            $scope.goToTop();
         };
         //Navigate to subtasks for scheduling and pay item fields
         $scope.goStateDown = function(state, substate, data) {
@@ -1264,6 +1265,12 @@ angular.module($APP.name).controller('FormCtrl', [
                     document.getElementsByTagName("html")[0].style.visibility = "visible";
                 }, 100);
             })
+        }
+
+        $scope.goToTop = function() {
+            $timeout(function() { // we need little delay
+                $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
+            });
         }
     }
 ]);

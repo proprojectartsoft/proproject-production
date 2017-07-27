@@ -175,6 +175,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     }
                     break;
             }
+            $scope.goToTop();
         };
         $scope.goStateDown = function(state, substate, data) {
             $scope.aux = {
