@@ -10,6 +10,5 @@ angular.module($APP.name).controller('CategoriesCtrl', [
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
-
     }
 ]);

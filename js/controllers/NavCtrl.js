@@ -17,11 +17,11 @@ angular.module($APP.name).controller('NavCtrl', [
                 .toggleClass("ion-navicon")
                 .toggleClass("ion-android-arrow-back");
         };
-
-        var mrg = $('.menu-btn').width();
-        console.log(mrg);
-        $('.header-title').css('left', mrg + 'px');
-
+        $(document).ready(function() {
+            var mrg = Math.max(57, $('.menu-btn').width());
+            console.log(mrg);
+            $('.header-title').css('left', mrg + 'px!important');
+        })
 
         var settingsCache = CacheFactory.get('settings');
         if (!settingsCache) {
