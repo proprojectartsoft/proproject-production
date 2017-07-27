@@ -55,6 +55,11 @@
     border-bottom: 0px #fff solid;
 }
 
+.category-box .row {
+    padding-left: 0;
+    padding-right: 0;
+}
+
 .category-content-abs {
     margin: auto;
     width: 100%;

@@ -478,7 +478,7 @@ angular.module($APP.name).factory('SyncService', [
             $APP.db.executeSql('SELECT * FROM UnitTable', [], function(rs) {
                 aux = [];
                 for (var i = 0; i < rs.rows.length; i++) {
-                    aux.push(rs.rows.item(i)); 
+                    aux.push(rs.rows.item(i));
                 }
                 DbService.add('unit', aux);
             }, function(error) {});
@@ -575,6 +575,8 @@ angular.module($APP.name).factory('SyncService', [
                                                         active: user.data.active
                                                     };
                                                     down();
+                                                }).error(function() {
+                                                    DbService.popclose();
                                                 })
                                         }
                                     } else {
