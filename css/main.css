@@ -476,8 +476,8 @@ label.item.img-description {
 }
 
 .swipe-preview .list .item .item-content {
-    animation: swipe-preview .5s;
-    animation-delay: .5s;
+    animation: swipe-preview .7s;
+    animation-delay: .7s;
 }
 
 .swipe-preview .list .item .item-options.invisible {
