@@ -221,7 +221,14 @@ input[type=checkbox].css-checkbox {
 
 .bar.bar-calm .title {
     color: #fff;
-    text-align: left;
+    /*text-align: left;*/
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.menu-title {
+    color: #fff;
     font-size: 16px;
     font-weight: 400;
     margin: 0;
