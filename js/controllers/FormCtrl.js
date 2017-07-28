@@ -1269,7 +1269,7 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.goToTop = function() {
             $timeout(function() { // we need little delay
-                $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
+                $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
             });
         }
     }

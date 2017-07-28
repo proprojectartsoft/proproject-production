@@ -1,5 +1,5 @@
 @font-face {
-    font-family: 'Roboto Condensed';
+    font-family: 'RobotoCondensed';
     src: url("../fonts/Roboto-Condensed.ttf");
 }
 
@@ -9,7 +9,7 @@
 }
 
 * {
-    font-family: 'Roboto Condensed', sans-serif !important;
+    font-family: 'RobotoCondensed', sans-serif !important;
 }
 
 .popup-head {
