@@ -230,6 +230,7 @@ angular.module($APP.name).controller('EditCtrl', [
             CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.aux);
             $scope.linkAux = $scope.aux.linkAux;
             $scope.titleShow = $scope.aux.titleShow;
+            $scope.goToTop();
         }
         $scope.goState = function(state, substate) {
             switch (state) {
@@ -280,6 +281,7 @@ angular.module($APP.name).controller('EditCtrl', [
                     $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
+            $scope.goToTop();
         }
 
         $ionicPopover.fromTemplateUrl('view/search.html', {
@@ -489,6 +491,7 @@ angular.module($APP.name).controller('EditCtrl', [
         $scope.testPicture = function(item) {
             $scope.filter.substate = 'pic';
             $scope.filter.picture = item;
+            $scope.goToTop();
         }
         $scope.trim = function() {
             $scope.pictures = [];

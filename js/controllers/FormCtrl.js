@@ -387,6 +387,7 @@ angular.module($APP.name).controller('FormCtrl', [
             CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.aux);
             $scope.linkAux = $scope.aux.linkAux;
             $scope.titleShow = $scope.aux.titleShow;
+            $scope.goToTop();
         }
         //Navigate to given state
         $scope.goState = function(state, substate) {
@@ -438,6 +439,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
+            $scope.goToTop();
         }
 
         $ionicPopover.fromTemplateUrl('view/search.html', {
@@ -820,6 +822,7 @@ angular.module($APP.name).controller('FormCtrl', [
             $scope.titleShow = 'Photo Gallery';
             $scope.filter.substate = 'pic';
             $scope.filter.picture = item;
+            $scope.goToTop();
         }
         $scope.imgURI = [];
         $scope.takePicture = function() {
@@ -1269,7 +1272,7 @@ angular.module($APP.name).controller('FormCtrl', [
 
         $scope.goToTop = function() {
             $timeout(function() { // we need little delay
-                $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom();
+                $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
         }
     }

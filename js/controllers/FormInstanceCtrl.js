@@ -185,6 +185,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             CommonServices.goStateDown(state, substate, data, $scope.filter, $scope.aux);
             $scope.linkAux = $scope.aux.linkAux;
             $scope.titleShow = $scope.aux.titleShow;
+            $scope.goToTop();
         }
         $scope.goState = function(state, substate) {
             switch (state) {
@@ -235,6 +236,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         $scope.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
+            $scope.goToTop();
         }
 
         $scope.doTotal = function(predicate, data) {
