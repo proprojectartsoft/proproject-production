@@ -77,6 +77,14 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.formData = JSON.parse(rs.rows.item(0).data)
                 $scope.titleShow = $scope.formData.name;
                 $scope.shownGroup = $scope.formData.field_group_designs[0];
+
+                angular.forEach($scope.formData.field_group_designs, function(field) {
+                    if (field.repeatable) {
+                        $scope.repeatable = true;
+                        return;
+                    }
+                })
+
                 $scope.filter.vat = parseInt($filter('filter')(custSett, {
                     name: 'vat'
                 })[0].value, 10);
@@ -200,13 +208,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             },
             function(error) {});
-        angular.forEach($scope.formData.field_group_designs, function(field) {
-            if (field.repeatable) {
-                $scope.repeatable = true;
-                return;
-            }
-        })
-
+            
         $scope.updateCalculation = function(data) {
             CommonServices.updateCalculation(data);
         }
