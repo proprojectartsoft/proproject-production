@@ -36,15 +36,19 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position-x: 0px;
-    padding: 140px 12px 12px 12px;
+    padding: 20% 12px 12px 12px;
 }
+
+/*#login .scroll {
+  background-color: #07101E;
+  background-image: url("../img/new/image.jpg");
+}*/
 
 .login-container .app-name {
     clear: both;
     float: right;
-    padding-top: 30px;
+    padding-top: 3%;
 }
-
 
 /* Change the white to any color ;) */
 
@@ -72,7 +76,7 @@ input:-webkit-autofill {
 
 .welcome-big {
     font-family: 'FreightLight' !important;
-    font-size: 45px;
+    font-size: 40px;
     font-weight: 300;
     color: #fff;
     line-height: 1em;
@@ -195,13 +199,15 @@ input[type=checkbox].css-checkbox {
 }
 
 .login-footer {
+  clear:both;
     width: 100%;
     color: #fff;
     font-size: 15px;
     font-weight: 300;
     text-align: right;
-    position: absolute;
-    bottom: 20px;
+    /*position: absolute;*/
+    /*bottom: 20px;*/
+    padding-top: 10%;
     right: 20px;
 }
 

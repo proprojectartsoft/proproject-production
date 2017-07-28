@@ -40,3 +40,12 @@
         background-color: #000;
     }
 }
+
+@media all and (max-height: 530px) {
+    .login-footer {
+        padding-top: 0;
+    }
+    .login-container {
+        padding-top: 10%;
+    }
+}
