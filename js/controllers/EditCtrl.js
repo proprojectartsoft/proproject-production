@@ -34,6 +34,7 @@ angular.module($APP.name).controller('EditCtrl', [
             popup_list: [],
             searchText: ''
         }
+        $scope.repeatable = false;
         $scope.vat = parseInt($filter('filter')(custSett, {
             name: 'vat'
         })[0].value, 10);
@@ -489,6 +490,8 @@ angular.module($APP.name).controller('EditCtrl', [
         }
 
         $scope.testPicture = function(item) {
+            $scope.linkAux = 'photodetails';
+            $scope.titleShow = 'Photo Gallery';
             $scope.filter.substate = 'pic';
             $scope.filter.picture = item;
             $scope.goToTop();
@@ -647,6 +650,13 @@ angular.module($APP.name).controller('EditCtrl', [
                 $scope.imgURI = res;
             })
         });
+
+        angular.forEach($scope.formData.field_group_instances, function(field) {
+            if (field.repeatable) {
+                $scope.repeatable = true;
+                return;
+            }
+        })
 
         $scope.submit = function(help) {
             if (!navigator.onLine) {

@@ -59,7 +59,7 @@ angular.module($APP.name).controller('FormCtrl', [
             $ionicSideMenuDelegate.canDragContent(false);
         });
         $ionicSideMenuDelegate.canDragContent(false);
-
+        $scope.repeatable = false;
         $scope.linkAux = 'forms';
         pullDown();
         $scope.currency = $filter('filter')(DbService.get('custsett'), {
@@ -200,6 +200,13 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             },
             function(error) {});
+        angular.forEach($scope.formData.field_group_designs, function(field) {
+            if (field.repeatable) {
+                $scope.repeatable = true;
+                return;
+            }
+        })
+
         $scope.updateCalculation = function(data) {
             CommonServices.updateCalculation(data);
         }
