@@ -3,7 +3,7 @@
         <div class="back-arrow ion-ios-arrow-left"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form' ">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
-    <ion-content class="blue-bgd" ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate, 'swipe-preview':filter.state !== 'form'}" delegate-handle="mainScroll">
+    <ion-content class="blue-bgd swipe-preview" ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate}" delegate-handle="mainScroll">
         <div class="content">
             <div class="list" ng-if="filter.state === 'form'">
                 <div class="formTitle clearfix" style="float:none">

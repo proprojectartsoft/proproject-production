@@ -2,7 +2,7 @@
     <ion-header-bar class="bar-subheader item-button-left test-item" style=" overflow: hidden; white-space: nowrap; text-overflow: ellipsis;" ui-sref="app.categories({projectId:projectId})">
         <span class="back-arrow ion-ios-arrow-left"></span> {{categoryName}} - completed
     </ion-header-bar>
-    <ion-content class="has-tabs" scroll-watch>
+    <ion-content class="has-tabs swipe-preview" scroll-watch>
         <ion-refresher on-refresh="refresh()" pulling-text="Pull to refresh..." refreshing-text="Refreshing!" spinner="android"></ion-refresher>
         <div class="content">
             <div class="list all-itemlist">
