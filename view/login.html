@@ -11,24 +11,30 @@
             <div class="app-name welcome-big">ProProject - Login</div>
             <form class="login-form" ng-submit="login()" role="form" name="loginForm" novalidate="">
                 <div class="input-container">
-                    <input type="email" ng-model="user.username" required="required"><strong></strong>
+                    <input type="email" ng-model="user.username" required="required" readonly onfocus="this.removeAttribute('readonly');"><strong></strong>
                     <label class="label-bar">Username</label>
                 </div>
                 <div class="input-container">
-                    <input type="password" ng-model="user.password" required="required"><strong></strong>
+                    <input type="password" ng-model="user.password" required="required" readonly onfocus="this.removeAttribute('readonly');"><strong></strong>
                     <label class="label-bar">Password</label>
                 </div>
                 <div class="input-container">
                     <button class="button button-full button-calm" type="submit" ng-disabled="loginForm.$invalid">
                         Login
                     </button>
-                    <div class="remember-container">
+                </div>
+            </form>
+            <div class="remember-container">
+                <div class="row" style="padding:0">
+                    <div class="col col-50" style="padding:0; padding-top: 15px;">
+                        <div ui-sref="forgotpassword">
+                            Forgot password?
+                        </div>
+                    </div>
+                    <div class="col col-50" style="padding:0">
                         <ion-checkbox ng-model="user.rememberMe">Remember me</ion-checkbox>
                     </div>
                 </div>
-            </form>
-            <div class="login-footer" ui-sref="forgotpassword">
-                Forgot password?
             </div>
         </div>
     </ion-content>
