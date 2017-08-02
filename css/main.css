@@ -1,4 +1,5 @@
 /*LOGIN PAGE*/
+
 .login-container ::-webkit-input-placeholder {
     /* Chrome/Opera/Safari */
     color: #fff;
@@ -107,6 +108,12 @@ input:-webkit-autofill {
 .login-form {
     width: 80%;
     float: right;
+}
+
+.forgot-pass {
+    text-align: left;
+    padding-left: 20px;
+    padding-top: 15px;
 }
 
 .input-container .label-bar {
