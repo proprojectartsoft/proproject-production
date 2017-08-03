@@ -581,14 +581,17 @@ angular.module($APP.name).factory('SyncService', [
                                         }
                                     } else {
                                         load();
+                                        DbService.popclose();
                                     }
                                 } else {
                                     load();
+                                    DbService.popclose();
                                 }
                             })
                     } else {
                         if (localStorage.getObject('ppremember')) {
                             load();
+                            DbService.popclose();
                         }
                     }
                 });
@@ -635,15 +638,18 @@ angular.module($APP.name).factory('SyncService', [
                                     } else {
                                         load();
                                         defer.resolve();
+                                        DbService.popclose();
                                     }
                                 } else {
                                     load();
                                     defer.resolve();
+                                    DbService.popclose();
                                 }
                             })
                     } else {
                         load();
                         defer.resolve()
+                        DbService.popclose();
                     }
                 });
                 return defer.promise;
