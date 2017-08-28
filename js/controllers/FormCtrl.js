@@ -63,12 +63,6 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.linkAux = 'forms';
         pullDown();
         var custSett = DbService.get('custsett');
-        var temp = $filter('filter')(custSett, {
-            name: 'currency'
-        });
-        if (temp && temp.length) {
-            $scope.currency = temp[0].value;
-        }
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
         $scope.abs_list = DbService.get('absenteeism');
@@ -91,9 +85,13 @@ angular.module($APP.name).controller('FormCtrl', [
                 $scope.filter.vat = parseInt($filter('filter')(custSett, {
                     name: 'vat'
                 })[0].value, 10);
-                $scope.filter.currency = $filter('filter')(custSett, {
+                var temp = $filter('filter')(custSett, {
                     name: 'currency'
-                })[0].value;
+                });
+                if (temp && temp.length) {
+                    $scope.currency = temp[0].value;
+                    $scope.filter.currency = temp[0].value;
+                }
                 $scope.filter.margin = $filter('filter')(custSett, {
                     name: 'margin'
                 })[0].value;

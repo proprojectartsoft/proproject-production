@@ -294,9 +294,13 @@ angular.module($APP.name).controller('EditCtrl', [
             $scope.popover = popover;
         });
 
-        $scope.filter.currency = $filter('filter')(custSett, {
+        var temp = $filter('filter')(custSett, {
             name: 'currency'
-        })[0].value;
+        });
+        if (temp && temp.length) {
+            $scope.currency = temp[0].value;
+            $scope.filter.currency = temp[0].value;
+        }
         $scope.filter.margin = $filter('filter')(custSett, {
             name: 'margin'
         })[0].value;
