@@ -301,9 +301,9 @@ angular.module($APP.name).controller('EditCtrl', [
             $scope.currency = temp[0].value;
             $scope.filter.currency = temp[0].value;
         }
-        $scope.filter.margin = $filter('filter')(custSett, {
-            name: 'margin'
-        })[0].value;
+        // $scope.filter.margin = $filter('filter')(custSett, {
+        //     name: 'margin'
+        // })[0].value;
         $scope.filter.start = $filter('filter')(custSett, {
             name: 'start'
         })[0].value;
