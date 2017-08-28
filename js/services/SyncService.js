@@ -18,9 +18,10 @@ angular.module($APP.name).factory('SyncService', [
     'StaffService',
     'SchedulingService',
     'PayitemService',
+    'orderByFilter',
 
     function($q, $rootScope, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService, StaffService,
-        SchedulingService, PayitemService) {
+        SchedulingService, PayitemService, orderBy) {
         function servresp(name, timer, start, response) {
             this.name = name;
             this.timer = timer;
@@ -252,6 +253,8 @@ angular.module($APP.name).factory('SyncService', [
                 }, 1);
                 return ResourceService.list_manager().then(function(result) {
                     if (result) {
+                        //order the resources
+                        var result = orderBy(result, 'name');
                         DbService.add('resources', result);
                         $interval.cancel(ping)
                         obj.response = result;
@@ -299,6 +302,8 @@ angular.module($APP.name).factory('SyncService', [
                 }, 1);
                 return StaffService.list_manager().then(function(result) {
                     if (result) {
+                        //order the resources
+                        var result = orderBy(result, 'name');
                         DbService.add('staff', result);
                         $interval.cancel(ping)
                         obj.response = result;
