@@ -38,9 +38,12 @@ angular.module($APP.name).controller('EditCtrl', [
         $scope.vat = parseInt($filter('filter')(custSett, {
             name: 'vat'
         })[0].value, 10);
-        $scope.currency = $filter('filter')(DbService.get('custsett'), {
+        var temp = $filter('filter')(custSett, {
             name: 'currency'
-        })[0].value;
+        });
+        if (temp && temp.length) {
+            $scope.currency = temp[0].value;
+        }
         $scope.linkAux = 'forms';
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');

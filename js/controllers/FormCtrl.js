@@ -63,10 +63,11 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.linkAux = 'forms';
         pullDown();
         var custSett = DbService.get('custsett');
-        if (custSett) {
-            $scope.currency = $filter('filter')(custsett, {
-                name: 'currency'
-            })[0].value;
+        var temp = $filter('filter')(custSett, {
+            name: 'currency'
+        });
+        if (temp && temp.length) {
+            $scope.currency = temp[0].value;
         }
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
