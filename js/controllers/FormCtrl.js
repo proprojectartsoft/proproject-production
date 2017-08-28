@@ -62,10 +62,12 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.repeatable = false;
         $scope.linkAux = 'forms';
         pullDown();
-        $scope.currency = $filter('filter')(DbService.get('custsett'), {
-            name: 'currency'
-        })[0].value;
         var custSett = DbService.get('custsett');
+        if (custSett) {
+            $scope.currency = $filter('filter')(custsett, {
+                name: 'currency'
+            })[0].value;
+        }
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
         $scope.abs_list = DbService.get('absenteeism');
@@ -208,7 +210,7 @@ angular.module($APP.name).controller('FormCtrl', [
                 }
             },
             function(error) {});
-            
+
         $scope.updateCalculation = function(data) {
             CommonServices.updateCalculation(data);
         }
