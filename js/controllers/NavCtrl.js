@@ -11,6 +11,18 @@ angular.module($APP.name).controller('NavCtrl', [
     'SyncService',
     'DbService',
     function($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, $timeout, $http, $ionicPopup, SyncService, DbService) {
+        //assign the arrow or the burger menu icon when appropriate
+        $scope.$watch(function() {
+            return $('body').attr('class');
+        }, function(cls) {
+            if (cls.indexOf("menu-open") !== -1) {
+                $('.menu-btn button').removeClass("ion-navicon");
+                $('.menu-btn button').addClass("ion-android-arrow-back");
+            } else {
+                $('.menu-btn button').addClass("ion-navicon");
+                $('.menu-btn button').removeClass("ion-android-arrow-back");
+            }
+        });
         $scope.toggleLeft = function($event) {
             $ionicSideMenuDelegate.toggleLeft();
             $($event.target)
