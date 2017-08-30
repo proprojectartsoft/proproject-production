@@ -138,7 +138,7 @@ angular.module($APP.name).factory('FormInstanceService', [
                             });
                         }, 10);
                     } else {
-                        var list = ConvertersService.photoList(imgURI, payload.id, requestForm.project_id);
+                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
                             ImageService.create(list).then(function(x) {
                                 return x;
