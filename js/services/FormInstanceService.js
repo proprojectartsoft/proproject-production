@@ -39,9 +39,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                     withCredentials: true
                 }).success(function(payload) {
                     if (!payload.message) {
-                        console.log(imgUri);
-                        console.log(payload);
-                        console.log(requestForm.project_id);
                         var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
                             ImageService.create(list).then(function(x) {
@@ -96,8 +93,6 @@ angular.module($APP.name).factory('FormInstanceService', [
                 }).then(function(response) {
                     if (pic) {
                         var list = ConvertersService.photoList(pic, response.data.id, dataIn.project_id);
-                        console.log(pic);
-                        console.log(response.data);
                         ImageService.create(list).then(function(x) {
                             return x;
                         });
@@ -127,11 +122,11 @@ angular.module($APP.name).factory('FormInstanceService', [
                     }
                 });
             },
-            save_as: function(data) {
+            save_as: function(data, imgUri) {
                 var requestForm = ConvertersService.instanceToNew(data);
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
-                }).then(function(payload) {
+                }).success(function(payload) {
                     if (payload.data.message) {
                         $timeout(function() {
                             var alertPopup3 = $ionicPopup.alert({
@@ -142,37 +137,48 @@ angular.module($APP.name).factory('FormInstanceService', [
                                 $rootScope.$broadcast('sync.todo');
                             });
                         }, 10);
+                    } else {
+                        var list = ConvertersService.photoList(imgURI, payload.id, requestForm.project_id);
+                        if (list.length !== 0) {
+                            ImageService.create(list).then(function(x) {
+                                return x;
+                            });
+                        }
                     }
                     return payload.data;
-                }, function(payload) {
-                    if (payload.status === 0 || payload.status === 502) {
-                        var sync = CacheFactory.get('sync');
-                        if (!sync) {
-                            sync = CacheFactory('sync');
-                        }
-                        sync.setOptions({
-                            storageMode: 'localStorage'
-                        });
-                        $rootScope.toBeUploadedCount = sync.keys().length;
-                        $rootScope.toBeUploadedCount++;
-                        sync.put($rootScope.toBeUploadedCount, requestForm);
-                        $timeout(function() {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Submision failed.',
-                                template: 'You are offline. Submit forms by syncing next time you are online'
-                            }).then(function(res) {
-                                $state.go('app.forms', {
-                                    'projectId': $rootScope.projectId,
-                                    'categoryId': requestForm.category_id
-                                });
-                            });
-                        }, 100);
+                }).error(function(payload) {
+                    var requestList = [];
+                    var ppfsync = localStorage.getObject('ppfsync');
+                    var pppsync = localStorage.getObject('pppsync');
+                    if (ppfsync) {
+                        $rootScope.toBeUploadedCount = ppfsync.length;
                     } else {
-                        var alertPopup2 = $ionicPopup.alert({
-                            title: 'Submision failed.',
-                            template: 'Incorrect data, try again'
+                        $rootScope.toBeUploadedCount = 0;
+                        localStorage.setObject('ppfsync', []);
+                    }
+                    if (!pppsync) {
+                        localStorage.setObject('pppsync', []);
+                    }
+                    $rootScope.toBeUploadedCount++;
+                    for (var i = 0; i < imgUri.length; i++) {
+                        if (imgUri[i].base64String !== "") {
+                            imgUri.projectId = requestForm.project_id;
+                            requestList.push(imgUri[i]);
+                        }
+                    }
+                    var aux_f = localStorage.getObject('ppfsync');
+                    aux_f.push({
+                        id: $rootScope.toBeUploadedCount,
+                        form: requestForm
+                    });
+                    localStorage.setObject('ppfsync', aux_f);
+                    if (requestList.length !== 0) {
+                        var aux_p = localStorage.getObject('pppsync');
+                        aux_p.push({
+                            id: $rootScope.toBeUploadedCount,
+                            imgs: requestList
                         });
-                        alertPopup2.then(function(res) {});
+                        localStorage.setObject('pppsync', aux_p);
                     }
                 });
             },

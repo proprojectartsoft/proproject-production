@@ -1088,24 +1088,14 @@ angular.module($APP.name).controller('EditCtrl', [
             });
 
             function fastSave() {
-                FormInstanceService.save_as($scope.formData).then(function(data) {
+                FormInstanceService.save_as($scope.formData).success(function(data) {
                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
                         $rootScope.formId = data.id;
-                        FormInstanceService.get($rootScope.formId).then(function(data) {
-                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                            if (list.length !== 0) {
-                                ImageService.create(list).then(function(x) {
-                                    $timeout(function() {
-                                        formUp.close();
-                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                    });
-                                });
-                            } else {
-                                $timeout(function() {
-                                    formUp.close();
-                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                });
-                            }
+                        FormInstanceService.get($rootScope.formId, $scope.imgURI).then(function(data) {
+                            $timeout(function() {
+                                formUp.close();
+                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                            });
                         });
                     } else {
                         $timeout(function() {
@@ -1113,7 +1103,34 @@ angular.module($APP.name).controller('EditCtrl', [
                             $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                         });
                     }
-                });
+                }).error(function(data) {
+                    formUp.close();
+                    if (data && data.status === 400) {
+                        $timeout(function() {
+                            $timeout(function() {
+                                var alertPopup2 = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'Incorrect data, try again'
+                                });
+                                alertPopup2.then(function(res) {});
+                            });
+                        });
+                    } else {
+                        $timeout(function() {
+                            $timeout(function() {
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'You are offline. Submit forms by syncing next time you are online.'
+                                }).then(function(res) {
+                                    $state.go('app.forms', {
+                                        'projectId': $rootScope.projectId,
+                                        'categoryId': $scope.formData.category_id
+                                    });
+                                });
+                            });
+                        });
+                    }
+                })
             }
         };
 
