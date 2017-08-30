@@ -48,6 +48,25 @@ angular.module($APP.name).controller('EditCtrl', [
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
         $scope.abs_list = DbService.get('absenteeism');
+
+        FormInstanceService.get($rootScope.formId).then(function(data) {
+            $rootScope.formData = data;
+            $scope.formData = data;
+            FormInstanceService.get_gallery($rootScope.formId, data.project_id).then(function(res) {
+                angular.forEach(res, function(image) {
+                    image.url = $APP.server + '/pub/images/' + image.base64String;
+                })
+                $scope.imgURI = res;
+            })
+        });
+
+        angular.forEach($scope.formData.field_group_instances, function(field) {
+            if (field.repeatable) {
+                $scope.repeatable = true;
+                return;
+            }
+        })
+
         $scope.updateCalculation = function(data) {
             CommonServices.updateCalculation(data);
         }
@@ -647,23 +666,6 @@ angular.module($APP.name).controller('EditCtrl', [
             };
             img.src = url;
         };
-        FormInstanceService.get($rootScope.formId).then(function(data) {
-            $rootScope.formData = data;
-            $scope.formData = data;
-            FormInstanceService.get_gallery($rootScope.formId, data.project_id).then(function(res) {
-                angular.forEach(res, function(image) {
-                    image.url = $APP.server + '/pub/images/' + image.base64String;
-                })
-                $scope.imgURI = res;
-            })
-        });
-
-        angular.forEach($scope.formData.field_group_instances, function(field) {
-            if (field.repeatable) {
-                $scope.repeatable = true;
-                return;
-            }
-        })
 
         $scope.submit = function(help) {
             if (!navigator.onLine) {
@@ -1088,10 +1090,10 @@ angular.module($APP.name).controller('EditCtrl', [
             });
 
             function fastSave(formUp) {
-                FormInstanceService.save_as($scope.formData).success(function(data) {
+                FormInstanceService.save_as($scope.formData, $scope.imgURI).success(function(data) {
                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
                         $rootScope.formId = data.id;
-                        FormInstanceService.get($rootScope.formId, $scope.imgURI).then(function(data) {
+                        FormInstanceService.get($rootScope.formId).then(function(data) {
                             $timeout(function() {
                                 formUp.close();
                                 $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
