@@ -857,83 +857,91 @@ angular.module($APP.name).controller('EditCtrl', [
             }
         };
         $scope.saveAsNew = function() {
-            if (!navigator.onLine) {
-                var confirmPopup = $ionicPopup.alert({
-                    title: 'Please note',
-                    template: 'You are offline. You can modify forms when online.'
-                });
-            } else {
-                var confirmPopup = $ionicPopup.confirm({
-                    title: 'Edit form',
-                    template: 'Are you sure you want to save this form?'
-                });
-                confirmPopup.then(function(res) {
-                    if (res) {
-                        $timeout(function() {
-                            var formUp = $ionicPopup.alert({
-                                title: "Submitting",
-                                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                                content: "",
-                                buttons: []
+            var confirmPopup = $ionicPopup.confirm({
+                title: 'Edit form',
+                template: 'Are you sure you want to save this form?'
+            });
+            confirmPopup.then(function(res) {
+                if (res) {
+                    $timeout(function() {
+                        var resourceOK = false,
+                            staffOK = false,
+                            schedulingOK = false,
+                            payOK = false;
+                        var formUp = $ionicPopup.alert({
+                            title: "Submitting",
+                            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                            content: "",
+                            buttons: []
+                        });
+                        if ($scope.formData.resource_field_id) {
+                            angular.forEach($rootScope.resourceField.resources, function(item) {
+                                if (item.unit_obj) {
+                                    item.unit_id = item.unit_obj.id;
+                                    item.unit_name = item.unit_obj.name;
+                                }
+                                if (item.res_type_obj) {
+                                    item.resource_type_id = item.res_type_obj.id;
+                                    item.resource_type_name = item.res_type_obj.name;
+                                }
+                                if (item.stage_obj) {
+                                    item.stage_id = item.stage_obj.id;
+                                    item.stage_name = item.stage_obj.name;
+                                }
+                                if (item.absenteeism_obj) {
+                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                }
+                                if (item.current_day_obj) {
+                                    item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
+                                }
                             });
-                            if ($scope.formData.resource_field_id) {
-                                angular.forEach($rootScope.resourceField.resources, function(item) {
-                                    if (item.unit_obj) {
-                                        item.unit_id = item.unit_obj.id;
-                                        item.unit_name = item.unit_obj.name;
+                            ResourceService.add_field($rootScope.resourceField).success(function(x) {
+                                $scope.formData.resource_field_id = x.id;
+                                resourceOK = true;
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            }).error(function(err) {
+                                resourceOK = true;
+                                //field could not be added to server; store it for later save
+                                //TODO:store in $scope.formData the new resource; this will be copied in formInstanceService on error branch
+                                $scope.formData.resourceField = $scope.formData.resourceField || [];
+                                $scope.formData.resourceField.push($rootScope.resourceField);
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            });
+                        } else {
+                            resourceOK = true;
+                        }
+                        if ($scope.formData.pay_item_field_id) {
+                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                if (item.unit_obj) {
+                                    item.unit = item.unit_obj.name;
+                                    item.unit_id = item.unit_obj.id;
+                                }
+                                angular.forEach(item.resources, function(res) {
+                                    if (res.unit_obj) {
+                                        res.unit_id = res.unit_obj.id;
+                                        res.unit_name = res.unit_obj.name;
                                     }
-                                    if (item.res_type_obj) {
-                                        item.resource_type_id = item.res_type_obj.id;
-                                        item.resource_type_name = item.res_type_obj.name;
+                                    if (res.res_type_obj) {
+                                        res.resource_type_id = res.res_type_obj.id;
+                                        res.resource_type_name = res.res_type_obj.name;
                                     }
-                                    if (item.stage_obj) {
-                                        item.stage_id = item.stage_obj.id;
-                                        item.stage_name = item.stage_obj.name;
+                                    if (res.absenteeism_obj) {
+                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                     }
-                                    if (item.absenteeism_obj) {
-                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                    if (res.current_day_obj) {
+                                        res.current_day = res.current_day_obj;
                                     }
-                                    if (item.current_day_obj) {
-                                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy"); 
+                                    if (res.expiry_date_obj) {
+                                        var date = new Date(res.expiry_date_obj);
+                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                     }
                                 });
-                                ResourceService.add_field($rootScope.resourceField).success(function(x) {
-                                    $scope.formData.resource_field_id = x.id;
-                                    FormInstanceService.save_as($scope.formData).then(function(data) {
-                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                            $rootScope.formId = data.id;
-                                            FormInstanceService.get($rootScope.formId).then(function(data) {
-                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                                if (list.length !== 0) {
-                                                    ImageService.create(list).then(function(x) {
-                                                        $timeout(function() {
-                                                            formUp.close();
-                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                        });
-                                                    });
-                                                } else {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            $timeout(function() {
-                                                formUp.close();
-                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                            });
-                                        }
-                                    });
-                                });
-                            }
-                            if ($scope.formData.pay_item_field_id) {
-                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                    if (item.unit_obj) {
-                                        item.unit = item.unit_obj.name;
-                                        item.unit_id = item.unit_obj.id;
-                                    }
-                                    angular.forEach(item.resources, function(res) {
+                                angular.forEach(item.subtasks, function(subtask) {
+                                    angular.forEach(subtask.resources, function(res) {
                                         if (res.unit_obj) {
                                             res.unit_id = res.unit_obj.id;
                                             res.unit_name = res.unit_obj.name;
@@ -953,66 +961,53 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
                                     });
-                                    angular.forEach(item.subtasks, function(subtask) {
-                                        angular.forEach(subtask.resources, function(res) {
-                                            if (res.unit_obj) {
-                                                res.unit_id = res.unit_obj.id;
-                                                res.unit_name = res.unit_obj.name;
-                                            }
-                                            if (res.res_type_obj) {
-                                                res.resource_type_id = res.res_type_obj.id;
-                                                res.resource_type_name = res.res_type_obj.name;
-                                            }
-                                            if (res.absenteeism_obj) {
-                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                            }
-                                            if (res.current_day_obj) {
-                                                res.current_day = res.current_day_obj;
-                                            }
-                                            if (res.expiry_date_obj) {
-                                                var date = new Date(res.expiry_date_obj);
-                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                            }
-                                        });
-                                    });
                                 });
-                                PayitemService.add_field($rootScope.payitemField).success(function(x) {
-                                    $scope.formData.pay_item_field_id = x.id;
-                                    FormInstanceService.save_as($scope.formData).then(function(data) {
-                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                            $rootScope.formId = data.id;
-                                            FormInstanceService.get($rootScope.formId).then(function(data) {
-                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                                if (list.length !== 0) {
-                                                    ImageService.create(list).then(function(x) {
-                                                        $timeout(function() {
-                                                            formUp.close();
-                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                        });
-                                                    });
-                                                } else {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            $timeout(function() {
-                                                formUp.close();
-                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                            });
-                                        }
-                                    });
-                                });
-                            }
-                            if ($scope.formData.scheduling_field_id) {
-                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                    if (item.unit_obj) {
-                                        item.unit = item.unit_obj.name;
-                                        item.unit_id = item.unit_obj.id;
+                            });
+                            PayitemService.add_field($rootScope.payitemField).success(function(x) {
+                                $scope.formData.pay_item_field_id = x.id;
+                                payOK = true;
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            }).error(function(err) {
+                                payOK = true;
+                                $scope.formData.payitemField = $scope.formData.payitemField || [];
+                                $scope.formData.payitemField.push($rootScope.payitemField);
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            });
+                        } else {
+                            payOK = true;
+                        }
+                        if ($scope.formData.scheduling_field_id) {
+                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                if (item.unit_obj) {
+                                    item.unit = item.unit_obj.name;
+                                    item.unit_id = item.unit_obj.id;
+                                }
+                                angular.forEach(item.resources, function(res) {
+                                    if (res.unit_obj) {
+                                        res.unit_id = res.unit_obj.id;
+                                        res.unit_name = res.unit_obj.name;
                                     }
-                                    angular.forEach(item.resources, function(res) {
+                                    if (res.res_type_obj) {
+                                        res.resource_type_id = res.res_type_obj.id;
+                                        res.resource_type_name = res.res_type_obj.name;
+                                    }
+                                    if (res.absenteeism_obj) {
+                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                    }
+                                    if (res.current_day_obj) {
+                                        res.current_day = res.current_day_obj;
+                                    }
+                                    if (res.expiry_date_obj) {
+                                        var date = new Date(res.expiry_date_obj);
+                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                    }
+                                });
+                                angular.forEach(item.subtasks, function(subtask) {
+                                    angular.forEach(subtask.resources, function(res) {
                                         if (res.unit_obj) {
                                             res.unit_id = res.unit_obj.id;
                                             res.unit_name = res.unit_obj.name;
@@ -1025,141 +1020,97 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj;
+                                            res.current_day = res.current_day_obj.getTime();
                                         }
                                         if (res.expiry_date_obj) {
                                             var date = new Date(res.expiry_date_obj);
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
                                     });
-                                    angular.forEach(item.subtasks, function(subtask) {
-                                        angular.forEach(subtask.resources, function(res) {
-                                            if (res.unit_obj) {
-                                                res.unit_id = res.unit_obj.id;
-                                                res.unit_name = res.unit_obj.name;
-                                            }
-                                            if (res.res_type_obj) {
-                                                res.resource_type_id = res.res_type_obj.id;
-                                                res.resource_type_name = res.res_type_obj.name;
-                                            }
-                                            if (res.absenteeism_obj) {
-                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                            }
-                                            if (res.current_day_obj) {
-                                                res.current_day = res.current_day_obj.getTime();
-                                            }
-                                            if (res.expiry_date_obj) {
-                                                var date = new Date(res.expiry_date_obj);
-                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                            }
-                                        });
+                                });
+                            });
+                            SchedulingService.add_field($rootScope.payitemField).success(function(x) {
+                                $scope.formData.scheduling_field_id = x.id;
+                                schedulingOK = true;
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            }).error(function(err) {
+                                schedulingOK = true;
+                                $scope.formData.schedField = $scope.formData.schedField || [];
+                                $scope.formData.schedField.push($rootScope.payitemField);
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            });
+                        } else {
+                            schedulingOK = true;
+                        }
+                        if ($scope.formData.staff_field_id) {
+                            angular.forEach($rootScope.staffField.resources, function(item) {
+                                if (item.res_type_obj) {
+                                    item.resource_type_id = item.res_type_obj.id;
+                                    item.resource_type_name = item.res_type_obj.name;
+                                }
+                                if (item.absenteeism_obj) {
+                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                    item.absenteeism_obj.reason;
+                                }
+                                if (item.current_day_obj) {
+                                    item.current_day = item.current_day_obj.getTime();
+                                }
+                                if (item.expiry_date_obj) {
+                                    item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
+                                }
+                            });
+                            StaffService.add_field($rootScope.staffField).success(function(x) {
+                                $scope.formData.staff_field_id = x.id;
+                                staffOK = true;
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            }).error(function(err) {
+                                staffOK = true;
+                                $scope.formData.staffField = $scope.formData.staffField || [];
+                                $scope.formData.staffField.push($rootScope.staffField);
+                                if (resourceOK && staffOK && schedulingOK && payOK) {
+                                    fastSave();
+                                }
+                            });
+                        } else {
+                            staffOK = true;
+                        }
+                        if (!$scope.formData.scheduling_field_id && !$scope.formData.staff_field_id && !$scope.formData.resource_field_id && !$scope.formData.pay_item_field_id) {
+                            fastSave();
+                        }
+                    });
+                }
+            });
+
+            function fastSave() {
+                FormInstanceService.save_as($scope.formData).then(function(data) {
+                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+                        $rootScope.formId = data.id;
+                        FormInstanceService.get($rootScope.formId).then(function(data) {
+                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
+                            if (list.length !== 0) {
+                                ImageService.create(list).then(function(x) {
+                                    $timeout(function() {
+                                        formUp.close();
+                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                     });
                                 });
-                                SchedulingService.add_field($rootScope.payitemField).success(function(x) {
-                                    $scope.formData.scheduling_field_id = x.id;
-                                    FormInstanceService.save_as($scope.formData).then(function(data) {
-                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                            $rootScope.formId = data.id;
-                                            FormInstanceService.get($rootScope.formId).then(function(data) {
-                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                                if (list.length !== 0) {
-                                                    ImageService.create(list).then(function(x) {
-                                                        $timeout(function() {
-                                                            formUp.close();
-                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                        });
-                                                    });
-                                                } else {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            $timeout(function() {
-                                                formUp.close();
-                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                            });
-                                        }
-                                    });
+                            } else {
+                                $timeout(function() {
+                                    formUp.close();
+                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                 });
                             }
-                            if ($scope.formData.staff_field_id) {
-                                angular.forEach($rootScope.staffField.resources, function(item) {
-                                    if (item.res_type_obj) {
-                                        item.resource_type_id = item.res_type_obj.id;
-                                        item.resource_type_name = item.res_type_obj.name;
-                                    }
-                                    if (item.absenteeism_obj) {
-                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                        item.absenteeism_obj.reason;
-                                    }
-                                    if (item.current_day_obj) {
-                                        item.current_day = item.current_day_obj.getTime();
-                                    }
-                                    if (item.expiry_date_obj) {
-                                        item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
-                                    }
-                                });
-                                StaffService.add_field($rootScope.staffField).success(function(x) {
-                                    $scope.formData.staff_field_id = x.id;
-                                    FormInstanceService.save_as($scope.formData).then(function(data) {
-                                        if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                            $rootScope.formId = data.id;
-                                            FormInstanceService.get($rootScope.formId).then(function(data) {
-                                                var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                                if (list.length !== 0) {
-                                                    ImageService.create(list).then(function(x) {
-                                                        $timeout(function() {
-                                                            formUp.close();
-                                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                        });
-                                                    });
-                                                } else {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                }
-                                            });
-                                        } else {
-                                            $timeout(function() {
-                                                formUp.close();
-                                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                            });
-                                        }
-                                    });
-                                });
-                            }
-                            if (!$scope.formData.scheduling_field_id && !$scope.formData.staff_field_id && !$scope.formData.resource_field_id && !$scope.formData.pay_item_field_id) {
-                                FormInstanceService.save_as($scope.formData).then(function(data) {
-                                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                        $rootScope.formId = data.id;
-                                        FormInstanceService.get($rootScope.formId).then(function(data) {
-                                            var list = ConvertersService.photoList($scope.imgURI, $scope.formData.id, $scope.formData.project_id);
-                                            if (list.length !== 0) {
-                                                ImageService.create(list).then(function(x) {
-                                                    $timeout(function() {
-                                                        formUp.close();
-                                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                    });
-                                                });
-                                            } else {
-                                                $timeout(function() {
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        });
-                                    } else {
-                                        $timeout(function() {
-                                            formUp.close();
-                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                        });
-                                    }
-                                });
-                            }
+                        });
+                    } else {
+                        $timeout(function() {
+                            formUp.close();
+                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                         });
                     }
                 });
