@@ -127,7 +127,7 @@ angular.module($APP.name).factory('FormInstanceService', [
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
                 }).success(function(payload) {
-                    if (payload.data.message) {
+                    if (payload.data || payload.data && payload.data.message) {
                         $timeout(function() {
                             var alertPopup3 = $ionicPopup.alert({
                                 title: 'Submision failed.',

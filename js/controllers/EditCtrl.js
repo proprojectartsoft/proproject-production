@@ -899,7 +899,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                 $scope.formData.resource_field_id = x.id;
                                 resourceOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             }).error(function(err) {
                                 resourceOK = true;
@@ -908,7 +908,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                 $scope.formData.resourceField = $scope.formData.resourceField || [];
                                 $scope.formData.resourceField.push($rootScope.resourceField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             });
                         } else {
@@ -967,14 +967,14 @@ angular.module($APP.name).controller('EditCtrl', [
                                 $scope.formData.pay_item_field_id = x.id;
                                 payOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             }).error(function(err) {
                                 payOK = true;
                                 $scope.formData.payitemField = $scope.formData.payitemField || [];
                                 $scope.formData.payitemField.push($rootScope.payitemField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             });
                         } else {
@@ -1033,14 +1033,14 @@ angular.module($APP.name).controller('EditCtrl', [
                                 $scope.formData.scheduling_field_id = x.id;
                                 schedulingOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             }).error(function(err) {
                                 schedulingOK = true;
                                 $scope.formData.schedField = $scope.formData.schedField || [];
                                 $scope.formData.schedField.push($rootScope.payitemField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             });
                         } else {
@@ -1067,27 +1067,27 @@ angular.module($APP.name).controller('EditCtrl', [
                                 $scope.formData.staff_field_id = x.id;
                                 staffOK = true;
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             }).error(function(err) {
                                 staffOK = true;
                                 $scope.formData.staffField = $scope.formData.staffField || [];
                                 $scope.formData.staffField.push($rootScope.staffField);
                                 if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave();
+                                    fastSave(formUp);
                                 }
                             });
                         } else {
                             staffOK = true;
                         }
                         if (!$scope.formData.scheduling_field_id && !$scope.formData.staff_field_id && !$scope.formData.resource_field_id && !$scope.formData.pay_item_field_id) {
-                            fastSave();
+                            fastSave(formUp);
                         }
                     });
                 }
             });
 
-            function fastSave() {
+            function fastSave(formUp) {
                 FormInstanceService.save_as($scope.formData).success(function(data) {
                     if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
                         $rootScope.formId = data.id;
