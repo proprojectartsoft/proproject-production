@@ -72,6 +72,7 @@ angular.module($APP.name).controller('NavCtrl', [
                 SyncService.sync_close();
                 AuthService.logout().success(function() {});
                 localStorage.setObject('loggedOut', true);
+                localStorage.removeItem('ppremember');
                 $state.go('login');
             } else {
                 $timeout(function() {
