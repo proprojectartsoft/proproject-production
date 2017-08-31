@@ -490,7 +490,9 @@ angular.module($APP.name).controller('EditCtrl', [
         $scope.titleShow = $scope.formData.name;
         $scope.goPicture = function() {
             $scope.filter.state = 'photos';
-            $scope.filter.substate = 'gallery'
+            $scope.filter.substate = 'gallery';
+            $scope.titleShow = 'Photo Gallery';
+            $scope.linkAux = 'photos';
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();
             });
@@ -665,7 +667,7 @@ angular.module($APP.name).controller('EditCtrl', [
                 return;
             }
         })
-        
+
         $scope.submit = function(help) {
             if (!navigator.onLine) {
                 var confirmPopup = $ionicPopup.alert({
