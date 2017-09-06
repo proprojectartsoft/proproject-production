@@ -88,17 +88,6 @@ angular.module($APP.name).controller('NavCtrl', [
             $rootScope.projectId = project.id;
             localStorage.setObject('ppnavTitle', project.name);
             localStorage.setObject('ppprojectId', project.id);
-            //set project settings
-            var proj = $filter('filter')(DbService.get('projects'), {
-                id: project.id
-            })[0];
-            if (proj && proj.settings) {
-                $rootScope.proj_margin = $filter('filter')(proj.settings, {
-                    name: "margin"
-                })[0];
-            } else {
-                $rootScope.proj_margin = 0;
-            }
         };
 
         $scope.sync = function() {

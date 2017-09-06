@@ -66,7 +66,17 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
         $scope.abs_list = DbService.get('absenteeism');
-        angular.copy($rootScope.proj_margin, $scope.proj_margin);
+        //set project settings
+        var proj = $filter('filter')(DbService.get('projects'), {
+            id: $stateParams.projectId
+        })[0];
+        if (proj && proj.settings) {
+            $scope.proj_margin = $filter('filter')(proj.settings, {
+                name: "margin"
+            })[0];
+        } else {
+            $scope.proj_margin = 0;
+        }
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
