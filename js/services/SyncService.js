@@ -179,6 +179,11 @@ angular.module($APP.name).factory('SyncService', [
                 }, 1);
                 return ProjectService.list_current(true).then(function(result) {
                     if (result) {
+                        //get project settings for all projects
+                        ProjectService.all_settings(true).then(function(sett) {
+                            console.log(sett);
+                        })
+
                         DbService.add('projects', result);
                         $interval.cancel(ping)
                         obj.response = result;
@@ -246,6 +251,7 @@ angular.module($APP.name).factory('SyncService', [
                     }
                 });
             }
+
             var resources = function() {
                 var obj = new servresp('resources', 0, []);
                 var ping = $interval(function() {

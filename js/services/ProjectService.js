@@ -21,6 +21,19 @@ angular.module($APP.name).factory('ProjectService', [
                     }
                 );
             },
+            
+            all_settings: function(active) {
+                return $http.get($APP.server + '/api/project/settings', {
+                    params: {
+                        active: active
+                    }
+                }).then(
+                    function(payload) {
+                        return payload.data;
+                    }
+                );
+            },
+
             settings: function(project_id) {
                 return $http.get($APP.server + '/api/projectsettings', {
                     params: {
