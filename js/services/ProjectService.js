@@ -21,8 +21,8 @@ angular.module($APP.name).factory('ProjectService', [
                     }
                 );
             },
-            
-            all_settings: function(active) {
+
+            list_with_settings: function(active) {
                 return $http.get($APP.server + '/api/project/settings', {
                     params: {
                         active: active

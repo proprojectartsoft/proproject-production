@@ -177,13 +177,8 @@ angular.module($APP.name).factory('SyncService', [
                 var ping = $interval(function() {
                     obj.timer += 1;
                 }, 1);
-                return ProjectService.list_current(true).then(function(result) {
+                return ProjectService.list_with_settings(true).then(function(result) {
                     if (result) {
-                        //get project settings for all projects
-                        ProjectService.all_settings(true).then(function(sett) {
-                            console.log(sett);
-                        })
-
                         DbService.add('projects', result);
                         $interval.cancel(ping)
                         obj.response = result;
