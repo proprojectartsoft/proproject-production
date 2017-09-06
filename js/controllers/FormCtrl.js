@@ -66,9 +66,11 @@ angular.module($APP.name).controller('FormCtrl', [
         $scope.resource_type_list = DbService.get('resource_type');
         $scope.unit_list = DbService.get('unit');
         $scope.abs_list = DbService.get('absenteeism');
+
+        var allProjects = DbService.get('projects');
         //set project settings
         var proj = $filter('filter')(DbService.get('projects'), {
-            id: $stateParams.projectId
+            id: parseInt($stateParams.projectId, 10)
         })[0];
         if (proj && proj.settings) {
             $scope.proj_margin = $filter('filter')(proj.settings, {
