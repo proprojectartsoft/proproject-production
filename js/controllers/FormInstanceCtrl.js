@@ -260,7 +260,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                     if (item.resources.length !== 0) {
                         angular.forEach(item.resources, function(res) {
                             if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
-                                res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                //compute resource sale price
+                                var resSalePrice = res.direct_cost * (1 + res.resource_margin / 100) * (1 + $scope.proj_margin / 100);
+                                //compute resource total including VAT/Tax
+                                var vatComponent = resSalePrice * res.vat / 100 * res.quantity;
+                                res.total_cost = vatComponent;
                                 item.total_cost = item.total_cost + res.total_cost;
                             }
                         })
@@ -270,7 +274,11 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             stk.total_cost = 0;
                             angular.forEach(stk.resources, function(res) {
                                 if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
-                                    res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                    //compute resource sale price
+                                    var resSalePrice = res.direct_cost * (1 + res.resource_margin / 100) * (1 + $scope.proj_margin / 100);
+                                    //compute resource total including VAT/Tax
+                                    var vatComponent = resSalePrice * res.vat / 100 * res.quantity;
+                                    res.total_cost = vatComponent;
                                     stk.total_cost = stk.total_cost + res.total_cost;
                                 }
                             })

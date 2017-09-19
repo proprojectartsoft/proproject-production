@@ -328,21 +328,13 @@ angular.module($APP.name).controller('EditCtrl', [
         $scope.doTotal = function(type, parent) {
             if (parent) {
                 parent.total_cost = 0;
-                if (type === 'resource') {
-                    angular.forEach(parent.resources, function(res) {
-                        res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                        parent.total_cost = parent.total_cost + res.total_cost;
-                    });
-                }
-                if (type === 'piresource') {
-                    angular.forEach(parent.resources, function(res) {
-                        res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                        parent.total_cost = parent.total_cost + res.total_cost;
-                    });
-                }
-                if (type === 'pisubresource') {
-                    angular.forEach(parent.resources, function(res) {
-                        res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                if (type === 'resource' || type === 'piresource' || type === 'pisubresource') {
+                    angular.forEach(parent.resources, function(res) {\
+                        //compute resource sale price
+                        var resSalePrice = res.direct_cost * (1 + res.resource_margin / 100) * (1 + $scope.proj_margin / 100);
+                        //compute resource total including VAT/Tax
+                        var vatComponent = resSalePrice * res.vat / 100 * res.quantity;
+                        res.total_cost = vatComponent;
                         parent.total_cost = parent.total_cost + res.total_cost;
                     });
                 }
@@ -351,7 +343,11 @@ angular.module($APP.name).controller('EditCtrl', [
                         parent.total_cost = parent.total_cost + stk.total_cost;
                     });
                     angular.forEach(parent.resources, function(res) {
-                        res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                        //compute resource sale price
+                        var resSalePrice = res.direct_cost * (1 + res.resource_margin / 100) * (1 + $scope.proj_margin / 100);
+                        //compute resource total including VAT/Tax
+                        var vatComponent = resSalePrice * res.vat / 100 * res.quantity;
+                        res.total_cost = vatComponent;
                         parent.total_cost = parent.total_cost + res.total_cost;
                     });
                 }
