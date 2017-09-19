@@ -263,7 +263,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                 //compute resource sale price
                                 var resSalePrice = res.direct_cost * (1 + res.resource_margin / 100) * (1 + $scope.proj_margin / 100);
                                 //compute resource total including VAT/Tax
-                                var vatComponent = resSalePrice * res.vat / 100 * res.quantity;
+                                var vatComponent = resSalePrice * (1 + res.vat / 100) * res.quantity;
                                 res.total_cost = vatComponent;
                                 item.total_cost = item.total_cost + res.total_cost;
                             }
@@ -277,7 +277,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                                     //compute resource sale price
                                     var resSalePrice = res.direct_cost * (1 + res.resource_margin / 100) * (1 + $scope.proj_margin / 100);
                                     //compute resource total including VAT/Tax
-                                    var vatComponent = resSalePrice * res.vat / 100 * res.quantity;
+                                    var vatComponent = resSalePrice * (1 + res.vat / 100) * res.quantity;
                                     res.total_cost = vatComponent;
                                     stk.total_cost = stk.total_cost + res.total_cost;
                                 }
