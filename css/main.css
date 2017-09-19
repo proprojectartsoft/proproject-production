@@ -554,12 +554,12 @@ label.item.img-description {
 
 #login-new .scroll-content form div input {
   width: 80%;
-  height: 48px;
+  height: 48px!important;
   border-radius: 7px;
   margin-bottom: 5px;
   color: #2A2876!important;
   font-size: 20px!important;
-  padding-left: 20px;
+  padding-left: 20px!important;
   font-weight: 600;
 }
 
