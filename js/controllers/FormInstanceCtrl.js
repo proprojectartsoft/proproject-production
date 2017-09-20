@@ -41,7 +41,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             id: $stateParams.projectId
         })[0];
         if (proj && proj.settings) {
-            $scope.proj_margin = $filter('filter')(proj.settings, {
+            $scope.proj_margin = $filter('filter')(proj.settings.value, {
                 name: "margin"
             })[0];
         } else {
