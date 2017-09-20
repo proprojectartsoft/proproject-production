@@ -44,6 +44,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $scope.proj_margin = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
+            $scope.proj_margin.value = parseInt($scope.proj_margin.value);
         } else {
             $scope.proj_margin.value = 0;
         }

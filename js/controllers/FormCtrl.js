@@ -76,9 +76,11 @@ angular.module($APP.name).controller('FormCtrl', [
             $scope.proj_margin = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
+            $scope.proj_margin.value = parseInt($scope.proj_margin.value);
         } else {
-            $scope.proj_margin = 0;
+            $scope.proj_margin.value = 0;
         }
+        console.log(proj, $scope.proj_margin)
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
