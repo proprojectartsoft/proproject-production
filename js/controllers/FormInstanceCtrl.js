@@ -47,6 +47,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
         } else {
             $scope.proj_margin = 0;
         }
+        console.log($scope.proj_margin, proj)
         $scope.updateTitle = function(title, placeholder) {
             CommonServices.updateTitle(title, placeholder, $scope.titleShow);
         }
