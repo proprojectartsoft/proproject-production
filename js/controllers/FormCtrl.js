@@ -76,11 +76,10 @@ angular.module($APP.name).controller('FormCtrl', [
             var val = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
-            $scope.proj_margin = parseInt(val.value);
+            if(!$scope.proj_margin) $scope.proj_margin = parseInt(val.value);
         } else {
             $scope.proj_margin = 0;
         }
-        console.log(proj, $scope.proj_margin)
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
         $APP.db.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
@@ -622,7 +621,6 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {
             CommonServices.addResource($scope.resourceField.resources, $scope.filter.vat);
-            console.log($scope.resourceField.resources)
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
         //Add new resource in staffField; initialized with start, break and finish times

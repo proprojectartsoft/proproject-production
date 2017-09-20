@@ -53,9 +53,10 @@ angular.module($APP.name).controller('EditCtrl', [
             id: $stateParams.projectId
         })[0];
         if (proj && proj.settings) {
-            $scope.proj_margin = $filter('filter')(proj.settings, {
+            var val = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
+            $scope.proj_margin = parseInt(val.value);
         } else {
             $scope.proj_margin = 0;
         }
