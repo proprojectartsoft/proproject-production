@@ -76,9 +76,9 @@ angular.module($APP.name).controller('FormCtrl', [
             var val = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
-            $scope.proj_margin = parseInt(val.value);
+            $rootScope.proj_margin = parseInt(val.value);
         } else {
-            $scope.proj_margin = 0;
+            $rootScope.proj_margin = 0;
         }
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
@@ -499,7 +499,7 @@ angular.module($APP.name).controller('FormCtrl', [
                     });
                     angular.forEach(parent.resources, function(res) {
                         //compute resource sale price
-                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin || 0) / 100);
+                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
                         //compute resource total including VAT/Tax
                         var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
                         res.total_cost = vatComponent;
