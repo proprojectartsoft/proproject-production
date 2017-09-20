@@ -41,13 +41,12 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             id: $stateParams.projectId
         })[0];
         if (proj && proj.settings) {
-            $scope.proj_margin = $filter('filter')(proj.settings.value, {
+            $scope.proj_margin = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
         } else {
-            $scope.proj_margin = 0;
+            $scope.proj_margin.value = 0;
         }
-        console.log($scope.proj_margin, proj)
         $scope.updateTitle = function(title, placeholder) {
             CommonServices.updateTitle(title, placeholder, $scope.titleShow);
         }
@@ -262,7 +261,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         angular.forEach(item.resources, function(res) {
                             if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
                                 //compute resource sale price
-                                var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin || 0) / 100);
+                                var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin.value || 0) / 100);
                                 //compute resource total including VAT/Tax
                                 var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
                                 res.total_cost = vatComponent;
@@ -276,7 +275,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             angular.forEach(stk.resources, function(res) {
                                 if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
                                     //compute resource sale price
-                                    var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin || 0) / 100);
+                                    var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin.value || 0) / 100);
                                     //compute resource total including VAT/Tax
                                     var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
                                     res.total_cost = vatComponent;
