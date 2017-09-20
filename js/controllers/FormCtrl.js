@@ -76,9 +76,9 @@ angular.module($APP.name).controller('FormCtrl', [
             $scope.proj_margin = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
-            $scope.proj_margin.value = parseInt($scope.proj_margin.value);
+            $scope.proj_margin = parseInt($scope.proj_margin.value);
         } else {
-            $scope.proj_margin.value = 0;
+            $scope.proj_margin = 0;
         }
         console.log(proj, $scope.proj_margin)
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources

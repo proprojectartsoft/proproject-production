@@ -44,9 +44,9 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
             $scope.proj_margin = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
-            $scope.proj_margin.value = parseInt($scope.proj_margin.value);
+            $scope.proj_margin = parseInt($scope.proj_margin.value);
         } else {
-            $scope.proj_margin.value = 0;
+            $scope.proj_margin = 0;
         }
         console.log(proj, $scope.proj_margin)
         $scope.updateTitle = function(title, placeholder) {
@@ -263,7 +263,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                         angular.forEach(item.resources, function(res) {
                             if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
                                 //compute resource sale price
-                                var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin.value || 0) / 100);
+                                var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin || 0) / 100);
                                 //compute resource total including VAT/Tax
                                 var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
                                 res.total_cost = vatComponent;
@@ -277,7 +277,7 @@ angular.module($APP.name).controller('FormInstanceCtrl', [
                             angular.forEach(stk.resources, function(res) {
                                 if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
                                     //compute resource sale price
-                                    var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin.value || 0) / 100);
+                                    var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($scope.proj_margin || 0) / 100);
                                     //compute resource total including VAT/Tax
                                     var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
                                     res.total_cost = vatComponent;
