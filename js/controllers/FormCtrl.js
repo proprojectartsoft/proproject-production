@@ -73,10 +73,10 @@ angular.module($APP.name).controller('FormCtrl', [
             id: parseInt($stateParams.projectId, 10)
         })[0];
         if (proj && proj.settings) {
-            $scope.proj_margin = $filter('filter')(proj.settings, {
+            var val = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
-            $scope.proj_margin = parseInt($scope.proj_margin.value);
+            $scope.proj_margin = parseInt(val.value);
         } else {
             $scope.proj_margin = 0;
         }
@@ -622,6 +622,7 @@ angular.module($APP.name).controller('FormCtrl', [
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {
             CommonServices.addResource($scope.resourceField.resources, $scope.filter.vat);
+            console.log($scope.resourceField.resources)
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
         //Add new resource in staffField; initialized with start, break and finish times
