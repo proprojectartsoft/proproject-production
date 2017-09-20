@@ -76,7 +76,7 @@ angular.module($APP.name).controller('FormCtrl', [
             var val = $filter('filter')(proj.settings, {
                 name: "margin"
             })[0];
-            if(!$scope.proj_margin) $scope.proj_margin = parseInt(val.value);
+            $scope.proj_margin = parseInt(val.value);
         } else {
             $scope.proj_margin = 0;
         }
