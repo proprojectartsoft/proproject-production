@@ -75,6 +75,9 @@ angular.module($APP.name).service('CommonServices', [
                             filter.popup_predicate.unit_id = unt.id;
                             filter.popup_predicate.unit_name = unt.name;
                         }
+                        if (item.resource_margin) {
+                            filter.popup_predicate.resource_margin = item.resource_margin;
+                        }
                     }
                 } else { //TODO:
                     // if ($scope.formData.scheduling_field_design) {
