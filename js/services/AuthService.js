@@ -135,7 +135,7 @@ angular.module($APP.name).factory('AuthService', [
                             });
                         }
                         localStorage.setObject("ppuser", $rootScope.currentUser)
-                        return payload.data.data;
+                        return payload.data;
                     })
                     .error(function(response, status) {
                         if (status === 502) {
