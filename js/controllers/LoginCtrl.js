@@ -24,7 +24,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                 }).success(function(response) {
                     localStorage.removeItem('loggedOut');
                     if (response) {
-                      console.log(response)
+                        console.log(response)
                         $timeout(function() {
                             SyncService.sync_close();
                             SyncService.sync_button();
@@ -74,17 +74,17 @@ angular.module($APP.name).controller('LoginCtrl', [
                             'username': $scope.user.username,
                             'password': $scope.user.password
                         });
-                        $timeout(function() {
-                            SyncService.sync_close();
-                            localStorage.setObject('ppreload', {
-                                'username': $scope.user.username,
-                                'password': $scope.user.password
-                            });
-                            SyncService.sync_button();
-                        });
                     } else {
                         localStorage.clear();
                     }
+                    $timeout(function() {
+                        SyncService.sync_close();
+                        localStorage.setObject('ppreload', {
+                            'username': $scope.user.username,
+                            'password': $scope.user.password
+                        });
+                        SyncService.sync_button();
+                    });
                 }
             }).error(function(err, status) {
                 if (status === 0 || status === -1) {
