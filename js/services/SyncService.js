@@ -161,6 +161,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS DesignsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS DesignsTable (id int primary key, name text, guidance text, category_id int, permission int, data text)');
+                            console.log("DESIGNS:");
+                            console.log(result);
                             angular.forEach(result, function(form) {
                                 tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
                             });
@@ -212,6 +214,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
+                            console.log("PROJECTS:");
+                            console.log(result);
                             angular.forEach(result, function(project) {
                                 tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
                             });
@@ -236,6 +240,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS CustsettTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS CustsettTable (id int primary key, name text, value text)');
+                            console.log("CUST SETT:");
+                            console.log(result);
                             angular.forEach(result, function(sett) {
                                 tx.executeSql('INSERT INTO CustsettTable VALUES (?,?,?)', [sett.id, sett.name, sett.value]);
                             });
@@ -262,6 +268,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ResourcesTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ResourcesTable (id int primary key, name text, product_ref text, direct_cost int)');
+                            console.log("RESOURCES:");
+                            console.log(result);
                             angular.forEach(result, function(res) {
                                 tx.executeSql('INSERT INTO ResourcesTable VALUES (?,?,?,?)', [res.id, res.name, res.product_ref, res.direct_cost]);
                             });
@@ -286,6 +294,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS UnitTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS UnitTable (id int primary key, name text, type text)');
+                            console.log("UNIT:");
+                            console.log(result);
                             angular.forEach(result, function(unit) {
                                 tx.executeSql('INSERT INTO UnitTable VALUES (?,?,?)', [unit.id, unit.name, unit.type]);
                             });
@@ -311,6 +321,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS StaffTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS StaffTable (id int primary key, name text, role text, employer_name text, direct_cost int, unit_name text, unit_id int, resource_type text, resource_id int)');
+                            console.log("STAFF:");
+                            console.log(result);
                             angular.forEach(result, function(res) {
                                 tx.executeSql('INSERT INTO StaffTable VALUES (?,?,?,?,?,?,?,?,?)', [res.id, res.name, res.role, res.employer_name, res.direct_cost, res.unit_name, res.unit_id, res.resource_type, res.resource_id]);
                             });
@@ -603,15 +615,12 @@ angular.module($APP.name).factory('SyncService', [
                 });
             },
             sync_button: function() {
-                console.log("SYNC");
                 var defer = $q.defer();
                 $timeout(function() {
-                    console.log("TEST IF ONLINE");
                     if (navigator.onLine) {
                         $state.go('app.categories', {
                             'projectId': $rootScope.projectId
                         });
-                        console.log(ONLINE);
                         DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true)
                         getme()
                             .success(function(data) {
@@ -656,7 +665,6 @@ angular.module($APP.name).factory('SyncService', [
                                 }
                             })
                     } else {
-                        console.log(OFFLINE);
                         load();
                         defer.resolve()
                         DbService.popclose();
