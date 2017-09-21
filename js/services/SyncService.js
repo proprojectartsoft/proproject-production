@@ -161,6 +161,8 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS DesignsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS DesignsTable (id int primary key, name text, guidance text, category_id int, permission int, data text)');
+                            console.log(result);
+
                             angular.forEach(result, function(form) {
                                 tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
                             });
@@ -212,6 +214,9 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
+                            console.log(result);
+
+
                             angular.forEach(result, function(project) {
                                 tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
                             });
@@ -262,6 +267,10 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ResourcesTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ResourcesTable (id int primary key, name text, product_ref text, direct_cost int)');
+
+
+                            console.log(result);
+                            
                             angular.forEach(result, function(res) {
                                 tx.executeSql('INSERT INTO ResourcesTable VALUES (?,?,?,?)', [res.id, res.name, res.product_ref, res.direct_cost]);
                             });

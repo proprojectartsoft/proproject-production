@@ -3,6 +3,7 @@ angular.module($APP.name).service('CommonServices', [
     function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService, DbService) {
         return {
             selectPopover: function(filter, item, titleShow) {
+                console.log(item);
                 var resource_type_list = DbService.get('resource_type');
                 var unit_list = DbService.get('unit');
                 var abs_list = DbService.get('absenteeism');
