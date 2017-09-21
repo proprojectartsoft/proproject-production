@@ -22,6 +22,8 @@ angular.module($APP.name).controller('LoginCtrl', [
                     username: $scope.user.username,
                     password: $scope.user.password
                 }).success(function(response) {
+                    console.log("success auth");
+                    console.log(response);
                     localStorage.removeItem('loggedOut');
                     if (response) {
                         console.log(response)
