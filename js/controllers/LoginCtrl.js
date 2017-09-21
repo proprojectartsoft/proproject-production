@@ -24,10 +24,11 @@ angular.module($APP.name).controller('LoginCtrl', [
                 }).success(function(response) {
                     localStorage.removeItem('loggedOut');
                     if (response) {
+                      console.log(response)
                         $timeout(function() {
                             SyncService.sync_close();
                             SyncService.sync_button();
-                        }, 100);
+                        });
                     }
                 }).error(function(err, status) {
                     console.log(status);
