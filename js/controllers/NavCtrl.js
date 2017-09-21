@@ -92,7 +92,21 @@ angular.module($APP.name).controller('NavCtrl', [
 
         $scope.sync = function() {
             if (navigator.onLine) {
-                SyncService.sync_button();
+                var popup = $ionicPopup.alert({
+                    title: "Sync",
+                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                    content: "",
+                    buttons: [{
+                        text: 'Ok',
+                        type: 'button-positive',
+                        onTap: function(e) {
+                            popup.close();
+                        }
+                    }]
+                });
+                SyncService.sync_button().then(function(res) {
+                    popup.close();
+                })
             } else {
                 var offlinePopup = $ionicPopup.alert({
                     title: "You are offline",

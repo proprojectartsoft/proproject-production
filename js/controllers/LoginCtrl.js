@@ -16,32 +16,40 @@ angular.module($APP.name).controller('LoginCtrl', [
         var ppremember = localStorage.getObject('ppremember');
         console.log(ppremember);
         if (ppremember) {
+            var popup = $ionicPopup.alert({
+                title: "Sync",
+                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        popup.close();
+                    }
+                }]
+            });
             $scope.user.username = ppremember.username;
             $scope.user.password = ppremember.password;
             $scope.user.rememberMe = true;
-            console.log(localStorage.getObject('loggedOut'));
             if (!localStorage.getObject('loggedOut')) {
-                console.log("CALL LOGIN");
-                console.log(user);
                 AuthService.login({
                     username: $scope.user.username,
                     password: $scope.user.password
                 }).success(function(response) {
-                    console.log("success auth");
-                    console.log(response);
                     localStorage.removeItem('loggedOut');
                     if (response) {
-                        console.log(response)
                         $timeout(function() {
                             SyncService.sync_close();
-                            SyncService.sync_button();
+                            SyncService.sync_button().then(function(res) {
+                                popup.close();
+                            })
                         });
+                    } else {
+                        popup.close();
                     }
                 }).error(function(err, status) {
-                    console.log(status);
+                    popup.close();
                     if (status === 0 || status === -1) {
-                        console.log($scope.user.username);
-                        console.log($scope.user.password);
                         localStorage.setObject('userToLog', {
                             'username': $scope.user.username,
                             'password': $scope.user.password
@@ -55,11 +63,6 @@ angular.module($APP.name).controller('LoginCtrl', [
                             title: 'Please Note',
                             template: "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.",
                         });
-
-                        console.log(localStorage.getObject('userToLog'));
-                        console.log(localStorage.getObject('ppreload'));
-
-
                         alertPopup.then(function(res) {});
                     }
                     $rootScope.thisUser = localStorage.getObject("ppuser");
@@ -67,13 +70,25 @@ angular.module($APP.name).controller('LoginCtrl', [
                     SyncService.sync_close();
                 })
             } else {
-                console.log("IS LOGED OUT");
+                popup.close();
             }
         } else {
-            console.log("NOT PPREMEMBER");
+            console.log("NOT PPREMEMBERED");
         }
 
         $scope.login = function() {
+            var popup = $ionicPopup.alert({
+                title: "Sync",
+                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        popup.close();
+                    }
+                }]
+            });
             AuthService.login({
                 username: $scope.user.username,
                 password: $scope.user.password
@@ -94,10 +109,15 @@ angular.module($APP.name).controller('LoginCtrl', [
                             'username': $scope.user.username,
                             'password': $scope.user.password
                         });
-                        SyncService.sync_button();
+                        SyncService.sync_button().then(function(err) {
+                            popup.close();
+                        })
                     });
+                } else {
+                    popup.close();
                 }
             }).error(function(err, status) {
+                popup.close();
                 if (status === 0 || status === -1) {
                     var alertPopup = $ionicPopup.alert({
                         title: 'Error',

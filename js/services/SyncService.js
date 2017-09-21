@@ -161,8 +161,6 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS DesignsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS DesignsTable (id int primary key, name text, guidance text, category_id int, permission int, data text)');
-                            console.log("DESIGNS:");
-                            console.log(result);
                             angular.forEach(result, function(form) {
                                 tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
                             });
@@ -214,8 +212,6 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
-                            console.log("PROJECTS:");
-                            console.log(result);
                             angular.forEach(result, function(project) {
                                 tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
                             });
@@ -240,8 +236,6 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS CustsettTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS CustsettTable (id int primary key, name text, value text)');
-                            console.log("CUST SETT:");
-                            console.log(result);
                             angular.forEach(result, function(sett) {
                                 tx.executeSql('INSERT INTO CustsettTable VALUES (?,?,?)', [sett.id, sett.name, sett.value]);
                             });
@@ -268,8 +262,6 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ResourcesTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ResourcesTable (id int primary key, name text, product_ref text, direct_cost int)');
-                            console.log("RESOURCES:");
-                            console.log(result);
                             angular.forEach(result, function(res) {
                                 tx.executeSql('INSERT INTO ResourcesTable VALUES (?,?,?,?)', [res.id, res.name, res.product_ref, res.direct_cost]);
                             });
@@ -294,8 +286,6 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS UnitTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS UnitTable (id int primary key, name text, type text)');
-                            console.log("UNIT:");
-                            console.log(result);
                             angular.forEach(result, function(unit) {
                                 tx.executeSql('INSERT INTO UnitTable VALUES (?,?,?)', [unit.id, unit.name, unit.type]);
                             });
@@ -321,8 +311,6 @@ angular.module($APP.name).factory('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS StaffTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS StaffTable (id int primary key, name text, role text, employer_name text, direct_cost int, unit_name text, unit_id int, resource_type text, resource_id int)');
-                            console.log("STAFF:");
-                            console.log(result);
                             angular.forEach(result, function(res) {
                                 tx.executeSql('INSERT INTO StaffTable VALUES (?,?,?,?,?,?,?,?,?)', [res.id, res.name, res.role, res.employer_name, res.direct_cost, res.unit_name, res.unit_id, res.resource_type, res.resource_id]);
                             });
@@ -491,6 +479,8 @@ angular.module($APP.name).factory('SyncService', [
                 for (var i = 0; i < rs.rows.length; i++) {
                     aux.push(rs.rows.item(i));
                 }
+                console.log("RESOURCES ADEED:");
+                console.log(aux);
                 DbService.add('resources', aux);
             }, function(error) {});
             $APP.db.executeSql('SELECT * FROM UnitTable', [], function(rs) {
@@ -552,13 +542,10 @@ angular.module($APP.name).factory('SyncService', [
         }
         return {
             sync: function() {
-                console.log("SYNC IS EXECUTED");
                 $timeout(function() {
                     if (navigator.onLine) {
-                        console.log("ONLINE");
                         getme()
                             .success(function(data) {
-                                console.log("SUCCESS");
                                 localStorage.setObject("ppuser", data)
                                 AuthService.version().then(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
@@ -568,21 +555,15 @@ angular.module($APP.name).factory('SyncService', [
                                         DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true)
                                         down();
                                     } else {
-                                        console.log("JUST LOAD");
-                                        $state.go('app.categories', {
-                                            'projectId': $rootScope.projectId
-                                        });
                                         load();
                                         DbService.popclose();
                                     }
                                 })
                             })
                             .error(function(data, status) {
-                              console.log("ERROR GETME");
                                 if (navigator.onLine) {
                                     if (status === 403) {
                                         var user = localStorage.getObject('ppremember');
-                                        console.log(user);
                                         if (user) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
@@ -623,14 +604,13 @@ angular.module($APP.name).factory('SyncService', [
                 var defer = $q.defer();
                 $timeout(function() {
                     if (navigator.onLine) {
-                        $state.go('app.categories', {
-                            'projectId': $rootScope.projectId
-                        });
-                        DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true)
                         getme()
                             .success(function(data) {
                                 localStorage.setObject("ppuser", data);
                                 down(defer);
+                                $state.go('app.categories', {
+                                    'projectId': $rootScope.projectId
+                                });
                             })
                             .error(function(data, status) {
                                 if (navigator.onLine) {
@@ -651,28 +631,23 @@ angular.module($APP.name).factory('SyncService', [
                                                     };
                                                     down(defer);
                                                 }).error(function() {
-                                                    DbService.popclose();
                                                     defer.resolve();
                                                 })
                                         } else {
-                                            DbService.popclose();
                                             defer.resolve();
                                         }
                                     } else {
                                         load();
                                         defer.resolve();
-                                        DbService.popclose();
                                     }
                                 } else {
                                     load();
                                     defer.resolve();
-                                    DbService.popclose();
                                 }
                             })
                     } else {
                         load();
                         defer.resolve()
-                        DbService.popclose();
                     }
                 });
                 return defer.promise;

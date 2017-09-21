@@ -27,13 +27,11 @@ angular.module($APP.name, [
     'ngCordova',
 ]);
 angular.module($APP.name).run(function($rootScope, $ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
-    // AuthService.init();
     $ionicPlatform.ready(function() {
         $APP.db = window.sqlitePlugin.openDatabase({
             name: 'demo.db',
             location: 'default'
         });
-        console.log("CALL SYNC FROM APPJS");
         SyncService.sync();
         // if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
