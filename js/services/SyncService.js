@@ -552,10 +552,13 @@ angular.module($APP.name).factory('SyncService', [
         }
         return {
             sync: function() {
+                console.log("SYNC IS EXECUTED");
                 $timeout(function() {
                     if (navigator.onLine) {
+                        console.log("ONLINE");
                         getme()
                             .success(function(data) {
+                                console.log("SUCCESS");
                                 localStorage.setObject("ppuser", data)
                                 AuthService.version().then(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
@@ -565,6 +568,7 @@ angular.module($APP.name).factory('SyncService', [
                                         DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true)
                                         down();
                                     } else {
+                                        console.log("JUST LOAD");
                                         $state.go('app.categories', {
                                             'projectId': $rootScope.projectId
                                         });
@@ -574,6 +578,7 @@ angular.module($APP.name).factory('SyncService', [
                                 })
                             })
                             .error(function(data, status) {
+                              console.log("ERROR GETME");
                                 if (navigator.onLine) {
                                     if (status === 403) {
                                         var user = localStorage.getObject('ppremember');

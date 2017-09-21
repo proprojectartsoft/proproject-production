@@ -7,17 +7,22 @@ angular.module($APP.name).controller('LoginCtrl', [
     '$ionicPopup',
     'SyncService',
     function($scope, $state, AuthService, $rootScope, $timeout, $ionicPopup, SyncService) {
+        console.log("LOGIN CONTROLLER");
         $scope.user = [];
         $scope.user.username = "";
         $scope.user.password = "";
         $scope.user.rememberMe = false;
         $scope.popupOpen = false;
         var ppremember = localStorage.getObject('ppremember');
+        console.log(ppremember);
         if (ppremember) {
             $scope.user.username = ppremember.username;
             $scope.user.password = ppremember.password;
             $scope.user.rememberMe = true;
+            console.log(localStorage.getObject('loggedOut'));
             if (!localStorage.getObject('loggedOut')) {
+                console.log("CALL LOGIN");
+                console.log(user);
                 AuthService.login({
                     username: $scope.user.username,
                     password: $scope.user.password
@@ -61,7 +66,11 @@ angular.module($APP.name).controller('LoginCtrl', [
                     localStorage.removeItem('loggedOut');
                     SyncService.sync_close();
                 })
+            } else {
+                console.log("IS LOGED OUT");
             }
+        } else {
+            console.log("NOT PPREMEMBER");
         }
 
         $scope.login = function() {

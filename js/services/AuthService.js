@@ -13,6 +13,7 @@ angular.module($APP.name).factory('AuthService', [
                 $http.get($APP.server + '/api/me', {
                     withCredentials: true
                 }).success(function(user) {
+                    console.log("AUTH INIT");
                     $rootScope.online = true;
                     $rootScope.currentUser = {
                         id: user.id,
@@ -23,6 +24,7 @@ angular.module($APP.name).factory('AuthService', [
                     };
                     $state.go("app.categories");
                 }).error(function(data, status, headers, config) {
+                    console.log("error init");
                     if (status === 403) {
                         var user = localStorage.getObject("ppreload");
                         if (user) {

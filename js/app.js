@@ -33,6 +33,7 @@ angular.module($APP.name).run(function($rootScope, $ionicPlatform, CacheFactory,
             name: 'demo.db',
             location: 'default'
         });
+        console.log("CALL SYNC FROM APPJS");
         SyncService.sync();
         // if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
