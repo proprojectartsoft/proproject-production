@@ -27,7 +27,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                         $timeout(function() {
                             SyncService.sync_close();
                             SyncService.sync_button();
-                        });
+                        }, 100);
                     }
                 }).error(function(err, status) {
                     console.log(status);
@@ -84,7 +84,6 @@ angular.module($APP.name).controller('LoginCtrl', [
                     } else {
                         localStorage.clear();
                     }
-
                 }
             }).error(function(err, status) {
                 if (status === 0 || status === -1) {
