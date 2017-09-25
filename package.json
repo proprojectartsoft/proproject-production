@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node ./app.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "body-parser": "~1.15.1",
     "cookie-parser": "~1.4.3",
