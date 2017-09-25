@@ -1136,6 +1136,8 @@ angular.module($APP.name).controller('FormCtrl', [
                         }
                         Promise.all([addResource, addStaff, addSchedule, addPayitem]).then(function(res) {
                             $scope.fastSave($scope.formData, $scope.imgURI);
+                        }, function(err) {
+                            $scope.fastSave($scope.formData, $scope.imgURI);
                         })
                     });
                 }
