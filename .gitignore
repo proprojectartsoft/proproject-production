@@ -1,2 +1,5 @@
 js/services/SyncService.js
 /nbproject/private/
+nbproject/
+.idea
+node_modules

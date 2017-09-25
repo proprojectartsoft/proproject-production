@@ -28,10 +28,14 @@ angular.module($APP.name, [
 ]);
 angular.module($APP.name).run(function($rootScope, $ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
     $ionicPlatform.ready(function() {
-        $APP.db = window.sqlitePlugin.openDatabase({
-            name: 'demo.db',
-            location: 'default'
-        });
+	    if (window.cordova && window.sqlitePlugin) {
+		    $APP.db = window.sqlitePlugin.openDatabase({
+			    name: 'demo.db',
+			    location: 'default'
+		    });
+	    } else {
+		    $APP.db =  window.openDatabase('demo.db', "1.0", "Test DB", 10000000);
+        }
         SyncService.sync();
         // if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
         //     cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);

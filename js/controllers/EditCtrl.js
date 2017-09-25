@@ -330,7 +330,7 @@ angular.module($APP.name).controller('EditCtrl', [
             if (parent) {
                 parent.total_cost = 0;
                 if (type === 'resource' || type === 'piresource' || type === 'pisubresource') {
-                    angular.forEach(parent.resources, function(res) {\
+                    angular.forEach(parent.resources, function(res) {
                         //compute resource sale price
                         var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
                         //compute resource total including VAT/Tax
