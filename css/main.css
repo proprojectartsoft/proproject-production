@@ -567,6 +567,7 @@ label.item.img-description {
   color: #2A2876;
   font-size: 20px;
   font-weight: 600;
+  vertical-align: middle;
 }
 
 #login-new .scroll-content .login-buttons {
