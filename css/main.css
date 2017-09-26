@@ -566,7 +566,7 @@ label.item.img-description {
 #login-new .scroll-content form div input::-webkit-input-placeholder {
   color: #2A2876;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 600!important;
   vertical-align: middle;
 }
 
