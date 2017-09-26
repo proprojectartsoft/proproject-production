@@ -96,13 +96,7 @@ angular.module($APP.name).controller('NavCtrl', [
                     title: "Sync",
                     template: "<center><ion-spinner icon='android'></ion-spinner></center>",
                     content: "",
-                    buttons: [{
-                        text: 'Ok',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            popup.close();
-                        }
-                    }]
+                    buttons: []
                 });
                 SyncService.sync_button().then(function(res) {
                     popup.close();

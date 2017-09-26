@@ -23,9 +23,10 @@ angular.module($APP.name).controller('EditCtrl', [
     '$state',
     '$filter',
     'DbService',
+    '$q',
     function($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory, ResourceService, StaffService, SchedulingService,
-        PayitemService, CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService) {
+        PayitemService, CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q) {
         var custSett = DbService.get('custsett');
         $scope.filter = {
             edit: true,
@@ -696,6 +697,7 @@ angular.module($APP.name).controller('EditCtrl', [
                                 content: "",
                                 buttons: []
                             });
+
                             if ($scope.formData.resource_field_id) {
                                 angular.forEach($rootScope.resourceField.resources, function(item) {
                                     if (item.unit_obj) {
@@ -875,84 +877,59 @@ angular.module($APP.name).controller('EditCtrl', [
             confirmPopup.then(function(res) {
                 if (res) {
                     $timeout(function() {
-                        var resourceOK = false,
-                            staffOK = false,
-                            schedulingOK = false,
-                            payOK = false;
                         var formUp = $ionicPopup.alert({
                             title: "Submitting",
                             template: "<center><ion-spinner icon='android'></ion-spinner></center>",
                             content: "",
                             buttons: []
                         });
-                        if ($scope.formData.resource_field_id) {
-                            angular.forEach($rootScope.resourceField.resources, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit_id = item.unit_obj.id;
-                                    item.unit_name = item.unit_obj.name;
-                                }
-                                if (item.res_type_obj) {
-                                    item.resource_type_id = item.res_type_obj.id;
-                                    item.resource_type_name = item.res_type_obj.name;
-                                }
-                                if (item.stage_obj) {
-                                    item.stage_id = item.stage_obj.id;
-                                    item.stage_name = item.stage_obj.name;
-                                }
-                                if (item.absenteeism_obj) {
-                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                }
-                                if (item.current_day_obj) {
-                                    item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
-                                }
-                            });
-                            ResourceService.add_field($rootScope.resourceField).success(function(x) {
-                                $scope.formData.resource_field_id = x.id;
-                                resourceOK = true;
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            }).error(function(err) {
-                                resourceOK = true;
-                                //field could not be added to server; store it for later save
-                                //TODO:store in $scope.formData the new resource; this will be copied in formInstanceService on error branch
-                                $scope.formData.resourceField = $scope.formData.resourceField || [];
-                                $scope.formData.resourceField.push($rootScope.resourceField);
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            });
-                        } else {
-                            resourceOK = true;
-                        }
-                        if ($scope.formData.pay_item_field_id) {
-                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit = item.unit_obj.name;
-                                    item.unit_id = item.unit_obj.id;
-                                }
-                                angular.forEach(item.resources, function(res) {
-                                    if (res.unit_obj) {
-                                        res.unit_id = res.unit_obj.id;
-                                        res.unit_name = res.unit_obj.name;
+
+                        function addResource() {
+                            var def = $q.defer();
+                            if ($scope.formData.resource_field_id) {
+                                angular.forEach($rootScope.resourceField.resources, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit_id = item.unit_obj.id;
+                                        item.unit_name = item.unit_obj.name;
                                     }
-                                    if (res.res_type_obj) {
-                                        res.resource_type_id = res.res_type_obj.id;
-                                        res.resource_type_name = res.res_type_obj.name;
+                                    if (item.res_type_obj) {
+                                        item.resource_type_id = item.res_type_obj.id;
+                                        item.resource_type_name = item.res_type_obj.name;
                                     }
-                                    if (res.absenteeism_obj) {
-                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                    if (item.stage_obj) {
+                                        item.stage_id = item.stage_obj.id;
+                                        item.stage_name = item.stage_obj.name;
                                     }
-                                    if (res.current_day_obj) {
-                                        res.current_day = res.current_day_obj;
+                                    if (item.absenteeism_obj) {
+                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
                                     }
-                                    if (res.expiry_date_obj) {
-                                        var date = new Date(res.expiry_date_obj);
-                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                    if (item.current_day_obj) {
+                                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
                                     }
                                 });
-                                angular.forEach(item.subtasks, function(subtask) {
-                                    angular.forEach(subtask.resources, function(res) {
+                                ResourceService.add_field($rootScope.resourceField).success(function(x) {
+                                    $scope.formData.resource_field_id = x.id;
+                                    def.resolve();
+                                }).error(function(err) {
+                                    $scope.formData.resourceField = $scope.formData.resourceField || [];
+                                    $scope.formData.resourceField.push($rootScope.resourceField);
+                                    def.resolve();
+                                });
+                            } else {
+                                def.resolve();
+                            }
+                            return def.promise;
+                        }
+
+                        function addPayitem() {
+                            var def = $q.defer();
+                            if ($scope.formData.pay_item_field_id) {
+                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit = item.unit_obj.name;
+                                        item.unit_id = item.unit_obj.id;
+                                    }
+                                    angular.forEach(item.resources, function(res) {
                                         if (res.unit_obj) {
                                             res.unit_id = res.unit_obj.id;
                                             res.unit_name = res.unit_obj.name;
@@ -972,53 +949,52 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
                                     });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        angular.forEach(subtask.resources, function(res) {
+                                            if (res.unit_obj) {
+                                                res.unit_id = res.unit_obj.id;
+                                                res.unit_name = res.unit_obj.name;
+                                            }
+                                            if (res.res_type_obj) {
+                                                res.resource_type_id = res.res_type_obj.id;
+                                                res.resource_type_name = res.res_type_obj.name;
+                                            }
+                                            if (res.absenteeism_obj) {
+                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                            }
+                                            if (res.current_day_obj) {
+                                                res.current_day = res.current_day_obj;
+                                            }
+                                            if (res.expiry_date_obj) {
+                                                var date = new Date(res.expiry_date_obj);
+                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                            }
+                                        });
+                                    });
                                 });
-                            });
-                            PayitemService.add_field($rootScope.payitemField).success(function(x) {
-                                $scope.formData.pay_item_field_id = x.id;
-                                payOK = true;
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            }).error(function(err) {
-                                payOK = true;
-                                $scope.formData.payitemField = $scope.formData.payitemField || [];
-                                $scope.formData.payitemField.push($rootScope.payitemField);
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            });
-                        } else {
-                            payOK = true;
+                                PayitemService.add_field($rootScope.payitemField).success(function(x) {
+                                    $scope.formData.pay_item_field_id = x.id;
+                                    def.resolve();
+                                }).error(function(err) {
+                                    $scope.formData.payitemField = $scope.formData.payitemField || [];
+                                    $scope.formData.payitemField.push($rootScope.payitemField);
+                                    def.resolve();
+                                });
+                            } else {
+                                def.resolve();
+                            }
+                            return def.promise;
                         }
-                        if ($scope.formData.scheduling_field_id) {
-                            angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                if (item.unit_obj) {
-                                    item.unit = item.unit_obj.name;
-                                    item.unit_id = item.unit_obj.id;
-                                }
-                                angular.forEach(item.resources, function(res) {
-                                    if (res.unit_obj) {
-                                        res.unit_id = res.unit_obj.id;
-                                        res.unit_name = res.unit_obj.name;
+
+                        function addScheduling() {
+                            var def = $q.defer();
+                            if ($scope.formData.scheduling_field_id) {
+                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
+                                    if (item.unit_obj) {
+                                        item.unit = item.unit_obj.name;
+                                        item.unit_id = item.unit_obj.id;
                                     }
-                                    if (res.res_type_obj) {
-                                        res.resource_type_id = res.res_type_obj.id;
-                                        res.resource_type_name = res.res_type_obj.name;
-                                    }
-                                    if (res.absenteeism_obj) {
-                                        res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                    }
-                                    if (res.current_day_obj) {
-                                        res.current_day = res.current_day_obj;
-                                    }
-                                    if (res.expiry_date_obj) {
-                                        var date = new Date(res.expiry_date_obj);
-                                        res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                    }
-                                });
-                                angular.forEach(item.subtasks, function(subtask) {
-                                    angular.forEach(subtask.resources, function(res) {
+                                    angular.forEach(item.resources, function(res) {
                                         if (res.unit_obj) {
                                             res.unit_id = res.unit_obj.id;
                                             res.unit_name = res.unit_obj.name;
@@ -1031,69 +1007,91 @@ angular.module($APP.name).controller('EditCtrl', [
                                             res.abseteeism_reason_name = res.absenteeism_obj.reason;
                                         }
                                         if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj.getTime();
+                                            res.current_day = res.current_day_obj;
                                         }
                                         if (res.expiry_date_obj) {
                                             var date = new Date(res.expiry_date_obj);
                                             res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
                                         }
                                     });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        angular.forEach(subtask.resources, function(res) {
+                                            if (res.unit_obj) {
+                                                res.unit_id = res.unit_obj.id;
+                                                res.unit_name = res.unit_obj.name;
+                                            }
+                                            if (res.res_type_obj) {
+                                                res.resource_type_id = res.res_type_obj.id;
+                                                res.resource_type_name = res.res_type_obj.name;
+                                            }
+                                            if (res.absenteeism_obj) {
+                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
+                                            }
+                                            if (res.current_day_obj) {
+                                                res.current_day = res.current_day_obj.getTime();
+                                            }
+                                            if (res.expiry_date_obj) {
+                                                var date = new Date(res.expiry_date_obj);
+                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                                            }
+                                        });
+                                    });
                                 });
-                            });
-                            SchedulingService.add_field($rootScope.payitemField).success(function(x) {
-                                $scope.formData.scheduling_field_id = x.id;
-                                schedulingOK = true;
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            }).error(function(err) {
-                                schedulingOK = true;
-                                $scope.formData.schedField = $scope.formData.schedField || [];
-                                $scope.formData.schedField.push($rootScope.payitemField);
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            });
-                        } else {
-                            schedulingOK = true;
+                                SchedulingService.add_field($rootScope.payitemField).success(function(x) {
+                                    $scope.formData.scheduling_field_id = x.id;
+                                    def.resolve();
+                                }).error(function(err) {
+                                    $scope.formData.schedField = $scope.formData.schedField || [];
+                                    $scope.formData.schedField.push($rootScope.payitemField);
+                                    def.resolve();
+                                });
+                            } else {
+                                def.resolve();
+                            }
+                            return def.promise;
                         }
-                        if ($scope.formData.staff_field_id) {
-                            angular.forEach($rootScope.staffField.resources, function(item) {
-                                if (item.res_type_obj) {
-                                    item.resource_type_id = item.res_type_obj.id;
-                                    item.resource_type_name = item.res_type_obj.name;
-                                }
-                                if (item.absenteeism_obj) {
-                                    item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                    item.absenteeism_obj.reason;
-                                }
-                                if (item.current_day_obj) {
-                                    item.current_day = item.current_day_obj.getTime();
-                                }
-                                if (item.expiry_date_obj) {
-                                    item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
-                                }
-                            });
-                            StaffService.add_field($rootScope.staffField).success(function(x) {
-                                $scope.formData.staff_field_id = x.id;
-                                staffOK = true;
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            }).error(function(err) {
-                                staffOK = true;
-                                $scope.formData.staffField = $scope.formData.staffField || [];
-                                $scope.formData.staffField.push($rootScope.staffField);
-                                if (resourceOK && staffOK && schedulingOK && payOK) {
-                                    fastSave(formUp);
-                                }
-                            });
-                        } else {
-                            staffOK = true;
+
+                        function addStaff() {
+                            var def = $q.defer();
+                            if ($scope.formData.staff_field_id) {
+                                angular.forEach($rootScope.staffField.resources, function(item) {
+                                    if (item.res_type_obj) {
+                                        item.resource_type_id = item.res_type_obj.id;
+                                        item.resource_type_name = item.res_type_obj.name;
+                                    }
+                                    if (item.absenteeism_obj) {
+                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                                        item.absenteeism_obj.reason;
+                                    }
+                                    if (item.current_day_obj) {
+                                        item.current_day = item.current_day_obj.getTime();
+                                    }
+                                    if (item.expiry_date_obj) {
+                                        item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
+                                    }
+                                });
+                                StaffService.add_field($rootScope.staffField).success(function(x) {
+                                    $scope.formData.staff_field_id = x.id;
+                                    def.resolve();
+                                }).error(function(err) {
+                                    $scope.formData.staffField = $scope.formData.staffField || [];
+                                    $scope.formData.staffField.push($rootScope.staffField);
+                                    def.resolve();
+                                });
+                            } else {
+                                def.resolve();
+                            }
+                            return def.promise;
                         }
-                        if (!$scope.formData.scheduling_field_id && !$scope.formData.staff_field_id && !$scope.formData.resource_field_id && !$scope.formData.pay_item_field_id) {
+
+                        var staff = addStaff();
+                        var schedule = addScheduling();
+                        var payitem = addPayitem();
+                        var resource = addResource();
+
+                        Promise.all([resource, staff, schedule, payitem]).then(function(res) {
                             fastSave(formUp);
-                        }
+                        })
                     });
                 }
             });

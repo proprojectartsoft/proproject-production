@@ -20,13 +20,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                 title: "Sync",
                 template: "<center><ion-spinner icon='android'></ion-spinner></center>",
                 content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        popup.close();
-                    }
-                }]
+                buttons: []
             });
             $scope.user.username = ppremember.username;
             $scope.user.password = ppremember.password;
@@ -81,13 +75,7 @@ angular.module($APP.name).controller('LoginCtrl', [
                 title: "Sync",
                 template: "<center><ion-spinner icon='android'></ion-spinner></center>",
                 content: "",
-                buttons: [{
-                    text: 'Ok',
-                    type: 'button-positive',
-                    onTap: function(e) {
-                        popup.close();
-                    }
-                }]
+                buttons: []
             });
             AuthService.login({
                 username: $scope.user.username,
