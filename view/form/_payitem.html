@@ -6,7 +6,7 @@
                 <span ng-if="!payitem.description">Pay-item {{$index + 1}}</span>
                 <span ng-if="payitem.description">{{payitem.description}}</span>
                 <div class="item-subtotal">
-                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i> {{payitem.total_cost}}
+                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i> {{payitem.total_cost | number: 2}}
                 </div>
                 <ion-option-button class="button-assertive" ng-click="deleteElement(payitemField.pay_items, payitem)" ng-if="filter.edit">
                     Delete
@@ -19,7 +19,7 @@
                 <i ng-if="currency">
                     <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                 </i>
-                {{payitemField.total_cost}}
+                {{payitemField.total_cost | number: 2}}
             </div>
         </div>
     </form>
@@ -79,7 +79,7 @@
                             <span ng-if="!stk.description">Subtask {{$index + 1}}</span>
                             <span ng-if="stk.description">{{stk.description}}</span>
                             <div class="item-subtotal">
-                                <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i> {{stk.total_cost}}
+                                <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i> {{stk.total_cost | number: 2}}
                             </div>
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.subtasks, stk)" ng-if="filter.edit">
                                 Delete
@@ -96,7 +96,7 @@
                                 <span> {{res.quantity}} </span>
                                 <span> {{res.unit_name}} </span>
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                                <span> {{res.total_cost}} </span>
+                                <span> {{res.total_cost | number: 2}} </span>
                             </div>
 
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substate.resources, res)" ng-if="filter.edit">
@@ -111,7 +111,7 @@
                             <i ng-if="currency">
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </i>
-                            {{filter.substate.total_cost}}
+                            {{filter.substate.total_cost | number: 2}}
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                                 <span> {{stkres.quantity}} </span>
                                 <span> {{stkres.unit_name}} </span>
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
-                                <span> {{stkres.total_cost}} </span>
+                                <span> {{stkres.total_cost | number: 2}} </span>
                             </div>
 
                             <ion-option-button class="button-assertive" ng-click="deleteElement(filter.substateStk.resources, stkres)" ng-if="filter.edit">
@@ -166,7 +166,7 @@
                             <i ng-if="currency">
                                 <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i>
                             </i>
-                            {{filter.substateStk.total_cost || 0}}
+                            {{(filter.substateStk.total_cost | number: 2) || 0}}
                         </div>
                     </div>
                 </div>
@@ -279,19 +279,19 @@
                         </label>
                         <label class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
-                                <span class="all-name">Resource Margin</span>
+                                <span class="all-name">Resource Margin (%)</span>
                             </div>
                             <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.resource_margin" ng-readonly="!filter.edit">
                         </label>
                         <label class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
-                                <span class="all-name">Project Margin</span>
+                                <span class="all-name">Project Margin (%)</span>
                             </div>
                             <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
                         </label>
                         <label class="item item-input item-stacked-label calm-border">
                             <div class="inputLabel" style="padding-top: 10px;">
-                                <span class="all-name">VAT/Tax</span>
+                                <span class="all-name">VAT/Tax (%)</span>
                             </div>
                             <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateStkRes.vat" ng-readonly="!filter.edit">
                         </label>
@@ -405,19 +405,19 @@
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
-                            <span class="all-name">Resource Margin</span>
+                            <span class="all-name">Resource Margin (%)</span>
                         </div>
                         <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.resource_margin" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
-                            <span class="all-name">Project Margin</span>
+                            <span class="all-name">Project Margin (%)</span>
                         </div>
                         <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
-                            <span class="all-name">VAT/Tax</span>
+                            <span class="all-name">VAT/Tax (%)</span>
                         </div>
                         <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substateRes.vat" ng-readonly="!filter.edit">
                     </label>
