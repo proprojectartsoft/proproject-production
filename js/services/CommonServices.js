@@ -383,6 +383,14 @@ angular.module($APP.name).service('CommonServices', [
                         filter.pi = false;
                         filter.popup_list = DbService.get('resources');
                         break;
+                    case 'payitem':
+                        filter.pi = true;
+                        filter.popup_list = DbService.get('payitems');
+                        // PayitemService.list_payitems(projectId).then(function(data) {
+                        //     $rootScope.payitem_list = data;
+                        //     filter.popup_list = $rootScope.payitem_list;
+                        // });
+                        filter.popup_title = "Payitem filter"
                     default:
                         filter.pi = true;
                         PayitemService.list_payitems(projectId).then(function(data) {

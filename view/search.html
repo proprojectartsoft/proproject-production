@@ -14,7 +14,7 @@
         <ion-list>
             <ion-item ng-repeat="item in filter.popup_list| filter:filter.searchText" ng-if='filter.popup_list.length !== 0' ng-click="selectPopover(item)">
                 <span ng-if="!filter.pi">{{item.name}}</span>
-                <span ng-if="filter.pi">{{item.reference}}</span>
+                <span ng-if="filter.pi">{{item.description}}</span>
             </ion-item>
             <ion-item ng-if='filter.popup_list.length === 0'>
                 No items in list.

@@ -18,7 +18,7 @@ angular.module($APP.name).factory('SyncService', [
 	'SchedulingService',
 	'PayitemService',
 	'orderByFilter',
-	
+
 	function ($q, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService, StaffService,
 	          SchedulingService, PayitemService, orderBy) {
 		function servresp(name, timer, start, response) {
@@ -26,7 +26,7 @@ angular.module($APP.name).factory('SyncService', [
 			this.timer = timer;
 			this.response = response;
 		}
-		
+
 		var getme = function () {
 			return $http.get($APP.server + '/api/me')
 				.success(function (user) {
@@ -58,7 +58,7 @@ angular.module($APP.name).factory('SyncService', [
 					return status;
 				})
 		};
-		
+
 		var addSpecialFields = function (formsToAdd) {
 			var def = $q.defer();
 			var resourceOK = false,
@@ -75,7 +75,7 @@ angular.module($APP.name).factory('SyncService', [
 				schedulingOK = true;
 			if (!formsToAdd.payitemField || formsToAdd.payitemField.length == 0)
 				payOK = true;
-			
+
 			angular.forEach(formsToAdd.resourceField, function (resField) {
 				ResourceService.add_field(resField).success(function (x) {
 					formsToAdd.resource_field_id = x.id;
@@ -215,8 +215,8 @@ angular.module($APP.name).factory('SyncService', [
 							tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
 							tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
 							console.log(result);
-							
-							
+
+
 							angular.forEach(result, function (project) {
 								tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
 							});
@@ -253,7 +253,7 @@ angular.module($APP.name).factory('SyncService', [
 					}
 				});
 			}
-			
+
 			var resources = function () {
 				var obj = new servresp('resources', 0, []);
 				var ping = $interval(function () {
@@ -269,10 +269,10 @@ angular.module($APP.name).factory('SyncService', [
 						$APP.db.transaction(function (tx) {
 							tx.executeSql('DROP TABLE IF EXISTS ResourcesTable');
 							tx.executeSql('CREATE TABLE IF NOT EXISTS ResourcesTable (id int primary key, name text, product_ref text, direct_cost int)');
-							
-							
+
+
 							console.log(result);
-							
+
 							angular.forEach(result, function (res) {
 								tx.executeSql('INSERT INTO ResourcesTable VALUES (?,?,?,?)', [res.id, res.name, res.product_ref, res.direct_cost]);
 							});
@@ -284,6 +284,39 @@ angular.module($APP.name).factory('SyncService', [
 					}
 				});
 			}
+
+			var payitems = function () {
+				var obj = new servresp('payitems', 0, []),
+						project_id = localStorage.getObject('ppprojectId');
+				var ping = $interval(function () {
+					obj.timer += 1;
+				}, 1);
+				return PayitemService.list_payitems(project_id).then(function (result) {
+					if (result) {
+						//order the payitems
+						var result = orderBy(result, 'name');
+						DbService.add('payitems', result);
+						$interval.cancel(ping)
+						obj.response = result;
+						$APP.db.transaction(function (tx) {
+							tx.executeSql('DROP TABLE IF EXISTS PayitemsTable');
+							tx.executeSql('CREATE TABLE IF NOT EXISTS PayitemsTable (id int primary key, reference text, description text, unit_id int, unit_name text)');
+
+
+							console.log(result);
+
+							angular.forEach(result, function (res) {
+								tx.executeSql('INSERT INTO PayitemsTable VALUES (?,?,?,?,?)', [res.id, res.reference, res.description, res.unit_id, res.unit_name]);
+							});
+						}, function (error) {
+							console.log('Transaction ERROR: ' + error.message);
+						}, function () {
+						});
+						return obj;
+					}
+				});
+			}
+
 			var unit = function () {
 				var obj = new servresp('unit', 0, []);
 				var ping = $interval(function () {
@@ -383,11 +416,11 @@ angular.module($APP.name).factory('SyncService', [
 					}
 				});
 			}
-			var doRequest = [designs(), projects(), custsett(), resources(), unit(), staff(), resourceType(), absenteeism()]
-			
+			var doRequest = [designs(), projects(), custsett(), resources(), unit(), staff(), resourceType(), absenteeism(), payitems()]
+
 			forms = localStorage.getObject('ppfsync');
 			pics = localStorage.getObject('pppsync');
-			
+
 			if (forms) {
 				var upRequests = [];
 				angular.forEach(forms, function (form) {
@@ -409,7 +442,7 @@ angular.module($APP.name).factory('SyncService', [
 							upRequests.push(FormInstanceService.create_sync(formsToAdd, picsToAdd).then(function () {
 							}));
 						}
-						
+
 						if (forms[forms.length - 1] == form) {
 							doRequest = doRequest.concat(upRequests);
 							localStorage.removeItem('ppfsync')

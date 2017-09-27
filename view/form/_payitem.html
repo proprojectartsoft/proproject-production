@@ -39,12 +39,16 @@
             <div class="blue-dropArrow"></div>
             <div class="formContent">
                 <div class="calm-border">
-                    <label class="item item-input item-stacked-label calm-border">
+                    <div class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Description</span>
                         </div>
-                        <input ng-change="updateTitle(filter.substate.description, 'Pay-item')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.description" ng-readonly="!filter.edit">
-                    </label>
+                        <div style="position: relative">
+                          <input ng-change="updateTitle(filter.substate.description, 'Pay-item')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.description" ng-readonly="!filter.edit">
+                          <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'payitem');
+                            $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
+                        </div>
+                   </div>
                 </div>
                 <div class="item item-input item-stacked-label calm-border">
                     <div class="inputLabel" style="padding-top: 10px;">
@@ -134,12 +138,16 @@
             <div class="blue-dropArrow" style="border-color: #287BA7 transparent transparent transparent;"></div>
             <div class="formContent">
                 <div class="calm-border">
-                    <label class="item item-input item-stacked-label calm-border">
+                    <div class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel" style="padding-top: 10px;">
                             <span class="all-name">Description</span>
                         </div>
-                        <input ng-change="updateTitle(filter.substateStk.description, 'Pay-item Subtask')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStk.description" ng-readonly="!filter.edit">
-                    </label>
+                        <div style="position: relative">
+                          <input ng-change="updateTitle(filter.substateStk.description, 'Pay-item Subtask')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substateStk.description" ng-readonly="!filter.edit">
+                          <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateStk, 'payitem');
+                            $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete">
