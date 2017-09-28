@@ -44,7 +44,7 @@
             <div class="formContent">
                 <div class="calm-border" ng-if="resourceField.date_option">
                     <label class="item item-input item-stacked-label calm-border datetime-picker" ion-datetime-picker date ng-model="filter.substate.current_day_obj" ng-if="filter.edit" month-step="1" hour-step="1" minute-step="1" second-step="1">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Date</span>
                         </div>
                         <div style="padding-left: 15px;padding-right: 15px;border-top-left-radius: 0px;border-top-right-radius: 0px;overflow: hidden;height: 46px;padding-top: 12px;font-size: 14px;color: #000;background-color: #fff;">
@@ -52,7 +52,7 @@
                         </div>
                     </label>
                     <label class="item item-input item-stacked-label calm-border" ng-model="filter.substate.current_day_obj" ng-if="!filter.edit">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Date</span>
                         </div>
                         <div style="padding-left: 15px;padding-right: 15px;border-top-left-radius: 0px;border-top-right-radius: 0px;overflow: hidden;height: 46px;padding-top: 12px;font-size: 14px;color: #000;background-color: #fff;">
@@ -62,11 +62,11 @@
                 </div>
                 <div class="calm-border">
                     <div class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Name</span>
                         </div>
                         <div style="position: relative">
-                            <input ng-change="updateTitle(filter.substate.name, 'Resource')" style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.name" ng-readonly="!filter.edit">
+                            <input ng-change="updateTitle(filter.substate.name, 'Resource')" class="pp-input" ng-model="filter.substate.name" ng-readonly="!filter.edit">
                             <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'resource');
                                 $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                         </div>
@@ -74,15 +74,15 @@
                 </div>
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Product ref</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" ng-model="filter.substate.product_ref" ng-readonly="!filter.edit">
+                        <input class="pp-input" ng-model="filter.substate.product_ref" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Unit</span>
                         </div>
                         <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substate.unit_obj" ng-disabled="!filter.edit"></select>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource type</span>
                         </div>
                         <select class="form-select" ng-options="option as option.name for option in resource_type_list track by option.id" ng-model="filter.substate.res_type_obj" ng-disabled="!filter.edit"></select>
@@ -98,45 +98,45 @@
                 </div>
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="calm-border" ng-if="resourceField.financial_option">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Direct cost</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substate.direct_cost" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.direct_cost" ng-readonly="!filter.edit">
                     </label>
                 </div>
 
 
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource Margin (%)</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substate.resource_margin" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.resource_margin" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">Project Margin (%)</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
                     </label>
                 </div>
 
                 <div class="calm-border">
                     <label class="item item-input item-stacked-label calm-border">
-                        <div class="inputLabel" style="padding-top: 10px;">
+                        <div class="inputLabel pp-pad-10">
                             <span class="all-name">VAT/Tax (%)</span>
                         </div>
-                        <input style="padding-left:15px; padding-right:15px;border-top-left-radius: 0px; border-top-right-radius: 0px;" type="number" ng-model="filter.substate.vat" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.vat" ng-readonly="!filter.edit">
                     </label>
                 </div>
             </div>

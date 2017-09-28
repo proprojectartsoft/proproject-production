@@ -633,3 +633,23 @@ label.item.img-description {
   font-family: sans-serif!important;
   margin-left: 16%;
 }
+
+.pp-input{
+  padding-left:15px!important;
+  padding-right:15px!important;
+  border-top-left-radius: 0px!important;
+  border-top-right-radius: 0px!important;
+}
+
+.pp-pad-10{
+  padding-top: 10px!important;
+}
+
+.pp-label-resource{
+  float:left;
+  position:static;
+  margin-right: 5px;
+  margin-left: -10px;
+  background-color: #ed9100;
+  color:#fff
+}
