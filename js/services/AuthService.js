@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('AuthService', [
+ppApp.factory('AuthService', [
     '$http',
     '$location',
     '$state',

@@ -1,6 +1,6 @@
 /* global angular */
 
-angular.module($APP.name).service('ConvertersService', [
+ppApp.service('ConvertersService', [
     '$rootScope', 'CacheFactory', '$stateParams',
     function($rootScope, CacheFactory, $stateParams) {
 

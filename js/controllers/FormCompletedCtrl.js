@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('FormCompletedCtrl', [
+ppApp.controller('FormCompletedCtrl', [
     '$scope',
     '$state',
     'FormInstanceService',

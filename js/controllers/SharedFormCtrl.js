@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('SharedFormCtrl', [
+ppApp.controller('SharedFormCtrl', [
     '$rootScope',
     '$scope',
     'FormInstanceService',

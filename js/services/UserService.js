@@ -1,4 +1,4 @@
-angular.module($APP.name).service('UserService', [
+ppApp.service('UserService', [
     '$http',
     '$rootScope',
     '$location',

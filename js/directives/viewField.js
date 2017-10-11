@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('viewField', ['$http', '$compile', '$parse', 'ConvertersService',
+ppApp.directive('viewField', ['$http', '$compile', '$parse', 'ConvertersService',
     function ($http, $compile, $parse, ConvertersService) {
         return {
             templateUrl: 'view/form/_viewform.html',

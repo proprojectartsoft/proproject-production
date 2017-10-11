@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('EditCtrl', [
+ppApp.controller('EditCtrl', [
     '$scope',
     'FormInstanceService',
     '$timeout',
@@ -659,23 +659,35 @@ angular.module($APP.name).controller('EditCtrl', [
             };
             img.src = url;
         };
-        FormInstanceService.get($rootScope.formId).then(function(data) {
-            $rootScope.formData = data;
-            $scope.formData = data;
-            FormInstanceService.get_gallery($rootScope.formId, data.project_id).then(function(res) {
+        PostService.post({
+            method: 'GET',
+            url: 'forminstance',
+            params: {
+                id: $rootScope.formId
+            }
+        }, function(res) {
+            $rootScope.formData = res.data;
+            $scope.formData = res.data;
+            FormInstanceService.get_gallery($rootScope.formId, res.data.project_id).then(function(res) {
                 angular.forEach(res, function(image) {
                     image.url = $APP.server + '/pub/images/' + image.base64String;
                 })
                 $scope.imgURI = res;
             })
+            angular.forEach($scope.formData.field_group_instances, function(field) {
+                if (field.repeatable) {
+                    $scope.repeatable = true;
+                    return;
+                }
+            })
+        }, function(err) {
+            angular.forEach($scope.formData.field_group_instances, function(field) {
+                if (field.repeatable) {
+                    $scope.repeatable = true;
+                    return;
+                }
+            })
         });
-
-        angular.forEach($scope.formData.field_group_instances, function(field) {
-            if (field.repeatable) {
-                $scope.repeatable = true;
-                return;
-            }
-        })
 
         $scope.submit = function(help) {
             if (!navigator.onLine) {

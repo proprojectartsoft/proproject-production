@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('ProjectService', [
+ppApp.factory('ProjectService', [
     '$http',
     'CacheFactory',
     function($http, CacheFactory) {
@@ -62,7 +62,7 @@ angular.module($APP.name).factory('ProjectService', [
         };
     }
 ]);
-angular.module($APP.name).directive('percentageField', ['$filter', function($filter) {
+ppApp.directive('percentageField', ['$filter', function($filter) {
     return {
         restrict: 'A',
         require: 'ngModel',

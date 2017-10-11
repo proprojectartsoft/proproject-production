@@ -1,4 +1,4 @@
-angular.module($APP.name).service('CommonServices', [
+ppApp.service('CommonServices', [
     '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PayitemService', 'DbService',
     function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService, DbService) {
         return {

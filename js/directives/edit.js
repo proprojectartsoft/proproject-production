@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('edit', [
+ppApp.directive('edit', [
     '$ionicModal', '$rootScope', '$timeout',
     function ($ionicModal, $rootScope, $timeout) {
 

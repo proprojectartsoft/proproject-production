@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('sketchErase', [
+ppApp.directive('sketchErase', [
     function () {
         return {
             restrict: 'A',

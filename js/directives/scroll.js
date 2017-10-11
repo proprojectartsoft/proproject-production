@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('scroll', [
+ppApp.directive('scroll', [
     '$timeout',
     '$window',
     '$ionicScrollDelegate',
@@ -36,7 +36,7 @@ angular.module($APP.name).directive('scroll', [
     }
 ]);
 
-angular.module($APP.name).directive('ngAutoExpand', function () {
+ppApp.directive('ngAutoExpand', function () {
     return {
         restrict: 'A',
         link: function ($scope, elem, attrs) {

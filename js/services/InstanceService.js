@@ -1,4 +1,4 @@
-angular.module($APP.name).service('InstanceService', [
+ppApp.service('InstanceService', [
     '$http',
     '$rootScope',
     'CacheFactory',

@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('CategoriesService', [
+ppApp.factory('CategoriesService', [
     '$http',
     'CacheFactory',
     function($http, CacheFactory) {

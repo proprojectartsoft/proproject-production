@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('ReloadMeService', [
+ppApp.factory('ReloadMeService', [
     'CacheFactory',
     function(CacheFactory) {
 

@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('FormInstanceService', [
+ppApp.factory('FormInstanceService', [
     '$rootScope',
     '$http',
     'CacheFactory',

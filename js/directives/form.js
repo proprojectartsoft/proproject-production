@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('form', ['$parse', '$ionicPopup', '$rootScope', function ($parse, $ionicPopup, $rootScope) {
+ppApp.directive('form', ['$parse', '$ionicPopup', '$rootScope', function ($parse, $ionicPopup, $rootScope) {
         return {
             restrict: 'EA',
             compile: function (cElement, cAttributes, transclude) {

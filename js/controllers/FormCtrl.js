@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('FormCtrl', [
+ppApp.controller('FormCtrl', [
     '$scope',
     'FormInstanceService',
     '$timeout',

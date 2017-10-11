@@ -1,5 +1,5 @@
 
-angular.module($APP.name).directive('fs', [
+ppApp.directive('fs', [
     '$rootScope',
     function ($rootScope) {
         return {
@@ -58,7 +58,7 @@ angular.module($APP.name).directive('fs', [
         };
     }
 ]);
-angular.module($APP.name).factory('SecuredPopups', [
+ppApp.factory('SecuredPopups', [
     '$ionicPopup',
     '$q',
     function ($ionicPopup, $q) {
@@ -104,7 +104,7 @@ angular.module($APP.name).factory('SecuredPopups', [
         };
     }
 ])
-angular.module($APP.name).directive('date', function ($filter) {
+ppApp.directive('date', function ($filter) {
     return {
         require: 'ngModel',
         link: function (scope, elm, attrs, ctrl) {

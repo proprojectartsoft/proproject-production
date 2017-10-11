@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('AppCtrl', [
+ppApp.controller('AppCtrl', [
     '$rootScope',
     '$scope',
     'CacheFactory',

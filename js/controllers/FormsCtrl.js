@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('FormsCtrl', [
+ppApp.controller('FormsCtrl', [
 	'$scope',
 	'$stateParams',
 	'FormDesignService',

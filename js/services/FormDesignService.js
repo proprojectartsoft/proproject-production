@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('FormDesignService', [
+ppApp.factory('FormDesignService', [
     '$http',
     function($http) {
 

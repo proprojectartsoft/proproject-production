@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('loading', ['$http', function ($http)
+ppApp.directive('loading', ['$http', function ($http)
     {
         return {
             restrict: 'A',

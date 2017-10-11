@@ -1,11 +1,8 @@
-angular.module($APP.name).controller('CategoriesCtrl', [
-    'AuthService',
-    'CacheFactory',
-    '$state',
+ppApp.controller('CategoriesCtrl', [
     '$scope',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
-    function(AuthService, CacheFactory, $state, $scope, $ionicSideMenuDelegate, $ionicHistory) {
+    function($scope, $ionicSideMenuDelegate, $ionicHistory) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);

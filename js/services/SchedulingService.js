@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('SchedulingService', [
+ppApp.factory('SchedulingService', [
     '$http', '$rootScope',
     function($http, $rootScope) {
         return {

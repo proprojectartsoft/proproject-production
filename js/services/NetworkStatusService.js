@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('TestService', [
+ppApp.factory('TestService', [
     '$rootScope',
     '$window',
     function($rootScope, $window) {

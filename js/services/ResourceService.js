@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('ResourceService', [
+ppApp.factory('ResourceService', [
     '$http', '$rootScope',
     function($http, $rootScope) {
         return {

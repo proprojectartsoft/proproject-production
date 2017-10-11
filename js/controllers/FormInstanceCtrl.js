@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('FormInstanceCtrl', [
+ppApp.controller('FormInstanceCtrl', [
     '$scope',
     '$rootScope',
     '$stateParams',

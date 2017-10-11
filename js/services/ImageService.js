@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('ImageService', [
+ppApp.factory('ImageService', [
     '$http',
     function($http) {
         return {

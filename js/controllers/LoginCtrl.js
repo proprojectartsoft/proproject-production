@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('LoginCtrl', [
+ppApp.controller('LoginCtrl', [
     '$scope',
     '$state',
     'AuthService',

@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('field', [
+ppApp.directive('field', [
     '$rootScope',
     'FieldUpdateService',
     '$ionicModal',

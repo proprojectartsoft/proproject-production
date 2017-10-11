@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('RegisterCtrl', [
+ppApp.controller('RegisterCtrl', [
     '$scope',
     '$rootScope',
     '$stateParams',

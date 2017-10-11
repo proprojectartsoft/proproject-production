@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('NavCtrl', [
+ppApp.controller('NavCtrl', [
     '$rootScope',
     '$state',
     'AuthService',

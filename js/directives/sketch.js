@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('sketch', [
+ppApp.directive('sketch', [
     '$rootScope',
     function ($rootScope) {
         return {
@@ -13,7 +13,7 @@ angular.module($APP.name).directive('sketch', [
     }
 ]);
 
-angular.module($APP.name).directive('scrollWatch', function ($rootScope, $window) {
+ppApp.directive('scrollWatch', function ($rootScope, $window) {
     return function (scope, elem, attr) {
         var start = 0;
         var threshold = 100;
@@ -40,7 +40,7 @@ angular.module($APP.name).directive('scrollWatch', function ($rootScope, $window
     };
 });
 
-angular.module($APP.name).directive('ionicAutocomplete',
+ppApp.directive('ionicAutocomplete',
         function ($ionicPopover, $rootScope) {
             var popoverTemplate =
                     '<ion-popover-view style="margin-top:5px">' +

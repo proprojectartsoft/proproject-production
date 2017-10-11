@@ -1,4 +1,4 @@
-angular.module($APP.name).directive('input', [
+ppApp.directive('input', [
     function () {
         return {
             restrict: 'A',

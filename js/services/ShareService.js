@@ -1,4 +1,4 @@
-angular.module($APP.name).service('ShareService', [
+ppApp.service('ShareService', [
     '$http',
     '$rootScope',
     '$location',

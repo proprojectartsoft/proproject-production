@@ -1,4 +1,4 @@
-angular.module($APP.name).service('FormUpdateService', function($rootScope) {
+ppApp.service('FormUpdateService', function($rootScope) {
     var productList = [];
 
     var addProduct = function(newObj) {

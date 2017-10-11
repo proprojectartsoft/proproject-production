@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('RegisterService', [
+ppApp.factory('RegisterService', [
     '$http',
     function($http) {
         return {

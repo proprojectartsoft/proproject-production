@@ -19,14 +19,14 @@ Storage.prototype.getObject = function(key) {
     return value && JSON.parse(value);
 }
 
-angular.module($APP.name, [
+var ppApp = angular.module($APP.name, [
     'ionic',
     'ion-datetime-picker',
     'angularMoment',
     'angular-cache',
     'ngCordova',
 ]);
-angular.module($APP.name).run(function($rootScope, $ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
+ppApp.run(function($rootScope, $ionicPlatform, CacheFactory, AuthService, $cordovaFile, $cordovaFileTransfer, $timeout, SyncService) {
     $ionicPlatform.ready(function() {
 	    if (window.cordova && window.sqlitePlugin) {
 		    $APP.db = window.sqlitePlugin.openDatabase({
@@ -57,7 +57,7 @@ angular.module($APP.name).run(function($rootScope, $ionicPlatform, CacheFactory,
         });
     });
 });
-angular.module($APP.name).config([
+ppApp.config([
     '$stateProvider',
     'CacheFactoryProvider',
     '$urlRouterProvider',

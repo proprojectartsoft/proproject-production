@@ -1,4 +1,4 @@
-angular.module($APP.name).service('FieldUpdateService', function($rootScope) {
+ppApp.service('FieldUpdateService', function($rootScope) {
     var productList = [];
 
     var addProduct = function(newObj) {

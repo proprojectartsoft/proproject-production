@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('MyAccountCtrl', [
+ppApp.controller('MyAccountCtrl', [
     '$rootScope',
     '$scope',
     'AuthService',

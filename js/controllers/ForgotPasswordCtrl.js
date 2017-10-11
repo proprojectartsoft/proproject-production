@@ -1,4 +1,4 @@
-angular.module($APP.name).controller('ForgotPasswordCtrl', [
+ppApp.controller('ForgotPasswordCtrl', [
     '$scope',
     'AuthService',
     '$state',

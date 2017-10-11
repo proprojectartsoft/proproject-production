@@ -1,4 +1,4 @@
-angular.module($APP.name).factory('DbService', [
+ppApp.factory('DbService', [
     '$http', '$ionicPopup', '$timeout',
     function($http, $ionicPopup, $timeout) {
         inmemdb = {};
