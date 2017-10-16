@@ -7,8 +7,7 @@ ppApp.factory('FormInstanceService', [
     '$timeout',
     '$state',
     'ConvertersService',
-    'ImageService',
-    function($rootScope, $http, CacheFactory, $ionicPopup, $location, $timeout, $state, ConvertersService, ImageService) {
+    function($rootScope, $http, CacheFactory, $ionicPopup, $location, $timeout, $state, ConvertersService) {
         return {
             get: function(id) {
                 return $http.get($APP.server + '/api/forminstance', {
@@ -39,12 +38,27 @@ ppApp.factory('FormInstanceService', [
                     withCredentials: true
                 }).success(function(payload) {
                     if (!payload.message) {
-                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
-                        if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) {  //TODO: send pic by pic
-                                return x;
+                        var cnt = 0;
+                        angular.forEach(imgUri, function(img) { //TODO: check
+                            img.id = 0;
+                            img.formInstanceId = payload.id;
+                            img.projectId = requestForm.project_id;
+                            PostService.post({
+                                method: 'POST',
+                                url: 'defectphoto/uploadfile',
+                                data: img,
+                            }, function(payload) {
+                                cnt++;
+                                if (cnt >= imgUri.length) {
+                                    return payload;
+                                }
+                            }, function(err) {
+                                cnt++;
+                                if (cnt >= imgUri.length) {
+                                    return err;
+                                }
                             });
-                        }
+                        })
                     }
                     return payload.data;
                 }).error(function(payload) {
@@ -92,10 +106,27 @@ ppApp.factory('FormInstanceService', [
                     data: dataIn
                 }).then(function(response) {
                     if (pic) {
-                        var list = ConvertersService.photoList(pic, response.data.id, dataIn.project_id);
-                        ImageService.create(list).then(function(x) {  //TODO: send pic by pic
-                            return x;
-                        });
+                        var cnt = 0;
+                        angular.forEach(pic, function(img) { //TODO: check
+                            img.id = 0;
+                            img.formInstanceId = response.data.id;
+                            img.projectId = dataIn.project_id;
+                            PostService.post({
+                                method: 'POST',
+                                url: 'defectphoto/uploadfile',
+                                data: img,
+                            }, function(payload) {
+                                cnt++;
+                                if (cnt >= imgUri.length) {
+                                    return payload;
+                                }
+                            }, function(err) {
+                                cnt++;
+                                if (cnt >= imgUri.length) {
+                                    return err;
+                                }
+                            });
+                        })
                     }
                 });
             },
@@ -140,9 +171,27 @@ ppApp.factory('FormInstanceService', [
                     } else {
                         var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) {  //TODO: send pic bu pic
-                                return x;
-                            });
+                            var cnt = 0;
+                            angular.forEach(imgUri, function(img) { //TODO: check
+                                img.id = 0;
+                                img.formInstanceId = payload.id;
+                                img.projectId = requestForm.project_id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'defectphoto/uploadfile',
+                                    data: img,
+                                }, function(payload) {
+                                    cnt++;
+                                    if (cnt >= imgUri.length) {
+                                        return payload;
+                                    }
+                                }, function(err) {
+                                    cnt++;
+                                    if (cnt >= imgUri.length) {
+                                        return err;
+                                    }
+                                });
+                            })
                         }
                     }
                     return payload.data;

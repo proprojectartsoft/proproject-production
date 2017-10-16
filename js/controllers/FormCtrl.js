@@ -17,13 +17,12 @@ ppApp.controller('FormCtrl', [
     '$ionicHistory',
     '$ionicPopover',
     'ConvertersService',
-    'ImageService',
     'CommonServices',
     '$filter',
     'DbService',
     '$q',
     function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $ionicPopup, $stateParams, $ionicListDelegate, $ionicModal,
-        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, ImageService, CommonServices, $filter, DbService, $q) {
+        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, DbService, $q) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -1202,13 +1201,21 @@ ppApp.controller('FormCtrl', [
                     data: requestForm,
                     withCredentials: true
                 }, function(payload) {
-                    if (!payload.message) {
-                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
-                        if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) { //TODO: send pic by pic
-                                return x;
+                    if (!payload.message) { //TODO: check
+                        angular.forEach(imgUri, function(img) {
+                            img.id = 0;
+                            img.formInstanceId = payload.id;
+                            img.projectId = requestForm.project_id;
+                            PostService.post({
+                                method: 'POST',
+                                url: 'defectphoto/uploadfile',
+                                data: img,
+                            }, function(payload) {
+
+                            }, function(err) {
+
                             });
-                        }
+                        })
                     }
 
                     var data = payload.data;
@@ -1249,7 +1256,6 @@ ppApp.controller('FormCtrl', [
                     }
 
                 }, function(data) {
-                    console.log("error on create");
                     var requestList = [];
                     var ppfsync = localStorage.getObject('ppfsync');
                     var pppsync = localStorage.getObject('pppsync');
