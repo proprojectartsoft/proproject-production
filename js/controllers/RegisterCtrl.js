@@ -2,13 +2,12 @@ ppApp.controller('RegisterCtrl', [
     '$scope',
     '$rootScope',
     '$stateParams',
-    'RegisterService',
     '$stateParams',
     '$location',
-    'FormInstanceService',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
-    function($scope, $rootScope, $stateParams, RegisterService, $stateParams, $location, FormInstanceService, $ionicSideMenuDelegate, $ionicHistory) {
+    'PostService',
+    function($scope, $rootScope, $stateParams, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, PostService) {
         $rootScope.categoryId = $stateParams.categoryId;
 
         $scope.$on('$ionicView.enter', function() {
@@ -20,25 +19,34 @@ ppApp.controller('RegisterCtrl', [
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
-        RegisterService.get($stateParams.code, $stateParams.projectId).then(function(data) {
-            $scope.listHelp = [];
-            $scope.data = data;
-            $scope.parsedData = $scope.transform(data.records)
-            $scope.num = $scope.data.records.values.length;
-        });
+        $scope.refresh(true);
+
         $scope.dateToString = function(val) {
             var date = new Date(parseInt(val));
             return date.toString();
         };
 
-        $scope.refresh = function() {
-            RegisterService.get($stateParams.code, $stateParams.projectId).then(function(data) {
+        $scope.refresh = function(isInit) {
+            PostService.post({
+                method: 'GET',
+                url: 'newregister',
+                params: {
+                    code: $stateParams.code,
+                    projectid: $stateParams.projectId
+                }
+            }, function(res) {
                 $scope.listHelp = [];
-                $scope.data = data;
+                $scope.data = res.data;
                 $scope.num = $scope.data.records.values.length;
+                if (isInit) {
+                    $scope.parsedData = $scope.transform(res.data.records);
+                }
+            }, function(err) {
+                console.log(err);
             });
             $scope.$broadcast('scroll.refreshComplete');
         }
+
         $scope.help = function(label, register) {
             for (var i = 0; i < register.length; i++) {
                 if (register[i].key === label) {
@@ -50,9 +58,17 @@ ppApp.controller('RegisterCtrl', [
 
         $scope.change = function(id) {
             $rootScope.formId = id;
-            FormInstanceService.get($rootScope.formId).then(function(data) {
-                $rootScope.rootForm = data;
+            PostService.post({
+                method: 'GET',
+                url: 'forminstance',
+                params: {
+                    id: $rootScope.formId
+                }
+            }, function(res) {
+                $rootScope.rootForm = res.data;
                 $location.path("/app/view/" + $rootScope.projectId + "/register/" + $rootScope.formId);
+            }, function(err) {
+                console.log(err);
             });
         };
 

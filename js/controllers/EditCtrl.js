@@ -1,6 +1,5 @@
 ppApp.controller('EditCtrl', [
     '$scope',
-    'FormInstanceService',
     '$timeout',
     'FormUpdateService',
     '$location',
@@ -13,10 +12,6 @@ ppApp.controller('EditCtrl', [
     'ConvertersService',
     'ImageService',
     '$ionicHistory',
-    'ResourceService',
-    'StaffService',
-    'SchedulingService',
-    'PayitemService',
     'CommonServices',
     '$ionicPopover',
     '$stateParams',
@@ -24,9 +19,10 @@ ppApp.controller('EditCtrl', [
     '$filter',
     'DbService',
     '$q',
-    function($scope, FormInstanceService, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
-        $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory, ResourceService, StaffService, SchedulingService,
-        PayitemService, CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q) {
+    'PostService',
+    function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
+        $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, ImageService, $ionicHistory,
+        CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q, PostService) {
         var custSett = DbService.get('custsett');
         $scope.filter = {
             edit: true,
@@ -659,6 +655,7 @@ ppApp.controller('EditCtrl', [
             };
             img.src = url;
         };
+
         PostService.post({
             method: 'GET',
             url: 'forminstance',
@@ -668,12 +665,21 @@ ppApp.controller('EditCtrl', [
         }, function(res) {
             $rootScope.formData = res.data;
             $scope.formData = res.data;
-            FormInstanceService.get_gallery($rootScope.formId, res.data.project_id).then(function(res) {
-                angular.forEach(res, function(image) {
+            PostService.post({
+                method: 'GET',
+                url: 'gallery/instance',
+                params: {
+                    formInstanceId: $rootScope.formId,
+                    projectId: res.data.project_id
+                }
+            }, function(succ) {
+                angular.forEach(succ.data, function(image) {
                     image.url = $APP.server + '/pub/images/' + image.base64String;
                 })
                 $scope.imgURI = res;
-            })
+            }, function(err) {
+                console.log(err);
+            });
             angular.forEach($scope.formData.field_group_instances, function(field) {
                 if (field.repeatable) {
                     $scope.repeatable = true;
@@ -731,7 +737,15 @@ ppApp.controller('EditCtrl', [
                                         item.current_day = new Date(item.current_day_obj).getTime();
                                     }
                                 });
-                                ResourceService.update_field($rootScope.resourceField).then(function(x) {});
+                                PostService.post({
+                                    method: 'PUT',
+                                    url: 'resourcefield',
+                                    data: $rootScope.resourceField
+                                }, function(res) {
+
+                                }, function(err) {
+                                    console.log(err);
+                                });
                             }
                             if ($scope.formData.pay_item_field_id) {
                                 angular.forEach($rootScope.payitemField.pay_items, function(item) {
@@ -782,7 +796,15 @@ ppApp.controller('EditCtrl', [
                                         });
                                     });
                                 });
-                                PayitemService.update_field($rootScope.payitemField).then(function(x) {});
+                                PostService.post({
+                                    method: 'PUT',
+                                    url: 'payitemfield',
+                                    data: $rootScope.payitemField
+                                }, function(res) {
+
+                                }, function(err) {
+                                    console.log(err);
+                                });
                             }
                             if ($scope.formData.scheduling_field_id) {
                                 angular.forEach($rootScope.payitemField.pay_items, function(item) {
@@ -833,7 +855,15 @@ ppApp.controller('EditCtrl', [
                                         });
                                     });
                                 });
-                                SchedulingService.update_field($rootScope.payitemField).then(function(x) {});
+                                PostService.post({
+                                    method: 'PUT',
+                                    url: 'schedulingfield',
+                                    data: $rootScope.payitemField
+                                }, function(res) {
+
+                                }, function(err) {
+                                    console.log(err);
+                                });
                             }
                             if ($scope.formData.staff_field_id) {
                                 angular.forEach($rootScope.staffField.resources, function(item) {
@@ -849,15 +879,31 @@ ppApp.controller('EditCtrl', [
                                         item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                     }
                                 });
-                                StaffService.update_field($rootScope.staffField).then(function(x) {});
+                                PostService.post({
+                                    method: 'PUT',
+                                    url: 'stafffield',
+                                    data: $rootScope.staffField
+                                }, function(res) {
+
+                                }, function(err) {
+                                    console.log(err);
+                                });
                             }
-                            FormInstanceService.update($rootScope.formId, $scope.formData).then(function(data) {
-                                if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                                    $rootScope.formId = data;
+                            var requestForm = ConvertersService.instanceToUpdate($scope.formData);
+                            PostService.post({
+                                method: 'PUT',
+                                url: 'forminstance',
+                                data: requestForm,
+                                params: {
+                                    'id': $rootScope.formId
+                                }
+                            }, function(res) {
+                                if (res.data && res.data.status !== 0 && res.data.status !== 502 && res.data.status !== 403 && res.data.status !== 400) {
+                                    $rootScope.formId = res.data;
                                     var list = ConvertersService.photoList($scope.imgToAdd, $scope.formData.id, $scope.formData.project_id);
                                     $scope.imgToAdd = [];
                                     if (list.length !== 0) {
-                                        ImageService.create(list).then(function(x) {
+                                        ImageService.create(list).then(function(x) { //TODO: send pic bu pic
                                             $timeout(function() {
                                                 formUp.close();
                                                 $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
@@ -875,12 +921,26 @@ ppApp.controller('EditCtrl', [
                                         $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                     });
                                 }
+                            }, function(err) {
+                                if (err.status === 0 || err.status === 502) {
+                                    var sync = CacheFactory.get('sync');
+                                    if (!sync) {
+                                        sync = CacheFactory('sync');
+                                    }
+                                    sync.setOptions({
+                                        storageMode: 'localStorage'
+                                    });
+                                    $rootScope.toBeUploadedCount = sync.keys().length;
+                                    $rootScope.toBeUploadedCount++;
+                                    sync.put($rootScope.toBeUploadedCount, requestForm);
+                                }
                             });
                         });
                     }
                 });
             }
         };
+
         $scope.saveAsNew = function() {
             var confirmPopup = $ionicPopup.confirm({
                 title: 'Edit form',
@@ -919,10 +979,14 @@ ppApp.controller('EditCtrl', [
                                         item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
                                     }
                                 });
-                                ResourceService.add_field($rootScope.resourceField).success(function(x) {
-                                    $scope.formData.resource_field_id = x.id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'resourcefield',
+                                    data: $rootScope.resourceField
+                                }, function(res) {
+                                    $scope.formData.resource_field_id = res.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.resourceField = $scope.formData.resourceField || [];
                                     $scope.formData.resourceField.push($rootScope.resourceField);
                                     def.resolve();
@@ -984,10 +1048,14 @@ ppApp.controller('EditCtrl', [
                                         });
                                     });
                                 });
-                                PayitemService.add_field($rootScope.payitemField).success(function(x) {
-                                    $scope.formData.pay_item_field_id = x.id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'payitemfield',
+                                    data: $rootScope.payitemField
+                                }, function(res) {
+                                    $scope.formData.pay_item_field_id = res.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.payitemField = $scope.formData.payitemField || [];
                                     $scope.formData.payitemField.push($rootScope.payitemField);
                                     def.resolve();
@@ -1049,10 +1117,14 @@ ppApp.controller('EditCtrl', [
                                         });
                                     });
                                 });
-                                SchedulingService.add_field($rootScope.payitemField).success(function(x) {
-                                    $scope.formData.scheduling_field_id = x.id;
+                                PostService.post({
+                                    method: 'PUT',
+                                    url: 'schedulingfield',
+                                    data: $rootScope.payitemField
+                                }, function(res) {
+                                    $scope.formData.scheduling_field_id = res.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.schedField = $scope.formData.schedField || [];
                                     $scope.formData.schedField.push($rootScope.payitemField);
                                     def.resolve();
@@ -1082,10 +1154,14 @@ ppApp.controller('EditCtrl', [
                                         item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                     }
                                 });
-                                StaffService.add_field($rootScope.staffField).success(function(x) {
-                                    $scope.formData.staff_field_id = x.id;
+                                PostService.post({
+                                    method: 'PUT',
+                                    url: 'stafffield',
+                                    data: $rootScope.staffField
+                                }, function(res) {
+                                    $scope.formData.staff_field_id = res.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.staffField = $scope.formData.staffField || [];
                                     $scope.formData.staffField.push($rootScope.staffField);
                                     def.resolve();
@@ -1108,23 +1184,102 @@ ppApp.controller('EditCtrl', [
                 }
             });
 
-            function fastSave(formUp) {
-                FormInstanceService.save_as($scope.formData, $scope.imgURI).success(function(data) {
-                    if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
+            function fastSave(formUp) { //TODO: CHECK REQUESTSH
+                var requestForm = ConvertersService.instanceToNew($scope.formData);
+                PostService.post({
+                    method: 'POST',
+                    url: 'forminstance',
+                    data: requestForm,
+                    params: {
+                        withCredentials: true
+                    }
+                }, function(res) {
+                    // if (res.data || res.data && res.data.message) {  //TODO: it is on error clause??
+                    //     $timeout(function() {
+                    //         var alertPopup3 = $ionicPopup.alert({
+                    //             title: 'Submision failed.',
+                    //             template: 'You have not permission to do this operation'
+                    //         });
+                    //         alertPopup3.then(function(res) {
+                    //             $rootScope.$broadcast('sync.todo');
+                    //         });
+                    //     }, 10);
+                    // } else {
+                    var list = ConvertersService.photoList($scope.imgURI, res.id, requestForm.project_id),
+                        postImages = '';
+                    if (list.length !== 0) {
+                        postImages = ImageService.create(list).then(function(x) { //TODO: PostService pic by pic
+                            return x;
+                        });
+                    }
+                    // }
+
+                    postImages.then(function(succ) {
+                        var data = res.data; //TODO: check it
+                        // if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
                         $rootScope.formId = data.id;
-                        FormInstanceService.get($rootScope.formId).then(function(data) {
+
+                        PostService.post({
+                            method: 'GET',
+                            url: 'forminstance',
+                            params: {
+                                id: $rootScope.formId
+                            }
+                        }, function(res) {
                             $timeout(function() {
                                 formUp.close();
                                 $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                             });
+                        }, function(err) {
+                            console.log(err);
                         });
+
+                        // } else {
+                        //     $timeout(function() {
+                        //         formUp.close();
+                        //         $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                        //     });
+                        // }
+                    })
+
+
+                }, function(data) {
+                    var requestList = [];
+                    var ppfsync = localStorage.getObject('ppfsync');
+                    var pppsync = localStorage.getObject('pppsync');
+                    if (ppfsync) {
+                        $rootScope.toBeUploadedCount = ppfsync.length;
                     } else {
-                        $timeout(function() {
-                            formUp.close();
-                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                        });
+                        $rootScope.toBeUploadedCount = 0;
+                        localStorage.setObject('ppfsync', []);
                     }
-                }).error(function(data) {
+                    if (!pppsync) {
+                        localStorage.setObject('pppsync', []);
+                    }
+                    $rootScope.toBeUploadedCount++;
+                    for (var i = 0; i < $scope.imgURI.length; i++) {
+                        if ($scope.imgURI[i].base64String !== "") {
+                            $scope.imgURI.projectId = requestForm.project_id;
+                            requestList.push($scope.imgURI[i]);
+                        }
+                    }
+                    var aux_f = localStorage.getObject('ppfsync');
+                    aux_f.push({
+                        id: $rootScope.toBeUploadedCount,
+                        form: requestForm
+                    });
+                    localStorage.setObject('ppfsync', aux_f);
+                    if (requestList.length !== 0) {
+                        var aux_p = localStorage.getObject('pppsync');
+                        aux_p.push({
+                            id: $rootScope.toBeUploadedCount,
+                            imgs: requestList
+                        });
+                        localStorage.setObject('pppsync', aux_p);
+                    }
+
+
+                    // data = err;
                     formUp.close();
                     if (data && data.status === 400) {
                         $timeout(function() {
@@ -1151,7 +1306,7 @@ ppApp.controller('EditCtrl', [
                             });
                         });
                     }
-                })
+                });
             }
         };
 

@@ -25,7 +25,6 @@ ppApp.controller('RegistersCtrl', [
 
         $scope.$on('$stateChangeSuccess', function() {});
 
-
         AuthService.me().then(function(user) {
             if (user && user.active === false) {
                 var alertPopup = $ionicPopup.alert({
@@ -76,29 +75,36 @@ ppApp.controller('RegistersCtrl', [
         }, function errorCallback(error) {});
         if ($stateParams.categoryId) {
             $rootScope.categoryId = $stateParams.categoryId;
-            RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
-                $scope.isLoaded = true;
-                $scope.registers = data;
-                if (data) {
-                    if (data.length === 0) {
-                        $scope.hasData = 'no data';
-                    }
-                } else {
-                    $scope.hasData = 'no data';
-                }
-            });
+            $scope.refresh(true);
         }
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
 
-        $scope.refresh = function() {
-            RegisterService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
-                if (data) {
-                    $scope.registers = data;
-                    if (data.length === 0) {
+        $scope.refresh = function(isInit) {
+            PostService.post({
+                method: 'GET',
+                url: 'newregister',
+                params: {
+                    projectid: $stateParams.projectId,
+                    categoryid: $stateParams.categoryId
+                }
+            }, function(res) { //TODO: check the flow
+                if (res.data && !res.data.length) {
+                    $scope.hasData = 'no data';
+                }
+                if (isInit) {
+                    $scope.isLoaded = true;
+                    $scope.registers = res.data;
+                    if (!res.data) {
                         $scope.hasData = 'no data';
                     }
+                } else {
+                    if (res.data) {
+                        $scope.registers = res.data;
+                    }
+                    $scope.$broadcast('scroll.refreshComplete');
                 }
-                $scope.$broadcast('scroll.refreshComplete');
+            }, function(err) {
+                console.log(err);
             });
         }
     }

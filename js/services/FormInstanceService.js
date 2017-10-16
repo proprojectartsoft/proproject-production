@@ -41,7 +41,7 @@ ppApp.factory('FormInstanceService', [
                     if (!payload.message) {
                         var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) {
+                            ImageService.create(list).then(function(x) {  //TODO: send pic by pic
                                 return x;
                             });
                         }
@@ -93,7 +93,7 @@ ppApp.factory('FormInstanceService', [
                 }).then(function(response) {
                     if (pic) {
                         var list = ConvertersService.photoList(pic, response.data.id, dataIn.project_id);
-                        ImageService.create(list).then(function(x) {
+                        ImageService.create(list).then(function(x) {  //TODO: send pic by pic
                             return x;
                         });
                     }
@@ -122,7 +122,7 @@ ppApp.factory('FormInstanceService', [
                     }
                 });
             },
-            save_as: function(data, imgUri) {
+            save_as: function(data, imgUri) { //TODO: CHECK THE RESPONSE OF THIS REQUEST!!!!
                 var requestForm = ConvertersService.instanceToNew(data);
                 return $http.post($APP.server + '/api/forminstance', requestForm, {
                     withCredentials: true
@@ -140,7 +140,7 @@ ppApp.factory('FormInstanceService', [
                     } else {
                         var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
                         if (list.length !== 0) {
-                            ImageService.create(list).then(function(x) {
+                            ImageService.create(list).then(function(x) {  //TODO: send pic bu pic
                                 return x;
                             });
                         }

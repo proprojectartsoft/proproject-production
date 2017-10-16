@@ -1,15 +1,10 @@
 ppApp.controller('SharedFormCtrl', [
     '$rootScope',
     '$scope',
-    'FormInstanceService',
-    'ShareService',
-    'ResourceService',
-    'StaffService',
-    'SchedulingService',
-    'PayitemService',
     '$stateParams',
     'DbService',
-    function($rootScope, $scope, FormInstanceService, ShareService, ResourceService, StaffService, SchedulingService, PayitemService, $stateParams, DbService) {
+    'PostService',
+    function($rootScope, $scope, $stateParams, DbService, PostService) {
 
         $scope.filter = {
             state: 'form',
@@ -17,9 +12,21 @@ ppApp.controller('SharedFormCtrl', [
             shared: true
         }
 
-        ShareService.comment.list($stateParams.formId).then(function(result) {
-            $scope.commentList = result;
-        })
+        //method to list shared comments for the given form
+        function listSharedComments() {
+            PostService.post({
+                method: 'GET',
+                url: 'sharedcomment',
+                params: {
+                    id: $stateParams.formId
+                }
+            }, function(result) {
+                $scope.commentList = result.data;
+            }, function(err) {
+                console.log(err);
+            });
+        }
+        listSharedComments();
         $scope.back = function() {
             delete $scope.formData;
         }
@@ -30,18 +37,36 @@ ppApp.controller('SharedFormCtrl', [
                 "user_id": 0,
                 "comment": $scope.filter.comment
             }
-            ShareService.comment.create(aux).then(function(result) {
-                $scope.filter.comment = '';
-                ShareService.comment.list($stateParams.formId).then(function(result) {
-                    $scope.commentList = result;
-                })
-            })
-        }
 
-        FormInstanceService.get($stateParams.formId).then(function(data) {
+            PostService.post({
+                method: 'POST',
+                url: 'sharedcomment',
+                data: aux
+            }, function(res) {
+                $scope.filter.comment = '';
+                listSharedComments();
+            }, function(err) {
+                console.log(err);
+            });
+        }
+        PostService.post({
+            method: 'GET',
+            url: 'forminstance',
+            params: {
+                id: $stateParams.formId
+            }
+        }, function(result) {
+            var data = result.data;
             $scope.formData = data;
             if (data.resource_field_id) {
-                ResourceService.get_field(data.resource_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'resourcefield',
+                    params: {
+                        id: data.resource_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.resourceField = res;
                     angular.forEach($scope.resourceField.resources, function(item) {
                         if (item.unit_id) {
@@ -74,7 +99,14 @@ ppApp.controller('SharedFormCtrl', [
                 });
             }
             if (data.staff_field_id) {
-                StaffService.get_field(data.staff_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'stafffield',
+                    params: {
+                        id: data.staff_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.staffField = res;
                     angular.forEach($scope.staffField.resources, function(item) {
                         if (item.unit_id) {
@@ -111,7 +143,14 @@ ppApp.controller('SharedFormCtrl', [
                 });
             }
             if (data.scheduling_field_id) {
-                SchedulingService.get_field(data.scheduling_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'schedulingfield',
+                    params: {
+                        id: data.scheduling_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.payitemField = res;
                     angular.forEach($scope.payitemField.pay_items, function(item) {
                         if (item.unit_id) {
@@ -192,7 +231,14 @@ ppApp.controller('SharedFormCtrl', [
                 });
             }
             if (data.pay_item_field_id) {
-                PayitemService.get_field(data.pay_item_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'payitemfield',
+                    params: {
+                        id: data.pay_item_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.payitemField = res;
                     angular.forEach($scope.payitemField.pay_items, function(item) {
                         if (item.unit_id) {
@@ -270,6 +316,8 @@ ppApp.controller('SharedFormCtrl', [
                     $rootScope.payitemField = $scope.payitemField;
                 });
             }
+        }, function(err) {
+            console.log(err);
         })
     }
 ]);

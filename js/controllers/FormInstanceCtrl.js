@@ -3,15 +3,9 @@ ppApp.controller('FormInstanceCtrl', [
     '$rootScope',
     '$stateParams',
     '$location',
-    'FormInstanceService',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
-    'ResourceService',
-    'StaffService',
-    'SchedulingService',
-    'PayitemService',
     '$ionicPopup',
-    'ShareService',
     '$ionicScrollDelegate',
     'SecuredPopups',
     'CommonServices',
@@ -19,8 +13,8 @@ ppApp.controller('FormInstanceCtrl', [
     '$state',
     '$filter',
     'DbService',
-    function($scope, $rootScope, $stateParams, $location, FormInstanceService, $ionicSideMenuDelegate, $ionicHistory, ResourceService, StaffService,
-        SchedulingService, PayitemService, $ionicPopup, ShareService, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, DbService) {
+    'PostService',
+    function($scope, $rootScope, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, $ionicPopup, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, DbService, PostService) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
@@ -306,13 +300,27 @@ ppApp.controller('FormInstanceCtrl', [
         $rootScope.slideHeaderHelper = false;
 
         //get all the fields for the current completed form
-        FormInstanceService.get($rootScope.formId).then(function(data) {
+        PostService.post({
+            method: 'GET',
+            url: 'forminstance',
+            params: {
+                id: $rootScope.formId
+            }
+        }, function(res) {
+            var data = res.data;
             $rootScope.formData = data;
             $scope.formData = data;
             $scope.titleShow = $scope.formData.name;
             //get resources data
             if (data.resource_field_id) {
-                ResourceService.get_field(data.resource_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'resourcefield',
+                    params: {
+                        id: data.resource_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.resourceField = res;
                     angular.forEach($scope.resourceField.resources, function(item) {
                         setResourceType(item);
@@ -325,11 +333,20 @@ ppApp.controller('FormInstanceCtrl', [
                         }
                     });
                     $rootScope.resourceField = $scope.resourceField;
+                }, function(err) {
+                    console.log(err);
                 });
             }
             //get staff data
             if (data.staff_field_id) {
-                StaffService.get_field(data.staff_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'stafffield',
+                    params: {
+                        id: data.staff_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.staffField = res;
                     angular.forEach($scope.staffField.resources, function(item) {
                         setResourceType(item);
@@ -345,11 +362,20 @@ ppApp.controller('FormInstanceCtrl', [
                         }
                     });
                     $rootScope.staffField = $scope.staffField;
+                }, function(err) {
+                    console.log(err);
                 });
             }
             //get schedule data
             if (data.scheduling_field_id) {
-                SchedulingService.get_field(data.scheduling_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'schedulingfield',
+                    params: {
+                        id: data.scheduling_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.payitemField = res;
                     $scope.doTotal('payitem', $scope.payitemField);
                     angular.forEach($scope.payitemField.pay_items, function(item) {
@@ -393,11 +419,20 @@ ppApp.controller('FormInstanceCtrl', [
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
+                }, function(err) {
+                    console.log(err);
                 });
             }
             //get payment data
             if (data.pay_item_field_id) {
-                PayitemService.get_field(data.pay_item_field_id).then(function(res) {
+                PostService.post({
+                    method: 'GET',
+                    url: 'payitemfield',
+                    params: {
+                        id: data.pay_item_field_id
+                    }
+                }, function(r) {
+                    var res = r.data;
                     $scope.payitemField = res;
                     $scope.doTotal('payitem', $scope.payitemField)
                     angular.forEach($scope.payitemField.pay_items, function(item) {
@@ -439,9 +474,14 @@ ppApp.controller('FormInstanceCtrl', [
                         });
                     });
                     $rootScope.payitemField = $scope.payitemField;
+                }, function(err) {
+                    console.log(err);
                 });
             }
+        }, function(err) {
+            console.log(err);
         });
+
         if ($scope.formData) {
             if ($scope.formData.length !== 0) {
                 $scope.hasData = true;
@@ -539,31 +579,37 @@ ppApp.controller('FormInstanceCtrl', [
                     content: "",
                     buttons: []
                 });
-                ShareService.form.create(id, res).then(function(response) {
-                        alertPopup1.close();
-                        if (response.message === "Form shared") {
-                            res = "";
-                            var alertPopupC = SecuredPopups.show('alert', {
-                                title: 'Share',
-                                template: 'Email sent.'
-                            });
-                        }
-                    },
-                    function(err) {
-                        alertPopup1.close();
-                        if (err.status == 422) {
-                            res = "";
-                            var alertPopupC = SecuredPopups.show('alert', {
-                                title: 'Share',
-                                template: 'Form already shared to this user.'
-                            });
-                        } else {
-                            var alertPopupC = SecuredPopups.show('alert', {
-                                title: 'Share',
-                                template: 'An unexpected error occured while sending the e-mail.'
-                            });
-                        }
-                    });
+                PostService.post({
+                    method: 'POST',
+                    url: 'share',
+                    params: {
+                        formId: id,
+                        email: res
+                    }
+                }, function(response) {
+                    alertPopup1.close();
+                    if (response.data.message === "Form shared") {
+                        res = "";
+                        var alertPopupC = SecuredPopups.show('alert', {
+                            title: 'Share',
+                            template: 'Email sent.'
+                        });
+                    }
+                }, function(err) {
+                    alertPopup1.close();
+                    if (err.data.status == 422) {
+                        res = "";
+                        var alertPopupC = SecuredPopups.show('alert', {
+                            title: 'Share',
+                            template: 'Form already shared to this user.'
+                        });
+                    } else {
+                        var alertPopupC = SecuredPopups.show('alert', {
+                            title: 'Share',
+                            template: 'An unexpected error occured while sending the e-mail.'
+                        });
+                    }
+                });
             }
         }
 

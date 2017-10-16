@@ -615,9 +615,17 @@ ppApp.controller('FormCtrl', [
             }
         };
 
-        PayitemService.list_payitems($stateParams.projectId).then(function(result) {
-            $scope.popup_list = result;
-        })
+        PostService.post({
+            method: 'GET',
+            url: 'payitem',
+            params: {
+                projectId: id
+            }
+        }, function(res) {
+            $scope.popup_list = res.data;
+        }, function(err) {
+            $scope.popup_list = [];
+        });
 
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {
@@ -985,10 +993,14 @@ ppApp.controller('FormCtrl', [
                                         item.current_day = item.current_day_obj;
                                     }
                                 });
-                                ResourceService.add_field($scope.resourceField).success(function(x) {
-                                    $scope.formData.resource_field_id = x.id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'resourcefield',
+                                    data: $scope.resourceField
+                                }, function(x) {
+                                    $scope.formData.resource_field_id = x.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.resourceField = $scope.formData.resourceField || [];
                                     $scope.formData.resourceField.push($scope.resourceField);
                                     def.resolve();
@@ -1053,10 +1065,14 @@ ppApp.controller('FormCtrl', [
                                         });
                                     });
                                 });
-                                PayitemService.add_field($scope.payitemField).success(function(x) {
-                                    $scope.formData.pay_item_field_id = x.id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'payitemfield',
+                                    data: $scope.payitemField
+                                }, function(x) {
+                                    $scope.formData.pay_item_field_id = x.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.payitemField = $scope.formData.payitemField || [];
                                     $scope.formData.payitemField.push($scope.payitemField);
                                     def.resolve();
@@ -1121,10 +1137,14 @@ ppApp.controller('FormCtrl', [
                                         });
                                     });
                                 });
-                                SchedulingService.add_field($scope.payitemField).success(function(x) {
-                                    $scope.formData.scheduling_field_id = x.id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'schedulingfield',
+                                    data: $scope.payitemField
+                                }, function(x) {
+                                    $scope.formData.scheduling_field_id = x.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.schedField = $scope.formData.schedField || [];
                                     $scope.formData.schedField.push($scope.payitemField);
                                     def.resolve();
@@ -1154,10 +1174,14 @@ ppApp.controller('FormCtrl', [
                                         item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                     }
                                 });
-                                StaffService.add_field($scope.staffField).success(function(x) {
-                                    $scope.formData.staff_field_id = x.id;
+                                PostService.post({
+                                    method: 'POST',
+                                    url: 'stafffield',
+                                    data: $scope.staffField
+                                }, function(x) {
+                                    $scope.formData.staff_field_id = x.data.id;
                                     def.resolve();
-                                }).error(function(err) {
+                                }, function(err) {
                                     $scope.formData.staffField = $scope.formData.staffField || [];
                                     $scope.formData.staffField.push($scope.staffField);
                                     def.resolve();
@@ -1180,7 +1204,7 @@ ppApp.controller('FormCtrl', [
                 }
             });
         };
-        $scope.fastSave = function(datax, img) {
+        $scope.fastSave = function(datax, imgUri) {
             var formUp = $ionicPopup.alert({
                 title: "Submitting",
                 template: "<center><ion-spinner icon='android'></ion-spinner></center>",
@@ -1197,63 +1221,125 @@ ppApp.controller('FormCtrl', [
             }
 
             function create() {
-                FormInstanceService.create(datax, img)
-                    .success(function(data) {
-                        if (data && data.data && data.data.message) {
+                var requestForm = ConvertersService.designToInstance(datax);
+
+                PostService.post({
+                    method: 'PUT',
+                    url: 'forminstance',
+                    data: requestForm,
+                    {
+                        withCredentials: true //TODO: params?????
+                    }
+                }, function(payload) {
+                    if (!payload.message) {
+                        var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);
+                        if (list.length !== 0) {
+                            ImageService.create(list).then(function(x) { //TODO: send pic by pic
+                                return x;
+                            });
+                        }
+                    }
+
+                    var data = payload.data;
+                    if (data && data.data && data.data.message) {
+                        $timeout(function() {
+                            formUp.close();
                             $timeout(function() {
+                                var alertPopup3 = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'You do not have permission to perform this operation'
+                                });
+                                alertPopup3.then(function(res) {
+                                    $rootScope.$broadcast('sync.todo');
+                                });
+                            });
+                        });
+                    } else {
+                        $rootScope.formId = data.id;
+                        if (!data.message && data.status !== 0) {
+                            PostService.post({
+                                method: 'GET',
+                                url: 'forminstance',
+                                params: {
+                                    id: $rootScope.formId
+                                }
+                            }, function(res) {
+                                $rootScope.rootForm = res.data;
                                 formUp.close();
-                                $timeout(function() {
-                                    var alertPopup3 = $ionicPopup.alert({
-                                        title: 'Submision failed',
-                                        template: 'You do not have permission to perform this operation'
-                                    });
-                                    alertPopup3.then(function(res) {
-                                        $rootScope.$broadcast('sync.todo');
-                                    });
+                                $state.go('app.formInstance', {
+                                    'projectId': $rootScope.projectId,
+                                    'type': 'form',
+                                    'formId': res.data.id
                                 });
-                            });
-                        } else {
-                            $rootScope.formId = data.id;
-                            if (!data.message && data.status !== 0) {
-                                FormInstanceService.get($rootScope.formId).then(function(data) {
-                                    $rootScope.rootForm = data;
-                                    formUp.close();
-                                    $state.go('app.formInstance', {
-                                        'projectId': $rootScope.projectId,
-                                        'type': 'form',
-                                        'formId': data.id
-                                    });
-                                });
-                            }
-                        }
-                    }).error(function(data) {
-                        formUp.close();
-                        if (data && data.status === 400) {
-                            $timeout(function() {
-                                $timeout(function() {
-                                    var alertPopup2 = $ionicPopup.alert({
-                                        title: 'Submision failed',
-                                        template: 'Incorrect data, try again'
-                                    });
-                                    alertPopup2.then(function(res) {});
-                                });
-                            });
-                        } else {
-                            $timeout(function() {
-                                $timeout(function() {
-                                    var alertPopup = $ionicPopup.alert({
-                                        title: 'Submision failed',
-                                        template: 'You are offline. Submit forms by syncing next time you are online.'
-                                    }).then(function(res) {
-                                        $state.go('app.forms', {
-                                            'projectId': $rootScope.projectId,
-                                            'categoryId': $scope.formData.category_id
-                                        });
-                                    });
-                                });
+                            }, function(err) {
+                                console.log(err);
                             });
                         }
+                    }
+
+                }, function(data) {
+                    console.log("error on create");
+                    var requestList = [];
+                    var ppfsync = localStorage.getObject('ppfsync');
+                    var pppsync = localStorage.getObject('pppsync');
+                    if (ppfsync) {
+                        $rootScope.toBeUploadedCount = ppfsync.length;
+                    } else {
+                        $rootScope.toBeUploadedCount = 0;
+                        localStorage.setObject('ppfsync', []);
+                    }
+                    if (!pppsync) {
+                        localStorage.setObject('pppsync', []);
+                    }
+                    $rootScope.toBeUploadedCount++;
+                    for (var i = 0; i < imgUri.length; i++) {
+                        if (imgUri[i].base64String !== "") {
+                            imgUri.projectId = requestForm.project_id;
+                            requestList.push(imgUri[i]);
+                        }
+                    }
+                    var aux_f = localStorage.getObject('ppfsync');
+                    aux_f.push({
+                        id: $rootScope.toBeUploadedCount,
+                        form: requestForm
                     });
+                    localStorage.setObject('ppfsync', aux_f);
+                    if (requestList.length !== 0) {
+                        var aux_p = localStorage.getObject('pppsync');
+                        aux_p.push({
+                            id: $rootScope.toBeUploadedCount,
+                            imgs: requestList
+                        });
+                        localStorage.setObject('pppsync', aux_p);
+                    }
+
+                    formUp.close();
+                    if (data && data.status === 400) {
+                        $timeout(function() {
+                            $timeout(function() {
+                                var alertPopup2 = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'Incorrect data, try again'
+                                });
+                                alertPopup2.then(function(res) {});
+                            });
+                        });
+                    } else {
+                        $timeout(function() {
+                            $timeout(function() {
+                                var alertPopup = $ionicPopup.alert({
+                                    title: 'Submision failed',
+                                    template: 'You are offline. Submit forms by syncing next time you are online.'
+                                }).then(function(res) {
+                                    $state.go('app.forms', {
+                                        'projectId': $rootScope.projectId,
+                                        'categoryId': $scope.formData.category_id
+                                    });
+                                });
+                            });
+                        });
+                    }
+                });
             }
         }
 

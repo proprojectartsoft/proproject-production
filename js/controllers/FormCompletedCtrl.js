@@ -1,7 +1,6 @@
 ppApp.controller('FormCompletedCtrl', [
     '$scope',
     '$state',
-    'FormInstanceService',
     'CacheFactory',
     '$rootScope',
     '$location',
@@ -11,10 +10,10 @@ ppApp.controller('FormCompletedCtrl', [
     '$ionicSideMenuDelegate',
     '$ionicHistory',
     '$ionicListDelegate',
-    'ShareService',
     '$timeout',
     'SecuredPopups',
-    function($scope, $state, FormInstanceService, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, ShareService, $timeout, SecuredPopups) {
+    'PostService',
+    function($scope, $state, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicPopup, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, $timeout, SecuredPopups, PostService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -70,31 +69,37 @@ ppApp.controller('FormCompletedCtrl', [
                     content: "",
                     buttons: []
                 });
-                ShareService.form.create(id, res).then(function(response) {
-                        alertPopup1.close();
-                        if (response.message === "Form shared") {
-                            res = "";
-                            var alertPopupC = SecuredPopups.show('alert', {
-                                title: 'Share',
-                                template: 'Email sent.'
-                            });
-                        }
-                    },
-                    function(err) {
-                        alertPopup1.close();
-                        if (err.status == 422) {
-                            res = "";
-                            var alertPopupC = SecuredPopups.show('alert', {
-                                title: 'Share',
-                                template: 'Form already shared to this user.'
-                            });
-                        } else {
-                            var alertPopupC = SecuredPopups.show('alert', {
-                                title: 'Share',
-                                template: 'An unexpected error occured while sending the e-mail.'
-                            });
-                        }
-                    });
+                PostService.post({
+                    method: 'POST',
+                    url: 'share',
+                    params: {
+                        formId: id,
+                        email: res
+                    }
+                }, function(response) {
+                    alertPopup1.close();
+                    if (response.data.message === "Form shared") {
+                        res = "";
+                        var alertPopupC = SecuredPopups.show('alert', {
+                            title: 'Share',
+                            template: 'Email sent.'
+                        });
+                    }
+                }, function(err) {
+                    alertPopup1.close();
+                    if (err.status == 422) { //TODO: .data??
+                        res = "";
+                        var alertPopupC = SecuredPopups.show('alert', {
+                            title: 'Share',
+                            template: 'Form already shared to this user.'
+                        });
+                    } else {
+                        var alertPopupC = SecuredPopups.show('alert', {
+                            title: 'Share',
+                            template: 'An unexpected error occured while sending the e-mail.'
+                        });
+                    }
+                });
             }
         }
 
@@ -220,36 +225,61 @@ ppApp.controller('FormCompletedCtrl', [
 
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
         $rootScope.categoryId = $stateParams.categoryId;
-
-        FormInstanceService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
+        PostService.post({
+            method: 'GET',
+            url: 'forminstance',
+            params: {
+                projectId: $stateParams.projectId,
+                categoryId: $stateParams.categoryId
+            }
+        }, function(res) {
             $scope.isLoaded = true;
-            $scope.formInstances = data;
-            if (data) {
-                if (data.length === 0) {
+            $scope.formInstances = res.data;
+            if (res.data) {
+                if (res.data.length === 0) {
                     $scope.hasData = 'no data';
                 }
             } else {
                 $scope.hasData = 'no data';
             }
+        }, function(err) {
+            console.log(err);
         });
 
         $scope.refresh = function() {
-            FormInstanceService.list($stateParams.projectId, $stateParams.categoryId).then(function(data) {
-                $scope.formInstances = data;
-                if (data) {
-                    if (data.length === 0) {
+            PostService.post({
+                method: 'GET',
+                url: 'forminstance',
+                params: {
+                    projectId: $stateParams.projectId,
+                    categoryId: $stateParams.categoryId
+                }
+            }, function(res) {
+                $scope.formInstances = res.data;
+                if (res.data) {
+                    if (res.data.length === 0) {
                         $scope.hasData = 'no data';
                     }
                 }
                 $scope.$broadcast('scroll.refreshComplete');
+            }, function(err) {
+                console.log(err);
             });
         };
 
         $scope.change = function(id) {
             $rootScope.formId = id;
-            FormInstanceService.get($rootScope.formId).then(function(data) {
-                $rootScope.rootForm = data;
+            PostService.post({
+                method: 'GET',
+                url: 'forminstance',
+                params: {
+                    id: $rootScope.formId
+                }
+            }, function(res) {
+                $rootScope.rootForm = res.data;
                 $location.path("/app/view/" + $rootScope.projectId + "/form/" + id);
+            }, function(err) {
+                console.log(err);
             });
         };
 

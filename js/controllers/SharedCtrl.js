@@ -1,22 +1,25 @@
 ppApp.controller('SharedCtrl', [
     '$rootScope',
     '$scope',
-    'FormInstanceService',
-    'ShareService',
-    'ResourceService',
-    'StaffService',
-    'SchedulingService',
-    'PayitemService',
     'DbService',
-    function($rootScope, $scope, FormInstanceService, ShareService, ResourceService, StaffService, SchedulingService, PayitemService, DbService) {
+    'PostService',
+    function($rootScope, $scope, DbService, PostService) {
         $scope.filter = {
             stateshare: 'form',
             edit: false,
             shared: true
         }
-        ShareService.form.list(false).then(function(result) {
-            $scope.sharedListData = result;
-            $scope.num = result.length;
+        PostService.post({
+            method: 'GET',
+            url: 'share',
+            params: {
+                shared: false
+            }
+        }, function(result) {
+            $scope.sharedListData = result.data;
+            $scope.num = result.data.length;
+        }, function(err) {
+            console.log(err);
         });
 
         $scope.back = function() {
@@ -24,10 +27,24 @@ ppApp.controller('SharedCtrl', [
         }
 
         $scope.loadForm = function(predicate) {
-            FormInstanceService.get(predicate.form_instance_id).then(function(data) {
+            PostService.post({
+                method: 'GET',
+                url: 'forminstance',
+                params: {
+                    id: predicate.form_instance_id
+                }
+            }, function(result) {
+                var data = result.data;
                 $scope.formData = data;
                 if (data.resource_field_id) {
-                    ResourceService.get_field(data.resource_field_id).then(function(res) {
+                    PostService.post({
+                        method: 'GET',
+                        url: 'resourcefield',
+                        params: {
+                            id: data.resource_field_id
+                        }
+                    }, function(r) {
+                        var res = r.data;
                         $scope.resourceField = res;
                         angular.forEach($scope.resourceField.resources, function(item) {
                             if (item.unit_id) {
@@ -57,10 +74,19 @@ ppApp.controller('SharedCtrl', [
                             }
                         });
                         $rootScope.resourceField = $scope.resourceField;
+                    }, function(err) {
+                        console.log(err);
                     });
                 }
                 if (data.staff_field_id) {
-                    StaffService.get_field(data.staff_field_id).then(function(res) {
+                    PostService.post({
+                        method: 'GET',
+                        url: 'stafffield',
+                        params: {
+                            id: data.staff_field_id
+                        }
+                    }, function(r) {
+                        var res = r.data;
                         $scope.staffField = res;
                         angular.forEach($scope.staffField.resources, function(item) {
                             if (item.unit_id) {
@@ -94,10 +120,19 @@ ppApp.controller('SharedCtrl', [
                             }
                         });
                         $rootScope.staffField = $scope.staffField;
+                    }, function(err) {
+                        console.log(err);
                     });
                 }
                 if (data.scheduling_field_id) {
-                    SchedulingService.get_field(data.scheduling_field_id).then(function(res) {
+                    PostService.post({
+                        method: 'GET',
+                        url: 'schedulingfield',
+                        params: {
+                            id: data.scheduling_field_id
+                        }
+                    }, function(r) {
+                        var res = r.data;
                         $scope.payitemField = res;
                         angular.forEach($scope.payitemField.pay_items, function(item) {
                             if (item.unit_id) {
@@ -175,10 +210,19 @@ ppApp.controller('SharedCtrl', [
                             });
                         });
                         $rootScope.payitemField = $scope.payitemField;
+                    }, function(err) {
+                        console.log(err);
                     });
                 }
                 if (data.pay_item_field_id) {
-                    PayitemService.get_field(data.pay_item_field_id).then(function(res) {
+                    PostService.post({
+                        method: 'GET',
+                        url: 'payitemfield',
+                        params: {
+                            id: data.pay_item_field_id
+                        }
+                    }, function(r) {
+                        var res = r.data;
                         $scope.payitemField = res;
                         angular.forEach($scope.payitemField.pay_items, function(item) {
                             if (item.unit_id) {
@@ -254,8 +298,12 @@ ppApp.controller('SharedCtrl', [
                             });
                         });
                         $rootScope.payitemField = $scope.payitemField;
+                    }, function(err) {
+                        console.log(err);
                     });
                 }
+            }, function(err) {
+                console.log(err);
             })
         }
     }
