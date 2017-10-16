@@ -114,7 +114,8 @@ ppApp.service('PostService', [
             var requestObject = {
                 method: params.method,
                 url: baseQueryTo + params.url,
-                data: params.data
+                data: params.data,
+                withCredentials: params.withCredentials
             };
 
             if (params.data && typeof params.data === 'object') {

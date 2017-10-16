@@ -1190,9 +1190,7 @@ ppApp.controller('EditCtrl', [
                     method: 'POST',
                     url: 'forminstance',
                     data: requestForm,
-                    params: {
-                        withCredentials: true
-                    }
+                    withCredentials: true
                 }, function(res) {
                     // if (res.data || res.data && res.data.message) {  //TODO: it is on error clause??
                     //     $timeout(function() {

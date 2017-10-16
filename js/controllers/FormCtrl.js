@@ -1,9 +1,8 @@
 ppApp.controller('FormCtrl', [
     '$scope',
-    'FormInstanceService',
     '$timeout',
+    'PostService',
     'FormUpdateService',
-    'StaffService',
     '$rootScope',
     'CacheFactory',
     '$ionicScrollDelegate',
@@ -16,9 +15,6 @@ ppApp.controller('FormCtrl', [
     'SyncService',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
-    'ResourceService',
-    'PayitemService',
-    'SchedulingService',
     '$ionicPopover',
     'ConvertersService',
     'ImageService',
@@ -26,33 +22,9 @@ ppApp.controller('FormCtrl', [
     '$filter',
     'DbService',
     '$q',
-    function($scope,
-        FormInstanceService,
-        $timeout,
-        FormUpdateService,
-        StaffService,
-        $rootScope,
-        CacheFactory,
-        $ionicScrollDelegate,
-        $ionicPopup,
-        $stateParams,
-        $ionicListDelegate,
-        $ionicModal,
-        $cordovaCamera,
-        $state,
-        SyncService,
-        $ionicSideMenuDelegate,
-        $ionicHistory,
-        ResourceService,
-        PayitemService,
-        SchedulingService,
-        $ionicPopover,
-        ConvertersService,
-        ImageService,
-        CommonServices,
-        $filter,
-        DbService,
-        $q) {
+    function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $ionicPopup, $stateParams, $ionicListDelegate, $ionicModal,
+        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, ImageService, CommonServices, $filter, DbService, $q) {
+
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
@@ -615,11 +587,12 @@ ppApp.controller('FormCtrl', [
             }
         };
 
+        //list payitems
         PostService.post({
             method: 'GET',
             url: 'payitem',
             params: {
-                projectId: id
+                projectId: $stateParams.projectId
             }
         }, function(res) {
             $scope.popup_list = res.data;
@@ -1224,12 +1197,10 @@ ppApp.controller('FormCtrl', [
                 var requestForm = ConvertersService.designToInstance(datax);
 
                 PostService.post({
-                    method: 'PUT',
+                    method: 'POST',
                     url: 'forminstance',
                     data: requestForm,
-                    {
-                        withCredentials: true //TODO: params?????
-                    }
+                    withCredentials: true
                 }, function(payload) {
                     if (!payload.message) {
                         var list = ConvertersService.photoList(imgUri, payload.id, requestForm.project_id);

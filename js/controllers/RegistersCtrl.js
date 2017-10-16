@@ -10,7 +10,8 @@ ppApp.controller('RegistersCtrl', [
     '$ionicSideMenuDelegate',
     '$timeout',
     '$ionicHistory',
-    function($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $ionicPopup, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory) {
+    'PostService',
+    function($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $ionicPopup, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory, PostService) {
         $scope.isLoaded = false;
 
         $scope.$on('$ionicView.enter', function() {
@@ -73,11 +74,6 @@ ppApp.controller('RegistersCtrl', [
 
             }
         }, function errorCallback(error) {});
-        if ($stateParams.categoryId) {
-            $rootScope.categoryId = $stateParams.categoryId;
-            $scope.refresh(true);
-        }
-        $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
 
         $scope.refresh = function(isInit) {
             PostService.post({
@@ -107,5 +103,11 @@ ppApp.controller('RegistersCtrl', [
                 console.log(err);
             });
         }
+
+        if ($stateParams.categoryId) {
+            $rootScope.categoryId = $stateParams.categoryId;
+            $scope.refresh(true);
+        }
+        $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
     }
 ]);

@@ -9,6 +9,7 @@ ppApp.controller('RegisterCtrl', [
     'PostService',
     function($scope, $rootScope, $stateParams, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, PostService) {
         $rootScope.categoryId = $stateParams.categoryId;
+        $scope.refresh = refresh;
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -26,7 +27,7 @@ ppApp.controller('RegisterCtrl', [
             return date.toString();
         };
 
-        $scope.refresh = function(isInit) {
+        function refresh(isInit) {
             PostService.post({
                 method: 'GET',
                 url: 'newregister',
