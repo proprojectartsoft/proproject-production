@@ -10,7 +10,6 @@ ppApp.service('SyncService', [
     'FormDesignService',
     'UserService',
     'AuthService',
-    '$ionicPopup',
     '$rootScope',
     '$state',
     'FormInstanceService',
@@ -20,7 +19,7 @@ ppApp.service('SyncService', [
     'orderByFilter',
     'PostService',
 
-    function($q, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $ionicPopup, $rootScope, $state, FormInstanceService, StaffService,
+    function($q, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $rootScope, $state, FormInstanceService, StaffService,
         SchedulingService, PayitemService, orderBy, PostService) {
         var service = this;
 

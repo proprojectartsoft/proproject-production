@@ -58,6 +58,7 @@ ppApp.directive('fs', [
         };
     }
 ]);
+
 ppApp.factory('SecuredPopups', [
     '$ionicPopup',
     '$q',

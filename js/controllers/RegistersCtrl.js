@@ -5,13 +5,13 @@ ppApp.controller('RegistersCtrl', [
     'RegisterService',
     'CacheFactory',
     'AuthService',
-    '$ionicPopup',
     '$state',
     '$ionicSideMenuDelegate',
     '$timeout',
     '$ionicHistory',
     'PostService',
-    function($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $ionicPopup, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory, PostService) {
+    'SettingService',
+    function($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory, PostService, SettingService) {
         $scope.isLoaded = false;
 
         $scope.$on('$ionicView.enter', function() {
@@ -28,11 +28,7 @@ ppApp.controller('RegistersCtrl', [
 
         AuthService.me().then(function(user) {
             if (user && user.active === false) {
-                var alertPopup = $ionicPopup.alert({
-                    title: 'Error',
-                    template: 'Your account has been de-activated. Contact your supervisor for further information.',
-                });
-                alertPopup.then(function(res) {
+                SettingService.show_message_popup('Error', 'Your account has been de-activated. Contact your supervisor for further information.').then(function(res) {
                     var projectsCache = CacheFactory.get('projectsCache');
                     if (projectsCache) {
                         projectsCache.destroy();

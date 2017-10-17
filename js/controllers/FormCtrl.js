@@ -6,7 +6,6 @@ ppApp.controller('FormCtrl', [
     '$rootScope',
     'CacheFactory',
     '$ionicScrollDelegate',
-    '$ionicPopup',
     '$stateParams',
     '$ionicListDelegate',
     '$ionicModal',
@@ -21,8 +20,9 @@ ppApp.controller('FormCtrl', [
     '$filter',
     'DbService',
     '$q',
-    function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $ionicPopup, $stateParams, $ionicListDelegate, $ionicModal,
-        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, DbService, $q) {
+    'SettingService',
+    function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
+        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, DbService, $q, SettingService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -828,10 +828,7 @@ ppApp.controller('FormCtrl', [
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
                 $timeout(function() {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Form gallery',
-                        template: 'Photo added. Check form gallery for more options.'
-                    });
+                    SettingService.show_message_popup('Form gallery', 'Photo added. Check form gallery for more options.');
                     $scope.imgURI.push({
                         "id": 0,
                         "base64String": imageData,
@@ -861,11 +858,7 @@ ppApp.controller('FormCtrl', [
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
                 $timeout(function() {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Form gallery',
-                        template: 'Photo added. Check form gallery for more options.'
-                    });
-
+                    SettingService.show_message_popup('Form gallery', 'Photo added. Check form gallery for more options.');
                     $scope.imgURI.push({
                         "id": 0,
                         "base64String": imageData,
@@ -929,11 +922,7 @@ ppApp.controller('FormCtrl', [
             }
         }
         $scope.submit = function() {
-            var confirmPopup = $ionicPopup.confirm({
-                title: 'New form',
-                template: 'Are you sure you want to submit the data?'
-            });
-            confirmPopup.then(function(res) {
+            SettingService.show_confirm_popup('New form', 'Are you sure you want to submit the data?').then(function(res) {
                 if (res) {
                     if ($scope.picModal) {
                         $scope.picModal.remove();
@@ -1177,12 +1166,7 @@ ppApp.controller('FormCtrl', [
             });
         };
         $scope.fastSave = function(datax, imgUri) {
-            var formUp = $ionicPopup.alert({
-                title: "Submitting",
-                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                content: "",
-                buttons: []
-            });
+            var formUp = SettingService.show_loading_popup('Submitting');
             //automatically sync previousely offline created forms
             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
                 SyncService.sync().then(function() {
@@ -1223,11 +1207,7 @@ ppApp.controller('FormCtrl', [
                         $timeout(function() {
                             formUp.close();
                             $timeout(function() {
-                                var alertPopup3 = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'You do not have permission to perform this operation'
-                                });
-                                alertPopup3.then(function(res) {
+                                SettingService.show_message_popup('Submision failed', 'You do not have permission to perform this operation').then(function(res) {
                                     $rootScope.$broadcast('sync.todo');
                                 });
                             });
@@ -1294,20 +1274,13 @@ ppApp.controller('FormCtrl', [
                     if (data && data.status === 400) {
                         $timeout(function() {
                             $timeout(function() {
-                                var alertPopup2 = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'Incorrect data, try again'
-                                });
-                                alertPopup2.then(function(res) {});
+                                SettingService.show_message_popup('Submision failed', 'Incorrect data, try again');
                             });
                         });
                     } else {
                         $timeout(function() {
                             $timeout(function() {
-                                var alertPopup = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'You are offline. Submit forms by syncing next time you are online.'
-                                }).then(function(res) {
+                                SettingService.show_message_popup('Submision failed', 'You are offline. Submit forms by syncing next time you are online.').then(function(res) {
                                     $state.go('app.forms', {
                                         'projectId': $rootScope.projectId,
                                         'categoryId': $scope.formData.category_id

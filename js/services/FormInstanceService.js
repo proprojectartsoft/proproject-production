@@ -2,12 +2,12 @@ ppApp.factory('FormInstanceService', [
     '$rootScope',
     '$http',
     'CacheFactory',
-    '$ionicPopup',
+    'SettingService',
     '$location',
     '$timeout',
     '$state',
     'ConvertersService',
-    function($rootScope, $http, CacheFactory, $ionicPopup, $location, $timeout, $state, ConvertersService) {
+    function($rootScope, $http, CacheFactory, SettingService, $location, $timeout, $state, ConvertersService) {
         return {
             get: function(id) {
                 return $http.get($APP.server + '/api/forminstance', {
@@ -160,11 +160,7 @@ ppApp.factory('FormInstanceService', [
                 }).success(function(payload) {
                     if (payload.data || payload.data && payload.data.message) {
                         $timeout(function() {
-                            var alertPopup3 = $ionicPopup.alert({
-                                title: 'Submision failed.',
-                                template: 'You have not permission to do this operation'
-                            });
-                            alertPopup3.then(function(res) {
+                            SettingService.show_message_popup('Submision failed.', 'You have not permission to do this operation').then(function(res) {
                                 $rootScope.$broadcast('sync.todo');
                             });
                         }, 10);

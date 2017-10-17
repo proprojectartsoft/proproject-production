@@ -6,7 +6,6 @@ ppApp.controller('EditCtrl', [
     '$rootScope',
     '$ionicSideMenuDelegate',
     '$ionicScrollDelegate',
-    '$ionicPopup',
     '$ionicModal',
     '$cordovaCamera',
     'ConvertersService',
@@ -19,9 +18,10 @@ ppApp.controller('EditCtrl', [
     'DbService',
     '$q',
     'PostService',
+    'SettingService',
     function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
-        $ionicPopup, $ionicModal, $cordovaCamera, ConvertersService, $ionicHistory,
-        CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q, PostService) {
+        $ionicModal, $cordovaCamera, ConvertersService, $ionicHistory,
+        CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q, PostService, SettingService) {
         var custSett = DbService.get('custsett');
         $scope.filter = {
             edit: true,
@@ -576,10 +576,7 @@ ppApp.controller('EditCtrl', [
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
                 $timeout(function() {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Form gallery',
-                        template: 'Photo added. Check form gallery for more options.'
-                    });
+                    SettingService.show_message_popup('Form gallery', 'Photo added. Check form gallery for more options.');
                     $scope.imgURI.push({
                         "id": 0,
                         "base64String": imageData,
@@ -610,10 +607,7 @@ ppApp.controller('EditCtrl', [
 
             $cordovaCamera.getPicture(options).then(function(imageData) {
                 $timeout(function() {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Form gallery',
-                        template: 'Photo added. Check form gallery for more options.'
-                    });
+                    SettingService.show_message_popup('Form gallery', 'Photo added. Check form gallery for more options.');
                     $scope.imgURI.push({
                         "id": 0,
                         "base64String": imageData,
@@ -696,24 +690,12 @@ ppApp.controller('EditCtrl', [
 
         $scope.submit = function(help) {
             if (!navigator.onLine) {
-                var confirmPopup = $ionicPopup.alert({
-                    title: 'Please note',
-                    template: 'You are offline. You can modify forms when online.'
-                });
+                SettingService.show_message_popup('Please note', 'You are offline. You can modify forms when online.');
             } else {
-                var confirmPopup = $ionicPopup.confirm({
-                    title: 'Edit form',
-                    template: 'Are you sure you want to edit this form?'
-                });
-                confirmPopup.then(function(res) {
+                SettingService.show_confirm_popup('Edit form', 'Are you sure you want to edit this form?').then(function(res) {
                     if (res) {
                         $timeout(function() {
-                            var formUp = $ionicPopup.alert({
-                                title: "Submitting",
-                                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                                content: "",
-                                buttons: []
-                            });
+                            var formUp = SettingService.show_loading_popup('Submitting');
 
                             if ($scope.formData.resource_field_id) {
                                 angular.forEach($rootScope.resourceField.resources, function(item) {
@@ -961,19 +943,10 @@ ppApp.controller('EditCtrl', [
         };
 
         $scope.saveAsNew = function() {
-            var confirmPopup = $ionicPopup.confirm({
-                title: 'Edit form',
-                template: 'Are you sure you want to save this form?'
-            });
-            confirmPopup.then(function(res) {
+            SettingService.show_confirm_popup('Edit form', 'Are you sure you want to save this form?').then(function(res) {
                 if (res) {
                     $timeout(function() {
-                        var formUp = $ionicPopup.alert({
-                            title: "Submitting",
-                            template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                            content: "",
-                            buttons: []
-                        });
+                        var formUp = SettingService.show_loading_popup('Submitting');
 
                         function addResource() {
                             var def = $q.defer();
@@ -1337,20 +1310,13 @@ ppApp.controller('EditCtrl', [
                     if (data && data.status === 400) {
                         $timeout(function() {
                             $timeout(function() {
-                                var alertPopup2 = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'Incorrect data, try again'
-                                });
-                                alertPopup2.then(function(res) {});
+                                SettingService.show_message_popup('Submision failed', 'Incorrect data, try again');
                             });
                         });
                     } else {
                         $timeout(function() {
                             $timeout(function() {
-                                var alertPopup = $ionicPopup.alert({
-                                    title: 'Submision failed',
-                                    template: 'You are offline. Submit forms by syncing next time you are online.'
-                                }).then(function(res) {
+                                SettingService.show_message_popup('Submision failed', 'You are offline. Submit forms by syncing next time you are online.').then(function(res) {
                                     $state.go('app.forms', {
                                         'projectId': $rootScope.projectId,
                                         'categoryId': $scope.formData.category_id

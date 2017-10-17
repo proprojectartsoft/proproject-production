@@ -1,12 +1,10 @@
 ppApp.factory('AuthService', [
     '$http',
-    '$location',
     '$state',
     '$rootScope',
     'CacheFactory',
-    '$ionicPopup',
-    '$ionicPlatform',
-    function($http, $location, $state, $rootScope, CacheFactory, $ionicPopup, $ionicPlatform) {
+    'SettingService',
+    function($http, $state, $rootScope, CacheFactory, SettingService) {
         var settingsCache = CacheFactory.get('settings');
         return {
             login: function(user) {
@@ -43,25 +41,13 @@ ppApp.factory('AuthService', [
                     })
                     .error(function(response, status) {
                         if (status === 502) {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Offline',
-                                template: "<center>Server offline</center>",
-                            });
-                            alertPopup.then(function(res) {});
+                            SettingService.show_message_popup('Offline', "<center>Server offline</center>");
                         }
                         if (status === 400) {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Error',
-                                template: "<center>Incorrect user data.</center>",
-                            });
-                            alertPopup.then(function(res) {});
+                            SettingService.show_message_popup('Error', "<center>Incorrect user data.</center>");
                         }
                         if (status === 401) {
-                            var alertPopup = $ionicPopup.alert({
-                                title: 'Error',
-                                template: 'Your account has been de-activated. Contact your supervisor for further information.',
-                            });
-                            alertPopup.then(function(res) {});
+                            SettingService.show_message_popup('Error', "Your account has been de-activated. Contact your supervisor for further information.");
                         }
                     })
             },

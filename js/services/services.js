@@ -231,6 +231,40 @@ ppApp.service('SettingService', ['$ionicPopup', '$ionicBackdrop', '$ionicBody', 
             });
         };
 
+        self.show_confirm_popup = function(title, template) {
+            return $ionicPopup.confirm({
+                title: title,
+                template: template
+            });
+        };
+
+        self.show_create_popup = function(email, importCallback, sendCallback, id) {
+            return $ionicPopup.show({
+                template: '<input type="text" ng-model="filter.email">',
+                title: 'Share form',
+                subTitle: 'Please enter a valid e-mail address.',
+                buttons: [{
+                    text: '<i class="ion-person-add"></i>',
+                    onTap: function(e) {
+                        importCallback(id);
+                    }
+                }, {
+                    text: 'Cancel',
+                }, {
+                    text: 'Send',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        if (!email) {
+                            e.preventDefault();
+                            self.show_message_popup('Share', "Please insert a valid e-mail address.");
+                        } else {
+                            sendCallback(email, id);
+                        }
+                    }
+                }]
+            });
+        }
+
         self.close_all_popups = function() {
             noop = angular.noop;
             elevated = false;
