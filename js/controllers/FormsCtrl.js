@@ -1,7 +1,6 @@
 ppApp.controller('FormsCtrl', [
     '$scope',
     '$stateParams',
-    'FormDesignService',
     '$rootScope',
     'AuthService',
     '$state',
@@ -11,7 +10,7 @@ ppApp.controller('FormsCtrl', [
     'SyncService',
     'DbService',
     'SettingService',
-    function($scope, $stateParams, FormDesignService, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, DbService, SettingService) {
+    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, DbService, SettingService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();

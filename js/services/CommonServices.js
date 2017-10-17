@@ -1,6 +1,6 @@
 ppApp.service('CommonServices', [
-    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PayitemService', 'DbService',
-    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PayitemService, DbService) {
+    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PostService', 'DbService',
+    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PostService, DbService) {
         return {
             selectPopover: function(filter, item, titleShow) {
                 console.log(item);
@@ -393,9 +393,17 @@ ppApp.service('CommonServices', [
                         filter.popup_title = "Payitem filter"
                     default:
                         filter.pi = true;
-                        PayitemService.list_payitems(projectId).then(function(data) {
-                            $rootScope.payitem_list = data;
+                        PostService.post({
+                            method: 'GET',
+                            url: 'payitem',
+                            params: {
+                                projectId: projectId
+                            }
+                        }, function(res) {
+                            $rootScope.payitem_list = res.data;
                             // filter.popup_list = $rootScope.payitem_list;
+                        }, function(err) {
+                            console.log(err);
                         });
                 }
             },

@@ -5,22 +5,13 @@ ppApp.service('SyncService', [
     '$cordovaSQLite',
     '$interval',
     'DbService',
-    'ResourceService',
-    'ProjectService',
-    'FormDesignService',
-    'UserService',
     'AuthService',
     '$rootScope',
     '$state',
-    'FormInstanceService',
-    'StaffService',
-    'SchedulingService',
-    'PayitemService',
     'orderByFilter',
     'PostService',
 
-    function($q, $http, $timeout, $cordovaSQLite, $interval, DbService, ResourceService, ProjectService, FormDesignService, UserService, AuthService, $rootScope, $state, FormInstanceService, StaffService,
-        SchedulingService, PayitemService, orderBy, PostService) {
+    function($q, $http, $timeout, $cordovaSQLite, $interval, DbService, AuthService, $rootScope, $state, orderBy, PostService) {
         var service = this;
 
         function servresp(name, timer, start, response) {
@@ -86,7 +77,7 @@ ppApp.service('SyncService', [
                             q = '';
                         if (order) {
                             //order the resources
-                            result = orderBy(result.data, 'name');
+                            result.data = orderBy(result.data, 'name');
                         }
                         // DbService.add('custsett', result.data);
                         $APP.db.transaction(function(tx) {

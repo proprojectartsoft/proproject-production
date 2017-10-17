@@ -2,7 +2,6 @@ ppApp.controller('RegistersCtrl', [
     '$scope',
     '$rootScope',
     '$stateParams',
-    'RegisterService',
     'CacheFactory',
     'AuthService',
     '$state',
@@ -11,7 +10,7 @@ ppApp.controller('RegistersCtrl', [
     '$ionicHistory',
     'PostService',
     'SettingService',
-    function($scope, $rootScope, $stateParams, RegisterService, CacheFactory, AuthService, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory, PostService, SettingService) {
+    function($scope, $rootScope, $stateParams, CacheFactory, AuthService, $state, $ionicSideMenuDelegate, $timeout, $ionicHistory, PostService, SettingService) {
         $scope.isLoaded = false;
 
         $scope.$on('$ionicView.enter', function() {
