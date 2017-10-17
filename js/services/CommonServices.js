@@ -1,12 +1,13 @@
 ppApp.service('CommonServices', [
-    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PostService', 'DbService',
-    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PostService, DbService) {
+    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService',
+    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PostService, SyncService) {
         return {
             selectPopover: function(filter, item, titleShow) {
                 console.log(item);
-                var resource_type_list = DbService.get('resource_type');
-                var unit_list = DbService.get('unit');
-                var abs_list = DbService.get('absenteeism');
+                var settings = SyncService.getSettings();
+                var resource_type_list = settings.resource_type,
+                    unit_list = settings.unit,
+                    abs_list = settings.absenteeism;
                 if (!filter.pi) {
                     filter.popup_predicate.name = item.name;
                     if (filter.state == 'resource') {
@@ -377,15 +378,15 @@ ppApp.service('CommonServices', [
                 switch (test) {
                     case 'staff':
                         filter.pi = false;
-                        filter.popup_list = DbService.get('staff');
+                        filter.popup_list = settings.staff; //DbService.get('staff');
                         break;
                     case 'resource':
                         filter.pi = false;
-                        filter.popup_list = DbService.get('resources');
+                        filter.popup_list = settings.resources; //DbService.get('resources');
                         break;
                     case 'payitem':
                         filter.pi = true;
-                        filter.popup_list = DbService.get('payitems');
+                        filter.popup_list = settings.payitems; //DbService.get('payitems');
                         // PayitemService.list_payitems(projectId).then(function(data) {
                         //     $rootScope.payitem_list = data;
                         //     filter.popup_list = $rootScope.payitem_list;

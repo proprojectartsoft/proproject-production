@@ -148,7 +148,7 @@ ppApp.service('SyncService', [
                             active: true
                         }
                     }, function(result) {
-                        DbService.add('projects', result.data);
+                        // DbService.add('projects', result.data);
                         var id = localStorage.getObject('ppprojectId');
                         var name = localStorage.getObject('ppnavTitle');
                         var sw = false;
@@ -297,7 +297,6 @@ ppApp.service('SyncService', [
                                         prm.resolve();
                                     }
                                 });
-
                             }
                         })
                     });
@@ -314,32 +313,97 @@ ppApp.service('SyncService', [
                 custsett = storeToLocalDb('companysettings', 'CustsettTable');
 
             Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designs, projects, custsett, formsPrm]).then(function(res) {
-                DbService.popclose(); //TODO: not
+                // DbService.popclose(); //TODO: not
                 deferred.resolve();
             })
             return deferred.promise;
         };
 
-        //store data locally
-        var loadFromLocalDb = function() {
-            var aux;
-            //Select the form templates
+        service.getSettings = function() {
+            var aux,
+                settings = {},
+                prm = $q.defer();
             $APP.db.transaction(function(tx) {
-                tx.executeSql('SELECT * FROM DesignsTable', [], function(tx, rs) {
+                //Select customer settings: currency, start, finish, break
+                var sett = tx.executeSql('SELECT * FROM CustsettTable', [], function(tx, rs) {
+                        aux = [];
+                        for (var i = 0; i < rs.rows.length; i++) {
+                            aux.push(rs.rows.item(i));
+                        }
+                        settings.custsett = aux;
+                        // DbService.add('custsett', aux);
+                    }, function(error) {}),
+                    res = tx.executeSql('SELECT * FROM ResourcesTable', [], function(tx, rs) {
+                        aux = [];
+                        for (var i = 0; i < rs.rows.length; i++) {
+                            aux.push(rs.rows.item(i));
+                        }
+                        settings.resources = aux;
+                        // DbService.add('resources', aux);
+                    }, function(error) {});
+                tx.executeSql('SELECT * FROM UnitTable', [], function(tx, rs) {
                     aux = [];
                     for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(JSON.parse(rs.rows.item(i).data));
+                        aux.push(rs.rows.item(i));
                     }
+                    settings.unit = aux;
+                    // DbService.add('unit', aux);
                 }, function(error) {});
+                tx.executeSql('SELECT * FROM StaffTable', [], function(tx, rs) {
+                    aux = [];
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        aux.push(rs.rows.item(i));
+                    }
+                    settings.staff = aux;
+                    // DbService.add('staff', aux);
+                }, function(error) {});
+                tx.executeSql('SELECT * FROM ResourceTypeTable', [], function(tx, rs) {
+                    aux = [];
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        aux.push(rs.rows.item(i));
+                    }
+                    settings.resource_type = aux;
+                    // DbService.add('resource_type', aux);
+                }, function(error) {});
+                tx.executeSql('SELECT * FROM AbsenteeismTable', [], function(tx, rs) {
+                    aux = [];
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        aux.push(rs.rows.item(i));
+                    }
+                    settings.absenteeism = aux;
+                    // DbService.add('absenteeism', aux);
+                }, function(error) {});
+                tx.executeSql('SELECT * FROM PayitemsTable', [], function(tx, rs) {
+                    console.log("load settings");
+                    aux = [];
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        aux.push(rs.rows.item(i));
+                    }
+                    settings.payitems = aux;
+                    // DbService.add('custsett', aux);
+                }, function(error) {});
+                Promise.all([sett, res]).then(function() {
+                    console.log("resolve settings");
+                    prm.resolve(settings);
+                })
+            });
+            return prm.promise;
+        };
+
+        service.getProjects = function() {
+            var prm = $q.defer();
+            $APP.db.transaction(function(tx) {
                 //Select projects
                 tx.executeSql('SELECT * FROM ProjectsTable', [], function(tx, rs) {
-                    $rootScope.projects = [];
+                    var aux = [];
+                    // $rootScope.projects = [];
                     for (var i = 0; i < rs.rows.length; i++) {
-                        $rootScope.projects.push(rs.rows.item(i));
+                        aux.push(rs.rows.item(i));
+                        // $rootScope.projects.push(rs.rows.item(i)); //TODO: check
                     }
-                    var id = localStorage.getObject('ppprojectId');
-                    var name = localStorage.getObject('ppnavTitle');
-                    var sw = false;
+                    var id = localStorage.getObject('ppprojectId'),
+                        name = localStorage.getObject('ppnavTitle'),
+                        sw = false;
                     if (id && name) {
                         for (var i = 0; i < rs.rows.length; i++) {
                             if (rs.rows.item(i).id === id && rs.rows.item(i).name === name) {
@@ -356,58 +420,120 @@ ppApp.service('SyncService', [
                         localStorage.setObject('ppnavTitle', rs.rows.item(0).name);
                         localStorage.setObject('ppprojectId', rs.rows.item(0).id);
                     }
-                    DbService.add('projects', aux);
-                }, function(error) {});
-                //Select customer settings: currency, start, finish, break
-                tx.executeSql('SELECT * FROM CustsettTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    DbService.add('custsett', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM ResourcesTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    console.log("RESOURCES ADEED:");
-                    console.log(aux);
-                    DbService.add('resources', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM UnitTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    DbService.add('unit', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM StaffTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    DbService.add('staff', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM ResourceTypeTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    DbService.add('resource_type', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM AbsenteeismTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    DbService.add('absenteeism', aux);
-                }, function(error) {});
+                    // DbService.add('projects', aux);
+                    prm.resolve(aux);
+                }, function(error) {
+                    prm.reject("Some unexpected error occured and projects could not be loaded.");
+                });
             });
-            $state.go('app.categories', {
-                'projectId': $rootScope.projectId
-            });
+            return prm.promise;
         };
+
+        service.getDesigns = function() {
+            var prm = $q.defer(),
+                aux;
+            $APP.db.transaction(function(tx) {
+                tx.executeSql('SELECT * FROM DesignsTable', [], function(tx, rs) {
+                    aux = [];
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        aux.push(JSON.parse(rs.rows.item(i).data));
+                    }
+                    prm.resolve(aux);
+                }, function(error) {
+                    prm.reject("Some unexpected error occured and designs could not be loaded.");
+                });
+            })
+            return prm.promise;
+        }
+
+        // //store data locally
+        // var loadFromLocalDb = function() {
+        //     var aux;
+        //     //Select the form templates
+        //     $APP.db.transaction(function(tx) {
+        //         tx.executeSql('SELECT * FROM DesignsTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(JSON.parse(rs.rows.item(i).data));
+        //             }
+        //         }, function(error) {});
+        //         //Select projects
+        //         tx.executeSql('SELECT * FROM ProjectsTable', [], function(tx, rs) {
+        //             $rootScope.projects = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 $rootScope.projects.push(rs.rows.item(i));
+        //             }
+        //             var id = localStorage.getObject('ppprojectId');
+        //             var name = localStorage.getObject('ppnavTitle');
+        //             var sw = false;
+        //             if (id && name) {
+        //                 for (var i = 0; i < rs.rows.length; i++) {
+        //                     if (rs.rows.item(i).id === id && rs.rows.item(i).name === name) {
+        //                         sw = true;
+        //                     }
+        //                 }
+        //             }
+        //             if (sw === true && id && name) {
+        //                 $rootScope.navTitle = name;
+        //                 $rootScope.projectId = id;
+        //             } else {
+        //                 $rootScope.navTitle = rs.rows.item(0).name;
+        //                 $rootScope.projectId = rs.rows.item(0).id;
+        //                 localStorage.setObject('ppnavTitle', rs.rows.item(0).name);
+        //                 localStorage.setObject('ppprojectId', rs.rows.item(0).id);
+        //             }
+        //             DbService.add('projects', aux);
+        //         }, function(error) {});
+        //         //Select customer settings: currency, start, finish, break
+        //         tx.executeSql('SELECT * FROM CustsettTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(rs.rows.item(i));
+        //             }
+        //             DbService.add('custsett', aux);
+        //         }, function(error) {});
+        //         tx.executeSql('SELECT * FROM ResourcesTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(rs.rows.item(i));
+        //             }
+        //             console.log("RESOURCES ADEED:");
+        //             console.log(aux);
+        //             DbService.add('resources', aux);
+        //         }, function(error) {});
+        //         tx.executeSql('SELECT * FROM UnitTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(rs.rows.item(i));
+        //             }
+        //             DbService.add('unit', aux);
+        //         }, function(error) {});
+        //         tx.executeSql('SELECT * FROM StaffTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(rs.rows.item(i));
+        //             }
+        //             DbService.add('staff', aux);
+        //         }, function(error) {});
+        //         tx.executeSql('SELECT * FROM ResourceTypeTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(rs.rows.item(i));
+        //             }
+        //             DbService.add('resource_type', aux);
+        //         }, function(error) {});
+        //         tx.executeSql('SELECT * FROM AbsenteeismTable', [], function(tx, rs) {
+        //             aux = [];
+        //             for (var i = 0; i < rs.rows.length; i++) {
+        //                 aux.push(rs.rows.item(i));
+        //             }
+        //             DbService.add('absenteeism', aux);
+        //         }, function(error) {});
+        //     });
+        //     $state.go('app.categories', {
+        //         'projectId': $rootScope.projectId
+        //     });
+        // };
 
         service.sync = function(isInit) {
             var defer = $q.defer();
@@ -419,7 +545,7 @@ ppApp.service('SyncService', [
                             if (isInit) {
                                 AuthService.version().then(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
-                                        DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true);
+                                        // DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true);
                                         syncData().then(function(res) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
@@ -427,8 +553,8 @@ ppApp.service('SyncService', [
                                             defer.resolve();
                                         })
                                     } else {
-                                        loadFromLocalDb();
-                                        DbService.popclose();
+                                        // loadFromLocalDb();
+                                        // DbService.popclose();
                                         defer.resolve();
                                     }
                                 })
@@ -448,9 +574,9 @@ ppApp.service('SyncService', [
                                     $state.go('app.categories', {
                                         'projectId': $rootScope.projectId
                                     });
-                                    if (isInit) {
-                                        DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true); //TODO: check if needed and close it everywhere
-                                    }
+                                    // if (isInit) {
+                                    // DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true); //TODO: check if needed and close it everywhere
+                                    // }
                                     setme(user).success(function(user) {
                                         $rootScope.currentUser = {
                                             id: user.data.id,
@@ -463,22 +589,22 @@ ppApp.service('SyncService', [
                                             defer.resolve();
                                         })
                                     }).error(function() {
-                                        DbService.popclose();
+                                        // DbService.popclose();
                                         defer.resolve();
                                     })
                                 } else {
                                     defer.resolve();
                                 }
                             } else {
-                                loadFromLocalDb();
-                                DbService.popclose();
+                                // loadFromLocalDb();
+                                // DbService.popclose();
                                 defer.resolve();
                             }
                         })
                 } else {
                     // if (!isInit || localStorage.getObject('ppremember')) {
-                    loadFromLocalDb();
-                    DbService.popclose(); //if isInit
+                    // loadFromLocalDb();
+                    // DbService.popclose(); //if isInit
                     defer.resolve();
                     // }
                 }

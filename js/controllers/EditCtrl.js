@@ -22,7 +22,11 @@ ppApp.controller('EditCtrl', [
     function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicModal, $cordovaCamera, ConvertersService, $ionicHistory,
         CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q, PostService, SettingService) {
-        var custSett = DbService.get('custsett');
+        var settings = SyncService.getSettings();
+        var custSett = settings.custSett; //DbService.get('custsett');
+        $scope.resource_type_list = settings.resource_type; //DbService.get('resource_type');
+        $scope.unit_list = settings.unit; //DbService.get('unit');
+        $scope.abs_list = settings.absenteeism; //DbService.get('absenteeism');
         $scope.filter = {
             edit: true,
             state: 'form',
@@ -41,11 +45,9 @@ ppApp.controller('EditCtrl', [
             $scope.currency = temp[0].value;
         }
         $scope.linkAux = 'forms';
-        $scope.resource_type_list = DbService.get('resource_type');
-        $scope.unit_list = DbService.get('unit');
-        $scope.abs_list = DbService.get('absenteeism');
+
         //set project settings
-        var proj = $filter('filter')(DbService.get('projects'), {
+        var proj = $filter('filter')(SyncService.getProjects(), {
             id: $stateParams.projectId
         })[0];
         if (proj && proj.settings) {

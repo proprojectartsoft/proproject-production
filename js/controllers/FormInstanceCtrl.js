@@ -14,24 +14,28 @@ ppApp.controller('FormInstanceCtrl', [
     'DbService',
     'PostService',
     'SettingService',
-    function($scope, $rootScope, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, DbService, PostService, SettingService) {
+    'SyncService',
+    function($scope, $rootScope, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, DbService, PostService, SettingService, SyncService) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
 
-        var temp = $filter('filter')(DbService.get('custsett'), {
+        var settings = SyncService.getSettings();
+        $scope.linkAux = 'forms';
+
+        var temp = $filter('filter')(settings.custsett, { //DbService.get('custsett')
             name: 'currency'
         });
         if (temp && temp.length) {
             $scope.currency = temp[0].value;
         }
-        $scope.linkAux = 'forms';
-        $scope.resource_type_list = DbService.get('resource_type');
-        $scope.unit_list = DbService.get('unit');
-        $scope.abs_list = DbService.get('absenteeism');
+
+        $scope.resource_type_list = settings.resource_type; //DbService.get('resource_type');
+        $scope.unit_list = settings.unit; //DbService.get('unit');
+        $scope.abs_list = settings.absenteeism; //DbService.get('absenteeism');
         //set project settings
-        var proj = $filter('filter')(DbService.get('projects'), {
+        var proj = $filter('filter')(SyncService.getProjects(), { //DbService.get('projects')
             id: $stateParams.projectId
         })[0];
         if (proj && proj.settings) {

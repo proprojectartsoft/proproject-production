@@ -13,7 +13,7 @@ ppApp.controller('MyAccountCtrl', [
                     method: 'GET',
                     url: 'user',
                     params: {
-                        id: id
+                        id: me.id
                     }
                 }, function(result) {
                     $scope.profileHeader = result.data;

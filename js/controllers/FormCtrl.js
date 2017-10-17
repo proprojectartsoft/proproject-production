@@ -21,8 +21,9 @@ ppApp.controller('FormCtrl', [
     'DbService',
     '$q',
     'SettingService',
+    'SyncService',
     function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
-        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, DbService, $q, SettingService) {
+        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, DbService, $q, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -32,27 +33,34 @@ ppApp.controller('FormCtrl', [
         $scope.repeatable = false;
         $scope.linkAux = 'forms';
         pullDown();
-        var custSett = DbService.get('custsett');
-        $scope.resource_type_list = DbService.get('resource_type');
-        $scope.unit_list = DbService.get('unit');
-        $scope.abs_list = DbService.get('absenteeism');
+        var custSett = [];
+        SyncService.getSettings().then(function(settings) {
+            custSett = settings.custSett; //DbService.get('custsett');
+            $scope.resource_type_list = settings.resource_type; //DbService.get('resource_type');
+            $scope.unit_list = settings.unit; //DbService.get('unit');
+            $scope.abs_list = settings.absenteeism; //DbService.get('absenteeism');
+        })
 
-        var allProjects = DbService.get('projects');
         //set project settings
-        var proj = $filter('filter')(DbService.get('projects'), {
-            id: parseInt($stateParams.projectId, 10)
-        })[0];
-        if (proj && proj.settings) {
-            var val = $filter('filter')(proj.settings, {
-                name: "margin"
+        SyncService.getProjects().then(function(res) {
+            var proj = $filter('filter')(res, { //DbService.get('projects');
+                id: parseInt($stateParams.projectId, 10)
             })[0];
-            $rootScope.proj_margin = parseInt(val.value);
-        } else {
-            $rootScope.proj_margin = 0;
-        }
+            if (proj && proj.settings) {
+                var val = $filter('filter')(proj.settings, {
+                    name: "margin"
+                })[0];
+                $rootScope.proj_margin = parseInt(val.value);
+            } else {
+                $rootScope.proj_margin = 0;
+            }
+        }, function(reason) {
+            SettingService.show_message_popup("Error", reason);
+        });
+
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
-        $APP.db.transaction(function(tx) {
+        $APP.db.transaction(function(tx) {  //TODO: use getDesigns function
             tx.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
                 function(tx, rs) {
                     $scope.formData = JSON.parse(rs.rows.item(0).data);
