@@ -4,24 +4,17 @@ ppApp.controller('LoginCtrl', [
     'AuthService',
     '$rootScope',
     '$timeout',
-    '$ionicPopup',
     'SyncService',
-    function($scope, $state, AuthService, $rootScope, $timeout, $ionicPopup, SyncService) {
-        console.log("LOGIN CONTROLLER");
-        $scope.user = [];
-        $scope.user.username = "";
-        $scope.user.password = "";
-        $scope.user.rememberMe = false;
-        $scope.popupOpen = false;
+    'SettingService',
+    function($scope, $state, AuthService, $rootScope, $timeout, SyncService, SettingService) {
+        $scope.user = {
+            username: "",
+            password: "",
+            rememberMe: false
+        }
         var ppremember = localStorage.getObject('ppremember');
-        console.log(ppremember);
         if (ppremember) {
-            var popup = $ionicPopup.alert({
-                title: "Sync",
-                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                content: "",
-                buttons: []
-            });
+            var popup = SettingService.show_loading_popup("Sync");
             $scope.user.username = ppremember.username;
             $scope.user.password = ppremember.password;
             $scope.user.rememberMe = true;
@@ -34,7 +27,7 @@ ppApp.controller('LoginCtrl', [
                     if (response) {
                         $timeout(function() {
                             SyncService.sync_close();
-                            SyncService.sync_button().then(function(res) {
+                            SyncService.sync(true).then(function(res) {
                                 popup.close();
                             })
                         });
@@ -53,11 +46,7 @@ ppApp.controller('LoginCtrl', [
                             'username': $scope.user.username,
                             'password': $scope.user.password
                         });
-                        var alertPopup = $ionicPopup.alert({
-                            title: 'Please Note',
-                            template: "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.",
-                        });
-                        alertPopup.then(function(res) {});
+                        SettingService.show_message_popup('Please Note', "You are offline. Whilst you have no connection you can complete new forms for later syncing with the server but you will not be able to review previously completed forms and registers.");
                     }
                     $rootScope.thisUser = localStorage.getObject("ppuser");
                     localStorage.removeItem('loggedOut');
@@ -66,17 +55,10 @@ ppApp.controller('LoginCtrl', [
             } else {
                 popup.close();
             }
-        } else {
-            console.log("NOT PPREMEMBERED");
         }
 
         $scope.login = function() {
-            var popup = $ionicPopup.alert({
-                title: "Sync",
-                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                content: "",
-                buttons: []
-            });
+            var popup = SettingService.show_loading_popup("Sync");
             AuthService.login({
                 username: $scope.user.username,
                 password: $scope.user.password
@@ -97,7 +79,7 @@ ppApp.controller('LoginCtrl', [
                             'username': $scope.user.username,
                             'password': $scope.user.password
                         });
-                        SyncService.sync_button().then(function(err) {
+                        SyncService.sync(true).then(function(err) {
                             popup.close();
                         })
                     });
@@ -107,11 +89,7 @@ ppApp.controller('LoginCtrl', [
             }).error(function(err, status) {
                 popup.close();
                 if (status === 0 || status === -1) {
-                    var alertPopup = $ionicPopup.alert({
-                        title: 'Error',
-                        template: "You are offline. You can login when online.",
-                    });
-                    alertPopup.then(function(res) {});
+                    SettingService.show_message_popup('Error', "<center>You are offline. You can login when online.</center>");
                 }
                 localStorage.removeItem('loggedOut');
                 SyncService.sync_close();

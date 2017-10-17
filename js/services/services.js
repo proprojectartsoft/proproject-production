@@ -202,3 +202,57 @@ ppApp.service('pendingRequests', ['$filter', function($filter) {
         pending.length = 0;
     };
 }]);
+
+ppApp.service('SettingService', ['$ionicPopup', '$ionicBackdrop', '$ionicBody', '$timeout',
+    function($ionicPopup, $ionicBackdrop, $ionicBody, $timeout) {
+        var self = this;
+        self.show_message_popup = function(title, template) {
+            var popup = $ionicPopup.alert({
+                title: title,
+                template: template,
+                content: "",
+                buttons: [{
+                    text: 'Ok',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        popup.close();
+                    }
+                }]
+            });
+            return popup;
+        };
+
+        self.show_loading_popup = function(title) {
+            return $ionicPopup.show({
+                title: title,
+                template: "<center><ion-spinner icon='android'></ion-spinner></center>",
+                content: "",
+                buttons: []
+            });
+        };
+
+        self.close_all_popups = function() {
+            noop = angular.noop;
+            elevated = false;
+            var popupStack = $ionicPopup._popupStack;
+            if (popupStack.length > 0) {
+                popupStack.forEach(function(popup, index) {
+                    if (popup.isShown === true) {
+                        popup.remove();
+                        popupStack.pop();
+                    }
+                });
+            }
+
+            $ionicBackdrop.release();
+            //Remove popup-open & backdrop if this is last popup
+            $timeout(function() {
+                // wait to remove this due to a 300ms delay native
+                // click which would trigging whatever was underneath this
+                $ionicBody.removeClass('popup-open');
+                // $ionicPopup._popupStack.pop();
+            }, 400, false);
+            ($ionicPopup._backButtonActionDone || noop)();
+        };
+    }
+]);

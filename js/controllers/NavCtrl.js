@@ -6,11 +6,9 @@ ppApp.controller('NavCtrl', [
     '$ionicSideMenuDelegate',
     'CacheFactory',
     '$timeout',
-    '$http',
-    '$ionicPopup',
     'SyncService',
-    'DbService',
-    function($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, $timeout, $http, $ionicPopup, SyncService, DbService) {
+    'SettingService',
+    function($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, $timeout, SyncService, SettingService) {
         $scope.toggleLeft = function($event) {
             $ionicSideMenuDelegate.toggleLeft();
         };
@@ -59,14 +57,14 @@ ppApp.controller('NavCtrl', [
                 "image_url": "financial"
             }
         ];
-        $scope.isDisconnect = {
-            checked: false
-        };
-        $scope.pushIsDisconnectChange = function() {
-            if ($scope.isDisconnect.checked) {
-                $scope.logout();
-            }
-        };
+        // $scope.isDisconnect = {
+        //     checked: false
+        // };
+        // $scope.pushIsDisconnectChange = function() {
+        //     if ($scope.isDisconnect.checked) {
+        //         $scope.logout();
+        //     }
+        // };
         $scope.logout = function() {
             if (navigator.onLine) {
                 SyncService.sync_close();
@@ -76,13 +74,10 @@ ppApp.controller('NavCtrl', [
                 $state.go('login');
             } else {
                 $timeout(function() {
-                    DbService.popopen('Error', "<center>Can't log out now. You are offline.</center>")
+                    SettingService.show_message_popup('Error', "<center>Can't log out now. You are offline.</center>")
                 })
             }
         };
-        $scope.force_logout = function() {
-            AuthService.logout().success(function() {});
-        }
         $scope.updateTitle = function(project) {
             $rootScope.navTitle = project.name;
             $rootScope.projectId = project.id;
@@ -92,30 +87,15 @@ ppApp.controller('NavCtrl', [
 
         $scope.sync = function() {
             if (navigator.onLine) {
-                var popup = $ionicPopup.alert({
-                    title: "Sync",
-                    template: "<center><ion-spinner icon='android'></ion-spinner></center>",
-                    content: "",
-                    buttons: []
-                });
-                SyncService.sync_button().then(function(res) {
+                var popup = SettingService.show_loading_popup('Sync');
+                SyncService.sync().then(function(res) {
                     popup.close();
                 })
             } else {
-                var offlinePopup = $ionicPopup.alert({
-                    title: "You are offline",
-                    template: "<center>You cannot sync your data when offline</center>",
-                    content: "",
-                    buttons: [{
-                        text: 'Ok',
-                        type: 'button-positive',
-                        onTap: function(e) {
-                            offlinePopup.close();
-                        }
-                    }]
-                });
+                SettingService.show_message_popup("You are offline", '<center>You cannot sync your data when offline</center>');
             }
         };
+
         $rootScope.$on('sync.todo', function() {
             $state.go('app.categories', {
                 'projectId': $rootScope.projectId

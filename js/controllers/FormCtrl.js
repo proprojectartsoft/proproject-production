@@ -1185,7 +1185,7 @@ ppApp.controller('FormCtrl', [
             });
             //automatically sync previousely offline created forms
             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
-                SyncService.sync_button().then(function() {
+                SyncService.sync().then(function() {
                     create();
                 })
             } else {
