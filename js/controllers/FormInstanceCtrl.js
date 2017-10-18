@@ -36,12 +36,9 @@ ppApp.controller('FormInstanceCtrl', [
         SyncService.getProjects().then(function(res) {
             var proj = $filter('filter')(res, {
                 id: $stateParams.projectId
-            })[0];
-            if (proj && proj.settings) {
-                var val = $filter('filter')(proj.settings, {
-                    name: "margin"
-                })[0];
-                $rootScope.proj_margin = parseInt(val.value);
+            });
+            if (proj && proj.length && proj[0].settings) {
+                $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj[0].settings, 'name', "margin").value);
             } else {
                 $rootScope.proj_margin = 0;
             }
@@ -496,27 +493,15 @@ ppApp.controller('FormInstanceCtrl', [
         }
 
         function setResourceType(item) {
-            var restype = $filter('filter')($scope.resource_type_list, {
-                name: item.resource_type_name
-            })[0];
-            if (restype)
-                item.res_type_obj = restype;
+            item.res_type_obj = CommonServices.filterByField($scope.resource_type_list, 'name', item.resource_type_name);
         }
 
         function setUnit(item) {
-            var unt = $filter('filter')($scope.unit_list, {
-                id: item.unit_id
-            })[0];
-            if (unt)
-                item.unit_obj = unt;
+            item.unit_obj = CommonServices.filterByField($scope.unit_list, 'id', item.unit_id);
         }
 
         function setAbsenteeism(item) {
-            var abs = $filter('filter')($scope.abs_list, {
-                reason: item.abseteeism_reason_name
-            })[0];
-            if (abs)
-                item.absenteeism_obj = abs;
+            item.absenteeism_obj = CommonServices.filterByField($scope.abs_list, 'reason', item.abseteeism_reason_name);
         }
 
         $scope.back = function() {

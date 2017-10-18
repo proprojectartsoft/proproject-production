@@ -45,13 +45,13 @@ ppApp.controller('FormCtrl', [
             $scope.resource_type_list = settings.resource_type;
             $scope.unit_list = settings.unit;
             $scope.abs_list = settings.absenteeism;
-            $scope.filter.vat = parseInt(CommonServices.getCustSett(custSett, 'vat'), 10);
-            $scope.currency = CommonServices.getCustSett(custSett, 'currency');
+            $scope.filter.vat = parseInt(CommonServices.filterByField(custSett, 'name', 'vat').value, 10);
+            $scope.currency = CommonServices.filterByField(custSett, 'name', 'currency').value;
             $scope.filter.currency = angular.copy($scope.currency);
-            $scope.filter.start = CommonServices.getCustSett(custSett, 'start');
-            $scope.filter.break = CommonServices.getCustSett(custSett, 'break');
-            $scope.filter.finish = CommonServices.getCustSett(custSett, 'finish');
-            // $scope.filter.margin = CommonServices.getCustSett(custSett, 'margin');
+            $scope.filter.start = CommonServices.filterByField(custSett, 'name', 'start').value;
+            $scope.filter.break = CommonServices.filterByField(custSett, 'name', 'break').value;
+            $scope.filter.finish = CommonServices.filterByField(custSett, 'name', 'finish').value;
+            // $scope.filter.margin = CommonServices.filterByField(custSett,'name', 'margin').value;
         })
 
         //list payitems
@@ -69,14 +69,9 @@ ppApp.controller('FormCtrl', [
 
         //set project settings
         SyncService.getProjects().then(function(res) {
-            var proj = $filter('filter')(res, {
-                id: parseInt($stateParams.projectId, 10)
-            })[0];
-            if (proj && proj.settings) {
-                var val = $filter('filter')(proj.settings, {
-                    name: "margin"
-                })[0];
-                $rootScope.proj_margin = parseInt(val.value);
+            var proj = CommonServices.filterByField(res, 'id', parseInt($stateParams.projectId, 10));
+            if (proj.settings) {
+                $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
             } else {
                 $rootScope.proj_margin = 0;
             }
@@ -1182,7 +1177,7 @@ ppApp.controller('FormCtrl', [
                             img.projectId = requestForm.project_id;
                             PostService.post({
                                 method: 'POST',
-                                url: 'defectphoto/uploadfile',
+                                url: 'image/uploadfile',
                                 data: img,
                             }, function(payload) {
 

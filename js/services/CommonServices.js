@@ -6,6 +6,15 @@ ppApp.service('CommonServices', [
         SyncService.getSettings().then(function(res) {
             settings = res;
         });
+        service.filterByField = function(array, field, name) {
+            var obj = {};
+            obj[field] = name;
+            var temp = $filter('filter')(array, obj);
+            if (temp && temp.length) {
+                return temp[0];
+            }
+            return {};
+        };
         service.selectPopover = function(filter, item, titleShow) {
             if (!filter.pi) {
                 filter.popup_predicate.name = item.name;
@@ -26,56 +35,36 @@ ppApp.service('CommonServices', [
                     }
                     filter.popup_predicate.product_ref = item.product_ref;
                     filter.popup_predicate.direct_cost = item.direct_cost;
-                    var restyp = $filter('filter')(settings.resource_type, {
-                        name: item.resource_type_name
-                    })[0];
-                    if (restyp) {
-                        filter.popup_predicate.res_type_obj = restyp;
-                        filter.popup_predicate.resource_type_id = restyp.id;
-                        filter.popup_predicate.resource_type_name = restyp.name;
-                    }
-                    var unt = $filter('filter')(settings.unit, {
-                        name: item.unit_name
-                    })[0];
-                    if (unt) {
-                        filter.popup_predicate.unit_obj = unt;
-                        filter.popup_predicate.unit_id = unt.id;
-                        filter.popup_predicate.unit_name = unt.name;
-                    }
+                    //set resource type
+                    filter.popup_predicate.res_type_obj = service.filterByField(settings.resource_type, 'name', item.resource_type_name);
+                    filter.popup_predicate.resource_type_id = filter.popup_predicate.res_type_obj.id;
+                    filter.popup_predicate.resource_type_name = filter.popup_predicate.res_type_obj.name;
+                    //set unit
+                    filter.popup_predicate.unit_obj = service.filterByField(settings.unit, 'name', item.unit_name);
+                    filter.popup_predicate.unit_id = filter.popup_predicate.unit_obj.id;
+                    filter.popup_predicate.unit_name = filter.popup_predicate.unit_obj.name;
                 }
                 if (filter.state == 'staff') {
                     titleShow = 'Staff: ' + item.name;
                     filter.popup_predicate.employer_name = item.employee_name;
                     filter.popup_predicate.staff_role = item.role;
                     filter.popup_predicate.direct_cost = item.direct_cost;
-                    var restyp = $filter('filter')(settings.resource_type, {
-                        name: item.resource_type_name
-                    })[0];
-                    if (restyp) {
-                        filter.popup_predicate.res_type_obj = restyp;
-                        filter.popup_predicate.resource_type_id = restyp.id;
-                        filter.popup_predicate.resource_type_name = restyp.name;
-                    }
+                    //set resource type
+                    filter.popup_predicate.res_type_obj = service.filterByField(settings.resource_type, 'name', item.resource_type_name);
+                    filter.popup_predicate.resource_type_id = filter.popup_predicate.res_type_obj.id;
+                    filter.popup_predicate.resource_type_name = filter.popup_predicate.res_type_obj.name;
                 }
                 if ((filter.state == 'scheduling' || filter.state == 'payitem') && (filter.substateRes || filter.substateStk && filter.substateStkRes)) {
                     filter.popup_predicate.product_ref = item.product_ref;
                     filter.popup_predicate.direct_cost = item.direct_cost;
-                    var restyp = $filter('filter')(settings.resource_type, {
-                        name: item.resource_type_name
-                    })[0];
-                    if (restyp) {
-                        filter.popup_predicate.res_type_obj = restyp;
-                        filter.popup_predicate.resource_type_id = restyp.id;
-                        filter.popup_predicate.resource_type_name = restyp.name;
-                    }
-                    var unt = $filter('filter')(settings.unit, {
-                        name: item.unit_name
-                    })[0];
-                    if (unt) {
-                        filter.popup_predicate.unit_obj = unt;
-                        filter.popup_predicate.unit_id = unt.id;
-                        filter.popup_predicate.unit_name = unt.name;
-                    }
+                    //set resource type
+                    filter.popup_predicate.res_type_obj = service.filterByField(settings.resource_type, 'name', item.resource_type_name);
+                    filter.popup_predicate.resource_type_id = filter.popup_predicate.res_type_obj.id;
+                    filter.popup_predicate.resource_type_name = filter.popup_predicate.res_type_obj.name;
+                    //set unit
+                    filter.popup_predicate.unit_obj = service.filterByField(settings.unit, 'name', item.unit_name);
+                    filter.popup_predicate.unit_id = filter.popup_predicate.unit_obj.id;
+                    filter.popup_predicate.unit_name = filter.popup_predicate.unit_obj.name;
                     if (item.resource_margin) {
                         filter.popup_predicate.resource_margin = item.resource_margin;
                     }
@@ -93,14 +82,10 @@ ppApp.service('CommonServices', [
 
                 filter.popup_predicate.description = item.description;
                 filter.popup_predicate.reference = item.reference;
-                var unt = $filter('filter')(settings.unit, {
-                    name: item.unit_name
-                })[0];
-                if (unt) {
-                    filter.popup_predicate.unit_obj = unt;
-                    filter.popup_predicate.unit_id = unt.id;
-                    filter.popup_predicate.unit_name = unt.name;
-                }
+                //set unit
+                filter.popup_predicate.unit_obj = service.filterByField(settings.unit, 'name', item.unit_name);
+                filter.popup_predicate.unit_id = filter.popup_predicate.unit_obj.id;
+                filter.popup_predicate.unit_name = filter.popup_predicate.unit_obj.name;
             }
         };
         service.addResource = function(resources, vat) {
@@ -545,16 +530,6 @@ ppApp.service('CommonServices', [
             } else {
                 titleShow = placeholder;
             }
-        };
-
-        service.getCustSett = function(custSett, name) {
-            var temp = $filter('filter')(custSett, {
-                name: name
-            });
-            if (temp && temp.length) {
-                return temp[0].value;
-            }
-            return null;
         };
     }
 ])
