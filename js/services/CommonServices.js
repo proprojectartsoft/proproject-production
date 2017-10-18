@@ -1,6 +1,6 @@
 ppApp.service('CommonServices', [
-    '$stateParams', '$state', '$filter', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService', 'SettingService', '$location',
-    function($stateParams, $state, $filter, $ionicScrollDelegate, $rootScope, PostService, SyncService, SettingService, $location) {
+    '$stateParams', '$state', '$filter', '$timeout', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService', 'SettingService', '$location',
+    function($stateParams, $state, $filter, $timeout, $ionicScrollDelegate, $rootScope, PostService, SyncService, SettingService, $location) {
         var service = this;
         var settings = {};
         SyncService.getSettings().then(function(res) {

@@ -29,10 +29,16 @@ ppApp.controller('LoginCtrl', [
                             SyncService.sync_close();
                             SyncService.sync(true).then(function(res) {
                                 popup.close();
+                                $state.go('app.categories', {
+                                    'projectId': $rootScope.projectId
+                                });
                             })
                         });
                     } else {
                         popup.close();
+                        $state.go('app.categories', {
+                            'projectId': $rootScope.projectId
+                        });
                     }
                 }).error(function(err, status) {
                     popup.close();
@@ -51,6 +57,9 @@ ppApp.controller('LoginCtrl', [
                     $rootScope.thisUser = localStorage.getObject("ppuser");
                     localStorage.removeItem('loggedOut');
                     SyncService.sync_close();
+                    $state.go('app.categories', {
+                        'projectId': $rootScope.projectId
+                    });
                 })
             } else {
                 popup.close();
@@ -81,10 +90,16 @@ ppApp.controller('LoginCtrl', [
                         });
                         SyncService.sync(true).then(function(err) {
                             popup.close();
+                            $state.go('app.categories', {
+                                'projectId': $rootScope.projectId
+                            });
                         })
                     });
                 } else {
                     popup.close();
+                    $state.go('app.categories', {
+                        'projectId': $rootScope.projectId
+                    });
                 }
             }).error(function(err, status) {
                 popup.close();

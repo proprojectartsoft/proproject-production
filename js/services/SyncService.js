@@ -6,11 +6,10 @@ ppApp.service('SyncService', [
     '$interval',
     'AuthService',
     '$rootScope',
-    '$state',
     'orderByFilter',
     'PostService',
 
-    function($q, $http, $timeout, $cordovaSQLite, $interval, AuthService, $rootScope, $state, orderBy, PostService) {
+    function($q, $http, $timeout, $cordovaSQLite, $interval, AuthService, $rootScope, orderBy, PostService) {
         var service = this;
 
         function servresp(name, timer, start, response) {
@@ -446,9 +445,6 @@ ppApp.service('SyncService', [
                                 AuthService.version().then(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
                                         syncData().then(function(res) {
-                                            $state.go('app.categories', {
-                                                'projectId': $rootScope.projectId
-                                            });
                                             defer.resolve();
                                         })
                                     } else {
@@ -457,9 +453,6 @@ ppApp.service('SyncService', [
                                 })
                             } else {
                                 syncData().then(function(res) {
-                                    $state.go('app.categories', {
-                                        'projectId': $rootScope.projectId
-                                    });
                                     defer.resolve();
                                 })
                             }
@@ -468,9 +461,6 @@ ppApp.service('SyncService', [
                             if (navigator.onLine && status === 403) {
                                 var user = localStorage.getObject('ppremember');
                                 if (user) {
-                                    $state.go('app.categories', {
-                                        'projectId': $rootScope.projectId
-                                    });
                                     setme(user).success(function(user) {
                                         $rootScope.currentUser = {
                                             id: user.data.id,
