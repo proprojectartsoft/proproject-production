@@ -670,136 +670,6 @@ ppApp.controller('EditCtrl', [
             })
         });
 
-        var fastSave = function(request, images, formUp, isNew) {
-            PostService.post(request, function(res) {
-                $rootScope.formId = res.data.id || res.data;
-                if (!images.length) {
-                    $timeout(function() {
-                        formUp.close();
-                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                    });
-                }
-                var cnt = 0;
-                angular.forEach(images, function(img) {
-                    img.id = 0;
-                    img.formInstanceId = $rootScope.formId;
-                    img.projectId = request.data.project_id;
-                    PostService.post({
-                        method: 'POST',
-                        url: 'image/uploadfile',
-                        data: img,
-                        withCredentials: true
-                    }, function(succ) {
-                        cnt++;
-                        //last image uploaded with success
-                        if (cnt >= images.length) {
-                            if (isNew) {
-                                PostService.post({
-                                    method: 'GET',
-                                    url: 'forminstance',
-                                    params: {
-                                        id: $rootScope.formId
-                                    }
-                                }, function(res) {
-                                    $timeout(function() {
-                                        formUp.close();
-                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                    });
-                                }, function(err) {
-                                    $timeout(function() {
-                                        formUp.close();
-                                    });
-                                });
-                            } else {
-                                $timeout(function() {
-                                    images = [];
-                                    formUp.close();
-                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                });
-                            }
-                        }
-                    }, function(err) {
-                        if (cnt >= $scope.imgURI.length) {
-                            $timeout(function() {
-                                formUp.close();
-                                if (!isNew) {
-                                    images = [];
-                                    formUp.close();
-                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                }
-                            });
-                        }
-                    });
-                })
-            }, function(data) {
-                if (isNew) {
-                    var requestList = [];
-                    var ppfsync = localStorage.getObject('ppfsync');
-                    var pppsync = localStorage.getObject('pppsync');
-                    if (ppfsync) {
-                        $rootScope.toBeUploadedCount = ppfsync.length;
-                    } else {
-                        $rootScope.toBeUploadedCount = 0;
-                        localStorage.setObject('ppfsync', []);
-                    }
-                    if (!pppsync) {
-                        localStorage.setObject('pppsync', []);
-                    }
-                    $rootScope.toBeUploadedCount++;
-                    for (var i = 0; i < $scope.imgURI.length; i++) {
-                        if ($scope.imgURI[i].base64String !== "") {
-                            $scope.imgURI.projectId = request.data.project_id;
-                            requestList.push($scope.imgURI[i]);
-                        }
-                    }
-                    var aux_f = localStorage.getObject('ppfsync');
-                    aux_f.push({
-                        id: $rootScope.toBeUploadedCount,
-                        form: request.data
-                    });
-                    localStorage.setObject('ppfsync', aux_f);
-                    if (requestList.length !== 0) {
-                        var aux_p = localStorage.getObject('pppsync');
-                        aux_p.push({
-                            id: $rootScope.toBeUploadedCount,
-                            imgs: requestList
-                        });
-                        localStorage.setObject('pppsync', aux_p);
-                    }
-
-                    formUp.close();
-                    if (data && data.status === 400) {
-                        $timeout(function() {
-                            $timeout(function() {
-                                SettingService.show_message_popup('Submision failed', 'Incorrect data, try again');
-                            });
-                        });
-                    } else {
-                        $timeout(function() {
-                            $timeout(function() {
-                                SettingService.show_message_popup('Submision failed', 'You are offline. Submit forms by syncing next time you are online.').then(function(res) {
-                                    $state.go('app.forms', {
-                                        'projectId': $rootScope.projectId,
-                                        'categoryId': $scope.formData.category_id
-                                    });
-                                });
-                            });
-                        });
-                    }
-                } else if (data.status === 0 || data.status === 502) {
-                    var sync = CacheFactory.get('sync');
-                    if (!sync) {
-                        sync = CacheFactory('sync');
-                    }
-                    sync.setOptions({
-                        storageMode: 'localStorage'
-                    });
-                    $rootScope.toBeUploadedCount = sync.keys().length;
-                    $rootScope.toBeUploadedCount++;
-                    sync.put($rootScope.toBeUploadedCount, requestForm);
-                }
-            });
-        };
 
         $scope.submit = function(help) {
             if (!navigator.onLine) {
@@ -984,7 +854,7 @@ ppApp.controller('EditCtrl', [
                                 });
                             }
 
-                            fastSave({
+                            CommonServices.saveFormToServer({
                                 method: 'PUT',
                                 url: 'forminstance',
                                 data: ConvertersService.instanceToUpdate($scope.formData),
@@ -1230,12 +1100,24 @@ ppApp.controller('EditCtrl', [
                         var resource = addResource();
 
                         Promise.all([resource, staff, schedule, payitem]).then(function(res) {
-                            fastSave({
-                                method: 'POST',
-                                url: 'forminstance',
-                                data: ConvertersService.instanceToNew($scope.formData),
-                                withCredentials: true
-                            }, $scope.imgURI, formUp, true);
+                            //automatically sync previousely offline created forms
+                            if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
+                                SyncService.sync().then(function() {
+                                    CommonServices.saveFormToServer({
+                                        method: 'POST',
+                                        url: 'forminstance',
+                                        data: ConvertersService.instanceToNew($scope.formData),
+                                        withCredentials: true
+                                    }, $scope.imgURI, formUp, true);
+                                })
+                            } else {
+                                CommonServices.saveFormToServer({
+                                    method: 'POST',
+                                    url: 'forminstance',
+                                    data: ConvertersService.instanceToNew($scope.formData),
+                                    withCredentials: true
+                                }, $scope.imgURI, formUp, true);
+                            }
                         })
                     });
                 }

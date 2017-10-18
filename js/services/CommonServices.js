@@ -1,6 +1,6 @@
 ppApp.service('CommonServices', [
-    '$stateParams', '$filter', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService',
-    function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PostService, SyncService) {
+    '$stateParams', '$state', '$filter', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService', 'SettingService', '$location',
+    function($stateParams, $state, $filter, $ionicScrollDelegate, $rootScope, PostService, SyncService, SettingService, $location) {
         var service = this;
         var settings = {};
         SyncService.getSettings().then(function(res) {
@@ -530,6 +530,152 @@ ppApp.service('CommonServices', [
             } else {
                 titleShow = placeholder;
             }
+        };
+
+        service.saveFormToServer = function(request, images, formUp, isNew) {
+            PostService.post(request, function(res) {
+                $rootScope.formId = res.data.id || res.data;
+                if (!images.length) {
+                    $timeout(function() {
+                        formUp.close();
+                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                    });
+                }
+                var cnt = 0,
+                    finishCallback = function(formUp) {
+                        if (isNew) {
+                            PostService.post({
+                                method: 'GET',
+                                url: 'forminstance',
+                                params: {
+                                    id: $rootScope.formId
+                                }
+                            }, function(res) {
+                                $rootScope.rootForm = res.data;
+                                $timeout(function() {
+                                    formUp.close();
+                                    // $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                    $state.go('app.formInstance', {
+                                        'projectId': $rootScope.projectId,
+                                        'type': 'form',
+                                        'formId': $rootScope.formId
+                                    });
+                                });
+                            }, function(err) {
+                                $timeout(function() {
+                                    formUp.close();
+                                });
+                            });
+                        } else {
+                            $timeout(function() {
+                                formUp.close();
+                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                            });
+                        }
+                    };
+
+                angular.forEach(images, function(img) {
+                    img.id = 0;
+                    img.formInstanceId = $rootScope.formId;
+                    img.projectId = request.data.project_id;
+                    if (isNew && img.url) {
+                        img = {
+                            base64String: '',
+                            comment: img.comment,
+                            formInstanceId: img.formInstanceId,
+                            id: img.id,
+                            projectId: img.projectId,
+                            tags: img.tags,
+                            title: img.title
+                        }
+                    }
+
+                    PostService.post({
+                        method: 'POST',
+                        url: 'image/uploadfile',
+                        data: img,
+                        withCredentials: true
+                    }, function(succ) {
+                        cnt++;
+                        //last image uploaded with success
+                        if (cnt >= images.length) {
+                            finishCallback(formUp);
+                            images = [];
+                        }
+                    }, function(err) {
+                        cnt++;
+                        if (cnt >= $scope.imgURI.length) {
+                            finishCallback(formUp);
+                            images = [];
+                        }
+                    });
+                })
+            }, function(data) {
+                formUp.close();
+                if (isNew) {
+                    var requestList = [];
+                    var ppfsync = localStorage.getObject('ppfsync');
+                    var pppsync = localStorage.getObject('pppsync');
+                    if (ppfsync) {
+                        $rootScope.toBeUploadedCount = ppfsync.length;
+                    } else {
+                        $rootScope.toBeUploadedCount = 0;
+                        localStorage.setObject('ppfsync', []);
+                    }
+                    if (!pppsync) {
+                        localStorage.setObject('pppsync', []);
+                    }
+                    $rootScope.toBeUploadedCount++;
+                    for (var i = 0; i < images.length; i++) {
+                        if (images[i].base64String !== "") {
+                            images.projectId = request.data.project_id;
+                            requestList.push(images[i]);
+                        }
+                    }
+                    var aux_f = localStorage.getObject('ppfsync');
+                    aux_f.push({
+                        id: $rootScope.toBeUploadedCount,
+                        form: request.data
+                    });
+                    localStorage.setObject('ppfsync', aux_f);
+                    if (requestList.length !== 0) {
+                        var aux_p = localStorage.getObject('pppsync');
+                        aux_p.push({
+                            id: $rootScope.toBeUploadedCount,
+                            imgs: requestList
+                        });
+                        localStorage.setObject('pppsync', aux_p);
+                    }
+                    if (data && data.status === 400) {
+                        $timeout(function() {
+                            $timeout(function() {
+                                SettingService.show_message_popup('Submision failed', 'Incorrect data, try again');
+                            });
+                        });
+                    } else {
+                        $timeout(function() {
+                            SettingService.show_message_popup('Submision failed', 'You are offline. Submit forms by syncing next time you are online.').then(function(res) {
+                                $state.go('app.forms', {
+                                    'projectId': $rootScope.projectId,
+                                    'categoryId': request.data.category_id
+                                });
+                            });
+                        });
+                    }
+                }
+                //  else if (data.status === 0 || data.status === 502) {
+                // var sync = CacheFactory.get('sync'); //TODO: check if needed
+                // if (!sync) {
+                //     sync = CacheFactory('sync');
+                // }
+                // sync.setOptions({
+                //     storageMode: 'localStorage'
+                // });
+                // $rootScope.toBeUploadedCount = sync.keys().length;
+                // $rootScope.toBeUploadedCount++;
+                // sync.put($rootScope.toBeUploadedCount, requestForm);
+                // }
+            });
         };
     }
 ])
