@@ -1179,6 +1179,7 @@ ppApp.controller('FormCtrl', [
                                 method: 'POST',
                                 url: 'image/uploadfile',
                                 data: img,
+                                withCredentials: true
                             }, function(payload) {
 
                             }, function(err) {

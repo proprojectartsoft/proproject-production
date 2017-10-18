@@ -688,6 +688,7 @@ ppApp.controller('EditCtrl', [
                         method: 'POST',
                         url: 'image/uploadfile',
                         data: img,
+                        withCredentials: true
                     }, function(succ) {
                         cnt++;
                         //last image uploaded with success
