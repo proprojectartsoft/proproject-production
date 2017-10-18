@@ -4,14 +4,13 @@ ppApp.service('SyncService', [
     '$timeout',
     '$cordovaSQLite',
     '$interval',
-    'DbService',
     'AuthService',
     '$rootScope',
     '$state',
     'orderByFilter',
     'PostService',
 
-    function($q, $http, $timeout, $cordovaSQLite, $interval, DbService, AuthService, $rootScope, $state, orderBy, PostService) {
+    function($q, $http, $timeout, $cordovaSQLite, $interval, AuthService, $rootScope, $state, orderBy, PostService) {
         var service = this;
 
         function servresp(name, timer, start, response) {
@@ -79,7 +78,6 @@ ppApp.service('SyncService', [
                             //order the resources
                             result.data = orderBy(result.data, 'name');
                         }
-                        // DbService.add('custsett', result.data);
                         $APP.db.transaction(function(tx) {
                             for (var key in result.data[0]) {
                                 temp.push(key);
@@ -124,7 +122,6 @@ ppApp.service('SyncService', [
                                 tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
                             });
                             prm.resolve();
-                            console.log(result.data);
                         }, function(error) {
                             prm.resolve();
                             console.log('Transaction ERROR: ' + error.message);
@@ -148,7 +145,6 @@ ppApp.service('SyncService', [
                             active: true
                         }
                     }, function(result) {
-                        // DbService.add('projects', result.data);
                         var id = localStorage.getObject('ppprojectId');
                         var name = localStorage.getObject('ppnavTitle');
                         var sw = false;
@@ -179,12 +175,13 @@ ppApp.service('SyncService', [
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
                             tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
-                            console.log(result.data);
                             angular.forEach(result.data, function(project) {
                                 tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
                             });
+                            prm.resolve();
                         }, function(error) {
                             console.log('Transaction ERROR: ' + error.message);
+                            prm.resolve();
                         }, function() {});
                     }, function(err) {
                         prm.resolve();
@@ -313,77 +310,54 @@ ppApp.service('SyncService', [
                 custsett = storeToLocalDb('companysettings', 'CustsettTable');
 
             Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designs, projects, custsett, formsPrm]).then(function(res) {
-                // DbService.popclose(); //TODO: not
                 deferred.resolve();
             })
             return deferred.promise;
         };
 
         service.getSettings = function() {
-            var aux,
-                settings = {},
+            var settings = {},
                 prm = $q.defer();
             $APP.db.transaction(function(tx) {
                 //Select customer settings: currency, start, finish, break
-                var sett = tx.executeSql('SELECT * FROM CustsettTable', [], function(tx, rs) {
+                var getSetting = function(table, setting) {
+                    var def = $q.defer(),
                         aux = [];
+                    tx.executeSql('SELECT * FROM ' + table, [], function(tx, rs) {
                         for (var i = 0; i < rs.rows.length; i++) {
                             aux.push(rs.rows.item(i));
                         }
-                        settings.custsett = aux;
-                        // DbService.add('custsett', aux);
-                    }, function(error) {}),
-                    res = tx.executeSql('SELECT * FROM ResourcesTable', [], function(tx, rs) {
-                        aux = [];
-                        for (var i = 0; i < rs.rows.length; i++) {
-                            aux.push(rs.rows.item(i));
-                        }
-                        settings.resources = aux;
-                        // DbService.add('resources', aux);
-                    }, function(error) {});
-                tx.executeSql('SELECT * FROM UnitTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    settings.unit = aux;
-                    // DbService.add('unit', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM StaffTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    settings.staff = aux;
-                    // DbService.add('staff', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM ResourceTypeTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    settings.resource_type = aux;
-                    // DbService.add('resource_type', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM AbsenteeismTable', [], function(tx, rs) {
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    settings.absenteeism = aux;
-                    // DbService.add('absenteeism', aux);
-                }, function(error) {});
-                tx.executeSql('SELECT * FROM PayitemsTable', [], function(tx, rs) {
-                    console.log("load settings");
-                    aux = [];
-                    for (var i = 0; i < rs.rows.length; i++) {
-                        aux.push(rs.rows.item(i));
-                    }
-                    settings.payitems = aux;
-                    // DbService.add('custsett', aux);
-                }, function(error) {});
-                Promise.all([sett, res]).then(function() {
-                    console.log("resolve settings");
+                        setting = aux;
+                        def.resolve(aux);
+                    }, function(error) {
+                        def.reject("Could not load data from local db.");
+                    });
+                    return def.promise;
+                };
+
+                var settPrm = getSetting('CustsettTable').then(function(res) {
+                        settings.custsett = res;
+                    }),
+                    resPrm = getSetting('ResourcesTable').then(function(res) {
+                        settings.resources = res;
+                    }),
+                    unitPrm = getSetting('UnitTable').then(function(res) {
+                        settings.unit = res;
+                    }),
+                    staffPrm = getSetting('StaffTable').then(function(res) {
+                        settings.staff = res;
+                    }),
+                    typePrm = getSetting('ResourceTypeTable').then(function(res) {
+                        settings.resource_type = res;
+                    }),
+                    absPrm = getSetting('AbsenteeismTable').then(function(res) {
+                        settings.absenteeism = res;
+                    }),
+                    payPrm = getSetting('PayitemsTable').then(function(res) {
+                        settings.payitems = res;
+                    });
+
+                Promise.all([settPrm, resPrm, unitPrm, staffPrm, typePrm, absPrm, payPrm]).then(function() {
                     prm.resolve(settings);
                 })
             });
@@ -396,10 +370,8 @@ ppApp.service('SyncService', [
                 //Select projects
                 tx.executeSql('SELECT * FROM ProjectsTable', [], function(tx, rs) {
                     var aux = [];
-                    // $rootScope.projects = [];
                     for (var i = 0; i < rs.rows.length; i++) {
                         aux.push(rs.rows.item(i));
-                        // $rootScope.projects.push(rs.rows.item(i)); //TODO: check
                     }
                     var id = localStorage.getObject('ppprojectId'),
                         name = localStorage.getObject('ppnavTitle'),
@@ -420,7 +392,6 @@ ppApp.service('SyncService', [
                         localStorage.setObject('ppnavTitle', rs.rows.item(0).name);
                         localStorage.setObject('ppprojectId', rs.rows.item(0).id);
                     }
-                    // DbService.add('projects', aux);
                     prm.resolve(aux);
                 }, function(error) {
                     prm.reject("Some unexpected error occured and projects could not be loaded.");
@@ -444,96 +415,7 @@ ppApp.service('SyncService', [
                 });
             })
             return prm.promise;
-        }
-
-        // //store data locally
-        // var loadFromLocalDb = function() {
-        //     var aux;
-        //     //Select the form templates
-        //     $APP.db.transaction(function(tx) {
-        //         tx.executeSql('SELECT * FROM DesignsTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(JSON.parse(rs.rows.item(i).data));
-        //             }
-        //         }, function(error) {});
-        //         //Select projects
-        //         tx.executeSql('SELECT * FROM ProjectsTable', [], function(tx, rs) {
-        //             $rootScope.projects = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 $rootScope.projects.push(rs.rows.item(i));
-        //             }
-        //             var id = localStorage.getObject('ppprojectId');
-        //             var name = localStorage.getObject('ppnavTitle');
-        //             var sw = false;
-        //             if (id && name) {
-        //                 for (var i = 0; i < rs.rows.length; i++) {
-        //                     if (rs.rows.item(i).id === id && rs.rows.item(i).name === name) {
-        //                         sw = true;
-        //                     }
-        //                 }
-        //             }
-        //             if (sw === true && id && name) {
-        //                 $rootScope.navTitle = name;
-        //                 $rootScope.projectId = id;
-        //             } else {
-        //                 $rootScope.navTitle = rs.rows.item(0).name;
-        //                 $rootScope.projectId = rs.rows.item(0).id;
-        //                 localStorage.setObject('ppnavTitle', rs.rows.item(0).name);
-        //                 localStorage.setObject('ppprojectId', rs.rows.item(0).id);
-        //             }
-        //             DbService.add('projects', aux);
-        //         }, function(error) {});
-        //         //Select customer settings: currency, start, finish, break
-        //         tx.executeSql('SELECT * FROM CustsettTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(rs.rows.item(i));
-        //             }
-        //             DbService.add('custsett', aux);
-        //         }, function(error) {});
-        //         tx.executeSql('SELECT * FROM ResourcesTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(rs.rows.item(i));
-        //             }
-        //             console.log("RESOURCES ADEED:");
-        //             console.log(aux);
-        //             DbService.add('resources', aux);
-        //         }, function(error) {});
-        //         tx.executeSql('SELECT * FROM UnitTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(rs.rows.item(i));
-        //             }
-        //             DbService.add('unit', aux);
-        //         }, function(error) {});
-        //         tx.executeSql('SELECT * FROM StaffTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(rs.rows.item(i));
-        //             }
-        //             DbService.add('staff', aux);
-        //         }, function(error) {});
-        //         tx.executeSql('SELECT * FROM ResourceTypeTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(rs.rows.item(i));
-        //             }
-        //             DbService.add('resource_type', aux);
-        //         }, function(error) {});
-        //         tx.executeSql('SELECT * FROM AbsenteeismTable', [], function(tx, rs) {
-        //             aux = [];
-        //             for (var i = 0; i < rs.rows.length; i++) {
-        //                 aux.push(rs.rows.item(i));
-        //             }
-        //             DbService.add('absenteeism', aux);
-        //         }, function(error) {});
-        //     });
-        //     $state.go('app.categories', {
-        //         'projectId': $rootScope.projectId
-        //     });
-        // };
+        };
 
         service.sync = function(isInit) {
             var defer = $q.defer();
@@ -545,7 +427,6 @@ ppApp.service('SyncService', [
                             if (isInit) {
                                 AuthService.version().then(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
-                                        // DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true);
                                         syncData().then(function(res) {
                                             $state.go('app.categories', {
                                                 'projectId': $rootScope.projectId
@@ -553,8 +434,6 @@ ppApp.service('SyncService', [
                                             defer.resolve();
                                         })
                                     } else {
-                                        // loadFromLocalDb();
-                                        // DbService.popclose();
                                         defer.resolve();
                                     }
                                 })
@@ -574,9 +453,6 @@ ppApp.service('SyncService', [
                                     $state.go('app.categories', {
                                         'projectId': $rootScope.projectId
                                     });
-                                    // if (isInit) {
-                                    // DbService.popopen('Sync', "<center><ion-spinner icon='android'></ion-spinner></center>", true); //TODO: check if needed and close it everywhere
-                                    // }
                                     setme(user).success(function(user) {
                                         $rootScope.currentUser = {
                                             id: user.data.id,
@@ -589,24 +465,17 @@ ppApp.service('SyncService', [
                                             defer.resolve();
                                         })
                                     }).error(function() {
-                                        // DbService.popclose();
                                         defer.resolve();
                                     })
                                 } else {
                                     defer.resolve();
                                 }
                             } else {
-                                // loadFromLocalDb();
-                                // DbService.popclose();
                                 defer.resolve();
                             }
                         })
                 } else {
-                    // if (!isInit || localStorage.getObject('ppremember')) {
-                    // loadFromLocalDb();
-                    // DbService.popclose(); //if isInit
                     defer.resolve();
-                    // }
                 }
             });
             return defer.promise;

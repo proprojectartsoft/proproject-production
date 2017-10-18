@@ -3,106 +3,103 @@ ppApp.service('CommonServices', [
     function($stateParams, $filter, $ionicScrollDelegate, $rootScope, PostService, SyncService) {
         return {
             selectPopover: function(filter, item, titleShow) {
-                console.log(item);
-                var settings = SyncService.getSettings();
-                var resource_type_list = settings.resource_type,
-                    unit_list = settings.unit,
-                    abs_list = settings.absenteeism;
-                if (!filter.pi) {
-                    filter.popup_predicate.name = item.name;
-                    if (filter.state == 'resource') {
-                        if (titleShow.indexOf('Scheduling Resource') > -1) {
-                            titleShow = 'Scheduling Resource: ' + item.name;
-                        } else {
-                            if (titleShow.indexOf('Scheduling Subtask Resource') > -1) {
-                                titleShow = 'Scheduling Subtask Resource: ' + item.name;
+                SyncService.getSettings().then(function(settings) {
+                    if (!filter.pi) {
+                        filter.popup_predicate.name = item.name;
+                        if (filter.state == 'resource') {
+                            if (titleShow.indexOf('Scheduling Resource') > -1) {
+                                titleShow = 'Scheduling Resource: ' + item.name;
                             } else {
-                                if (titleShow.indexOf('Resource') > -1) {
-                                    titleShow = 'Resource: ' + item.name;
+                                if (titleShow.indexOf('Scheduling Subtask Resource') > -1) {
+                                    titleShow = 'Scheduling Subtask Resource: ' + item.name;
+                                } else {
+                                    if (titleShow.indexOf('Resource') > -1) {
+                                        titleShow = 'Resource: ' + item.name;
+                                    }
                                 }
                             }
+                            if (titleShow.indexOf('Staff') > -1) {
+                                titleShow = 'Staff: ' + item.name;
+                            }
+                            filter.popup_predicate.product_ref = item.product_ref;
+                            filter.popup_predicate.direct_cost = item.direct_cost;
+                            var restyp = $filter('filter')(settings.resource_type, {
+                                name: item.resource_type_name
+                            })[0];
+                            if (restyp) {
+                                filter.popup_predicate.res_type_obj = restyp;
+                                filter.popup_predicate.resource_type_id = restyp.id;
+                                filter.popup_predicate.resource_type_name = restyp.name;
+                            }
+                            var unt = $filter('filter')(settings.unit, {
+                                name: item.unit_name
+                            })[0];
+                            if (unt) {
+                                filter.popup_predicate.unit_obj = unt;
+                                filter.popup_predicate.unit_id = unt.id;
+                                filter.popup_predicate.unit_name = unt.name;
+                            }
                         }
-                        if (titleShow.indexOf('Staff') > -1) {
+                        if (filter.state == 'staff') {
                             titleShow = 'Staff: ' + item.name;
+                            filter.popup_predicate.employer_name = item.employee_name;
+                            filter.popup_predicate.staff_role = item.role;
+                            filter.popup_predicate.direct_cost = item.direct_cost;
+                            var restyp = $filter('filter')(settings.resource_type, {
+                                name: item.resource_type_name
+                            })[0];
+                            if (restyp) {
+                                filter.popup_predicate.res_type_obj = restyp;
+                                filter.popup_predicate.resource_type_id = restyp.id;
+                                filter.popup_predicate.resource_type_name = restyp.name;
+                            }
                         }
-                        filter.popup_predicate.product_ref = item.product_ref;
-                        filter.popup_predicate.direct_cost = item.direct_cost;
-                        var restyp = $filter('filter')(resource_type_list, {
-                            name: item.resource_type_name
-                        })[0];
-                        if (restyp) {
-                            filter.popup_predicate.res_type_obj = restyp;
-                            filter.popup_predicate.resource_type_id = restyp.id;
-                            filter.popup_predicate.resource_type_name = restyp.name;
+                        if ((filter.state == 'scheduling' || filter.state == 'payitem') && (filter.substateRes || filter.substateStk && filter.substateStkRes)) {
+                            filter.popup_predicate.product_ref = item.product_ref;
+                            filter.popup_predicate.direct_cost = item.direct_cost;
+                            var restyp = $filter('filter')(settings.resource_type, {
+                                name: item.resource_type_name
+                            })[0];
+                            if (restyp) {
+                                filter.popup_predicate.res_type_obj = restyp;
+                                filter.popup_predicate.resource_type_id = restyp.id;
+                                filter.popup_predicate.resource_type_name = restyp.name;
+                            }
+                            var unt = $filter('filter')(settings.unit, {
+                                name: item.unit_name
+                            })[0];
+                            if (unt) {
+                                filter.popup_predicate.unit_obj = unt;
+                                filter.popup_predicate.unit_id = unt.id;
+                                filter.popup_predicate.unit_name = unt.name;
+                            }
+                            if (item.resource_margin) {
+                                filter.popup_predicate.resource_margin = item.resource_margin;
+                            }
+                            if (item.vat) {
+                                filter.popup_predicate.vat = item.vat;
+                            }
                         }
-                        var unt = $filter('filter')(unit_list, {
-                            name: item.unit_name
-                        })[0];
-                        if (unt) {
-                            filter.popup_predicate.unit_obj = unt;
-                            filter.popup_predicate.unit_id = unt.id;
-                            filter.popup_predicate.unit_name = unt.name;
-                        }
-                    }
-                    if (filter.state == 'staff') {
-                        titleShow = 'Staff: ' + item.name;
-                        filter.popup_predicate.employer_name = item.employee_name;
-                        filter.popup_predicate.staff_role = item.role;
-                        filter.popup_predicate.direct_cost = item.direct_cost;
-                        var restyp = $filter('filter')(resource_type_list, {
-                            name: item.resource_type_name
-                        })[0];
-                        if (restyp) {
-                            filter.popup_predicate.res_type_obj = restyp;
-                            filter.popup_predicate.resource_type_id = restyp.id;
-                            filter.popup_predicate.resource_type_name = restyp.name;
-                        }
-                    }
-                    if ((filter.state == 'scheduling' || filter.state == 'payitem') && (filter.substateRes || filter.substateStk && filter.substateStkRes)) {
-                        filter.popup_predicate.product_ref = item.product_ref;
-                        filter.popup_predicate.direct_cost = item.direct_cost;
-                        var restyp = $filter('filter')(resource_type_list, {
-                            name: item.resource_type_name
-                        })[0];
-                        if (restyp) {
-                            filter.popup_predicate.res_type_obj = restyp;
-                            filter.popup_predicate.resource_type_id = restyp.id;
-                            filter.popup_predicate.resource_type_name = restyp.name;
-                        }
-                        var unt = $filter('filter')(unit_list, {
-                            name: item.unit_name
-                        })[0];
-                        if (unt) {
-                            filter.popup_predicate.unit_obj = unt;
-                            filter.popup_predicate.unit_id = unt.id;
-                            filter.popup_predicate.unit_name = unt.name;
-                        }
-                        if (item.resource_margin) {
-                            filter.popup_predicate.resource_margin = item.resource_margin;
-                        }
-                        if (item.vat) {
-                            filter.popup_predicate.vat = item.vat;
-                        }
-                    }
-                } else { //TODO:
-                    // if ($scope.formData.scheduling_field_design) {
-                    //     titleShow = 'Scheduling: ' + item.reference;
-                    // }
-                    // if ($scope.formData.pay_item_field_design) {
-                    //     titleShow = 'Pay-item: ' + item.reference;
-                    // }
+                    } else { //TODO:
+                        // if ($scope.formData.scheduling_field_design) {
+                        //     titleShow = 'Scheduling: ' + item.reference;
+                        // }
+                        // if ($scope.formData.pay_item_field_design) {
+                        //     titleShow = 'Pay-item: ' + item.reference;
+                        // }
 
-                    filter.popup_predicate.description = item.description;
-                    filter.popup_predicate.reference = item.reference;
-                    var unt = $filter('filter')(unit_list, {
-                        name: item.unit_name
-                    })[0];
-                    if (unt) {
-                        filter.popup_predicate.unit_obj = unt;
-                        filter.popup_predicate.unit_id = unt.id;
-                        filter.popup_predicate.unit_name = unt.name;
+                        filter.popup_predicate.description = item.description;
+                        filter.popup_predicate.reference = item.reference;
+                        var unt = $filter('filter')(settings.unit, {
+                            name: item.unit_name
+                        })[0];
+                        if (unt) {
+                            filter.popup_predicate.unit_obj = unt;
+                            filter.popup_predicate.unit_id = unt.id;
+                            filter.popup_predicate.unit_name = unt.name;
+                        }
                     }
-                }
+                })
             },
             addResource: function(resources, vat) {
                 resources.push({
@@ -378,15 +375,15 @@ ppApp.service('CommonServices', [
                 switch (test) {
                     case 'staff':
                         filter.pi = false;
-                        filter.popup_list = settings.staff; //DbService.get('staff');
+                        filter.popup_list = settings.staff;
                         break;
                     case 'resource':
                         filter.pi = false;
-                        filter.popup_list = settings.resources; //DbService.get('resources');
+                        filter.popup_list = settings.resources;
                         break;
                     case 'payitem':
                         filter.pi = true;
-                        filter.popup_list = settings.payitems; //DbService.get('payitems');
+                        filter.popup_list = settings.payitems;
                         // PayitemService.list_payitems(projectId).then(function(data) {
                         //     $rootScope.payitem_list = data;
                         //     filter.popup_list = $rootScope.payitem_list;

@@ -18,12 +18,11 @@ ppApp.controller('FormCtrl', [
     'ConvertersService',
     'CommonServices',
     '$filter',
-    'DbService',
     '$q',
     'SettingService',
     'SyncService',
     function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
-        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, DbService, $q, SettingService, SyncService) {
+        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, $q, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -35,15 +34,15 @@ ppApp.controller('FormCtrl', [
         pullDown();
         var custSett = [];
         SyncService.getSettings().then(function(settings) {
-            custSett = settings.custSett; //DbService.get('custsett');
-            $scope.resource_type_list = settings.resource_type; //DbService.get('resource_type');
-            $scope.unit_list = settings.unit; //DbService.get('unit');
-            $scope.abs_list = settings.absenteeism; //DbService.get('absenteeism');
+            custSett = settings.custsett;
+            $scope.resource_type_list = settings.resource_type;
+            $scope.unit_list = settings.unit;
+            $scope.abs_list = settings.absenteeism;
         })
 
         //set project settings
         SyncService.getProjects().then(function(res) {
-            var proj = $filter('filter')(res, { //DbService.get('projects');
+            var proj = $filter('filter')(res, {
                 id: parseInt($stateParams.projectId, 10)
             })[0];
             if (proj && proj.settings) {
@@ -60,7 +59,7 @@ ppApp.controller('FormCtrl', [
 
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
-        $APP.db.transaction(function(tx) {  //TODO: use getDesigns function
+        $APP.db.transaction(function(tx) { //TODO: use getDesigns function
             tx.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
                 function(tx, rs) {
                     $scope.formData = JSON.parse(rs.rows.item(0).data);
@@ -74,15 +73,17 @@ ppApp.controller('FormCtrl', [
                         }
                     });
 
-                    $scope.filter.vat = parseInt($filter('filter')(custSett, {
-                        name: 'vat'
-                    })[0].value, 10);
                     var temp = $filter('filter')(custSett, {
+                        name: 'vat'
+                    });
+                    if (temp && temp.length)
+                        $scope.filter.vat = parseInt(temp[0].value, 10);
+                    temp = $filter('filter')(custSett, {
                         name: 'currency'
                     });
                     if (temp && temp.length) {
                         $scope.currency = temp[0].value;
-                        $scope.filter.currency = temp[0].value;
+                        $scope.filter.currency = temp[0].value; //TODO: why currency and filter.currency?
                     }
                     // $scope.filter.margin = $filter('filter')(custSett, {
                     //     name: 'margin'

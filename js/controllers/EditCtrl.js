@@ -15,18 +15,20 @@ ppApp.controller('EditCtrl', [
     '$stateParams',
     '$state',
     '$filter',
-    'DbService',
     '$q',
     'PostService',
     'SettingService',
     function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicModal, $cordovaCamera, ConvertersService, $ionicHistory,
-        CommonServices, $ionicPopover, $stateParams, $state, $filter, DbService, $q, PostService, SettingService) {
-        var settings = SyncService.getSettings();
-        var custSett = settings.custSett; //DbService.get('custsett');
-        $scope.resource_type_list = settings.resource_type; //DbService.get('resource_type');
-        $scope.unit_list = settings.unit; //DbService.get('unit');
-        $scope.abs_list = settings.absenteeism; //DbService.get('absenteeism');
+        CommonServices, $ionicPopover, $stateParams, $state, $filter, $q, PostService, SettingService) {
+        var custSett = null;
+        SyncService.getSettings().then(function(settings) {
+            custSett = settings.custsett;
+            $scope.resource_type_list = settings.resource_type;
+            $scope.unit_list = settings.unit;
+            $scope.abs_list = settings.absenteeism;
+        })
+
         $scope.filter = {
             edit: true,
             state: 'form',
@@ -47,17 +49,21 @@ ppApp.controller('EditCtrl', [
         $scope.linkAux = 'forms';
 
         //set project settings
-        var proj = $filter('filter')(SyncService.getProjects(), {
-            id: $stateParams.projectId
-        })[0];
-        if (proj && proj.settings) {
-            var val = $filter('filter')(proj.settings, {
-                name: "margin"
+        SyncService.getProjects().then(function(res) {
+            var proj = $filter('filter')(res, {
+                id: $stateParams.projectId
             })[0];
-            $rootScope.proj_margin = parseInt(val.value);
-        } else {
-            $rootScope.proj_margin = 0;
-        }
+            if (proj && proj.settings) {
+                var val = $filter('filter')(proj.settings, {
+                    name: "margin"
+                })[0];
+                $rootScope.proj_margin = parseInt(val.value);
+            } else {
+                $rootScope.proj_margin = 0;
+            }
+        }, function(reason) {
+            SettingService.show_message_popup("Error", reason);
+        });
 
         $scope.updateCalculation = function(data) {
             CommonServices.updateCalculation(data);

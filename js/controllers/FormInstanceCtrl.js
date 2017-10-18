@@ -11,41 +11,44 @@ ppApp.controller('FormInstanceCtrl', [
     '$timeout',
     '$state',
     '$filter',
-    'DbService',
     'PostService',
     'SettingService',
     'SyncService',
-    function($scope, $rootScope, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, DbService, PostService, SettingService, SyncService) {
+    function($scope, $rootScope, $stateParams, $location, $ionicSideMenuDelegate, $ionicHistory, $ionicScrollDelegate, SecuredPopups, CommonServices, $timeout, $state, $filter, PostService, SettingService, SyncService) {
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
         });
+        SyncService.getSettings().then(function(settings) {
+            var temp = $filter('filter')(settings.custsett, {
+                name: 'currency'
+            });
+            if (temp && temp.length) {
+                $scope.currency = temp[0].value;
+            }
+            $scope.resource_type_list = settings.resource_type;
+            $scope.unit_list = settings.unit;
+            $scope.abs_list = settings.absenteeism;
+        })
 
-        var settings = SyncService.getSettings();
         $scope.linkAux = 'forms';
-
-        var temp = $filter('filter')(settings.custsett, { //DbService.get('custsett')
-            name: 'currency'
-        });
-        if (temp && temp.length) {
-            $scope.currency = temp[0].value;
-        }
-
-        $scope.resource_type_list = settings.resource_type; //DbService.get('resource_type');
-        $scope.unit_list = settings.unit; //DbService.get('unit');
-        $scope.abs_list = settings.absenteeism; //DbService.get('absenteeism');
         //set project settings
-        var proj = $filter('filter')(SyncService.getProjects(), { //DbService.get('projects')
-            id: $stateParams.projectId
-        })[0];
-        if (proj && proj.settings) {
-            var val = $filter('filter')(proj.settings, {
-                name: "margin"
+        SyncService.getProjects().then(function(res) {
+            var proj = $filter('filter')(res, {
+                id: $stateParams.projectId
             })[0];
-            $rootScope.proj_margin = parseInt(val.value);
-        } else {
-            $rootScope.proj_margin = 0;
-        }
+            if (proj && proj.settings) {
+                var val = $filter('filter')(proj.settings, {
+                    name: "margin"
+                })[0];
+                $rootScope.proj_margin = parseInt(val.value);
+            } else {
+                $rootScope.proj_margin = 0;
+            }
+        }, function(reason) {
+            SettingService.show_message_popup("Error", reason);
+        });
+
         $scope.updateTitle = function(title, placeholder) {
             CommonServices.updateTitle(title, placeholder, $scope.titleShow);
         }

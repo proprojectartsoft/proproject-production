@@ -8,10 +8,9 @@ ppApp.controller('FormsCtrl', [
     '$anchorScroll',
     '$ionicSideMenuDelegate',
     'SyncService',
-    'DbService',
     'SettingService',
     'SyncService',
-    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, DbService, SettingService, SyncService) {
+    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -55,12 +54,14 @@ ppApp.controller('FormsCtrl', [
 
         $scope.refresh = function() {
             $rootScope.formDesigns = [];
-            designsCache = SyncService.getDesigns(); //DbService.get('designs');
-            angular.forEach(designsCache, function(aux) {
-                if (aux.category_id === parseInt($stateParams.categoryId)) {
-                    $rootScope.formDesigns.push(aux);
-                }
-            });
+            SyncService.getDesigns().then(function(res) {
+                designsCache = res;
+                angular.forEach(designsCache, function(aux) {
+                    if (aux.category_id === parseInt($stateParams.categoryId)) {
+                        $rootScope.formDesigns.push(aux);
+                    }
+                });
+            })
         };
 
         $scope.fixScroll = function() {
