@@ -307,11 +307,13 @@ ppApp.service('SyncService', [
                 staff = storeToLocalDb('staff', 'StaffTable'),
                 resourceType = storeToLocalDb('resourcetype', 'ResourceTypeTable'),
                 absenteeism = storeToLocalDb('absenteeismreasons/list', 'AbsenteeismTable'),
-                custsett = storeToLocalDb('companysettings', 'CustsettTable');
+                custsett = storeToLocalDb('companysettings', 'CustsettTable'),
+                projPrm = projects(),
+                designsPrm = designs(),
 
-            Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designs, projects, custsett, formsPrm]).then(function(res) {
-                deferred.resolve();
-            })
+                Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designsPrm, projPrm, custsett, formsPrm]).then(function(res) {
+                    deferred.resolve();
+                })
             return deferred.promise;
         };
 

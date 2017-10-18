@@ -1031,6 +1031,7 @@ ppApp.controller('EditCtrl', [
                                         item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
                                     }
                                 });
+                                $rootScope.resourceField.id = 0;
                                 PostService.post({
                                     method: 'POST',
                                     url: 'resourcefield',
@@ -1100,6 +1101,7 @@ ppApp.controller('EditCtrl', [
                                         });
                                     });
                                 });
+                                $rootScope.payitemField.id = 0;
                                 PostService.post({
                                     method: 'POST',
                                     url: 'payitemfield',
@@ -1169,6 +1171,7 @@ ppApp.controller('EditCtrl', [
                                         });
                                     });
                                 });
+                                $rootScope.payitemField.id = 0;
                                 PostService.post({
                                     method: 'PUT',
                                     url: 'schedulingfield',
@@ -1206,8 +1209,9 @@ ppApp.controller('EditCtrl', [
                                         item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
                                     }
                                 });
+                                $rootScope.staffField.id = 0;
                                 PostService.post({
-                                    method: 'PUT',
+                                    method: 'POST',
                                     url: 'stafffield',
                                     data: $rootScope.staffField
                                 }, function(res) {
