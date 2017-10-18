@@ -18,35 +18,33 @@ ppApp.controller('EditCtrl', [
     '$q',
     'PostService',
     'SettingService',
+    'SyncService',
     function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicModal, $cordovaCamera, ConvertersService, $ionicHistory,
-        CommonServices, $ionicPopover, $stateParams, $state, $filter, $q, PostService, SettingService) {
+        CommonServices, $ionicPopover, $stateParams, $state, $filter, $q, PostService, SettingService, SyncService) {
         var custSett = null;
+        $scope.repeatable = false;
+        $scope.linkAux = 'forms';
         SyncService.getSettings().then(function(settings) {
             custSett = settings.custsett;
+            $scope.filter = {
+                edit: true,
+                state: 'form',
+                popup_title: 'Resource filter',
+                popup_list: [],
+                searchText: ''
+            }
             $scope.resource_type_list = settings.resource_type;
             $scope.unit_list = settings.unit;
             $scope.abs_list = settings.absenteeism;
+            $scope.filter.vat = parseInt(CommonServices.getCustSett(custSett, 'vat'), 10);
+            $scope.currency = CommonServices.getCustSett(custSett, 'currency');
+            $scope.filter.currency = angular.copy($scope.currency);
+            $scope.filter.start = CommonServices.getCustSett(custSett, 'start');
+            $scope.filter.break = CommonServices.getCustSett(custSett, 'break');
+            $scope.filter.finish = CommonServices.getCustSett(custSett, 'finish');
+            // $scope.filter.margin = CommonServices.getCustSett(custSett, 'margin');
         })
-
-        $scope.filter = {
-            edit: true,
-            state: 'form',
-            popup_title: 'Resource filter',
-            popup_list: [],
-            searchText: ''
-        }
-        $scope.repeatable = false;
-        $scope.vat = parseInt($filter('filter')(custSett, {
-            name: 'vat'
-        })[0].value, 10);
-        var temp = $filter('filter')(custSett, {
-            name: 'currency'
-        });
-        if (temp && temp.length) {
-            $scope.currency = temp[0].value;
-        }
-        $scope.linkAux = 'forms';
 
         //set project settings
         SyncService.getProjects().then(function(res) {
@@ -311,25 +309,6 @@ ppApp.controller('EditCtrl', [
             $scope.popover = popover;
         });
 
-        var temp = $filter('filter')(custSett, {
-            name: 'currency'
-        });
-        if (temp && temp.length) {
-            $scope.currency = temp[0].value;
-            $scope.filter.currency = temp[0].value;
-        }
-        // $scope.filter.margin = $filter('filter')(custSett, {
-        //     name: 'margin'
-        // })[0].value;
-        $scope.filter.start = $filter('filter')(custSett, {
-            name: 'start'
-        })[0].value;
-        $scope.filter.break = $filter('filter')(custSett, {
-            name: 'break'
-        })[0].value;
-        $scope.filter.finish = $filter('filter')(custSett, {
-            name: 'finish'
-        })[0].value;
         $scope.doTotal = function(type, parent) {
             if (parent) {
                 parent.total_cost = 0;
@@ -677,7 +656,7 @@ ppApp.controller('EditCtrl', [
                 angular.forEach(succ.data, function(image) {
                     image.url = $APP.server + '/pub/images/' + image.base64String;
                 })
-                $scope.imgURI = res;
+                $scope.imgURI = succ.data;
             }, function(err) {
                 console.log(err);
             });
@@ -695,6 +674,136 @@ ppApp.controller('EditCtrl', [
                 }
             })
         });
+
+        var fastSave = function(request, images, formUp, isNew) {
+            PostService.post(request, function(res) {
+                $rootScope.formId = res.data.id || res.data;
+                if (!images.length) {
+                    $timeout(function() {
+                        formUp.close();
+                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                    });
+                }
+                var cnt = 0;
+                angular.forEach(images, function(img) {
+                    img.id = 0;
+                    img.formInstanceId = $rootScope.formId;
+                    img.projectId = request.data.project_id;
+                    PostService.post({
+                        method: 'POST',
+                        url: 'defectphoto/uploadfile',
+                        data: img,
+                    }, function(succ) {
+                        cnt++;
+                        //last image uploaded with success
+                        if (cnt >= images.length) {
+                            if (isNew) {
+                                PostService.post({
+                                    method: 'GET',
+                                    url: 'forminstance',
+                                    params: {
+                                        id: $rootScope.formId
+                                    }
+                                }, function(res) {
+                                    $timeout(function() {
+                                        formUp.close();
+                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                    });
+                                }, function(err) {
+                                    $timeout(function() {
+                                        formUp.close();
+                                    });
+                                });
+                            } else {
+                                $timeout(function() {
+                                    images = [];
+                                    formUp.close();
+                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                });
+                            }
+                        }
+                    }, function(err) {
+                        if (cnt >= $scope.imgURI.length) {
+                            $timeout(function() {
+                                formUp.close();
+                                if (!isNew) {
+                                    images = [];
+                                    formUp.close();
+                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                }
+                            });
+                        }
+                    });
+                })
+            }, function(data) {
+                if (isNew) {
+                    var requestList = [];
+                    var ppfsync = localStorage.getObject('ppfsync');
+                    var pppsync = localStorage.getObject('pppsync');
+                    if (ppfsync) {
+                        $rootScope.toBeUploadedCount = ppfsync.length;
+                    } else {
+                        $rootScope.toBeUploadedCount = 0;
+                        localStorage.setObject('ppfsync', []);
+                    }
+                    if (!pppsync) {
+                        localStorage.setObject('pppsync', []);
+                    }
+                    $rootScope.toBeUploadedCount++;
+                    for (var i = 0; i < $scope.imgURI.length; i++) {
+                        if ($scope.imgURI[i].base64String !== "") {
+                            $scope.imgURI.projectId = request.data.project_id;
+                            requestList.push($scope.imgURI[i]);
+                        }
+                    }
+                    var aux_f = localStorage.getObject('ppfsync');
+                    aux_f.push({
+                        id: $rootScope.toBeUploadedCount,
+                        form: request.data
+                    });
+                    localStorage.setObject('ppfsync', aux_f);
+                    if (requestList.length !== 0) {
+                        var aux_p = localStorage.getObject('pppsync');
+                        aux_p.push({
+                            id: $rootScope.toBeUploadedCount,
+                            imgs: requestList
+                        });
+                        localStorage.setObject('pppsync', aux_p);
+                    }
+
+                    formUp.close();
+                    if (data && data.status === 400) {
+                        $timeout(function() {
+                            $timeout(function() {
+                                SettingService.show_message_popup('Submision failed', 'Incorrect data, try again');
+                            });
+                        });
+                    } else {
+                        $timeout(function() {
+                            $timeout(function() {
+                                SettingService.show_message_popup('Submision failed', 'You are offline. Submit forms by syncing next time you are online.').then(function(res) {
+                                    $state.go('app.forms', {
+                                        'projectId': $rootScope.projectId,
+                                        'categoryId': $scope.formData.category_id
+                                    });
+                                });
+                            });
+                        });
+                    }
+                } else if (data.status === 0 || data.status === 502) {
+                    var sync = CacheFactory.get('sync');
+                    if (!sync) {
+                        sync = CacheFactory('sync');
+                    }
+                    sync.setOptions({
+                        storageMode: 'localStorage'
+                    });
+                    $rootScope.toBeUploadedCount = sync.keys().length;
+                    $rootScope.toBeUploadedCount++;
+                    sync.put($rootScope.toBeUploadedCount, requestForm);
+                }
+            });
+        };
 
         $scope.submit = function(help) {
             if (!navigator.onLine) {
@@ -878,72 +987,15 @@ ppApp.controller('EditCtrl', [
                                     console.log(err);
                                 });
                             }
-                            var requestForm = ConvertersService.instanceToUpdate($scope.formData);
-                            PostService.post({
+
+                            fastSave({
                                 method: 'PUT',
                                 url: 'forminstance',
-                                data: requestForm,
+                                data: ConvertersService.instanceToUpdate($scope.formData),
                                 params: {
                                     'id': $rootScope.formId
                                 }
-                            }, function(res) {
-                                if (res.data && res.data.status !== 0 && res.data.status !== 502 && res.data.status !== 403 && res.data.status !== 400) {
-                                    $rootScope.formId = res.data;
-                                    //no image to add
-                                    if (!$scope.imgToAdd.length) {
-                                        $timeout(function() {
-                                            formUp.close();
-                                            $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                        });
-                                    }
-                                    var cnt = 0;
-                                    angular.forEach($scope.imgToAdd, function(img) { //TODO: check
-                                        img.id = 0;
-                                        img.formInstanceId = $scope.formData.id;
-                                        img.projectId = $scope.formData.project_id;
-                                        PostService.post({
-                                            method: 'POST',
-                                            url: 'defectphoto/uploadfile',
-                                            data: img,
-                                        }, function(payload) {
-                                            cnt++;
-                                            if (cnt >= $scope.imgToAdd.length) {
-                                                $timeout(function() {
-                                                    $scope.imgToAdd = [];
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        }, function(err) {
-                                            if (cnt >= $scope.imgToAdd.length) {
-                                                $timeout(function() {
-                                                    $scope.imgToAdd = [];
-                                                    formUp.close();
-                                                    $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                                });
-                                            }
-                                        });
-                                    })
-                                } else {
-                                    $timeout(function() {
-                                        formUp.close();
-                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                    });
-                                }
-                            }, function(err) {
-                                if (err.status === 0 || err.status === 502) {
-                                    var sync = CacheFactory.get('sync');
-                                    if (!sync) {
-                                        sync = CacheFactory('sync');
-                                    }
-                                    sync.setOptions({
-                                        storageMode: 'localStorage'
-                                    });
-                                    $rootScope.toBeUploadedCount = sync.keys().length;
-                                    $rootScope.toBeUploadedCount++;
-                                    sync.put($rootScope.toBeUploadedCount, requestForm);
-                                }
-                            });
+                            }, $scope.imgToAdd, formUp);
                         });
                     }
                 });
@@ -1178,163 +1230,16 @@ ppApp.controller('EditCtrl', [
                         var resource = addResource();
 
                         Promise.all([resource, staff, schedule, payitem]).then(function(res) {
-                            fastSave(formUp);
+                            fastSave({
+                                method: 'POST',
+                                url: 'forminstance',
+                                data: ConvertersService.instanceToNew($scope.formData),
+                                withCredentials: true
+                            }, $scope.imgURI, formUp, true);
                         })
                     });
                 }
             });
-
-            function fastSave(formUp) { //TODO: CHECK REQUESTSH
-                var requestForm = ConvertersService.instanceToNew($scope.formData);
-                PostService.post({
-                    method: 'POST',
-                    url: 'forminstance',
-                    data: requestForm,
-                    withCredentials: true
-                }, function(res) {
-                    var cnt = 0;
-                    angular.forEach($scope.imgURI, function(img) {
-                        img.id = 0;
-                        img.formInstanceId = res.id;
-                        img.projectId = requestForm.project_id;
-                        PostService.post({
-                            method: 'POST',
-                            url: 'defectphoto/uploadfile',
-                            data: img,
-                        }, function(res) {
-                            cnt++;
-                            if (cnt >= $scope.imgURI.length) {
-                                var data = res.data; //TODO: check it
-                                $rootScope.formId = data.id;
-                                PostService.post({
-                                    method: 'GET',
-                                    url: 'forminstance',
-                                    params: {
-                                        id: $rootScope.formId
-                                    }
-                                }, function(res) {
-                                    $timeout(function() {
-                                        formUp.close();
-                                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                                    });
-                                }, function(err) {
-                                    $timeout(function() {
-                                        formUp.close();
-                                    });
-                                });
-                            }
-                        }, function(err) {
-                            if (cnt >= $scope.imgURI.length) {
-                                $timeout(function() {
-                                    formUp.close();
-                                });
-                            }
-                        });
-                    })
-                    // if (res.data || res.data && res.data.message) {  //TODO: it is on error clause??
-                    //     $timeout(function() {
-                    //         var alertPopup3 = $ionicPopup.alert({
-                    //             title: 'Submision failed.',
-                    //             template: 'You have not permission to do this operation'
-                    //         });
-                    //         alertPopup3.then(function(res) {
-                    //             $rootScope.$broadcast('sync.todo');
-                    //         });
-                    //     }, 10);
-                    // } else {
-                    // var list = ConvertersService.photoList($scope.imgURI, res.id, requestForm.project_id),
-                    //     postImages = '';
-                    // if (list.length !== 0) {
-                    //     postImages = ImageService.create(list).then(function(x) { //TODO: PostService pic by pic
-                    //         return x;
-                    //     });
-                    // }
-                    // }
-                    // postImages.then(function(succ) {
-                    //     var data = res.data; //TODO: check it
-                    //     // if (data && data.status !== 0 && data.status !== 502 && data.status !== 403 && data.status !== 400) {
-                    //     $rootScope.formId = data.id;
-                    //
-                    //     PostService.post({
-                    //         method: 'GET',
-                    //         url: 'forminstance',
-                    //         params: {
-                    //             id: $rootScope.formId
-                    //         }
-                    //     }, function(res) {
-                    //         $timeout(function() {
-                    //             formUp.close();
-                    //             $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                    //         });
-                    //     }, function(err) {
-                    //         console.log(err);
-                    //     });
-                    //
-                    //     // } else {
-                    //     //     $timeout(function() {
-                    //     //         formUp.close();
-                    //     //         $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
-                    //     //     });
-                    //     // }
-                    // })
-                }, function(data) {
-                    var requestList = [];
-                    var ppfsync = localStorage.getObject('ppfsync');
-                    var pppsync = localStorage.getObject('pppsync');
-                    if (ppfsync) {
-                        $rootScope.toBeUploadedCount = ppfsync.length;
-                    } else {
-                        $rootScope.toBeUploadedCount = 0;
-                        localStorage.setObject('ppfsync', []);
-                    }
-                    if (!pppsync) {
-                        localStorage.setObject('pppsync', []);
-                    }
-                    $rootScope.toBeUploadedCount++;
-                    for (var i = 0; i < $scope.imgURI.length; i++) {
-                        if ($scope.imgURI[i].base64String !== "") {
-                            $scope.imgURI.projectId = requestForm.project_id;
-                            requestList.push($scope.imgURI[i]);
-                        }
-                    }
-                    var aux_f = localStorage.getObject('ppfsync');
-                    aux_f.push({
-                        id: $rootScope.toBeUploadedCount,
-                        form: requestForm
-                    });
-                    localStorage.setObject('ppfsync', aux_f);
-                    if (requestList.length !== 0) {
-                        var aux_p = localStorage.getObject('pppsync');
-                        aux_p.push({
-                            id: $rootScope.toBeUploadedCount,
-                            imgs: requestList
-                        });
-                        localStorage.setObject('pppsync', aux_p);
-                    }
-
-
-                    // data = err;
-                    formUp.close();
-                    if (data && data.status === 400) {
-                        $timeout(function() {
-                            $timeout(function() {
-                                SettingService.show_message_popup('Submision failed', 'Incorrect data, try again');
-                            });
-                        });
-                    } else {
-                        $timeout(function() {
-                            $timeout(function() {
-                                SettingService.show_message_popup('Submision failed', 'You are offline. Submit forms by syncing next time you are online.').then(function(res) {
-                                    $state.go('app.forms', {
-                                        'projectId': $rootScope.projectId,
-                                        'categoryId': $scope.formData.category_id
-                                    });
-                                });
-                            });
-                        });
-                    }
-                });
-            }
         };
 
         function elmYPosition(id) {

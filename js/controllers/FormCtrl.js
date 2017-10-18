@@ -11,7 +11,6 @@ ppApp.controller('FormCtrl', [
     '$ionicModal',
     '$cordovaCamera',
     '$state',
-    'SyncService',
     '$ionicSideMenuDelegate',
     '$ionicHistory',
     '$ionicPopover',
@@ -22,7 +21,7 @@ ppApp.controller('FormCtrl', [
     'SettingService',
     'SyncService',
     function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
-        $cordovaCamera, $state, SyncService, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, $q, SettingService, SyncService) {
+        $cordovaCamera, $state, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, $q, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -35,10 +34,38 @@ ppApp.controller('FormCtrl', [
         var custSett = [];
         SyncService.getSettings().then(function(settings) {
             custSett = settings.custsett;
+            $scope.filter = {
+                state: 'form',
+                actionBtn: false,
+                edit: true,
+                popup_title: 'Resource filter',
+                popup_list: [],
+                searchText: ''
+            };
             $scope.resource_type_list = settings.resource_type;
             $scope.unit_list = settings.unit;
             $scope.abs_list = settings.absenteeism;
+            $scope.filter.vat = parseInt(CommonServices.getCustSett(custSett, 'vat'), 10);
+            $scope.currency = CommonServices.getCustSett(custSett, 'currency');
+            $scope.filter.currency = angular.copy($scope.currency);
+            $scope.filter.start = CommonServices.getCustSett(custSett, 'start');
+            $scope.filter.break = CommonServices.getCustSett(custSett, 'break');
+            $scope.filter.finish = CommonServices.getCustSett(custSett, 'finish');
+            // $scope.filter.margin = CommonServices.getCustSett(custSett, 'margin');
         })
+
+        //list payitems
+        PostService.post({
+            method: 'GET',
+            url: 'payitem',
+            params: {
+                projectId: $stateParams.projectId
+            }
+        }, function(res) {
+            $scope.popup_list = res.data;
+        }, function(err) {
+            $scope.popup_list = [];
+        });
 
         //set project settings
         SyncService.getProjects().then(function(res) {
@@ -59,149 +86,123 @@ ppApp.controller('FormCtrl', [
 
         //Populate resourceField, staffField, payitemField with data from server and an empty list for resources
         //every resource added, independently on the field type(staff, resource, pay item, schedule) will be added to resources list of the corresponding Field
-        $APP.db.transaction(function(tx) { //TODO: use getDesigns function
-            tx.executeSql('SELECT * FROM DesignsTable WHERE id=' + $stateParams.formId, [],
-                function(tx, rs) {
-                    $scope.formData = JSON.parse(rs.rows.item(0).data);
-                    $scope.titleShow = $scope.formData.name;
-                    $scope.shownGroup = $scope.formData.field_group_designs[0];
+        SyncService.selectDesignsWhere('id', $stateParams.formId).then(function(res) {
+            $scope.formData = res[0];
+            $scope.titleShow = $scope.formData.name;
+            $scope.shownGroup = $scope.formData.field_group_designs[0];
 
-                    angular.forEach($scope.formData.field_group_designs, function(field) {
-                        if (field.repeatable) {
-                            $scope.repeatable = true;
-                            return false;
-                        }
-                    });
+            angular.forEach($scope.formData.field_group_designs, function(field) {
+                if (field.repeatable) {
+                    $scope.repeatable = true;
+                    return false;
+                }
+            });
 
-                    var temp = $filter('filter')(custSett, {
-                        name: 'vat'
-                    });
-                    if (temp && temp.length)
-                        $scope.filter.vat = parseInt(temp[0].value, 10);
-                    temp = $filter('filter')(custSett, {
-                        name: 'currency'
-                    });
-                    if (temp && temp.length) {
-                        $scope.currency = temp[0].value;
-                        $scope.filter.currency = temp[0].value; //TODO: why currency and filter.currency?
-                    }
-                    // $scope.filter.margin = $filter('filter')(custSett, {
-                    //     name: 'margin'
-                    // })[0].value;
-                    $scope.filter.start = $filter('filter')(custSett, {
-                        name: 'start'
-                    })[0].value;
-                    $scope.filter.break = $filter('filter')(custSett, {
-                        name: 'break'
-                    })[0].value;
-                    $scope.filter.finish = $filter('filter')(custSett, {
-                        name: 'finish'
-                    })[0].value;
-                    if ($scope.formData.resource_field_design) {
-                        $scope.resourceField = {
-                            'id': 0,
-                            'customer_id': $scope.formData.customer_id,
-                            'register_nominated': $scope.formData.resource_field_design.register_nominated,
-                            'date_option': $scope.formData.resource_field_design.date_option,
-                            'financial_option': $scope.formData.resource_field_design.financial_option,
-                            'total_cost': 0,
-                            'resources': [{
-                                "id": 0,
-                                "resource_field_id": 0,
-                                "resource_id": 0,
-                                "position": 0,
-                                "calculation": false,
-                                "name": '',
-                                "product_ref": '',
-                                "unit_id": 0,
-                                "unit_name": '',
-                                "resource_type_id": 0,
-                                "unit_obj": "",
-                                "resource_type_name": '',
-                                "direct_cost": 0,
-                                "resource_margin": 0,
-                                "stage_id": 1,
-                                "stage_name": '',
-                                "vat": $scope.filter.vat,
-                                "quantity": 0,
-                                "current_day": '',
-                                "total_cost": 0,
-                                "staff_role": '',
-                                "expiry_date": '',
-                                "abseteeism_reason_name": ''
-                            }]
-                        };
-                        // $scope.filter.substate = $scope.resourceField.resources[0];
-                    }
-                    if ($scope.formData.pay_item_field_design) {
-                        $scope.payitemField = {
-                            "id": 0,
-                            'register_nominated': $scope.formData.pay_item_field_design.register_nominated,
-                            'display_subtask': $scope.formData.pay_item_field_design.display_subtask,
-                            'display_resources': $scope.formData.pay_item_field_design.display_resources,
-                            "pay_items": [{
-                                "description": "",
-                                "reference": "",
-                                "unit": "",
-                                "quantity": "",
-                                "open": true,
-                                "child": true,
-                                "subtasks": [],
-                                "resources": [],
-                                "total_cost": 0
-                            }]
-                        };
-                        $scope.filter.substate = $scope.payitemField.pay_items[0];
-                    }
-                    if ($scope.formData.scheduling_field_design) {
-                        $scope.payitemField = {
-                            "id": 0,
-                            'display_subtask': $scope.formData.scheduling_field_design.true,
-                            "pay_items": [{
-                                "description": "",
-                                "reference": "",
-                                "unit": "",
-                                "quantity": "",
-                                "open": true,
-                                "child": true,
-                                "subtasks": [],
-                                "resources": [],
-                                "total_cost": 0
-                            }]
-                        };
-                    }
-                    if ($scope.formData.staff_field_design) {
-                        $scope.staffField = {
-                            'id': 0,
-                            'withTimes': $scope.formData.staff_field_design.withTimes,
-                            'resources': [{
-                                "name": "",
-                                "customerId": 0,
-                                "employer_name": "",
-                                "staff_role": "",
-                                "product_ref": "",
-                                "unit_name": "",
-                                "direct_cost": 0.0,
-                                "resource_type_name": "",
-                                "resource_margin": 0,
-                                "telephone_number": "",
-                                "email": "",
-                                "safety_card_number": "",
-                                "expiry_date": "",
-                                "staff": true,
-                                "current_day": "",
-                                "start_time": $scope.filter.start,
-                                "break_time": $scope.filter.break,
-                                "finish_time": $scope.filter.finish,
-                                "total_time": "",
-                                "comment": "",
-                                "open": true,
-                                "vat": $scope.filter.vat
-                            }]
-                        };
-                    }
-                },
-                function(error) {});
+            if ($scope.formData.resource_field_design) {
+                $scope.resourceField = {
+                    'id': 0,
+                    'customer_id': $scope.formData.customer_id,
+                    'register_nominated': $scope.formData.resource_field_design.register_nominated,
+                    'date_option': $scope.formData.resource_field_design.date_option,
+                    'financial_option': $scope.formData.resource_field_design.financial_option,
+                    'total_cost': 0,
+                    'resources': [{
+                        "id": 0,
+                        "resource_field_id": 0,
+                        "resource_id": 0,
+                        "position": 0,
+                        "calculation": false,
+                        "name": '',
+                        "product_ref": '',
+                        "unit_id": 0,
+                        "unit_name": '',
+                        "resource_type_id": 0,
+                        "unit_obj": "",
+                        "resource_type_name": '',
+                        "direct_cost": 0,
+                        "resource_margin": 0,
+                        "stage_id": 1,
+                        "stage_name": '',
+                        "vat": $scope.filter.vat,
+                        "quantity": 0,
+                        "current_day": '',
+                        "total_cost": 0,
+                        "staff_role": '',
+                        "expiry_date": '',
+                        "abseteeism_reason_name": ''
+                    }]
+                };
+                // $scope.filter.substate = $scope.resourceField.resources[0];
+            }
+            if ($scope.formData.pay_item_field_design) {
+                $scope.payitemField = {
+                    "id": 0,
+                    'register_nominated': $scope.formData.pay_item_field_design.register_nominated,
+                    'display_subtask': $scope.formData.pay_item_field_design.display_subtask,
+                    'display_resources': $scope.formData.pay_item_field_design.display_resources,
+                    "pay_items": [{
+                        "description": "",
+                        "reference": "",
+                        "unit": "",
+                        "quantity": "",
+                        "open": true,
+                        "child": true,
+                        "subtasks": [],
+                        "resources": [],
+                        "total_cost": 0
+                    }]
+                };
+                $scope.filter.substate = $scope.payitemField.pay_items[0];
+            }
+            if ($scope.formData.scheduling_field_design) {
+                $scope.payitemField = {
+                    "id": 0,
+                    'display_subtask': $scope.formData.scheduling_field_design.true,
+                    "pay_items": [{
+                        "description": "",
+                        "reference": "",
+                        "unit": "",
+                        "quantity": "",
+                        "open": true,
+                        "child": true,
+                        "subtasks": [],
+                        "resources": [],
+                        "total_cost": 0
+                    }]
+                };
+            }
+            if ($scope.formData.staff_field_design) {
+                $scope.staffField = {
+                    'id': 0,
+                    'withTimes': $scope.formData.staff_field_design.withTimes,
+                    'resources': [{
+                        "name": "",
+                        "customerId": 0,
+                        "employer_name": "",
+                        "staff_role": "",
+                        "product_ref": "",
+                        "unit_name": "",
+                        "direct_cost": 0.0,
+                        "resource_type_name": "",
+                        "resource_margin": 0,
+                        "telephone_number": "",
+                        "email": "",
+                        "safety_card_number": "",
+                        "expiry_date": "",
+                        "staff": true,
+                        "current_day": "",
+                        "start_time": $scope.filter.start,
+                        "break_time": $scope.filter.break,
+                        "finish_time": $scope.filter.finish,
+                        "total_time": "",
+                        "comment": "",
+                        "open": true,
+                        "vat": $scope.filter.vat
+                    }]
+                };
+            }
+        }, function(reason) {
+            console.log(reason);
         });
 
         $scope.updateCalculation = function(data) {
@@ -525,14 +526,7 @@ ppApp.controller('FormCtrl', [
                 storageMode: 'localStorage'
             });
         }
-        $scope.filter = {
-            state: 'form',
-            actionBtn: false,
-            edit: true,
-            popup_title: 'Resource filter',
-            popup_list: [],
-            searchText: ''
-        };
+
         $scope.onSelect = function(item) {
             if ($scope.filter.state === 'resource') {
                 $scope.filter.substate.name = item.name;
@@ -594,19 +588,6 @@ ppApp.controller('FormCtrl', [
                 $scope.addStaff();
             }
         };
-
-        //list payitems
-        PostService.post({
-            method: 'GET',
-            url: 'payitem',
-            params: {
-                projectId: $stateParams.projectId
-            }
-        }, function(res) {
-            $scope.popup_list = res.data;
-        }, function(err) {
-            $scope.popup_list = [];
-        });
 
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {

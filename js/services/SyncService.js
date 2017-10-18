@@ -402,16 +402,32 @@ ppApp.service('SyncService', [
 
         service.getDesigns = function() {
             var prm = $q.defer(),
-                aux;
+                aux = [];
             $APP.db.transaction(function(tx) {
                 tx.executeSql('SELECT * FROM DesignsTable', [], function(tx, rs) {
-                    aux = [];
                     for (var i = 0; i < rs.rows.length; i++) {
                         aux.push(JSON.parse(rs.rows.item(i).data));
                     }
                     prm.resolve(aux);
                 }, function(error) {
                     prm.reject("Some unexpected error occured and designs could not be loaded.");
+                });
+            })
+            return prm.promise;
+        };
+
+        service.selectDesignsWhere = function(fieldName, value) {
+            var prm = $q.defer(),
+                aux = [];
+            $APP.db.transaction(function(tx) {
+                tx.executeSql('SELECT * FROM DesignsTable WHERE ' + fieldName + '=' + value, [], function(tx, rs) {
+                    for (var i = 0; i < rs.rows.length; i++) {
+                        aux.push(JSON.parse(rs.rows.item(i).data));
+                    }
+                    prm.resolve(aux);
+                }, function(error) {
+                    console.log('Error selecting designs', error);
+                    prm.reject("Could not get designs from db.");
                 });
             })
             return prm.promise;

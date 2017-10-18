@@ -7,10 +7,9 @@ ppApp.controller('FormsCtrl', [
     '$ionicHistory',
     '$anchorScroll',
     '$ionicSideMenuDelegate',
-    'SyncService',
     'SettingService',
     'SyncService',
-    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SyncService, SettingService, SyncService) {
+    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -34,22 +33,16 @@ ppApp.controller('FormsCtrl', [
             }
         }, function errorCallback(error) {});
         $rootScope.formDesigns = [];
-        $APP.db.transaction(function(tx) {
-            tx.executeSql('SELECT * FROM DesignsTable WHERE category_id = ?', [$stateParams.categoryId], function(tx, rs) {
-                var aux = [];
-                for (var i = 0; i < rs.rows.length; i++) {
-                    aux.push(JSON.parse(rs.rows.item(i).data));
-                }
-                $rootScope.formDesigns = aux;
-                $scope.isLoaded = true;
-                if ($rootScope.formDesigns.length === 0) {
-                    $scope.hasData = 'no data';
-                }
-            }, function(error) {
-                console.log('Error selecting designs', error);
-            });
+        SyncService.selectDesignsWhere('category_id', $stateParams.categoryId).then(function(res) {
+            $rootScope.formDesigns = res;
+            $scope.isLoaded = true;
+            if ($rootScope.formDesigns.length === 0) {
+                $scope.hasData = 'no data';
+            }
+        }, function(reason) {
+            console.log(reason);
         });
-
+  
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
 
         $scope.refresh = function() {
