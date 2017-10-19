@@ -8,8 +8,9 @@ ppApp.service('SyncService', [
     '$rootScope',
     'orderByFilter',
     'PostService',
+    '$filter',
 
-    function($q, $http, $timeout, $cordovaSQLite, $interval, AuthService, $rootScope, orderBy, PostService) {
+    function($q, $http, $timeout, $cordovaSQLite, $interval, AuthService, $rootScope, orderBy, PostService, $filter) {
         var service = this;
 
         function servresp(name, timer, start, response) {
