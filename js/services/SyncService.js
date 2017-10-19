@@ -200,9 +200,29 @@ ppApp.service('SyncService', [
                     }
 
                     //method to add the given items to server
-                    var addItemsToServer = function(items, field_id, url) {
+                    var addItemsToServer = function(form, field, url) { //items, field_id, url
                             var d = $q.defer(),
-                                cnt = 0;
+                                cnt = 0,
+                                items = [],
+                                field_id = "";
+                            switch (field) {
+                                case 'resource':
+                                    items = form.resourceField;
+                                    field_id = "resource_field_id";
+                                    break;
+                                case 'staff':
+                                    items = form.staffField;
+                                    field_id = "staff_field_id";
+                                    break;
+                                case 'payitem':
+                                    items = form.payitemField;
+                                    field_id = "pay_item_field_id";
+                                    break;
+                                case 'sched':
+                                    items = form.schedField;
+                                    field_id = "scheduling_field_id";
+                                    break
+                            }
                             if (!items || items && !items.length) {
                                 d.resolve();
                             }
@@ -213,7 +233,7 @@ ppApp.service('SyncService', [
                                     data: item
                                 }, function(x) {
                                     cnt++;
-                                    field_id = x.data.id; //TODO: it keeps only the last value
+                                    form[field_id] = x.data.id; //TODO: it keeps only the last value
                                     if (cnt >= items.length) {
                                         d.resolve();
                                     }
@@ -258,10 +278,14 @@ ppApp.service('SyncService', [
 
                     angular.forEach(forms, function(form) {
                         //add all special fields for the given form
-                        var resourcePrm = addItemsToServer(form.form.resourceField, form.form.resource_field_id, 'resourcefield'),
-                            staffPrm = addItemsToServer(form.form.staffField, form.form.staff_field_id, 'stafffield'),
-                            schedulePrm = addItemsToServer(form.form.schedField, form.form.scheduling_field_id, 'schedulingfield'),
-                            payitemPrm = addItemsToServer(form.form.payitemField, form.form.pay_item_field_id, 'payitemfield');
+                        var resourcePrm = addItemsToServer(form.form, 'resource', 'resourcefield'),
+                            staffPrm = addItemsToServer(form.form, 'staff', 'stafffield'),
+                            schedulePrm = addItemsToServer(form.form, 'sched', 'schedulingfield'),
+                            payitemPrm = addItemsToServer(form.form, 'payitem', 'payitemfield');
+                        // var resourcePrm = addItemsToServer(form.form.resourceField, form.form.resource_field_id, 'resourcefield'),
+                        //     staffPrm = addItemsToServer(form.form.staffField, form.form.staff_field_id, 'stafffield'),
+                        //     schedulePrm = addItemsToServer(form.form.schedField, form.form.scheduling_field_id, 'schedulingfield'),
+                        //     payitemPrm = addItemsToServer(form.form.payitemField, form.form.pay_item_field_id, 'payitemfield');
 
                         Promise.all([resourcePrm, staffPrm, schedulePrm, payitemPrm]).then(function(res) {
                             form.form.resourceField = [];
