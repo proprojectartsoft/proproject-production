@@ -312,7 +312,6 @@ ppApp.controller('FormInstanceCtrl', [
             }
         }, function(res) {
             var data = res.data;
-            $rootScope.formData = data;
             $scope.formData = data;
             $scope.titleShow = $scope.formData.name;
             //get resources data

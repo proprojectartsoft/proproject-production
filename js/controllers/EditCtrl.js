@@ -638,7 +638,6 @@ ppApp.controller('EditCtrl', [
                 id: $rootScope.formId
             }
         }, function(res) {
-            $rootScope.formData = res.data;
             $scope.formData = res.data;
             PostService.post({
                 method: 'GET',
@@ -1102,7 +1101,7 @@ ppApp.controller('EditCtrl', [
                         Promise.all([resource, staff, schedule, payitem]).then(function(res) {
                             //automatically sync previousely offline created forms
                             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
-                                SyncService.sync().then(function() {
+                                SyncService.sync().then(function(res) {
                                     CommonServices.saveFormToServer({
                                         method: 'POST',
                                         url: 'forminstance',
