@@ -226,7 +226,7 @@ ppApp.service('SyncService', [
                         },
                         //method to upload images to server
                         uploadImages = function(imgs, formId, projectId) {
-                            var def = defer(),
+                            var def = $q.defer(),
                                 cnt = 0;
                             if (!imgs.length)
                                 def.resolve();
