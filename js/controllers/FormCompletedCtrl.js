@@ -166,15 +166,11 @@ ppApp.controller('FormCompletedCtrl', [
         }, function(res) {
             $scope.isLoaded = true;
             $scope.formInstances = res.data;
-            if (res.data) {
-                if (res.data.length === 0) {
-                    $scope.hasData = 'no data';
-                }
-            } else {
+            if ($scope.formInstances.length === 0) {
                 $scope.hasData = 'no data';
             }
         }, function(err) {
-            console.log(err);
+            $scope.hasData = 'no data';
         });
 
         $scope.refresh = function() {
@@ -187,10 +183,8 @@ ppApp.controller('FormCompletedCtrl', [
                 }
             }, function(res) {
                 $scope.formInstances = res.data;
-                if (res.data) {
-                    if (res.data.length === 0) {
-                        $scope.hasData = 'no data';
-                    }
+                if ($scope.formInstances.length === 0) {
+                    $scope.hasData = 'no data';
                 }
                 $scope.$broadcast('scroll.refreshComplete');
             }, function(err) {
@@ -213,8 +207,6 @@ ppApp.controller('FormCompletedCtrl', [
                 console.log(err);
             });
         };
-
-        $scope.test = function() {};
 
         $scope.form = function(completedFormId) {
             $state.go("app.form");

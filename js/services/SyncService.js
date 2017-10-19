@@ -254,26 +254,25 @@ ppApp.service('SyncService', [
 
                     angular.forEach(forms, function(form) {
                         //add all special fields for the given form
-                        var resourcePrm = addItemsToServer(formsToAdd.resourceField, formsToAdd.resource_field_id, 'resourcefield'),
-                            staffPrm = addItemsToServer(formsToAdd.staffField, formsToAdd.staff_field_id, 'stafffield'),
-                            schedulePrm = addItemsToServer(formsToAdd.schedField, formsToAdd.scheduling_field_id, 'schedulingfield'),
-                            payitemPrm = addItemsToServer(formsToAdd.payitemField, formsToAdd.pay_item_field_id, 'payitemfield');
+                        var resourcePrm = addItemsToServer(form.resourceField, form.resource_field_id, 'resourcefield'),
+                            staffPrm = addItemsToServer(form.staffField, form.staff_field_id, 'stafffield'),
+                            schedulePrm = addItemsToServer(form.schedField, form.scheduling_field_id, 'schedulingfield'),
+                            payitemPrm = addItemsToServer(form.payitemField, form.pay_item_field_id, 'payitemfield');
 
                         Promise.all([resourcePrm, staffPrm, schedulePrm, payitemPrm]).then(function(res) {
                             form.form.resourceField = [];
                             form.form.staffField = [];
                             form.form.schedField = [];
                             form.form.payitemField = [];
-                            picX = false;
-                            formX = form.form;
-                            angular.forEach(pics, function(pic) {
-                                if (pic.id === form.id) {
-                                    picX = pic.imgs;
+                            if (form.form) {
+                                var formsToAdd = angular.copy(form.form),
+                                    picsToAdd = [];
+                                var temp = $filter('filter')(pics, {
+                                    id: form.id
+                                });
+                                if (temp && temp.length) {
+                                    picsToAdd = temp[0].imgs;
                                 }
-                            })
-                            if (formX) {
-                                var formsToAdd = angular.copy(formX),
-                                    picsToAdd = angular.copy(picX);
 
                                 //add form to server
                                 PostService.post({
