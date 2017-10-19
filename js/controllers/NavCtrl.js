@@ -57,14 +57,6 @@ ppApp.controller('NavCtrl', [
                 "image_url": "financial"
             }
         ];
-        // $scope.isDisconnect = {
-        //     checked: false
-        // };
-        // $scope.pushIsDisconnectChange = function() {
-        //     if ($scope.isDisconnect.checked) {
-        //         $scope.logout();
-        //     }
-        // };
         $scope.logout = function() {
             if (navigator.onLine) {
                 SyncService.sync_close();
@@ -90,6 +82,9 @@ ppApp.controller('NavCtrl', [
                 var popup = SettingService.show_loading_popup('Sync');
                 SyncService.sync().then(function(res) {
                     popup.close();
+                    $state.go('app.categories', {
+                        'projectId': $rootScope.projectId
+                    });
                 })
             } else {
                 SettingService.show_message_popup("You are offline", '<center>You cannot sync your data when offline</center>');
@@ -97,6 +92,7 @@ ppApp.controller('NavCtrl', [
         };
 
         $rootScope.$on('sync.todo', function() {
+            console.log('nav ctrl - on sync');
             $state.go('app.categories', {
                 'projectId': $rootScope.projectId
             });

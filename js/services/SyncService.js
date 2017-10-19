@@ -236,7 +236,7 @@ ppApp.service('SyncService', [
                                 img.projectId = projectId;
                                 PostService.post({
                                     method: 'POST',
-                                    url: 'defectphoto/uploadfile',
+                                    url: 'image/uploadfile',
                                     data: img,
                                     withCredentials: true
                                 }, function(payload) {
@@ -256,10 +256,10 @@ ppApp.service('SyncService', [
 
                     angular.forEach(forms, function(form) {
                         //add all special fields for the given form
-                        var resourcePrm = addItemsToServer(form.resourceField, form.resource_field_id, 'resourcefield'),
-                            staffPrm = addItemsToServer(form.staffField, form.staff_field_id, 'stafffield'),
-                            schedulePrm = addItemsToServer(form.schedField, form.scheduling_field_id, 'schedulingfield'),
-                            payitemPrm = addItemsToServer(form.payitemField, form.pay_item_field_id, 'payitemfield');
+                        var resourcePrm = addItemsToServer(form.form.resourceField, form.form.resource_field_id, 'resourcefield'),
+                            staffPrm = addItemsToServer(form.form.staffField, form.form.staff_field_id, 'stafffield'),
+                            schedulePrm = addItemsToServer(form.form.schedField, form.form.scheduling_field_id, 'schedulingfield'),
+                            payitemPrm = addItemsToServer(form.form.payitemField, form.form.pay_item_field_id, 'payitemfield');
 
                         Promise.all([resourcePrm, staffPrm, schedulePrm, payitemPrm]).then(function(res) {
                             form.form.resourceField = [];

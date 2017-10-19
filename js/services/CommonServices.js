@@ -564,6 +564,9 @@ ppApp.service('CommonServices', [
                             }, function(err) {
                                 $timeout(function() {
                                     formUp.close();
+                                    $state.go('app.categories', {
+                                        'projectId': $rootScope.projectId
+                                    });
                                 });
                             });
                         } else {
