@@ -212,11 +212,13 @@ ppApp.service('SyncService', [
                                     url: url,
                                     data: item
                                 }, function(x) {
+                                    cnt++;
                                     field_id = x.data.id; //TODO: it keeps only the last value
                                     if (cnt >= items.length) {
                                         d.resolve();
                                     }
                                 }, function(err) {
+                                    cnt++;
                                     if (cnt >= items.length) {
                                         d.resolve();
                                     }
@@ -266,35 +268,32 @@ ppApp.service('SyncService', [
                             form.form.staffField = [];
                             form.form.schedField = [];
                             form.form.payitemField = [];
-                            if (form.form) {
-                                var formsToAdd = angular.copy(form.form),
-                                    picsToAdd = [];
-                                var temp = $filter('filter')(pics, {
-                                    id: form.id
-                                });
-                                if (temp && temp.length) {
-                                    picsToAdd = temp[0].imgs;
-                                }
+                            var picsToAdd = [];
+                            var temp = $filter('filter')(pics, {
+                                id: form.id
+                            });
+                            if (temp && temp.length) {
+                                picsToAdd = temp[0].imgs;
+                            }
 
-                                //add form to server
-                                PostService.post({
-                                    method: 'POST',
-                                    url: 'forminstance',
-                                    data: formsToAdd
-                                }, function(res) {
-                                    uploadImages(picsToAdd, res.data.id, formsToAdd.project_id).then(function(r) {
-                                        count++;
-                                        if (count >= forms.length) {
-                                            prm.resolve();
-                                        }
-                                    })
-                                }, function(err) {
+                            //add form to server
+                            PostService.post({
+                                method: 'POST',
+                                url: 'forminstance',
+                                data: form.form
+                            }, function(res) {
+                                uploadImages(picsToAdd, res.data.id, form.form.project_id).then(function(r) {
                                     count++;
                                     if (count >= forms.length) {
                                         prm.resolve();
                                     }
-                                });
-                            }
+                                })
+                            }, function(err) {
+                                count++;
+                                if (count >= forms.length) {
+                                    prm.resolve();
+                                }
+                            });
                         })
                     });
                     return prm.promise;
