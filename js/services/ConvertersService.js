@@ -303,7 +303,7 @@ ppApp.service('ConvertersService', [
         };
 
         return {
-            designToInstance: function(design) {
+            designToInstance: function(design, isNew) {
                 var settings = CacheFactory.get('settings');
                 if (!settings || settings.length === 0) {
                     settings = CacheFactory('settings');
@@ -317,32 +317,32 @@ ppApp.service('ConvertersService', [
                     "active": true,
                     "name": design.name,
                     "guidance": design.guidance,
-                    "code": design.code,
+                    "code": design.code || design.form_design_code,
                     "hash": null,
                     "pdf": design.pdf,
-                    "project_id": parseInt($stateParams.projectId),
-                    "resource_field_id": design.resource_field_id,
-                    "staff_field_id": design.staff_field_id,
-                    "pay_item_field_id": design.pay_item_field_id,
-                    "scheduling_field_id": design.scheduling_field_id,
+                    "project_id": parseInt($stateParams.projectId) || design.project_id,
                     "customer_id": design.customer_id,
                     "category": design.category,
                     "category_id": design.category_id,
                     "user_id": $rootScope.thisUser && $rootScope.thisUser.id,
                     "created_on": new Date().getTime(),
                     "updated_on": new Date().getTime(),
-                    "formDesignId": design.id,
+                    "formDesignId": design.formDesignId || design.id,
+                    "resource_field_id": design.resource_field_id,
+                    "staff_field_id": design.staff_field_id,
+                    "pay_item_field_id": design.pay_item_field_id,
+                    "scheduling_field_id": design.scheduling_field_id,
                     "field_group_instances": [],
-                    "resourceField": design.resourceField,
+                    "resourceField": design.resourceField, //TODO: not needed??? only for instance to new
                     "staffField": design.staffField,
                     "payitemField": design.payitemField,
-                    "schedField": design.schedField
+                    "schedField": design.schedField,
                 };
                 var requestGroupList = [],
                     requestFieldList = [];
                 var requestGroup, requestField;
 
-                angular.forEach(design.field_group_designs, function(field_group) {
+                angular.forEach(design.field_group_designs || design.field_group_instances, function(field_group) {
                     requestGroup = {
                         "id": 0,
                         "name": field_group.name,
@@ -355,7 +355,18 @@ ppApp.service('ConvertersService', [
                     };
                     requestFieldList = [];
 
-                    angular.forEach(field_group.field_designs, function(field) {
+                    angular.forEach(field_group.field_designs || field_group.field_instances, function(field) {
+                        var aux = null;
+                        if (isNew) {
+                            aux = designToInstanceValuesFormat(field);
+                        } else {
+                            aux = instanceToInstanceValuesFormat(field);
+                            angular.forEach(aux, function(val) {
+                                val.id = 0;
+                                val.field_instance_id = 0;
+                            });
+                        }
+
                         requestField = {
                             "id": 0,
                             "name": field.name,
@@ -371,8 +382,8 @@ ppApp.service('ConvertersService', [
                             "default_value": field.default_value,
                             "register_nominated": field.register_nominated,
                             "at_revision": "0",
-                            "option_instances": [],
-                            "field_values": designToInstanceValuesFormat(field)
+                            "option_instances": [] || field.option_instances,
+                            "field_values": aux
                         };
                         requestFieldList.push(requestField);
                     });
@@ -487,88 +498,6 @@ ppApp.service('ConvertersService', [
                             "at_revision": field.at_revision,
                             "option_instances": field.option_instances,
                             "field_values": instanceToInstanceValuesFormat(field)
-                        };
-                        requestFieldList.push(requestField);
-                    });
-                    requestGroup.field_instances = requestFieldList;
-                    requestGroupList.push(requestGroup);
-                });
-                requestForm.field_group_instances = requestGroupList;
-                return requestForm;
-            },
-            instanceToNew: function(instance) {
-                var data = angular.copy(instance);
-                var settings = CacheFactory.get('settings');
-                if (!settings || settings.length === 0) {
-                    settings = CacheFactory('settings');
-                    settings.setOptions({
-                        storageMode: 'localStorage'
-                    });
-                }
-                $rootScope.thisUser = localStorage.getObject("ppuser");;
-                var requestForm = {
-                    "id": 0,
-                    "active": true,
-                    "name": data.name,
-                    "guidance": data.guidance,
-                    "code": data.form_design_code,
-                    "hash": null,
-                    "pdf": data.pdf,
-                    "project_id": data.project_id,
-                    "customer_id": data.customer_id,
-                    "category": data.category,
-                    "category_id": data.category_id,
-                    "user_id": $rootScope.thisUser.id,
-                    "created_on": new Date().getTime(),
-                    "updated_on": new Date().getTime(),
-                    "formDesignId": data.formDesignId,
-                    "resource_field_id": data.resource_field_id,
-                    "scheduling_field_id": data.scheduling_field_id,
-                    "pay_item_field_id": data.pay_item_field_id,
-                    "staff_field_id": data.staff_field_id,
-                    "field_group_instances": []
-                };
-                var requestGroupList = [],
-                    requestFieldList = [];
-                var requestGroup, requestField;
-
-                angular.forEach(data.field_group_instances, function(field_group) {
-
-                    requestFieldList = [];
-                    requestGroup = {
-                        "id": 0,
-                        "name": field_group.name,
-                        "guidance": field_group.guidance,
-                        "position": field_group.position,
-                        "form_instance_id": 0,
-                        "repeatable": field_group.repeatable,
-                        "at_revision": "0",
-                        "field_instances": []
-                    };
-                    angular.forEach(field_group.field_instances, function(field) {
-                        var aux = instanceToInstanceValuesFormat(field);
-                        angular.forEach(aux, function(val) {
-                            val.id = 0;
-                            val.field_instance_id = 0;
-                        });
-
-                        requestField = {
-                            "id": 0,
-                            "name": field.name,
-                            "guidance": field.guidance,
-                            "type": field.type,
-                            "validation": field.validation,
-                            "placeholder": field.placeholder,
-                            "required": field.required,
-                            "repeatable": field.repeatable,
-                            "position": field.position,
-                            "inline": field.inline,
-                            "field_group_instance_id": 0,
-                            "default_value": field.default_value,
-                            "register_nominated": field.register_nominated,
-                            "option_instances": field.option_instances,
-                            "at_revision": "0",
-                            "field_values": aux
                         };
                         requestFieldList.push(requestField);
                     });

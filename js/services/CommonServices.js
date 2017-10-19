@@ -1,6 +1,6 @@
 ppApp.service('CommonServices', [
-    '$stateParams', '$state', '$filter', '$timeout', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService', 'SettingService', '$location',
-    function($stateParams, $state, $filter, $timeout, $ionicScrollDelegate, $rootScope, PostService, SyncService, SettingService, $location) {
+    '$stateParams', '$state', '$filter', '$timeout', '$ionicScrollDelegate', '$rootScope', 'PostService', 'SyncService', 'SettingService', '$location', '$q',
+    function($stateParams, $state, $filter, $timeout, $ionicScrollDelegate, $rootScope, PostService, SyncService, SettingService, $location, $q) {
         var service = this;
         var settings = {};
         SyncService.getSettings().then(function(res) {
@@ -534,15 +534,21 @@ ppApp.service('CommonServices', [
 
         service.saveFormToServer = function(request, images, formUp, isNew) {
             PostService.post(request, function(res) {
-                $rootScope.formId = res.data.id || res.data;
-                if (!images.length) {
+                if (res.data.message) {
+                    formUp.close();
                     $timeout(function() {
-                        formUp.close();
-                        $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                        SettingService.show_message_popup('Submision failed', res.data.message).then(function(res) {
+                            $state.go('app.forms', {
+                                'projectId': $rootScope.projectId,
+                                'categoryId': request.data.category_id
+                            });
+                        });
                     });
+                    return;
                 }
+                $rootScope.formId = res.data.id || res.data;
                 var cnt = 0,
-                    finishCallback = function(formUp) {
+                    finishCallback = function(formUp) { //does not enter for isNew
                         if (isNew) {
                             PostService.post({
                                 method: 'GET',
@@ -554,7 +560,6 @@ ppApp.service('CommonServices', [
                                 $rootScope.rootForm = res.data;
                                 $timeout(function() {
                                     formUp.close();
-                                    // $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
                                     $state.go('app.formInstance', {
                                         'projectId': $rootScope.projectId,
                                         'type': 'form',
@@ -576,6 +581,13 @@ ppApp.service('CommonServices', [
                             });
                         }
                     };
+
+                if (!images.length) {
+                    $timeout(function() {
+                        formUp.close();
+                        finishCallback(formUp);
+                    });
+                }
 
                 angular.forEach(images, function(img) {
                     img.id = 0;
@@ -607,7 +619,7 @@ ppApp.service('CommonServices', [
                         }
                     }, function(err) {
                         cnt++;
-                        if (cnt >= $scope.imgURI.length) {
+                        if (cnt >= images.length) {
                             finishCallback(formUp);
                             images = [];
                         }
@@ -629,12 +641,23 @@ ppApp.service('CommonServices', [
                         localStorage.setObject('pppsync', []);
                     }
                     $rootScope.toBeUploadedCount++;
-                    for (var i = 0; i < images.length; i++) {
-                        if (images[i].base64String !== "") {
-                            images.projectId = request.data.project_id;
-                            requestList.push(images[i]);
+
+                    //store images to sync
+                    angular.forEach(images, function(img) {
+                        img.projectId = request.data.project_id;
+                        if (isNew && img.url) {
+                            img = {
+                                base64String: '',
+                                comment: img.comment,
+                                formInstanceId: img.formInstanceId,
+                                id: img.id,
+                                projectId: img.projectId,
+                                tags: img.tags,
+                                title: img.title
+                            }
                         }
-                    }
+                        requestList.push(img);
+                    })
                     var aux_f = localStorage.getObject('ppfsync');
                     aux_f.push({
                         id: $rootScope.toBeUploadedCount,
@@ -680,5 +703,158 @@ ppApp.service('CommonServices', [
                 // }
             });
         };
+
+        service.saveSpecialFields = function(formData, specialFields) {
+            var prm = $q.defer();
+            var prepareResources = function(resources) {
+                angular.forEach(resources, function(item) { //
+                    if (item.unit_obj) { //TODO:not for staff
+                        item.unit_id = item.unit_obj.id;
+                        item.unit_name = item.unit_obj.name;
+                    }
+                    if (item.res_type_obj) {
+                        item.resource_type_id = item.res_type_obj.id;
+                        item.resource_type_name = item.res_type_obj.name;
+                    }
+                    if (item.stage_obj) { //TODO: only for res,
+                        item.stage_id = item.stage_obj.id;
+                        item.stage_name = item.stage_obj.name;
+                    }
+                    if (item.absenteeism_obj) {
+                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
+                    }
+                    if (item.current_day_obj) {
+                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
+                    }
+                    if (item.expiry_date_obj) { //TODO: not for res
+                        var date = new Date(item.expiry_date_obj);
+                        item.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
+                    }
+                });
+                return resources;
+            }
+
+            var addResourcesToServer = function() {
+                    var def = $q.defer();
+                    if (formData.resource_field_design || formData.resource_field_id) {
+                        specialFields.resourceField.resources = prepareResources(specialFields.resourceField.resources);
+                        specialFields.resourceField.id = 0;
+                        PostService.post({
+                            method: 'POST',
+                            url: 'resourcefield',
+                            data: specialFields.resourceField
+                        }, function(res) {
+                            formData.resource_field_id = res.data.id;
+                            def.resolve();
+                        }, function(err) {
+                            formData.resourceField = formData.resourceField || [];
+                            formData.resourceField.push(specialFields.resourceField);
+                            def.resolve();
+                        });
+                    } else {
+                        def.resolve();
+                    }
+                    return def.promise;
+                },
+
+                addPayitemToServer = function() {
+                    var def = $q.defer();
+                    if (formData.pay_item_field_design || formData.pay_item_field_id) {
+                        angular.forEach(specialFields.payitemField.pay_items, function(item) { //TODO:if no resourve, subtask => payitemField is undefined
+                            if (item.unit_obj) {
+                                item.unit = item.unit_obj.name;
+                                item.unit_id = item.unit_obj.id;
+                            }
+                            item.resources = prepareResources(item.resources);
+                            angular.forEach(item.subtasks, function(subtask) {
+                                subtask.resources = prepareResources(subtask.resources);
+                            });
+                        });
+                        specialFields.payitemField.id = 0;
+                        PostService.post({
+                            method: 'POST',
+                            url: 'payitemfield',
+                            data: specialFields.payitemField
+                        }, function(res) {
+                            formData.pay_item_field_id = res.data.id;
+                            def.resolve();
+                        }, function(err) {
+                            formData.payitemField = formData.payitemField || [];
+                            formData.payitemField.push(specialFields.payitemField);
+                            def.resolve();
+                        });
+                    } else {
+                        def.resolve();
+                    }
+                    return def.promise;
+                },
+
+                addSchedulingToServer = function() {
+                    var def = $q.defer();
+                    if (formData.scheduling_field_design || formData.scheduling_field_id) {
+                        angular.forEach(specialFields.payitemField.pay_items, function(item) {
+                            if (item.unit_obj) {
+                                item.unit = item.unit_obj.name;
+                                item.unit_id = item.unit_obj.id;
+                            }
+                            item.resources = prepareResources(item.resources);
+                            angular.forEach(item.subtasks, function(subtask) {
+                                item.subtasks = prepareResources(item.subtasks);
+                            });
+                        });
+                        specialFields.payitemField.id = 0;
+                        PostService.post({
+                            method: 'POST',
+                            url: 'schedulingfield',
+                            data: specialFields.payitemField
+                        }, function(res) {
+                            formData.scheduling_field_id = res.data.id;
+                            def.resolve();
+                        }, function(err) {
+                            formData.schedField = formData.schedField || [];
+                            formData.schedField.push(specialFields.payitemField);
+                            def.resolve();
+                        });
+                    } else {
+                        def.resolve();
+                    }
+                    return def.promise;
+                },
+
+                addStaffToServer = function() {
+                    var def = $q.defer();
+                    if (formData.staff_field_design || formData.staff_field_id) {
+                        specialFields.staffField.resources = prepareResources(specialFields.staffField.resources);
+                        specialFields.staffField.id = 0;
+                        PostService.post({
+                            method: 'POST',
+                            url: 'stafffield',
+                            data: specialFields.staffField
+                        }, function(res) {
+                            formData.staff_field_id = res.data.id;
+                            def.resolve();
+                        }, function(err) {
+                            formData.staffField = formData.staffField || [];
+                            formData.staffField.push(specialFields.staffField);
+                            def.resolve();
+                        });
+                    } else {
+                        def.resolve();
+                    }
+                    return def.promise;
+                };
+
+            var staff = addStaffToServer(),
+                schedule = addSchedulingToServer(),
+                payitem = addPayitemToServer(),
+                resource = addResourcesToServer();
+
+            Promise.all([resource, staff, schedule, payitem]).then(function(res) {
+                prm.resolve(formData);
+            })
+            return prm.promise;
+        };
+
+
     }
 ])

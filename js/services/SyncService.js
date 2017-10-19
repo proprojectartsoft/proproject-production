@@ -200,7 +200,7 @@ ppApp.service('SyncService', [
                     }
 
                     //method to add the given items to server
-                    var addItemsToServer = function(form, field, url) { //items, field_id, url
+                    var addItemsToServer = function(form, field, url) { 
                             var d = $q.defer(),
                                 cnt = 0,
                                 items = [],
@@ -282,10 +282,6 @@ ppApp.service('SyncService', [
                             staffPrm = addItemsToServer(form.form, 'staff', 'stafffield'),
                             schedulePrm = addItemsToServer(form.form, 'sched', 'schedulingfield'),
                             payitemPrm = addItemsToServer(form.form, 'payitem', 'payitemfield');
-                        // var resourcePrm = addItemsToServer(form.form.resourceField, form.form.resource_field_id, 'resourcefield'),
-                        //     staffPrm = addItemsToServer(form.form.staffField, form.form.staff_field_id, 'stafffield'),
-                        //     schedulePrm = addItemsToServer(form.form.schedField, form.form.scheduling_field_id, 'schedulingfield'),
-                        //     payitemPrm = addItemsToServer(form.form.payitemField, form.form.pay_item_field_id, 'payitemfield');
 
                         Promise.all([resourcePrm, staffPrm, schedulePrm, payitemPrm]).then(function(res) {
                             form.form.resourceField = [];
