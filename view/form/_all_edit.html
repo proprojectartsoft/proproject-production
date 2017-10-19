@@ -52,6 +52,7 @@
         <span class="all-description">{{data.guidance}}</span>
     </div>
     <input input id="{{hash}}" type="number" name="{{data.name}}"
+           ng-model="data.field_values[0].value" placeholder="{{data.placeholder || 'insert here'}}"
            ng-required="data.required">
 </label>
 
