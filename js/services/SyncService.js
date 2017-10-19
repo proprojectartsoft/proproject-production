@@ -238,6 +238,7 @@ ppApp.service('SyncService', [
                                     method: 'POST',
                                     url: 'defectphoto/uploadfile',
                                     data: img,
+                                    withCredentials: true
                                 }, function(payload) {
                                     cnt++;
                                     if (cnt >= imgs.length) {
