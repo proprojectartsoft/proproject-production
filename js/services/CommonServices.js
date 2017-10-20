@@ -489,6 +489,89 @@ ppApp.service('CommonServices', [
             }
             data.quantity = Math.round(data.quantity * 100) / 100
         };
+        service.doTotal = function(type, parent) {
+            if (parent) {
+                parent.total_cost = 0;
+                if (type === 'resource' || type === 'piresource' || type === 'pisubresource') {
+                    angular.forEach(parent.resources, function(res) {
+                        if (isNaN(res.quantity)) {
+                            res.total_cost = 0;
+                        }
+                        if (isNaN(res.direct_cost)) {
+                            res.total_cost = 0;
+                        }
+                        //compute resource sale price
+                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
+                        //compute resource total including VAT/Tax
+                        var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
+                        res.total_cost = vatComponent;
+                        parent.total_cost = parent.total_cost + res.total_cost;
+                    });
+                }
+                if (type === 'pisubtask') {
+                    angular.forEach(parent.subtasks, function(stk) {
+                        if (isNaN(stk.total_cost)) {
+                            stk.total_cost = 0;
+                        }
+                        parent.total_cost = parent.total_cost + stk.total_cost;
+                    });
+                    angular.forEach(parent.resources, function(res) {
+                        //compute resource sale price
+                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
+                        //compute resource total including VAT/Tax
+                        var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
+                        res.total_cost = vatComponent;
+                        parent.total_cost = parent.total_cost + res.total_cost;
+                    });
+                }
+                if (type === 'pi') {
+                    angular.forEach(parent.pay_items, function(pi) {
+                        if (isNaN(pi.total_cost)) {
+                            pi.total_cost = 0;
+                        }
+                        parent.total_cost = parent.total_cost + pi.total_cost;
+                    });
+                }
+
+                if (type === 'payitem') {
+                    parent.total_cost = 0;
+                    angular.forEach(parent.pay_items, function(item) {
+                        item.total_cost = 0;
+                        if (item.resources.length !== 0) {
+                            angular.forEach(item.resources, function(res) {
+                                if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
+                                    //compute resource sale price
+                                    var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
+                                    //compute resource total including VAT/Tax
+                                    var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
+                                    res.total_cost = vatComponent;
+                                    item.total_cost = item.total_cost + res.total_cost;
+                                }
+                            })
+                        }
+                        if (item.subtasks.length !== 0) {
+                            angular.forEach(item.subtasks, function(stk) {
+                                stk.total_cost = 0;
+                                angular.forEach(stk.resources, function(res) {
+                                    if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
+                                        //compute resource sale price
+                                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
+                                        //compute resource total including VAT/Tax
+                                        var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
+                                        res.total_cost = vatComponent;
+                                        stk.total_cost = stk.total_cost + res.total_cost;
+                                    }
+                                })
+                                if (!isNaN(stk.total_cost)) {
+                                    item.total_cost = item.total_cost + stk.total_cost;
+                                }
+                            })
+                        }
+                        parent.total_cost = parent.total_cost + item.total_cost;
+                    })
+                }
+            }
+        };
         service.updateTitle = function(title, placeholder, titleShow) {
             if (title) {
                 if (placeholder === 'Resource') {
@@ -844,6 +927,230 @@ ppApp.service('CommonServices', [
                 prm.resolve(formData);
             })
             return prm.promise;
+        };
+
+        service.getCompletedForm = function(formId) {
+            var deffered = $q.defer();
+            //get all the fields for the current completed form
+            PostService.post({
+                method: 'GET',
+                url: 'forminstance',
+                params: {
+                    id: formId
+                }
+            }, function(res) {
+                var response = {
+                    formData: res.data
+                };
+
+                var getResources = function(data) {
+                        var prm = $q.defer();
+                        //get resources data
+                        if (data.formData.resource_field_id) {
+                            PostService.post({
+                                method: 'GET',
+                                url: 'resourcefield',
+                                params: {
+                                    id: data.formData.resource_field_id
+                                }
+                            }, function(r) {
+                                data.resourceField = r.data;
+                                angular.forEach(data.resourceField.resources, function(item) {
+                                    item.res_type_obj = service.filterByField(settings.resource_type, 'name', item.resource_type_name);
+                                    item.unit_obj = service.filterByField(settings.unit, 'id', item.unit_id);
+                                    item.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', item.abseteeism_reason_name);
+                                    item.total_cost = item.direct_cost * item.quantity + item.direct_cost * item.quantity * item.vat / 100;
+                                    if (item.current_day) {
+                                        var partsOfStr = item.current_day.split('-');
+                                        item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                    }
+                                });
+                                $rootScope.resourceField = data.resourceField;
+                                prm.resolve();
+                            }, function(err) {
+                                console.log(err);
+                                prm.resolve();
+                            });
+                        } else {
+                            prm.resolve();
+                        }
+                        return prm.promise;
+                    },
+                    getStaff = function(data) {
+                        var prm = $q.defer();
+                        //get staff data
+                        if (data.formData.staff_field_id) {
+                            PostService.post({
+                                method: 'GET',
+                                url: 'stafffield',
+                                params: {
+                                    id: data.formData.staff_field_id
+                                }
+                            }, function(r) {
+                                data.staffField = r.data;
+                                angular.forEach(data.staffField.resources, function(item) {
+                                    item.res_type_obj = service.filterByField(settings.resource_type, 'name', item.resource_type_name);
+                                    item.unit_obj = service.filterByField(settings.unit, 'id', item.unit_id);
+                                    item.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', item.abseteeism_reason_name);
+                                    if (item.current_day) {
+                                        var partsOfStr = item.current_day.split('-');
+                                        item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                    }
+                                    if (item.expiry_date) {
+                                        var partsOfStr = item.expiry_date.split('-');
+                                        item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                    }
+                                });
+                                $rootScope.staffField = data.staffField;
+                                prm.resolve();
+                            }, function(err) {
+                                console.log(err);
+                                prm.resolve();
+                            });
+                        } else {
+                            prm.resolve();
+                        }
+                        return prm.promise;
+                    },
+                    getPayitems = function(data) {
+                        var prm = $q.defer();
+                        //get payment data
+                        if (data.formData.pay_item_field_id) {
+                            PostService.post({
+                                method: 'GET',
+                                url: 'payitemfield',
+                                params: {
+                                    id: data.formData.pay_item_field_id
+                                }
+                            }, function(r) {
+                                data.payitemField = r.data;
+                                service.doTotal('payitem', data.payitemField)
+                                angular.forEach(data.payitemField.pay_items, function(item) {
+                                    item.unit_obj = service.filterByField(settings.unit, 'id', item.unit_id);
+                                    item.total_cost = 0;
+                                    angular.forEach(item.resources, function(res) {
+                                        res.res_type_obj = service.filterByField(settings.resource_type, 'name', res.resource_type_name);
+                                        res.unit_obj = service.filterByField(settings.unit, 'id', res.unit_id);
+                                        res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
+                                        if (res.current_day) {
+                                            var partsOfStr = res.current_day.split('-');
+                                            item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                        }
+                                        if (res.expiry_date) {
+                                            var partsOfStr = res.expiry_date.split('-');
+                                            item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                        }
+                                        // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                        item.total_cost += res.total_cost;
+                                    });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        subtask.total_cost = 0;
+                                        angular.forEach(subtask.resources, function(res) {
+                                            res.res_type_obj = service.filterByField(settings.resource_type, 'name', res.resource_type_name);
+                                            res.unit_obj = service.filterByField(settings.unit, 'id', res.unit_id);
+                                            res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
+                                            if (res.current_day) {
+                                                var partsOfStr = res.current_day.split('-');
+                                                item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                            }
+                                            if (res.expiry_date) {
+                                                var partsOfStr = res.expiry_date.split('-');
+                                                item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                            }
+                                            // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                            subtask.total_cost += res.total_cost;
+                                        });
+                                        item.total_cost += subtask.total_cost;
+                                    });
+                                });
+                                $rootScope.payitemField = data.payitemField;
+                                prm.resolve();
+                            }, function(err) {
+                                console.log(err);
+                                prm.resolve();
+                            });
+                        } else {
+                            prm.resolve();
+                        }
+                        return prm.promise;
+                    },
+                    getScheduling = function(data) {
+                        var prm = $q.defer();
+                        //get schedule data
+                        if (data.formData.scheduling_field_id) {
+                            PostService.post({
+                                method: 'GET',
+                                url: 'schedulingfield',
+                                params: {
+                                    id: data.formData.scheduling_field_id
+                                }
+                            }, function(r) {
+                                data.payitemField = r.data;
+                                service.doTotal('payitem', data.payitemField);
+                                angular.forEach(data.payitemField.pay_items, function(item) {
+                                    item.unit_obj = service.filterByField(settings.unit, 'id', item.unit_id);
+                                    item.total_cost = 0;
+                                    angular.forEach(item.resources, function(res) {
+                                        res.res_type_obj = service.filterByField(settings.resource_type, 'name', res.resource_type_name);
+                                        res.unit_obj = service.filterByField(settings.unit, 'id', res.unit_id);
+                                        res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
+                                        if (res.current_day) {
+                                            var partsOfStr = res.current_day.split('-');
+                                            item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                        }
+                                        if (res.expiry_date) {
+                                            var partsOfStr = res.expiry_date.split('-');
+                                            item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                        }
+                                        // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                        item.total_cost += res.total_cost;
+                                    });
+                                    angular.forEach(item.subtasks, function(subtask) {
+                                        subtask.total_cost = 0;
+                                        angular.forEach(subtask.resources, function(res) {
+                                            res.res_type_obj = service.filterByField(settings.resource_type, 'name', res.resource_type_name);
+                                            res.unit_obj = service.filterByField(settings.unit, 'id', res.unit_id);
+                                            res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
+                                            if (res.current_day) {
+                                                var partsOfStr = res.current_day.split('-');
+                                                item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                                res.current_day_obj = res.current_day;
+                                            }
+                                            if (res.expiry_date) {
+                                                var partsOfStr = res.expiry_date.split('-');
+                                                item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                                res.expiry_date_obj = res.expiry_date;
+                                            }
+                                            // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
+                                            subtask.total_cost += res.total_cost;
+                                        });
+                                        item.total_cost += subtask.total_cost;
+                                    });
+                                });
+                                $rootScope.payitemField = data.payitemField;
+                                prm.resolve();
+                            }, function(err) {
+                                console.log(err);
+                                prm.resolve();
+                            });
+                        } else {
+                            prm.resolve();
+                        }
+                        return prm.promise;
+                    };
+
+                var resPrm = getResources(response),
+                    staffPrm = getStaff(response),
+                    payPrm = getPayitems(response),
+                    schedulePrm = getScheduling(response);
+                Promise.all([resPrm, staffPrm, payPrm, schedulePrm]).then(function(r) {
+                    deffered.resolve(response);
+                })
+            }, function(err) {
+                deffered.reject("Form instance could not be loaded. Please try again later.");
+            });
+
+            return deffered.promise;
         };
 
 

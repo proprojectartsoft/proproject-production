@@ -245,50 +245,10 @@ ppApp.controller('FormInstanceCtrl', [
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
                     if ($scope.filter.substate)
-                        $scope.doTotal('pisubtask', $scope.filter.substate);
+                        CommonServices.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
             $scope.goToTop();
-        }
-
-        $scope.doTotal = function(predicate, data) {
-            if (predicate === 'payitem') {
-                data.total_cost = 0;
-                angular.forEach(data.pay_items, function(item) {
-                    item.total_cost = 0;
-                    if (item.resources.length !== 0) {
-                        angular.forEach(item.resources, function(res) {
-                            if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
-                                //compute resource sale price
-                                var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
-                                //compute resource total including VAT/Tax
-                                var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
-                                res.total_cost = vatComponent;
-                                item.total_cost = item.total_cost + res.total_cost;
-                            }
-                        })
-                    }
-                    if (item.subtasks.length !== 0) {
-                        angular.forEach(item.subtasks, function(stk) {
-                            stk.total_cost = 0;
-                            angular.forEach(stk.resources, function(res) {
-                                if (!isNaN(res.quantity) && !isNaN(res.direct_cost)) {
-                                    //compute resource sale price
-                                    var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
-                                    //compute resource total including VAT/Tax
-                                    var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
-                                    res.total_cost = vatComponent;
-                                    stk.total_cost = stk.total_cost + res.total_cost;
-                                }
-                            })
-                            if (!isNaN(stk.total_cost)) {
-                                item.total_cost = item.total_cost + stk.total_cost;
-                            }
-                        })
-                    }
-                    data.total_cost = data.total_cost + item.total_cost;
-                })
-            }
         }
 
         $scope.filter = {
@@ -304,203 +264,21 @@ ppApp.controller('FormInstanceCtrl', [
         $rootScope.slideHeaderHelper = false;
 
         //get all the fields for the current completed form
-        PostService.post({
-            method: 'GET',
-            url: 'forminstance',
-            params: {
-                id: $rootScope.formId
-            }
-        }, function(res) {
-            var data = res.data;
-            $scope.formData = data;
+        CommonServices.getCompletedForm($stateParams.formId).then(function(response) {
+            $scope.formData = response.formData;
+            $scope.resourceField = $scope.resourceField || response.resourceField;
+            $scope.staffField = $scope.staffField || response.staffField;
+            $scope.payitemField = $scope.payitemField || response.payitemField;
             $scope.titleShow = $scope.formData.name;
-            //get resources data
-            if (data.resource_field_id) {
-                PostService.post({
-                    method: 'GET',
-                    url: 'resourcefield',
-                    params: {
-                        id: data.resource_field_id
-                    }
-                }, function(r) {
-                    var res = r.data;
-                    $scope.resourceField = res;
-                    angular.forEach($scope.resourceField.resources, function(item) {
-                        setResourceType(item);
-                        setUnit(item);
-                        setAbsenteeism(item);
-                        item.total_cost = item.direct_cost * item.quantity + item.direct_cost * item.quantity * item.vat / 100;
-                        if (item.current_day) {
-                            var partsOfStr = item.current_day.split('-');
-                            item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                        }
-                    });
-                    $rootScope.resourceField = $scope.resourceField;
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-            //get staff data
-            if (data.staff_field_id) {
-                PostService.post({
-                    method: 'GET',
-                    url: 'stafffield',
-                    params: {
-                        id: data.staff_field_id
-                    }
-                }, function(r) {
-                    var res = r.data;
-                    $scope.staffField = res;
-                    angular.forEach($scope.staffField.resources, function(item) {
-                        setResourceType(item);
-                        setUnit(item);
-                        setAbsenteeism(item);
-                        if (item.current_day) {
-                            var partsOfStr = item.current_day.split('-');
-                            item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                        }
-                        if (item.expiry_date) {
-                            var partsOfStr = item.expiry_date.split('-');
-                            item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                        }
-                    });
-                    $rootScope.staffField = $scope.staffField;
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-            //get schedule data
-            if (data.scheduling_field_id) {
-                PostService.post({
-                    method: 'GET',
-                    url: 'schedulingfield',
-                    params: {
-                        id: data.scheduling_field_id
-                    }
-                }, function(r) {
-                    var res = r.data;
-                    $scope.payitemField = res;
-                    $scope.doTotal('payitem', $scope.payitemField);
-                    angular.forEach($scope.payitemField.pay_items, function(item) {
-                        setUnit(item);
-                        item.total_cost = 0;
-                        angular.forEach(item.resources, function(res) {
-                            setResourceType(res);
-                            setUnit(res);
-                            setAbsenteeism(res);
-                            if (res.current_day) {
-                                var partsOfStr = res.current_day.split('-');
-                                item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            }
-                            if (res.expiry_date) {
-                                var partsOfStr = res.expiry_date.split('-');
-                                item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            }
-                            // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                            item.total_cost += res.total_cost;
-                        });
-                        angular.forEach(item.subtasks, function(subtask) {
-                            subtask.total_cost = 0;
-                            angular.forEach(subtask.resources, function(res) {
-                                setResourceType(res);
-                                setUnit(res);
-                                setAbsenteeism(res);
-                                if (res.current_day) {
-                                    var partsOfStr = res.current_day.split('-');
-                                    item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                    res.current_day_obj = res.current_day;
-                                }
-                                if (res.expiry_date) {
-                                    var partsOfStr = res.expiry_date.split('-');
-                                    item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                    res.expiry_date_obj = res.expiry_date;
-                                }
-                                // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                                subtask.total_cost += res.total_cost;
-                            });
-                            item.total_cost += subtask.total_cost;
-                        });
-                    });
-                    $rootScope.payitemField = $scope.payitemField;
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-            //get payment data
-            if (data.pay_item_field_id) {
-                PostService.post({
-                    method: 'GET',
-                    url: 'payitemfield',
-                    params: {
-                        id: data.pay_item_field_id
-                    }
-                }, function(r) {
-                    var res = r.data;
-                    $scope.payitemField = res;
-                    $scope.doTotal('payitem', $scope.payitemField)
-                    angular.forEach($scope.payitemField.pay_items, function(item) {
-                        setUnit(item);
-                        item.total_cost = 0;
-                        angular.forEach(item.resources, function(res) {
-                            setResourceType(res);
-                            setUnit(res);
-                            setAbsenteeism(res);
-                            if (res.current_day) {
-                                var partsOfStr = res.current_day.split('-');
-                                item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            }
-                            if (res.expiry_date) {
-                                var partsOfStr = res.expiry_date.split('-');
-                                item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                            }
-                            // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                            item.total_cost += res.total_cost;
-                        });
-                        angular.forEach(item.subtasks, function(subtask) {
-                            subtask.total_cost = 0;
-                            angular.forEach(subtask.resources, function(res) {
-                                setResourceType(res);
-                                setUnit(res);
-                                setAbsenteeism(res);
-                                if (res.current_day) {
-                                    var partsOfStr = res.current_day.split('-');
-                                    item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                }
-                                if (res.expiry_date) {
-                                    var partsOfStr = res.expiry_date.split('-');
-                                    item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                }
-                                // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
-                                subtask.total_cost += res.total_cost;
-                            });
-                            item.total_cost += subtask.total_cost;
-                        });
-                    });
-                    $rootScope.payitemField = $scope.payitemField;
-                }, function(err) {
-                    console.log(err);
-                });
-            }
-        }, function(err) {
-            console.log(err);
+        }, function(reason) {
+            CommonServices.show_message_popup("Error", reason);
+            $state.go('app.shared');
         });
 
         if ($scope.formData) {
             if ($scope.formData.length !== 0) {
                 $scope.hasData = true;
             }
-        }
-
-        function setResourceType(item) {
-            item.res_type_obj = CommonServices.filterByField($scope.resource_type_list, 'name', item.resource_type_name);
-        }
-
-        function setUnit(item) {
-            item.unit_obj = CommonServices.filterByField($scope.unit_list, 'id', item.unit_id);
-        }
-
-        function setAbsenteeism(item) {
-            item.absenteeism_obj = CommonServices.filterByField($scope.abs_list, 'reason', item.abseteeism_reason_name);
         }
 
         $scope.back = function() {
@@ -575,7 +353,6 @@ ppApp.controller('FormInstanceCtrl', [
                 $scope.filter.email = contact;
                 $timeout(function() {
                     SettingService.show_create_popup($scope.filter.email, $scope.importContact, sendEmail, id);
-
                     // var popup = $ionicPopup.show(createPopup(id));
                 });
             }
@@ -594,7 +371,6 @@ ppApp.controller('FormInstanceCtrl', [
         }
         $scope.shareThis = function(predicate) {
             SettingService.show_create_popup($scope.filter.email, $scope.importContact, sendEmail, predicate.id);
-
             // var popup = $ionicPopup.show(createPopup(predicate.id));
         };
 

@@ -229,7 +229,7 @@ ppApp.controller('FormCtrl', [
                     pullDown();
                     break;
                 case 'resource':
-                    $scope.doTotal('resource', $scope.resourceField);
+                    CommonServices.doTotal('resource', $scope.resourceField);
                     $scope.titleShow = 'Resources';
                     $scope.filter.state = 'resource';
                     $scope.filter.substate = null;
@@ -256,7 +256,7 @@ ppApp.controller('FormCtrl', [
                 case 'scheduling':
                     if ($scope.filter.substate) {
                         $scope.filter.state = 'scheduling';
-                        $scope.doTotal('pi', $scope.payitemField);
+                        CommonServices.doTotal('pi', $scope.payitemField);
                         $scope.filter.substateStkRes = null;
                         $scope.filter.substateStk = null;
                         $scope.filter.substateRes = null;
@@ -279,7 +279,7 @@ ppApp.controller('FormCtrl', [
                     break;
                 case 'schedulingStk':
                     $scope.filter.state = 'scheduling';
-                    $scope.doTotal('pisubtask', $scope.filter.substate);
+                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
                     $scope.filter.substateStk = null;
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'scheduling';
@@ -291,7 +291,7 @@ ppApp.controller('FormCtrl', [
                     break;
                 case 'schedulingSubRes':
                     $scope.filter.state = 'scheduling';
-                    $scope.doTotal('pisubtask', $scope.filter.substateStk);
+                    CommonServices.doTotal('pisubtask', $scope.filter.substateStk);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateStkRes = null;
                     $ionicScrollDelegate.resize();
@@ -304,7 +304,7 @@ ppApp.controller('FormCtrl', [
                     break;
                 case 'schedulingRes':
                     $scope.filter.state = 'scheduling';
-                    $scope.doTotal('piresource', $scope.filter.substate);
+                    CommonServices.doTotal('piresource', $scope.filter.substate);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateRes = null;
                     $ionicScrollDelegate.resize();
@@ -318,7 +318,7 @@ ppApp.controller('FormCtrl', [
                 case 'payitem':
                     if ($scope.filter.substate) {
                         $scope.filter.state = 'payitem';
-                        $scope.doTotal('pi', $scope.payitemField);
+                        CommonServices.doTotal('pi', $scope.payitemField);
                         $scope.filter.substateStkRes = null;
                         $scope.filter.substateStk = null;
                         $scope.filter.substateRes = null;
@@ -341,7 +341,7 @@ ppApp.controller('FormCtrl', [
                     break;
                 case 'payitemStk':
                     $scope.filter.state = 'payitem';
-                    $scope.doTotal('pisubtask', $scope.filter.substate);
+                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
                     $scope.filter.substateStk = null;
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'payitem';
@@ -353,7 +353,7 @@ ppApp.controller('FormCtrl', [
                     break;
                 case 'payitemSubRes':
                     $scope.filter.state = 'payitem';
-                    $scope.doTotal('pisubresource', $scope.filter.substateStk);
+                    CommonServices.doTotal('pisubresource', $scope.filter.substateStk);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateStkRes = null;
                     $ionicScrollDelegate.resize();
@@ -366,7 +366,7 @@ ppApp.controller('FormCtrl', [
                     break;
                 case 'payitemRes':
                     $scope.filter.state = 'payitem';
-                    $scope.doTotal('piresource', $scope.filter.substate);
+                    CommonServices.doTotal('piresource', $scope.filter.substate);
                     $scope.filter.actionBtnShow = true;
                     $scope.filter.substateRes = null;
                     $ionicScrollDelegate.resize();
@@ -426,7 +426,7 @@ ppApp.controller('FormCtrl', [
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
-                    $scope.doTotal('pisubtask', $scope.filter.substate);
+                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
                     break;
                 case 'payitem':
                     $scope.filter.state = state;
@@ -438,7 +438,7 @@ ppApp.controller('FormCtrl', [
                     $scope.linkAux = $scope.aux.linkAux;
                     $scope.titleShow = $scope.aux.titleShow;
                     $ionicScrollDelegate.resize();
-                    $scope.doTotal('pisubtask', $scope.filter.substate);
+                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
                     break;
             }
             $scope.goToTop();
@@ -449,52 +449,6 @@ ppApp.controller('FormCtrl', [
         }).then(function(popover) {
             $scope.popover = popover;
         });
-
-        $scope.doTotal = function(type, parent) {
-            if (parent) {
-                parent.total_cost = 0;
-                if (type === 'resource' || type === 'piresource' || type === 'pisubresource') {
-                    angular.forEach(parent.resources, function(res) {
-                        if (isNaN(res.quantity)) {
-                            res.total_cost = 0;
-                        }
-                        if (isNaN(res.direct_cost)) {
-                            res.total_cost = 0;
-                        }
-                        //compute resource sale price
-                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
-                        //compute resource total including VAT/Tax
-                        var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
-                        res.total_cost = vatComponent;
-                        parent.total_cost = parent.total_cost + res.total_cost;
-                    });
-                }
-                if (type === 'pisubtask') {
-                    angular.forEach(parent.subtasks, function(stk) {
-                        if (isNaN(stk.total_cost)) {
-                            stk.total_cost = 0;
-                        }
-                        parent.total_cost = parent.total_cost + stk.total_cost;
-                    });
-                    angular.forEach(parent.resources, function(res) {
-                        //compute resource sale price
-                        var resSalePrice = res.direct_cost * (1 + (res.resource_margin || 0) / 100) * (1 + ($rootScope.proj_margin || 0) / 100);
-                        //compute resource total including VAT/Tax
-                        var vatComponent = resSalePrice * (1 + (res.vat || 0) / 100) * res.quantity;
-                        res.total_cost = vatComponent;
-                        parent.total_cost = parent.total_cost + res.total_cost;
-                    });
-                }
-                if (type === 'pi') {
-                    angular.forEach(parent.pay_items, function(pi) {
-                        if (isNaN(pi.total_cost)) {
-                            pi.total_cost = 0;
-                        }
-                        parent.total_cost = parent.total_cost + pi.total_cost;
-                    });
-                }
-            }
-        }
 
         //Open resource filter with the corresponding resources list
         $scope.openPopover = function($event, predicate, test) {
