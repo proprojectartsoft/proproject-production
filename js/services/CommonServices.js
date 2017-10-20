@@ -660,7 +660,11 @@ ppApp.service('CommonServices', [
                         } else {
                             $timeout(function() {
                                 formUp.close();
-                                $location.path("/app/view/" + $rootScope.projectId + "/form/" + $rootScope.formId);
+                                $state.go('app.formInstance', {
+                                    'projectId': $rootScope.projectId,
+                                    'type': 'form',
+                                    'formId': $rootScope.formId
+                                });
                             });
                         }
                     };
@@ -819,14 +823,14 @@ ppApp.service('CommonServices', [
                             url: 'resourcefield',
                             data: specialFields.resourceField
                         }, function(res) {
-                            if (method == 'POST')
-                                formData.resource_field_id = res.data.id;
+                            // if (method == 'POST')
+                            formData.resource_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            if (method == 'POST') {
-                                formData.resourceField = formData.resourceField || [];
-                                formData.resourceField.push(specialFields.resourceField);
-                            }
+                            // if (method == 'POST') {
+                            formData.resourceField = formData.resourceField || [];
+                            formData.resourceField.push(specialFields.resourceField);
+                            // }
                             def.resolve();
                         });
                     } else {
@@ -855,14 +859,14 @@ ppApp.service('CommonServices', [
                             url: 'payitemfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            if (method == 'POST')
-                                formData.pay_item_field_id = res.data.id;
+                            // if (method == 'POST')
+                            formData.pay_item_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            if (method == 'POST') {
-                                formData.payitemField = formData.payitemField || [];
-                                formData.payitemField.push(specialFields.payitemField);
-                            }
+                            // if (method == 'POST') {
+                            formData.payitemField = formData.payitemField || [];
+                            formData.payitemField.push(specialFields.payitemField);
+                            // }
                             def.resolve();
                         });
                     } else {
@@ -891,14 +895,14 @@ ppApp.service('CommonServices', [
                             url: 'schedulingfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            if (method == 'POST')
-                                formData.scheduling_field_id = res.data.id;
+                            // if (method == 'POST')
+                            formData.scheduling_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            if (method == 'POST') {
-                                formData.schedField = formData.schedField || [];
-                                formData.schedField.push(specialFields.payitemField);
-                            }
+                            // if (method == 'POST') {
+                            formData.schedField = formData.schedField || [];
+                            formData.schedField.push(specialFields.payitemField);
+                            // }
                             def.resolve();
                         });
                     } else {
@@ -918,14 +922,14 @@ ppApp.service('CommonServices', [
                             url: 'stafffield',
                             data: specialFields.staffField
                         }, function(res) {
-                            if (method == 'POST')
-                                formData.staff_field_id = res.data.id;
+                            // if (method == 'POST')
+                            formData.staff_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            if (method == 'POST') {
-                                formData.staffField = formData.staffField || [];
-                                formData.staffField.push(specialFields.staffField);
-                            }
+                            // if (method == 'POST') {
+                            formData.staffField = formData.staffField || [];
+                            formData.staffField.push(specialFields.staffField);
+                            // }
                             def.resolve();
                         });
                     } else {
