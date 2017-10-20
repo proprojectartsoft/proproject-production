@@ -2,7 +2,7 @@
     <form class="form-new-fields">
         <ion-list show-delete="data.showDelete">
             <ion-item ng-repeat="resource in resourceField.resources" item="resource" class="item-remove-animate" ng-click="goState('resource', resource)">
-                <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>
+                <!-- <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span> -->
                 <span ng-if="!resource.name">Resource {{$index + 1}}</span>
                 <span ng-if="resource.name">{{resource.name}} </span>
 

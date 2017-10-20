@@ -760,7 +760,7 @@ ppApp.service('CommonServices', [
                 addPayitemToServer = function() {
                     var def = $q.defer();
                     if (formData.pay_item_field_design || formData.pay_item_field_id) {
-                        angular.forEach(specialFields.payitemField.pay_items, function(item) { //TODO:if no resourve, subtask => payitemField is undefined
+                        angular.forEach(specialFields.payitemField.pay_items, function(item) {
                             if (item.unit_obj) {
                                 item.unit = item.unit_obj.name;
                                 item.unit_id = item.unit_obj.id;

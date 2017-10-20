@@ -920,7 +920,7 @@ ppApp.controller('FormCtrl', [
                         CommonServices.saveSpecialFields($scope.formData, {
                             resourceField: $scope.resourceField,
                             staffField: $scope.staffField,
-                            payitemField: $rootScope.payitemField
+                            payitemField: $scope.payitemField
                         }).then(function(result) {
                             var data = ConvertersService.designToInstance(result, true);
                             //automatically sync previousely offline created forms

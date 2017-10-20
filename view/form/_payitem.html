@@ -2,7 +2,7 @@
     <form class="form-new-fields">
         <ion-list show-delete="data.showDelete">
             <ion-item ng-repeat="payitem in payitemField.pay_items" item="resource" class="item-remove-animate" ng-click="goState('payitem', payitem)">
-                <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span>
+                <!-- <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span> -->
                 <span ng-if="!payitem.description">Pay-item {{$index + 1}}</span>
                 <span ng-if="payitem.description">{{payitem.description}}</span>
                 <div class="item-subtotal">
@@ -77,7 +77,7 @@
                 <div class="form-new-fields" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete" ng-if="filter.substate.subtasks.length !== 0">
                         <ion-item ng-repeat="stk in filter.substate.subtasks" item="stk" class="item-remove-animate" ng-click="goStateDown('payitem', 'subtask', stk)">
-                            <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span>
+                            <!-- <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span> -->
                             <span ng-if="!stk.description">Subtask {{$index + 1}}</span>
                             <span ng-if="stk.description">{{stk.description}}</span>
                             <div class="item-subtotal">
@@ -90,7 +90,7 @@
                     </ion-list>
                     <ion-list show-delete="data.showDelete" ng-if="filter.substate.resources.length !== 0">
                         <ion-item ng-repeat="res in filter.substate.resources" item="resource" class="item-remove-animate" ng-click="goStateDown('payitem', 'res', res)">
-                            <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span>
+                            <!-- <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #287BA7;color:#fff">{{$index + 1}}</span> -->
                             <span ng-if="!res.name">Resource {{$index + 1}}</span>
                             <span ng-if="res.name">{{res.name}}</span>
 
@@ -150,7 +150,7 @@
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete">
                         <ion-item ng-repeat="stkres in filter.substateStk.resources" item="stkres" class="item-remove-animate" ng-click="goStateDown('payitem', 'subres', stkres)">
-                            <span class="badge" class="pp-label-resource">{{$index + 1}}</span>
+                            <!-- <span class="badge" class="pp-label-resource">{{$index + 1}}</span> -->
                             <span ng-if="!stkres.name">Resource {{$index + 1}}</span>
                             <span ng-if="stkres.name">{{stkres.name}}</span>
 
