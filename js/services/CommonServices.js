@@ -778,7 +778,7 @@ ppApp.service('CommonServices', [
             });
         };
 
-        service.saveSpecialFields = function(formData, specialFields) {
+        service.saveSpecialFields = function(formData, specialFields, method) {
             var prm = $q.defer();
             var prepareResources = function(resources) {
                 angular.forEach(resources, function(item) { //
@@ -812,17 +812,21 @@ ppApp.service('CommonServices', [
                     var def = $q.defer();
                     if (formData.resource_field_design || formData.resource_field_id) {
                         specialFields.resourceField.resources = prepareResources(specialFields.resourceField.resources);
-                        specialFields.resourceField.id = 0;
+                        if (method == 'POST')
+                            specialFields.resourceField.id = 0;
                         PostService.post({
-                            method: 'POST',
+                            method: method,
                             url: 'resourcefield',
                             data: specialFields.resourceField
                         }, function(res) {
-                            formData.resource_field_id = res.data.id;
+                            if (method == 'POST')
+                                formData.resource_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            formData.resourceField = formData.resourceField || [];
-                            formData.resourceField.push(specialFields.resourceField);
+                            if (method == 'POST') {
+                                formData.resourceField = formData.resourceField || [];
+                                formData.resourceField.push(specialFields.resourceField);
+                            }
                             def.resolve();
                         });
                     } else {
@@ -844,17 +848,21 @@ ppApp.service('CommonServices', [
                                 subtask.resources = prepareResources(subtask.resources);
                             });
                         });
-                        specialFields.payitemField.id = 0;
+                        if (method == 'POST')
+                            specialFields.payitemField.id = 0;
                         PostService.post({
-                            method: 'POST',
+                            method: method,
                             url: 'payitemfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            formData.pay_item_field_id = res.data.id;
+                            if (method == 'POST')
+                                formData.pay_item_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            formData.payitemField = formData.payitemField || [];
-                            formData.payitemField.push(specialFields.payitemField);
+                            if (method == 'POST') {
+                                formData.payitemField = formData.payitemField || [];
+                                formData.payitemField.push(specialFields.payitemField);
+                            }
                             def.resolve();
                         });
                     } else {
@@ -876,17 +884,21 @@ ppApp.service('CommonServices', [
                                 item.subtasks = prepareResources(item.subtasks);
                             });
                         });
-                        specialFields.payitemField.id = 0;
+                        if (method == 'POST')
+                            specialFields.payitemField.id = 0;
                         PostService.post({
-                            method: 'POST',
+                            method: method,
                             url: 'schedulingfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            formData.scheduling_field_id = res.data.id;
+                            if (method == 'POST')
+                                formData.scheduling_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            formData.schedField = formData.schedField || [];
-                            formData.schedField.push(specialFields.payitemField);
+                            if (method == 'POST') {
+                                formData.schedField = formData.schedField || [];
+                                formData.schedField.push(specialFields.payitemField);
+                            }
                             def.resolve();
                         });
                     } else {
@@ -899,17 +911,21 @@ ppApp.service('CommonServices', [
                     var def = $q.defer();
                     if (formData.staff_field_design || formData.staff_field_id) {
                         specialFields.staffField.resources = prepareResources(specialFields.staffField.resources);
-                        specialFields.staffField.id = 0;
+                        if (method == 'POST')
+                            specialFields.staffField.id = 0;
                         PostService.post({
-                            method: 'POST',
+                            method: method,
                             url: 'stafffield',
                             data: specialFields.staffField
                         }, function(res) {
-                            formData.staff_field_id = res.data.id;
+                            if (method == 'POST')
+                                formData.staff_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            formData.staffField = formData.staffField || [];
-                            formData.staffField.push(specialFields.staffField);
+                            if (method == 'POST') {
+                                formData.staffField = formData.staffField || [];
+                                formData.staffField.push(specialFields.staffField);
+                            }
                             def.resolve();
                         });
                     } else {

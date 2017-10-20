@@ -553,7 +553,7 @@ ppApp.controller('EditCtrl', [
         });
 
 
-        $scope.submit = function(help) { //TODO: refactor this
+        $scope.submit = function(help) {
             if (!navigator.onLine) {
                 SettingService.show_message_popup('Please note', 'You are offline. You can modify forms when online.');
             } else {
@@ -561,189 +561,20 @@ ppApp.controller('EditCtrl', [
                     if (res) {
                         $timeout(function() {
                             var formUp = SettingService.show_loading_popup('Submitting');
-
-                            if ($scope.formData.resource_field_id) {
-                                angular.forEach($rootScope.resourceField.resources, function(item) {
-                                    if (item.unit_obj) {
-                                        item.unit_id = item.unit_obj.id;
-                                        item.unit_name = item.unit_obj.name;
-                                    }
-                                    if (item.res_type_obj) {
-                                        item.resource_type_id = item.res_type_obj.id;
-                                        item.resource_type_name = item.res_type_obj.name;
-                                    }
-                                    if (item.stage_obj) {
-                                        item.stage_id = item.stage_obj.id;
-                                        item.stage_name = item.stage_obj.name;
-                                    }
-                                    if (item.absenteeism_obj) {
-                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                    }
-                                    if (item.current_day_obj) {
-                                        item.current_day = new Date(item.current_day_obj).getTime();
-                                    }
-                                });
-                                PostService.post({
+                            CommonServices.saveSpecialFields($scope.formData, {
+                                resourceField: $rootScope.resourceField,
+                                staffField: $rootScope.staffField,
+                                payitemField: $rootScope.payitemField
+                            }, 'PUT').then(function(result) {
+                                CommonServices.saveFormToServer({
                                     method: 'PUT',
-                                    url: 'resourcefield',
-                                    data: $rootScope.resourceField
-                                }, function(res) {
-
-                                }, function(err) {
-                                    console.log(err);
-                                });
-                            }
-                            if ($scope.formData.pay_item_field_id) {
-                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                    if (item.unit_obj) {
-                                        item.unit = item.unit_obj.name;
-                                        item.unit_id = item.unit_obj.id;
+                                    url: 'forminstance',
+                                    data: ConvertersService.instanceToUpdate(result),
+                                    params: {
+                                        'id': $rootScope.formId
                                     }
-                                    angular.forEach(item.resources, function(res) {
-                                        if (res.unit_obj) {
-                                            res.unit_id = res.unit_obj.id;
-                                            res.unit_name = res.unit_obj.name;
-                                        }
-                                        if (res.res_type_obj) {
-                                            res.resource_type_id = res.res_type_obj.id;
-                                            res.resource_type_name = res.res_type_obj.name;
-                                        }
-                                        if (res.absenteeism_obj) {
-                                            res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                        }
-                                        if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj;
-                                        }
-                                        if (res.expiry_date_obj) {
-                                            var date = new Date(res.expiry_date_obj);
-                                            res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                        }
-                                    });
-                                    angular.forEach(item.subtasks, function(subtask) {
-                                        angular.forEach(subtask.resources, function(res) {
-                                            if (res.unit_obj) {
-                                                res.unit_id = res.unit_obj.id;
-                                                res.unit_name = res.unit_obj.name;
-                                            }
-                                            if (res.res_type_obj) {
-                                                res.resource_type_id = res.res_type_obj.id;
-                                                res.resource_type_name = res.res_type_obj.name;
-                                            }
-                                            if (res.absenteeism_obj) {
-                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                            }
-                                            if (res.current_day_obj) {
-                                                res.current_day = res.current_day_obj;
-                                            }
-                                            if (res.expiry_date_obj) {
-                                                var date = new Date(res.expiry_date_obj);
-                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                            }
-                                        });
-                                    });
-                                });
-                                PostService.post({
-                                    method: 'PUT',
-                                    url: 'payitemfield',
-                                    data: $rootScope.payitemField
-                                }, function(res) {
-
-                                }, function(err) {
-                                    console.log(err);
-                                });
-                            }
-                            if ($scope.formData.scheduling_field_id) {
-                                angular.forEach($rootScope.payitemField.pay_items, function(item) {
-                                    if (item.unit_obj) {
-                                        item.unit = item.unit_obj.name;
-                                        item.unit_id = item.unit_obj.id;
-                                    }
-                                    angular.forEach(item.resources, function(res) {
-                                        if (res.unit_obj) {
-                                            res.unit_id = res.unit_obj.id;
-                                            res.unit_name = res.unit_obj.name;
-                                        }
-                                        if (res.res_type_obj) {
-                                            res.resource_type_id = res.res_type_obj.id;
-                                            res.resource_type_name = res.res_type_obj.name;
-                                        }
-                                        if (res.absenteeism_obj) {
-                                            res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                        }
-                                        if (res.current_day_obj) {
-                                            res.current_day = res.current_day_obj;
-                                        }
-                                        if (res.expiry_date_obj) {
-                                            var date = new Date(res.expiry_date_obj);
-                                            res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                        }
-                                    });
-                                    angular.forEach(item.subtasks, function(subtask) {
-                                        angular.forEach(subtask.resources, function(res) {
-                                            if (res.unit_obj) {
-                                                res.unit_id = res.unit_obj.id;
-                                                res.unit_name = res.unit_obj.name;
-                                            }
-                                            if (res.res_type_obj) {
-                                                res.resource_type_id = res.res_type_obj.id;
-                                                res.resource_type_name = res.res_type_obj.name;
-                                            }
-                                            if (res.absenteeism_obj) {
-                                                res.abseteeism_reason_name = res.absenteeism_obj.reason;
-                                            }
-                                            if (res.current_day_obj) {
-                                                res.current_day = res.current_day_obj.getTime();
-                                            }
-                                            if (res.expiry_date_obj) {
-                                                var date = new Date(res.expiry_date_obj);
-                                                res.expiry_date = date.getDate() + '.' + (date.getMonth() + 1) + '.' + date.getFullYear();
-                                            }
-                                        });
-                                    });
-                                });
-                                PostService.post({
-                                    method: 'PUT',
-                                    url: 'schedulingfield',
-                                    data: $rootScope.payitemField
-                                }, function(res) {
-
-                                }, function(err) {
-                                    console.log(err);
-                                });
-                            }
-                            if ($scope.formData.staff_field_id) {
-                                angular.forEach($rootScope.staffField.resources, function(item) {
-                                    if (item.res_type_obj) {
-                                        item.resource_type_id = item.res_type_obj.id;
-                                        item.resource_type_name = item.res_type_obj.name;
-                                    }
-                                    if (item.absenteeism_obj) {
-                                        item.abseteeism_reason_name = item.absenteeism_obj.reason;
-                                        item.absenteeism_obj.reason;
-                                    }
-                                    if (item.expiry_date_obj) {
-                                        item.expiry_date = item.expiry_date_obj.getFullYear() + '-' + (item.expiry_date_obj.getMonth() + 1) + '-' + item.expiry_date_obj.getDate();
-                                    }
-                                });
-                                PostService.post({
-                                    method: 'PUT',
-                                    url: 'stafffield',
-                                    data: $rootScope.staffField
-                                }, function(res) {
-
-                                }, function(err) {
-                                    console.log(err);
-                                });
-                            }
-
-                            CommonServices.saveFormToServer({
-                                method: 'PUT',
-                                url: 'forminstance',
-                                data: ConvertersService.instanceToUpdate($scope.formData),
-                                params: {
-                                    'id': $rootScope.formId
-                                }
-                            }, [], formUp); //$scope.imgToAdd
+                                }, [], formUp); //$scope.imgToAdd
+                            })
                         });
                     }
                 });
@@ -760,7 +591,7 @@ ppApp.controller('EditCtrl', [
                             resourceField: $rootScope.resourceField,
                             staffField: $rootScope.staffField,
                             payitemField: $rootScope.payitemField
-                        }).then(function(result) {
+                        }, 'POST').then(function(result) {
                             //automatically sync previousely offline created forms
                             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
                                 SyncService.sync().then(function(res) {

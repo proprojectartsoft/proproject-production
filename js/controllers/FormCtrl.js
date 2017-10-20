@@ -855,7 +855,7 @@ ppApp.controller('FormCtrl', [
                             resourceField: $scope.resourceField,
                             staffField: $scope.staffField,
                             payitemField: $scope.payitemField
-                        }).then(function(result) {
+                        }, 'POST').then(function(result) {
                             var data = ConvertersService.designToInstance(result, true);
                             //automatically sync previousely offline created forms
                             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
