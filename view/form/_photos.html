@@ -9,7 +9,7 @@
                     <img ng-src="{{imgURI[$index].url}}" ng-if="imgURI[$index].url" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                     <img data-ng-src="data:image/png;base64,{{imgURI[$index].base64String}}" ng-if="!imgURI[$index].url" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                 </div>
-                <div>
+                <div ng-if='!disablePhotosActions'>
                     <button class="button button-assertive" ng-click='removePicture()' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px; padding: 0px;">Remove</button>
                 </div>
             </div>
@@ -18,7 +18,7 @@
                     <img ng-src="{{imgURI[$index + 1].url}}" ng-if="imgURI[$index + 1].url" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                     <img data-ng-src="data:image/png;base64,{{imgURI[$index + 1].base64String}}" ng-if="!imgURI[$index + 1].url" width="100%;-ms-transform: scale(0.3,0.3);-webkit-transform: scale(0.3,0.3); transform: scale(0.3,0.3);" />
                 </div>
-                <div>
+                <div ng-if='!disablePhotosActions'>
                     <button class="button button-assertive" ng-click='removePicture()' style=" min-height: auto;line-height: 30px;font-size: 15px;width: 100%;margin-top: 5px; padding: 0px;">Remove</button>
                 </div>
             </div>

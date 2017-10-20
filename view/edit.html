@@ -1,12 +1,12 @@
 <ion-view title="Form" id="form" cache-view="false">
-    <ion-header-bar align-title="left" class="bar-subheader item item-button-left subHeader-form-bar"  ng-click="backHelper()">
+    <ion-header-bar align-title="left" class="bar-subheader item item-button-left subHeader-form-bar" ng-click="backHelper()">
         <div class="back-arrow ion-ios-arrow-left"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form'">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
     <ion-content class="blue-bgd" delegate-handle="mainScroll" ng-class="{'swipe-preview': filter.state !== 'form' || repeatable == true}">
         <div class="content">
             <div class="list" ng-if="filter.state === 'form'">
-<!--                                <a class="item item-button-left subHeader-form-bar" ng-click="back()"
+                <!--                                <a class="item item-button-left subHeader-form-bar" ng-click="back()"
                                    href="#/app/view/{{projectId}}/{{formData.category_id}}">
                                     <div class="back-arrow ion-ios-arrow-left"></div>
                                     <div class="header-prj-text">{{formData.category}}</div>
@@ -18,32 +18,25 @@
                 </div>
                 <form class="form-container-bgd">
                     <ion-list>
-                        <div ng-repeat="fieldset in formData.field_group_instances track by $index" fs
-                             data="fieldset" style="position: relative; margin-bottom:5px">
+                        <div ng-repeat="fieldset in formData.field_group_instances track by $index" fs data="fieldset" style="position: relative; margin-bottom:5px">
 
-                            <ion-item  id="{{formData.id}}:{{$index}}"
-                                       ng-click="toggleGroup(fieldset, formData.id + ':' + $index)"
-                                       ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}"
-                                       class="item-stable item fs all-field-header" style="width:100%; padding: 0px !important">
+                            <ion-item id="{{formData.id}}:{{$index}}" ng-click="toggleGroup(fieldset, formData.id + ':' + $index)" ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}" class="item-stable item fs all-field-header" style="width:100%; padding: 0px !important">
                                 <span class="fieldSet-name">{{fieldset.name}}</span>
                                 <div class="ion-ios-arrow-down choose-arrow"></div>
                                 <span class="all-field-description">{{fieldset.guidance}}</span>
                                 <ion-option-button class="button-assertive" ng-click="repeatGroup(fieldset)" ng-if="fieldset.repeatable" style="background-color: #C8F7C5;color: #31475A;">
                                     Repeat
                                 </ion-option-button>
-                            </ion-item >
+                            </ion-item>
                             <div ng-class="{'blue-dropArrow':shownGroup}"></div>
-                            <div class="formContent"
-                                 ng-repeat="field in fieldset.field_instances"
-                                 style="position: relative" ng-show="isGroupShown(fieldset)">
-                                <a class="all-field-repeat" ng-click="repeatField(fieldset, field)"
-                                   ng-show="field.repeatable"><span class="icon ion-plus"
+                            <div class="formContent" ng-repeat="field in fieldset.field_instances" style="position: relative" ng-show="isGroupShown(fieldset)">
+                                <a class="all-field-repeat" ng-click="repeatField(fieldset, field)" ng-show="field.repeatable"><span class="icon ion-plus"
                                                                  style="color:#fff"></span> </a>
                                 <edit data="field"></edit>
                             </div>
                         </div>
                     </ion-list>
-                    <div class="item-stable item fs all-field-header" ng-if="formData.resource_field_id" >
+                    <div class="item-stable item fs all-field-header" ng-if="formData.resource_field_id">
                         <span class="add-pic-text">Resource field</span>
                         <button ng-click="goState('resource')">Open</button>
                     </div>
@@ -64,19 +57,17 @@
                 <div class="form-container-bgd">
                     <div id="image-header" class="item-stable item fs all-field-header">
                         <span class="add-pic-text">Add pictures</span>
-                        <img ng-click="addPicture()" class="add-pic-icon mr-0" src="img/new/cameraRoll.png">
-                        <img ng-click="takePicture()" class="add-pic-icon" src="img/new/takePicture.png">
+                        <img ng-click="addPicture()" ng-disabled=true class="add-pic-icon mr-0" src="img/new/cameraRoll.png">
+                        <img ng-click="takePicture()" ng-disabled=true class="add-pic-icon" src="img/new/takePicture.png">
                         <img ng-click="goPicture()" class="add-pic-icon" src="img/new/gallery.png">
                     </div>
                 </div>
                 <div class="padding">
-                    <button type="submit" ng-click="submit(formData)" ng-disabled="" value="Save"
-                            class="button button-block button-calm">Submit
+                    <button type="submit" ng-click="submit(formData)" ng-disabled="" value="Save" class="button button-block button-calm">Submit
                     </button>
                 </div>
                 <div class="padding" style="margin-top:-20px">
-                    <button type="submit" ng-click="saveAsNew()" ng-disabled="" value="Save"
-                            class="button button-block button-calm">Save as new
+                    <button type="submit" ng-click="saveAsNew()" ng-disabled="" value="Save" class="button button-block button-calm">Save as new
                     </button>
                 </div>
             </div>
@@ -87,7 +78,7 @@
             <div class="list" ng-if="filter.state === 'photos'" ng-include="'view/form/_photos.html'"></div>
         </div>
     </ion-content>
-    <div ng-if="!filter.substateRes && !filter.substateStkRes && filter.state !== 'form' && filter.state !== 'staff' && filter.state !== 'resource' && filter.state !== 'photos' || (!filter.substate && filter.state === 'staff') || (!filter.substate && filter.state === 'resource')" >
+    <div ng-if="!filter.substateRes && !filter.substateStkRes && filter.state !== 'form' && filter.state !== 'staff' && filter.state !== 'resource' && filter.state !== 'photos' || (!filter.substate && filter.state === 'staff') || (!filter.substate && filter.state === 'resource')">
         <button class="btn-add-resource" ng-click="addResourcePi()" ng-if="filter.actionBtn && filter.substate.subtasks.length === 0 && filter.substate.resources.length === 0">
             Add resource
         </button>
@@ -98,7 +89,7 @@
             <i class="ion-ios-plus-empty"></i>
         </button>
     </div>
-    <div ng-if="filter.state === 'payitem' && (filter.substateRes || filter.substateStkRes)" >
+    <div ng-if="filter.state === 'payitem' && (filter.substateRes || filter.substateStkRes)">
         <button class="btn-add" ng-click="actionBtnCalculation();" ng-if="filter.substateRes">
             <i ng-if="!filter.substateRes.calculation" class="ion-ios-calculator-outline" style="font-size: 42px;margin-top: 0px;"></i>
             <i ng-if="filter.substateRes.calculation" class="ion-ios-calculator" style="font-size: 42px;margin-top: 0px;"></i>

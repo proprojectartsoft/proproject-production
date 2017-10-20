@@ -25,6 +25,8 @@ ppApp.controller('EditCtrl', [
         var custSett = null;
         $scope.repeatable = false;
         $scope.linkAux = 'forms';
+        $scope.disablePhotosActions = true;
+        $scope.imgURI = [];
         SyncService.getSettings().then(function(settings) {
             custSett = settings.custsett;
             $scope.filter = {
@@ -79,6 +81,8 @@ ppApp.controller('EditCtrl', [
                     $scope.linkAux = 'forms';
                     break;
                 case 'photodetails':
+                    //return from test picture to gallery
+                    //TODO:save photos to update!!!
                     $scope.filter.substate = 'gallery';
                     $ionicScrollDelegate.resize();
                     $scope.linkAux = 'photos';
@@ -467,7 +471,7 @@ ppApp.controller('EditCtrl', [
                 }
             }
         }
-        //        ==========================================================================================
+
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
             $ionicSideMenuDelegate.canDragContent(false);
@@ -527,93 +531,6 @@ ppApp.controller('EditCtrl', [
             }
         };
 
-        $scope.test = function(item) {
-            $scope.item = item;
-            $ionicModal.fromTemplateUrl('view/form/_picture_modal.html', {
-                scope: $scope
-            }).then(function(modal) {
-                $timeout(function() {
-                    $scope.picModal = modal;
-                    $scope.picModal.show();
-                });
-            });
-        };
-        $scope.doShow = function() {
-            $scope.picModal.hide();
-            $scope.picModal.remove();
-        };
-        $scope.imgURI = [];
-        $scope.imgToAdd = [];
-        $scope.takePicture = function(id) {
-            var options = {
-                quality: 60,
-                destinationType: Camera.DestinationType.DATA_URL,
-                sourceType: Camera.PictureSourceType.CAMERA,
-                allowEdit: false,
-                encodingType: Camera.EncodingType.JPEG,
-                popoverOptions: CameraPopoverOptions,
-                saveToPhotoAlbum: true,
-                correctOrientation: true
-            };
-
-            $cordovaCamera.getPicture(options).then(function(imageData) {
-                $timeout(function() {
-                    SettingService.show_message_popup('Form gallery', 'Photo added. Check form gallery for more options.');
-                    $scope.imgURI.push({
-                        "id": 0,
-                        "base64String": imageData,
-                        "comment": "",
-                        "tags": "",
-                        "title": " ",
-                        "projectId": 0,
-                        "formInstanceId": 0
-                    })
-                    $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
-                    $scope.imgToAdd.push($scope.imgURI[$scope.imgURI.length - 1]);
-                    $scope.filter.state = 'form';
-                    $scope.filter.substate = null;
-                });
-            }, function(err) {
-                // An error occured. Show a message to the user
-            });
-        };
-        $scope.addPicture = function(index) {
-            var options = {
-                maximumImagesCount: 1,
-                quality: 50,
-                destinationType: Camera.DestinationType.DATA_URL,
-                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-                correctOrientation: true,
-                allowEdit: false
-            };
-
-            $cordovaCamera.getPicture(options).then(function(imageData) {
-                $timeout(function() {
-                    SettingService.show_message_popup('Form gallery', 'Photo added. Check form gallery for more options.');
-                    $scope.imgURI.push({
-                        "id": 0,
-                        "base64String": imageData,
-                        "comment": "",
-                        "tags": "",
-                        "title": " ",
-                        "projectId": 0,
-                        "formInstanceId": 0
-                    })
-                    $scope.filter.picture = $scope.imgURI[$scope.imgURI.length - 1];
-                    $scope.imgToAdd.push($scope.imgURI[$scope.imgURI.length - 1]);
-                    $scope.filter.state = 'form';
-                    $scope.filter.substate = null;
-                });
-            }, function(err) {
-                // error
-            });
-        };
-        $scope.removePicture = function(index) {
-            if ($scope.imgURI.length !== 0) {
-                $scope.imgURI.splice(index, 1);
-            }
-            pullDown();
-        };
         $scope.convertToDataURLviaCanvas = function(url, callback) {
             var img = new Image();
             img.crossOrigin = 'Anonymous';
@@ -860,7 +777,7 @@ ppApp.controller('EditCtrl', [
                                 params: {
                                     'id': $rootScope.formId
                                 }
-                            }, $scope.imgToAdd, formUp);
+                            }, [], formUp); //$scope.imgToAdd
                         });
                     }
                 });
@@ -886,7 +803,7 @@ ppApp.controller('EditCtrl', [
                                         url: 'forminstance',
                                         data: ConvertersService.designToInstance(result),
                                         withCredentials: true
-                                    }, $scope.imgURI, formUp, true);
+                                    }, [], formUp, true);
                                 })
                             } else {
                                 CommonServices.saveFormToServer({
@@ -894,7 +811,7 @@ ppApp.controller('EditCtrl', [
                                     url: 'forminstance',
                                     data: ConvertersService.designToInstance(result),
                                     withCredentials: true
-                                }, $scope.imgURI, formUp, true);
+                                }, [], formUp, true);
                             }
                         })
                     });

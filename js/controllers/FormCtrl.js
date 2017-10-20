@@ -30,6 +30,8 @@ ppApp.controller('FormCtrl', [
         $ionicSideMenuDelegate.canDragContent(false);
         $scope.repeatable = false;
         $scope.linkAux = 'forms';
+        $scope.imgURI = [];
+
         pullDown();
         var custSett = [];
         SyncService.getSettings().then(function(settings) {
@@ -679,21 +681,6 @@ ppApp.controller('FormCtrl', [
                 }
             }
         };
-        $scope.test = function(item) {
-            $scope.item = item;
-            $ionicModal.fromTemplateUrl('view/form/_picture_modal.html', {
-                scope: $scope
-            }).then(function(modal) {
-                $timeout(function() {
-                    $scope.picModal = modal;
-                    $scope.picModal.show();
-                });
-            });
-        };
-        $scope.doShow = function() {
-            $scope.picModal.hide();
-            $scope.picModal.remove();
-        };
 
         function elmYPosition(id) {
             var elm = document.getElementById(id);
@@ -798,7 +785,6 @@ ppApp.controller('FormCtrl', [
             $scope.filter.picture = item;
             $scope.goToTop();
         }
-        $scope.imgURI = [];
         $scope.takePicture = function() {
             var options = {
                 quality: 20,
@@ -909,12 +895,6 @@ ppApp.controller('FormCtrl', [
         $scope.submit = function() {
             SettingService.show_confirm_popup('New form', 'Are you sure you want to submit the data?').then(function(res) {
                 if (res) {
-                    if ($scope.picModal) {
-                        $scope.picModal.remove();
-                        if ($scope.picModal) {
-                            delete $scope.picModal;
-                        }
-                    }
                     $timeout(function() {
                         var formUp = SettingService.show_loading_popup('Submitting');
                         CommonServices.saveSpecialFields($scope.formData, {

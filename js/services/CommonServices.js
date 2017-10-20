@@ -593,17 +593,18 @@ ppApp.service('CommonServices', [
                     img.id = 0;
                     img.formInstanceId = $rootScope.formId;
                     img.projectId = request.data.project_id;
-                    if (isNew && img.url) {
-                        img = {
-                            base64String: '',
-                            comment: img.comment,
-                            formInstanceId: img.formInstanceId,
-                            id: img.id,
-                            projectId: img.projectId,
-                            tags: img.tags,
-                            title: img.title
-                        }
-                    }
+                    //for saved as new
+                    // if (isNew && img.url) {
+                    //     img = {
+                    //         base64String: '',
+                    //         comment: img.comment,
+                    //         formInstanceId: img.formInstanceId,
+                    //         id: img.id,
+                    //         projectId: img.projectId,
+                    //         tags: img.tags,
+                    //         title: img.title
+                    //     }
+                    // }
 
                     PostService.post({
                         method: 'POST',
@@ -628,9 +629,8 @@ ppApp.service('CommonServices', [
             }, function(data) {
                 formUp.close();
                 if (isNew) {
-                    var requestList = [];
-                    var ppfsync = localStorage.getObject('ppfsync');
-                    var pppsync = localStorage.getObject('pppsync');
+                    var ppfsync = localStorage.getObject('ppfsync'),
+                        pppsync = localStorage.getObject('pppsync');
                     if (ppfsync) {
                         $rootScope.toBeUploadedCount = ppfsync.length;
                     } else {
@@ -644,19 +644,10 @@ ppApp.service('CommonServices', [
 
                     //store images to sync
                     angular.forEach(images, function(img) {
+                        //for saved as new
+                        // if (!img.url) {
                         img.projectId = request.data.project_id;
-                        if (isNew && img.url) {
-                            img = {
-                                base64String: '',
-                                comment: img.comment,
-                                formInstanceId: img.formInstanceId,
-                                id: img.id,
-                                projectId: img.projectId,
-                                tags: img.tags,
-                                title: img.title
-                            }
-                        }
-                        requestList.push(img);
+                        // }
                     })
                     var aux_f = localStorage.getObject('ppfsync');
                     aux_f.push({
@@ -664,11 +655,11 @@ ppApp.service('CommonServices', [
                         form: request.data
                     });
                     localStorage.setObject('ppfsync', aux_f);
-                    if (requestList.length !== 0) {
+                    if (images.length !== 0) {
                         var aux_p = localStorage.getObject('pppsync');
                         aux_p.push({
                             id: $rootScope.toBeUploadedCount,
-                            imgs: requestList
+                            imgs: images
                         });
                         localStorage.setObject('pppsync', aux_p);
                     }
