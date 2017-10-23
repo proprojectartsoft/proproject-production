@@ -2,8 +2,8 @@ ppApp.directive('field', [
     '$rootScope',
     'FieldUpdateService',
     '$ionicModal',
-    'ConvertersService',
-    function($rootScope, FieldUpdateService, $ionicModal, ConvertersService) {
+    'CommonServices'
+    function($rootScope, FieldUpdateService, $ionicModal, CommonServices) {
 
         return {
             templateUrl: 'view/form/_all.html',
@@ -23,7 +23,7 @@ ppApp.directive('field', [
                     $scope.modal.remove();
                 };
 
-                $scope.data = ConvertersService.viewField($scope.data);
+                $scope.data = CommonServices.viewField($scope.data);
 
                 $scope.$on('submit', function() {
                     if ($scope.data.type === "checkbox") {

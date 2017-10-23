@@ -1173,6 +1173,266 @@ ppApp.service('CommonServices', [
             return deffered.promise;
         };
 
+        var designToInstanceValuesFormat = function(data, isNew) {
+            var field_values = [],
+                field;
+            if (isNew) {
+                field = data;
+            } else {
+                field = data.field_values[0];
+            }
+            switch (data.type) {
+                case 'date':
+                    var x = '';
+                    if (field.value && field.value != 'Invalid Date') {
+                        if (typeof field.value === 'object') {
+                            x = new Date(field.value);
+                            var dd = x.getDate();
+                            var MM = x.getMonth() + 1;
+                            var yyyy = x.getFullYear();
+                            if (dd < 10) {
+                                dd = '0' + dd;
+                            }
+                            if (MM < 10) {
+                                MM = '0' + MM;
+                            }
+                            x = dd + '-' + MM + '-' + yyyy;
+                        } else {
+                            x = field.name
+                        }
+                    }
+                    field_values = [{
+                        "id": !isNew && field.id || 0,
+                        "name": x,
+                        "value": x,
+                        "position": field.position,
+                        "field_instance_id": isNew && 0 || field.field_instance_id
+                    }];
+                    break;
+                case 'time':
+                    var x = '';
+                    if (field.value && field.value != 'Invalid Date') {
+                        x = new Date(field.value);
+                        var hh = x.getHours();
+                        var mm = x.getMinutes();
+                        if (hh < 10) {
+                            hh = '0' + hh;
+                        }
+                        if (mm < 10) {
+                            mm = '0' + mm;
+                        }
+                        x = hh + ':' + mm;
+                    }
+                    field_values = [{
+                        "id": !isNew && field.id || 0,
+                        "name": x,
+                        "value": x,
+                        "position": field.position,
+                        "field_instance_id": field.field_instance_id || 0
+                    }];
+                    break;
+                case 'select':
+                    var array = isNew && field.option_designs || data.field_values;
+                    angular.forEach(array, function(option_value) {
+                        field_values.push({
+                            "id": !isNew && field.id || 0,
+                            "name": option_value.name,
+                            "value": option_value.value === field.value,
+                            "position": field.position,
+                            "field_instance_id": field.field_instance_id || 0
+                        });
+                    });
+                    break;
+                case 'radio':
+                    var array = isNew && field.option_designs || data.field_values;
+                    angular.forEach(array, function(option_value) {
+                        field_values.push({
+                            "id": !isNew && field.id || 0,
+                            "name": option_value.name,
+                            "value": option_value.value === field.value,
+                            "position": field.position,
+                            "field_instance_id": field.field_instance_id || 0
+                        });
+                    });
+                    break;
+                case 'checkbox_list':
+                    var array = isNew && field.option_designs || data.field_values;
+                    angular.forEach(array, function(option_value) {
+                        field_values.push({
+                            "id": !isNew && option_value.id || 0,
+                            "name": option_value.name,
+                            "value": option_value.value === true,
+                            "position": field.position,
+                            "field_instance_id": option_value.field_instance_id || 0
+                        });
+                    });
+                    break;
+                case 'checkbox':
+                    field_values = [{
+                        "id": !isNew && field.id || 0,
+                        "name": field.value || false,
+                        "value": field.value || false,
+                        "position": field.position,
+                        "field_instance_id": field.id || 0
+                    }];
+                    break;
+                default: //type: text, email, textarea, number, signature
+                    field_values = [{
+                        "id": !isNew && field.id || 0,
+                        "name": field.value,
+                        "value": field.value || '',
+                        "position": field.position,
+                        "field_instance_id": field.field_instance_id || 0
+                    }];
+                    break;
+            }
+            return field_values;
+        };
 
+        service.designToInstance = function(design, isNew) {
+            var settings = CacheFactory.get('settings');
+            if (!settings || settings.length === 0) {
+                settings = CacheFactory('settings');
+                settings.setOptions({
+                    storageMode: 'localStorage'
+                });
+            }
+            $rootScope.thisUser = localStorage.getObject("ppuser");
+            var requestForm = {
+                "id": 0,
+                "active": true,
+                "name": design.name,
+                "guidance": design.guidance,
+                "code": design.code || design.form_design_code,
+                "hash": null,
+                "pdf": design.pdf,
+                "project_id": parseInt($stateParams.projectId) || design.project_id,
+                "customer_id": design.customer_id,
+                "category": design.category,
+                "category_id": design.category_id,
+                "user_id": $rootScope.thisUser && $rootScope.thisUser.id,
+                "created_on": new Date().getTime(),
+                "updated_on": new Date().getTime(),
+                "formDesignId": design.formDesignId || design.id,
+                "resource_field_id": design.resource_field_id,
+                "staff_field_id": design.staff_field_id,
+                "pay_item_field_id": design.pay_item_field_id,
+                "scheduling_field_id": design.scheduling_field_id,
+                "field_group_instances": [],
+                "resourceField": design.resourceField,
+                "staffField": design.staffField,
+                "payitemField": design.payitemField,
+                "schedField": design.schedField,
+            };
+            var requestGroupList = [],
+                requestFieldList = [];
+            var requestGroup, requestField;
+
+            angular.forEach(design.field_group_designs || design.field_group_instances, function(field_group) {
+                requestGroup = angular.copy(field_group);
+                requestGroup.id = 0;
+                requestGroup.form_instance_id = 0;
+                requestGroup.at_revision = "0";
+                requestGroup.field_instances = [];
+                requestFieldList = [];
+
+                angular.forEach(field_group.field_designs || field_group.field_instances, function(field) {
+                    var aux = null;
+                    if (isNew) {
+                        aux = designToInstanceValuesFormat(field, true);
+                    } else {
+                        aux = designToInstanceValuesFormat(field);
+                        angular.forEach(aux, function(val) {
+                            val.id = 0;
+                            val.field_instance_id = 0;
+                        });
+                    }
+
+                    requestField = angular.copy(field);
+                    requestField.id = 0;
+                    requestField.field_group_instance_id = 0;
+                    requestField.at_revision = "0";
+                    requestField.option_instances = [] || field.option_instances;
+                    requestField.field_values = aux;
+                    requestFieldList.push(requestField);
+                });
+                requestGroup.field_instances = requestFieldList;
+                requestGroupList.push(requestGroup);
+            });
+            requestForm.field_group_instances = requestGroupList;
+            return (requestForm);
+        };
+        service.viewField = function(data) {
+            if (data.type === "checkbox" && data.field_values && data.field_values.length > 0) {
+                if (data.field_values[0].value === 'true' || data.field_values[0].value === true) {
+                    data.value = true;
+                } else {
+                    data.value = false;
+                }
+            }
+            if ((data.type === "select" || data.type === "radio") && data.field_values && data.field_values.length > 0) {
+                angular.forEach(data.field_values, function(entry) {
+                    if (entry.value === true || entry.value === "true") {
+                        data.value = entry.name;
+                    }
+                });
+            }
+            if (data.type === "time" && data.field_values && data.field_values.length > 0) {
+                if (data.field_values[0].value !== '' && data.field_values[0].value !== 0 && data.field_values[0].value !== '0') {
+                    data.value = new Date("01 " + data.field_values[0].value);
+                } else {
+                    data.value = null;
+                }
+            }
+            if (data.type === "date" && data.field_values && data.field_values.length > 0) {
+                var fix = data.field_values[0].value.substr(3, 2) + '-' + data.field_values[0].value.substr(0, 2) + '-' + data.field_values[0].value.substr(6, 4);
+                if (data.field_values[0].value !== '0' && data.field_values[0].value !== 0 && data.field_values[0].value !== '') {
+                    data.value = new Date(fix);
+                } else {
+                    data.value = null;
+                }
+            }
+            return data;
+        };
+        service.instanceToUpdate = function(instance) {
+            var data = angular.copy(instance);
+            var settings = CacheFactory.get('settings');
+            if (!settings || settings.length === 0) {
+                settings = CacheFactory('settings');
+                settings.setOptions({
+                    storageMode: 'localStorage'
+                });
+            }
+            $rootScope.thisUser = localStorage.getObject("ppuser");;
+            var requestForm = angular.copy(data);
+            delete requestForm.form_design_code;
+            delete requestForm.has_photos;
+            delete requestForm.permission;
+            delete requestForm.project_name;
+            delete requestForm.project_number;
+            delete requestForm.revision;
+            requestForm.updated_on = new Date().getTime();
+            requestForm.field_group_instances = [];
+            requestForm.user_id = $rootScope.thisUser.id;
+            var requestGroupList = [],
+                requestFieldList = [],
+                requestGroup, requestField;
+
+            angular.forEach(data.field_group_instances, function(field_group) {
+                requestFieldList = [];
+                requestGroup = angular.copy(field_group);
+                requestGroup.field_instances = [];
+
+                angular.forEach(field_group.field_instances, function(field) {
+                    requestField = angular.copy(field);
+                    requestField.field_values = designToInstanceValuesFormat(field)
+                    requestFieldList.push(requestField);
+                });
+                requestGroup.field_instances = requestFieldList;
+                requestGroupList.push(requestGroup);
+            });
+            requestForm.field_group_instances = requestGroupList;
+            return requestForm;
+        };
     }
 ])

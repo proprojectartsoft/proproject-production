@@ -14,14 +14,13 @@ ppApp.controller('FormCtrl', [
     '$ionicSideMenuDelegate',
     '$ionicHistory',
     '$ionicPopover',
-    'ConvertersService',
     'CommonServices',
     '$filter',
     '$q',
     'SettingService',
     'SyncService',
     function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
-        $cordovaCamera, $state, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, ConvertersService, CommonServices, $filter, $q, SettingService, SyncService) {
+        $cordovaCamera, $state, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, CommonServices, $filter, $q, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -103,32 +102,10 @@ ppApp.controller('FormCtrl', [
                     'date_option': $scope.formData.resource_field_design.date_option,
                     'financial_option': $scope.formData.resource_field_design.financial_option,
                     'total_cost': 0,
-                    'resources': [{
-                        "id": 0,
-                        "resource_field_id": 0,
-                        "resource_id": 0,
-                        "position": 0,
-                        "calculation": false,
-                        "name": '',
-                        "product_ref": '',
-                        "unit_id": 0,
-                        "unit_name": '',
-                        "resource_type_id": 0,
-                        "unit_obj": "",
-                        "resource_type_name": '',
-                        "direct_cost": 0,
-                        "resource_margin": 0,
-                        "stage_id": 1,
-                        "stage_name": '',
-                        "vat": $scope.filter.vat,
-                        "quantity": 0,
-                        "current_day": '',
-                        "total_cost": 0,
-                        "staff_role": '',
-                        "expiry_date": '',
-                        "abseteeism_reason_name": ''
-                    }]
+                    'resources': []
                 };
+
+                CommonServices.addResource($scope.resourceField.resources, 0);
                 // $scope.filter.substate = $scope.resourceField.resources[0];
             }
             if ($scope.formData.pay_item_field_design) {
@@ -137,66 +114,31 @@ ppApp.controller('FormCtrl', [
                     'register_nominated': $scope.formData.pay_item_field_design.register_nominated,
                     'display_subtask': $scope.formData.pay_item_field_design.display_subtask,
                     'display_resources': $scope.formData.pay_item_field_design.display_resources,
-                    "pay_items": [{
-                        "description": "",
-                        "reference": "",
-                        "unit": "",
-                        "quantity": "",
-                        "open": true,
-                        "child": true,
-                        "subtasks": [],
-                        "resources": [],
-                        "total_cost": 0
-                    }]
+                    "pay_items": []
                 };
+                CommonServices.addPayitem($scope.payitemField.pay_items);
+                //     "open": true,
+                //     "child": true,
+
                 $scope.filter.substate = $scope.payitemField.pay_items[0];
             }
             if ($scope.formData.scheduling_field_design) {
                 $scope.payitemField = {
                     "id": 0,
                     'display_subtask': $scope.formData.scheduling_field_design.true,
-                    "pay_items": [{
-                        "description": "",
-                        "reference": "",
-                        "unit": "",
-                        "quantity": "",
-                        "open": true,
-                        "child": true,
-                        "subtasks": [],
-                        "resources": [],
-                        "total_cost": 0
-                    }]
+                    "pay_items": []
                 };
+                CommonServices.addPayitem($scope.payitemField.pay_items);
+                //     "open": true,
+                //     "child": true,
             }
             if ($scope.formData.staff_field_design) {
                 $scope.staffField = {
                     'id': 0,
                     'withTimes': $scope.formData.staff_field_design.withTimes,
-                    'resources': [{
-                        "name": "",
-                        "customerId": 0,
-                        "employer_name": "",
-                        "staff_role": "",
-                        "product_ref": "",
-                        "unit_name": "",
-                        "direct_cost": 0.0,
-                        "resource_type_name": "",
-                        "resource_margin": 0,
-                        "telephone_number": "",
-                        "email": "",
-                        "safety_card_number": "",
-                        "expiry_date": "",
-                        "staff": true,
-                        "current_day": "",
-                        "start_time": $scope.filter.start,
-                        "break_time": $scope.filter.break,
-                        "finish_time": $scope.filter.finish,
-                        "total_time": "",
-                        "comment": "",
-                        "open": true,
-                        "vat": $scope.filter.vat
-                    }]
+                    'resources': []
                 };
+                CommonServices.addStaff($scope.staffField.resources, $scope.filter.start, $scope.filter.break, $scope.filter.finish, $scope.filter.vat);
             }
         }, function(reason) {
             console.log(reason);
@@ -856,7 +798,7 @@ ppApp.controller('FormCtrl', [
                             staffField: $scope.staffField,
                             payitemField: $scope.payitemField
                         }, 'POST').then(function(result) {
-                            var data = ConvertersService.designToInstance(result, true);
+                            var data = CommonServices.designToInstance(result, true);
                             //automatically sync previousely offline created forms
                             if (localStorage.getObject('ppfsync') || localStorage.getObject('pppsync')) {
                                 SyncService.sync().then(function(res) {

@@ -8,7 +8,6 @@ ppApp.controller('EditCtrl', [
     '$ionicScrollDelegate',
     '$ionicModal',
     '$cordovaCamera',
-    'ConvertersService',
     '$ionicHistory',
     'CommonServices',
     '$ionicPopover',
@@ -20,7 +19,7 @@ ppApp.controller('EditCtrl', [
     'SettingService',
     'SyncService',
     function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
-        $ionicModal, $cordovaCamera, ConvertersService, $ionicHistory,
+        $ionicModal, $cordovaCamera, $ionicHistory,
         CommonServices, $ionicPopover, $stateParams, $state, $filter, $q, PostService, SettingService, SyncService) {
         var custSett = null;
         $scope.repeatable = false;
@@ -569,7 +568,7 @@ ppApp.controller('EditCtrl', [
                                 CommonServices.saveFormToServer({
                                     method: 'PUT',
                                     url: 'forminstance',
-                                    data: ConvertersService.instanceToUpdate(result),
+                                    data: CommonServices.instanceToUpdate(result),
                                     params: {
                                         'id': $rootScope.formId
                                     }
@@ -598,7 +597,7 @@ ppApp.controller('EditCtrl', [
                                     CommonServices.saveFormToServer({
                                         method: 'POST',
                                         url: 'forminstance',
-                                        data: ConvertersService.designToInstance(result),
+                                        data: CommonServices.designToInstance(result),
                                         withCredentials: true
                                     }, [], formUp, true);
                                 })
@@ -606,7 +605,7 @@ ppApp.controller('EditCtrl', [
                                 CommonServices.saveFormToServer({
                                     method: 'POST',
                                     url: 'forminstance',
-                                    data: ConvertersService.designToInstance(result),
+                                    data: CommonServices.designToInstance(result),
                                     withCredentials: true
                                 }, [], formUp, true);
                             }
