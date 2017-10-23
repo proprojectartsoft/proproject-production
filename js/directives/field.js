@@ -1,9 +1,8 @@
 ppApp.directive('field', [
     '$rootScope',
-    'FieldUpdateService',
     '$ionicModal',
-    'CommonServices'
-    function($rootScope, FieldUpdateService, $ionicModal, CommonServices) {
+    'CommonServices',
+    function($rootScope, $ionicModal, CommonServices) {
 
         return {
             templateUrl: 'view/form/_all.html',
@@ -39,21 +38,6 @@ ppApp.directive('field', [
                     }).then(function(modal) {
                         $scope.modal = modal;
                         $scope.modal.hash = $scope.hash;
-                        FieldUpdateService.addProduct($scope.modalHelper);
-                        $rootScope.$broadcast('updateScopeFromDirective');
-
-                        // TODO:
-                        // console.log("ion-content");
-                        // console.log($('ion-content').outerHeight());
-                        // console.log('form');
-                        // console.log($('form.signature-form').outerHeight());
-                        // console.log('buttons');
-                        // console.log($('div.button-bar').outerHeight());
-                        // var bottom = $('ion-content').outerHeight() - $('form.signature-form').outerHeight() - $('div.button-bar').outerHeight() + 5;
-                        // console.log('bottom: ' + bottom);
-                        // // $('div.button-bar').css('bottom': bottom);
-                        //
-
                         $scope.modal.show();
                     });
                 };

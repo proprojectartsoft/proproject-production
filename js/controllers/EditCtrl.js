@@ -1,7 +1,6 @@
 ppApp.controller('EditCtrl', [
     '$scope',
     '$timeout',
-    'FormUpdateService',
     '$location',
     '$rootScope',
     '$ionicSideMenuDelegate',
@@ -18,7 +17,7 @@ ppApp.controller('EditCtrl', [
     'PostService',
     'SettingService',
     'SyncService',
-    function($scope, $timeout, FormUpdateService, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
+    function($scope, $timeout, $location, $rootScope, $ionicSideMenuDelegate, $ionicScrollDelegate,
         $ionicModal, $cordovaCamera, $ionicHistory,
         CommonServices, $ionicPopover, $stateParams, $state, $filter, $q, PostService, SettingService, SyncService) {
         var custSett = null;
@@ -690,12 +689,7 @@ ppApp.controller('EditCtrl', [
         $scope.isGroupShown = function(group) {
             return $scope.shownGroup === group;
         };
-        $scope.$on('updateScopeFromDirective', function() {
-            FormUpdateService.addProduct($scope.formData, $scope.modalHelper);
-        });
-        $scope.$on('moduleSaveChanges', function() {
-            $scope.formData = FormUpdateService.getProducts();
-        });
+
         $scope.goToTop = function() {
             $timeout(function() { // we need little delay
                 $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop();

@@ -2,7 +2,6 @@ ppApp.controller('FormCtrl', [
     '$scope',
     '$timeout',
     'PostService',
-    'FormUpdateService',
     '$rootScope',
     'CacheFactory',
     '$ionicScrollDelegate',
@@ -19,7 +18,7 @@ ppApp.controller('FormCtrl', [
     '$q',
     'SettingService',
     'SyncService',
-    function($scope, $timeout, PostService, FormUpdateService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
+    function($scope, $timeout, PostService, $rootScope, CacheFactory, $ionicScrollDelegate, $stateParams, $ionicListDelegate, $ionicModal,
         $cordovaCamera, $state, $ionicSideMenuDelegate, $ionicHistory, $ionicPopover, CommonServices, $filter, $q, SettingService, SyncService) {
 
         $scope.$on('$ionicView.enter', function() {
@@ -658,12 +657,7 @@ ppApp.controller('FormCtrl', [
         $scope.isGroupShown = function(group) {
             return $scope.shownGroup === group;
         };
-        $scope.$on('updateScopeFromDirective', function() {
-            FormUpdateService.addProduct($scope.formData, $scope.modalHelper);
-        });
-        $scope.$on('moduleSaveChanges', function() {
-            $scope.formData = FormUpdateService.getProducts();
-        });
+
         $scope.goPicture = function() {
             $scope.linkAux = 'photos';
             $scope.titleShow = 'Photo Gallery';
