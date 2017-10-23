@@ -65,176 +65,191 @@ ppApp.controller('EditCtrl', [
             CommonServices.updateTitle(title, placeholder, $scope.titleShow);
         }
         $scope.backHelper = function() {
-            switch ($scope.linkAux) {
-                case 'forms':
-                    $state.go('app.completed', {
-                        'projectId': $stateParams.projectId,
-                        'categoryId': $scope.formData.category_id
-                    });
-                    break;
-                case 'photos':
-                    $scope.filter.substate = null;
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    break;
-                case 'photodetails':
-                    //return from test picture to gallery
-                    $scope.filter.substate = 'gallery';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'photos';
-                    pullDown();
-                    break;
-                case 'resource':
-                    CommonServices.doTotal('resource', $scope.resourceField);
-                    $scope.titleShow = 'Resources';
-                    $scope.filter.state = 'resource';
-                    $scope.filter.substate = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'resources';
-                    break;
-                case 'resources':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    break;
-                case 'staff':
-                    $scope.filter.state = 'staff';
-                    $scope.titleShow = 'Staffs';
-                    $scope.filter.substate = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'staffs';
-                    break;
-                case 'staffs':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    break;
-                case 'scheduling':
-                    if ($scope.filter.substate) {
-                        $scope.filter.state = 'scheduling';
-                        CommonServices.doTotal('pi', $scope.payitemField);
-                        $scope.filter.substateStkRes = null;
-                        $scope.filter.substateStk = null;
-                        $scope.filter.substateRes = null;
-                        $scope.filter.substate = null;
-                        $ionicScrollDelegate.resize();
-                        $scope.titleShow = 'Schedulings';
-                        $scope.linkAux = 'schedulings';
-                    } else {
-                        $scope.filter.state = 'form';
-                        $ionicScrollDelegate.resize();
-                        $scope.linkAux = 'forms';
-                        $scope.titleShow = $scope.formData.name;
-                    }
-                    break;
-                case 'schedulings':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    $scope.titleShow = $scope.formData.name;
-                    break;
-                case 'schedulingStk':
-                    $scope.filter.state = 'scheduling';
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    $scope.filter.substateStk = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'scheduling';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Scheduling';
-                    }
-                    break;
-                case 'schedulingSubRes':
-                    $scope.filter.state = 'scheduling';
-                    CommonServices.doTotal('pisubtask', $scope.filter.substateStk);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateStkRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'schedulingStk';
-                    if ($scope.filter.substateStk.description) {
-                        $scope.titleShow = 'Scheduling Subtaks: ' + $scope.filter.substateStk.description;
-                    } else {
-                        $scope.titleShow = 'Scheduling Subtaks';
-                    }
-                    break;
-                case 'schedulingRes':
-                    $scope.filter.state = 'scheduling';
-                    CommonServices.doTotal('piresource', $scope.filter.substate);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'scheduling';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Scheduling:' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Scheduling';
-                    }
-                    break;
-                case 'payitem':
-                    if ($scope.filter.substate) {
-                        $scope.filter.state = 'payitem';
-                        CommonServices.doTotal('pi', $scope.payitemField);
-                        $scope.filter.substateStkRes = null;
-                        $scope.filter.substateStk = null;
-                        $scope.filter.substateRes = null;
-                        $scope.filter.substate = null;
-                        $ionicScrollDelegate.resize();
-                        $scope.titleShow = 'Pay-items';
-                        $scope.linkAux = 'payitems';
-                    } else {
-                        $scope.filter.state = 'form';
-                        $ionicScrollDelegate.resize();
-                        $scope.linkAux = 'forms';
-                        $scope.titleShow = $scope.formData.name;
-                    }
-                    break;
-                case 'payitems':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    $scope.titleShow = $scope.formData.name;
-                    break;
-                case 'payitemStk':
-                    $scope.filter.state = 'payitem';
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    $scope.filter.substateStk = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'payitem';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Pay-item';
-                    }
-                    break;
-                case 'payitemSubRes':
-                    $scope.filter.state = 'payitem';
-                    CommonServices.doTotal('pisubresource', $scope.filter.substateStk);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateStkRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'payitemStk';
-                    if ($scope.filter.substateStk.description) {
-                        $scope.titleShow = 'Pay-item Subtaks: ' + $scope.filter.substateStk.description;
-                    } else {
-                        $scope.titleShow = 'Pay-item Subtaks';
-                    }
-                    break;
-                case 'payitemRes':
-                    $scope.filter.state = 'payitem';
-                    CommonServices.doTotal('piresource', $scope.filter.substate);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'payitem';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Pay-item:' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Pay-item';
-                    }
-                    break;
+            if ($scope.linkAux == 'forms') {
+                $state.go('app.completed', { //TODO:
+                    'projectId': $stateParams.projectId,
+                    'categoryId': $scope.formData.category_id
+                });
+            } else {
+                var temp = CommonServices.backHelper($scope.linkAux, $scope.filter, {
+                    resourceField: $scope.resourceField,
+                    payitemField: $scope.payitemField
+                });
+                $scope.titleShow = temp.titleShow || $scope.formData.name;
+                $scope.linkAux = temp.linkAux;
+                $ionicScrollDelegate.resize();
             }
+
+            // switch ($scope.linkAux) {
+            //     case 'forms':
+            //         $state.go('app.completed', {
+            //             'projectId': $stateParams.projectId,
+            //             'categoryId': $scope.formData.category_id
+            //         });
+            //         break;
+            //     case 'photos':
+            //         $scope.filter.substate = null;
+            //         $scope.filter.state = 'form';
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'forms';
+            //         break;
+            //     case 'photodetails':
+            //         //return from test picture to gallery
+            //         $scope.filter.substate = 'gallery';
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'photos';
+            //         pullDown();
+            //         break;
+            //     case 'resource':
+            //         CommonServices.doTotal('resource', $scope.resourceField);
+            //         $scope.titleShow = 'Resources';
+            //         $scope.filter.state = 'resource';
+            //         $scope.filter.substate = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'resources';
+            //         break;
+            //     case 'resources':
+            //         $scope.filter.state = 'form';
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'forms';
+            //         break;
+            //     case 'staff':
+            //         $scope.filter.state = 'staff';
+            //         $scope.titleShow = 'Staffs';
+            //         $scope.filter.substate = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'staffs';
+            //         break;
+            //     case 'staffs':
+            //         $scope.filter.state = 'form';
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'forms';
+            //         break;
+            //     case 'scheduling':
+            //         if ($scope.filter.substate) {
+            //             $scope.filter.state = 'scheduling';
+            //             CommonServices.doTotal('pi', $scope.payitemField);
+            //             $scope.filter.substateStkRes = null;
+            //             $scope.filter.substateStk = null;
+            //             $scope.filter.substateRes = null;
+            //             $scope.filter.substate = null;
+            //             $ionicScrollDelegate.resize();
+            //             $scope.titleShow = 'Schedulings';
+            //             $scope.linkAux = 'schedulings';
+            //         } else {
+            //             $scope.filter.state = 'form';
+            //             $ionicScrollDelegate.resize();
+            //             $scope.linkAux = 'forms';
+            //             $scope.titleShow = $scope.formData.name;
+            //         }
+            //         break;
+            //     case 'schedulings':
+            //         $scope.filter.state = 'form';
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'forms';
+            //         $scope.titleShow = $scope.formData.name;
+            //         break;
+            //     case 'schedulingStk':
+            //         $scope.filter.state = 'scheduling';
+            //         CommonServices.doTotal('pisubtask', $scope.filter.substate);
+            //         $scope.filter.substateStk = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'scheduling';
+            //         if ($scope.filter.substate.description) {
+            //             $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
+            //         } else {
+            //             $scope.titleShow = 'Scheduling';
+            //         }
+            //         break;
+            //     case 'schedulingSubRes':
+            //         $scope.filter.state = 'scheduling';
+            //         CommonServices.doTotal('pisubtask', $scope.filter.substateStk);
+            //         $scope.filter.actionBtnShow = true;
+            //         $scope.filter.substateStkRes = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'schedulingStk';
+            //         if ($scope.filter.substateStk.description) {
+            //             $scope.titleShow = 'Scheduling Subtaks: ' + $scope.filter.substateStk.description;
+            //         } else {
+            //             $scope.titleShow = 'Scheduling Subtaks';
+            //         }
+            //         break;
+            //     case 'schedulingRes':
+            //         $scope.filter.state = 'scheduling';
+            //         CommonServices.doTotal('piresource', $scope.filter.substate);
+            //         $scope.filter.actionBtnShow = true;
+            //         $scope.filter.substateRes = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'scheduling';
+            //         if ($scope.filter.substate.description) {
+            //             $scope.titleShow = 'Scheduling:' + $scope.filter.substate.description;
+            //         } else {
+            //             $scope.titleShow = 'Scheduling';
+            //         }
+            //         break;
+            //     case 'payitem':
+            //         if ($scope.filter.substate) {
+            //             $scope.filter.state = 'payitem';
+            //             CommonServices.doTotal('pi', $scope.payitemField);
+            //             $scope.filter.substateStkRes = null;
+            //             $scope.filter.substateStk = null;
+            //             $scope.filter.substateRes = null;
+            //             $scope.filter.substate = null;
+            //             $ionicScrollDelegate.resize();
+            //             $scope.titleShow = 'Pay-items';
+            //             $scope.linkAux = 'payitems';
+            //         } else {
+            //             $scope.filter.state = 'form';
+            //             $ionicScrollDelegate.resize();
+            //             $scope.linkAux = 'forms';
+            //             $scope.titleShow = $scope.formData.name;
+            //         }
+            //         break;
+            //     case 'payitems':
+            //         $scope.filter.state = 'form';
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'forms';
+            //         $scope.titleShow = $scope.formData.name;
+            //         break;
+            //     case 'payitemStk':
+            //         $scope.filter.state = 'payitem';
+            //         CommonServices.doTotal('pisubtask', $scope.filter.substate);
+            //         $scope.filter.substateStk = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'payitem';
+            //         if ($scope.filter.substate.description) {
+            //             $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
+            //         } else {
+            //             $scope.titleShow = 'Pay-item';
+            //         }
+            //         break;
+            //     case 'payitemSubRes':
+            //         $scope.filter.state = 'payitem';
+            //         CommonServices.doTotal('pisubresource', $scope.filter.substateStk);
+            //         $scope.filter.actionBtnShow = true;
+            //         $scope.filter.substateStkRes = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'payitemStk';
+            //         if ($scope.filter.substateStk.description) {
+            //             $scope.titleShow = 'Pay-item Subtaks: ' + $scope.filter.substateStk.description;
+            //         } else {
+            //             $scope.titleShow = 'Pay-item Subtaks';
+            //         }
+            //         break;
+            //     case 'payitemRes':
+            //         $scope.filter.state = 'payitem';
+            //         CommonServices.doTotal('piresource', $scope.filter.substate);
+            //         $scope.filter.actionBtnShow = true;
+            //         $scope.filter.substateRes = null;
+            //         $ionicScrollDelegate.resize();
+            //         $scope.linkAux = 'payitem';
+            //         if ($scope.filter.substate.description) {
+            //             $scope.titleShow = 'Pay-item:' + $scope.filter.substate.description;
+            //         } else {
+            //             $scope.titleShow = 'Pay-item';
+            //         }
+            //         break;
+            // }
             $scope.goToTop();
         };
         $scope.goStateDown = function(state, substate, data) {
@@ -248,54 +263,16 @@ ppApp.controller('EditCtrl', [
             $scope.goToTop();
         }
         $scope.goState = function(state, substate) {
-            switch (state) {
-                case 'resource':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    break;
-                case 'staff':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToStaff(substate, $scope.filter, $scope.staffField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    break;
-                case 'scheduling':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToScheduling(substate, $scope.filter, $scope.payitemField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    break;
-                case 'payitem':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToPayitem(substate, $scope.filter, $scope.payitemField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    break;
-            }
+            var temp = CommonServices.goState(state, substate, $scope.filter, {
+                linkAux: $scope.linkAux,
+                titleShow: $scope.titleShow,
+                resourceField: $scope.resourceField,
+                staffField: $scope.staffField,
+                payitemField: $scope.payitemField
+            });
+            $scope.linkAux = temp.linkAux;
+            $scope.titleShow = temp.titleShow;
+            $ionicScrollDelegate.resize();
             $scope.goToTop();
         }
 
@@ -360,7 +337,14 @@ ppApp.controller('EditCtrl', [
             $scope.popover.hide();
         }
         $scope.addResource = function() {
-            CommonServices.addResource($scope.resourceField.resources, $scope.vat);
+            CommonServices.addResource($scope.resourceField.resources, {
+                open: true,
+                stage_id: 1,
+                calculation: false,
+                id: 0,
+                resource_field_id: 0,
+                vat: $scope.vat
+            });
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
         $scope.addStaff = function() {
@@ -388,7 +372,12 @@ ppApp.controller('EditCtrl', [
         }
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
-                CommonServices.addResourcePi($scope.filter.substate.resources, $scope.vat);
+                CommonServices.addResource($scope.filter.substate.resources, {
+                    open: false,
+                    stage_id: 0,
+                    calculation: true,
+                    vat: $scope.vat
+                });
                 $scope.filter.substateRes = $scope.filter.substate.resources[$scope.filter.substate.resources.length - 1];
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingRes';
@@ -401,7 +390,12 @@ ppApp.controller('EditCtrl', [
         }
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
-                CommonServices.addResourceInSubtask($scope.filter.substateStk, $scope.vat);
+                CommonServices.addResource($scope.filter.substateStk.resources, {
+                    open: false,
+                    stage_id: 0,
+                    calculation: true,
+                    vat: $scope.vat
+                });
                 $scope.filter.substateStkRes = $scope.filter.substateStk.resources[$scope.filter.substateStk.resources.length - 1];
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingSubRes';

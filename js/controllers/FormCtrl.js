@@ -104,8 +104,14 @@ ppApp.controller('FormCtrl', [
                     'resources': []
                 };
 
-                CommonServices.addResource($scope.resourceField.resources, 0);
-                // $scope.filter.substate = $scope.resourceField.resources[0];
+                CommonServices.addResource($scope.resourceField.resources, {
+                    open: true,
+                    stage_id: 1,
+                    calculation: false,
+                    id: 0,
+                    resource_field_id: 0,
+                    vat: 0
+                });
             }
             if ($scope.formData.pay_item_field_design) {
                 $scope.payitemField = {
@@ -116,7 +122,7 @@ ppApp.controller('FormCtrl', [
                     "pay_items": []
                 };
                 CommonServices.addPayitem($scope.payitemField.pay_items);
-                //     "open": true,
+                //     "open": true, TODO:
                 //     "child": true,
 
                 $scope.filter.substate = $scope.payitemField.pay_items[0];
@@ -334,54 +340,16 @@ ppApp.controller('FormCtrl', [
         }
         //Navigate to given state
         $scope.goState = function(state, substate) {
-            switch (state) {
-                case 'resource':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToResource(substate, $scope.filter, $scope.resourceField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    break;
-                case 'staff':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToStaff(substate, $scope.filter, $scope.staffField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    break;
-                case 'scheduling':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToScheduling(substate, $scope.filter, $scope.payitemField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    break;
-                case 'payitem':
-                    $scope.filter.state = state;
-                    $scope.aux = {
-                        linkAux: $scope.linkAux,
-                        titleShow: $scope.titleShow
-                    }
-                    CommonServices.goToPayitem(substate, $scope.filter, $scope.payitemField, $scope.aux);
-                    $scope.linkAux = $scope.aux.linkAux;
-                    $scope.titleShow = $scope.aux.titleShow;
-                    $ionicScrollDelegate.resize();
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    break;
-            }
+            var temp = CommonServices.goState(state, substate, $scope.filter, {
+                linkAux: $scope.linkAux,
+                titleShow: $scope.titleShow,
+                resourceField: $scope.resourceField,
+                staffField: $scope.staffField,
+                payitemField: $scope.payitemField
+            });
+            $scope.linkAux = temp.linkAux;
+            $scope.titleShow = temp.titleShow;
+            $ionicScrollDelegate.resize();
             $scope.goToTop();
         }
 
@@ -483,7 +451,14 @@ ppApp.controller('FormCtrl', [
 
         //Add new resource in resourceField; initialized with unit info
         $scope.addResource = function() {
-            CommonServices.addResource($scope.resourceField.resources, $scope.filter.vat);
+            CommonServices.addResource($scope.resourceField.resources, {
+                open: true,
+                stage_id: 1,
+                calculation: false,
+                id: 0,
+                resource_field_id: 0,
+                vat: $scope.filter.vat
+            });
             $scope.filter.substate = $scope.resourceField.resources[$scope.resourceField.resources.length - 1];
         };
         //Add new resource in staffField; initialized with start, break and finish times
@@ -515,7 +490,12 @@ ppApp.controller('FormCtrl', [
         //Add new resource in payitemField (as subtask)
         $scope.addResourcePi = function() {
             if ($scope.filter.substate && $scope.filter.substate.subtasks.length === 0) {
-                CommonServices.addResourcePi($scope.filter.substate.resources, $scope.filter.vat);
+                CommonServices.addResource($scope.filter.substate.resources, {
+                    open: false,
+                    stage_id: 0,
+                    calculation: true,
+                    vat: $scope.filter.vat
+                });
                 $scope.filter.substateRes = $scope.filter.substate.resources[$scope.filter.substate.resources.length - 1]
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingRes';
@@ -529,7 +509,12 @@ ppApp.controller('FormCtrl', [
         //Add new resource in payitemField subtask
         $scope.addResourceInSubtask = function() {
             if ($scope.filter.substateStk) {
-                CommonServices.addResourceInSubtask($scope.filter.substateStk, $scope.filter.vat);
+                CommonServices.addResource($scope.filter.substateStk.resources, {
+                    open: false,
+                    stage_id: 0,
+                    calculation: true,
+                    vat: $scope.filter.vat
+                });
                 $scope.filter.substateStkRes = $scope.filter.substateStk.resources[$scope.filter.substateStk.resources.length - 1];
                 if ($scope.filter.state === 'scheduling') {
                     $scope.linkAux = 'schedulingSubRes';

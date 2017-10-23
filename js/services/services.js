@@ -381,29 +381,29 @@ ppApp.service('CommonServices', [
                 filter.popup_predicate.unit_name = filter.popup_predicate.unit_obj.name;
             }
         };
-        service.addResource = function(resources, vat) {
+        service.addResource = function(resources, data) {
             resources.push({
-                "id": 0,
-                "resource_field_id": 0,
+                "id": data.id,
+                "resource_field_id": data.resource_field_id,
+                "open": data.open,
                 "resource_id": 0,
                 "position": 0,
-                "name": '',
-                "product_ref": '',
+                "name": "",
+                "product_ref": "",
+                "unit_obj": {},
                 "unit_id": 0,
                 "unit_name": '',
-                "unit_obj": {},
                 "resource_type_id": 0,
-                "resource_type_name": '',
+                "resource_type_name": "",
                 "direct_cost": 0,
-                "resource_margin": 0,
-                "stage_id": 1,
-                "stage_name": '',
-                "vat": vat || 0,
                 "quantity": 0,
-                "current_day": '',
-                "total_cost": 0,
-                "calculation": false,
-                "open": true
+                "resource_margin": 0,
+                "current_day": "",
+                "stage_id": 0,
+                "stage_name": "",
+                "calculation": true,
+                "vat": data.vat || 0,
+                "total_cost": 0
             });
         };
         service.addStaff = function(resources, startTime, breakTime, finishTime, vat) {
@@ -443,76 +443,17 @@ ppApp.service('CommonServices', [
             })
         };
         service.addSubtask = function(subtasks, vat) {
-            subtasks.push({
+            var temp = {
                 "description": "",
-                "resources": [{
-                    "open": false,
-                    "resource_id": 0,
-                    "position": 0,
-                    "name": "",
-                    "product_ref": "",
-                    "unit_id": 0,
-                    "unit_name": '',
-                    "unit_obj": {},
-                    "resource_type_id": 0,
-                    "resource_type_name": "",
-                    "direct_cost": 0,
-                    "quantity": 0,
-                    "resource_margin": 0,
-                    "current_day": "",
-                    "stage_id": 0,
-                    "stage_name": "",
-                    "calculation": true,
-                    "vat": vat || 0,
-                    "total_cost": 0
-                }]
+                "resources": []
+            };
+            service.addResource(temp.resources, {
+                open: false,
+                stage_id: 0,
+                calculation: true,
+                vat: 0
             });
-        };
-        service.addResourcePi = function(resources, vat) {
-            resources.push({
-                "open": false,
-                "resource_id": 0,
-                "position": 0,
-                "name": "",
-                "product_ref": "",
-                "unit_obj": {},
-                "unit_id": 0,
-                "unit_name": '',
-                "resource_type_id": 0,
-                "resource_type_name": "",
-                "direct_cost": 0,
-                "quantity": 0,
-                "resource_margin": 0,
-                "current_day": "",
-                "stage_id": 0,
-                "stage_name": "",
-                "calculation": true,
-                "vat": vat || 0,
-                "total_cost": 0
-            });
-        };
-        service.addResourceInSubtask = function(resources, vat) {
-            resources.resources.push({
-                "open": false,
-                "resource_id": 0,
-                "position": 0,
-                "name": "",
-                "product_ref": "",
-                "unit_id": 0,
-                "unit_name": '',
-                "unit_obj": {},
-                "resource_type_id": 0,
-                "resource_type_name": "",
-                "direct_cost": 0,
-                "quantity": 0,
-                "resource_margin": 0,
-                "current_day": "",
-                "stage_id": 0,
-                "stage_name": "",
-                "vat": vat || 0,
-                "calculation": true,
-                "total_cost": 0
-            });
+            subtasks.push(temp);
         };
         service.goToResource = function(substate, filter, resourceField, aux) {
             if (substate || resourceField && resourceField.id == 0) {
@@ -568,6 +509,34 @@ ppApp.service('CommonServices', [
             } else {
                 aux.linkAux = 'schedulings';
                 aux.titleShow = 'Schedulings';
+            }
+        };
+        service.goState = function(state, substate, filter, data) {
+            filter.state = state;
+            var aux = {
+                linkAux: data.linkAux,
+                titleShow: data.titleShow
+            }
+            switch (state) {
+                case 'resource':
+                    service.goToResource(substate, filter, data.resourceField, aux);
+                    break;
+                case 'staff':
+                    service.goToStaff(substate, filter, data.staffField, aux);
+                    break;
+                case 'scheduling':
+                    service.goToScheduling(substate, filter, data.payitemField, aux);
+                    service.doTotal('pisubtask', filter.substate);
+                    break;
+                case 'payitem':
+                    service.goToPayitem(substate, filter, data.payitemField, aux);
+                    if (filter.substate)
+                        service.doTotal('pisubtask', filter.substate);
+                    break;
+            }
+            return {
+                linkAux: aux.linkAux,
+                titleShow: aux.titleShow
             }
         };
         service.goStateDown = function(state, substate, data, filter, aux) {
@@ -684,6 +653,156 @@ ppApp.service('CommonServices', [
                         console.log(err);
                     });
             }
+        };
+        service.backHelper = function(linkAux, filter, data) { //TODO:
+            var response = {};
+            switch (linkAux) {
+                case 'photos':
+                    filter.substate = null;
+                    filter.state = 'form';
+                    response.linkAux = 'forms';
+                    break;
+                case 'photodetails':
+                    //return from test picture to gallery
+                    filter.substate = 'gallery';
+                    response.linkAux = 'photos';
+                    pullDown();
+                    break;
+                case 'resource':
+                    service.doTotal('resource', data.resourceField);
+                    response.titleShow = 'Resources';
+                    filter.state = 'resource';
+                    filter.substate = null;
+                    response.linkAux = 'resources';
+                    break;
+                case 'resources':
+                    filter.state = 'form';
+                    $scope.linkAux = 'forms';
+                    break;
+                case 'staff':
+                    filter.state = 'staff';
+                    response.titleShow = 'Staffs';
+                    filter.substate = null;
+                    response.linkAux = 'staffs';
+                    break;
+                case 'staffs':
+                    filter.state = 'form';
+                    response.linkAux = 'forms';
+                    break;
+                case 'scheduling':
+                    if (filter.substate) {
+                        filter.state = 'scheduling';
+                        service.doTotal('pi', data.payitemField);
+                        filter.substateStkRes = null;
+                        filter.substateStk = null;
+                        filter.substateRes = null;
+                        filter.substate = null;
+                        response.titleShow = 'Schedulings';
+                        response.linkAux = 'schedulings';
+                    } else {
+                        filter.state = 'form';
+                        response.linkAux = 'forms';
+                        response.titleShow = $scope.formData.name;
+                    }
+                    break;
+                case 'schedulings':
+                    filter.state = 'form';
+                    response.linkAux = 'forms';
+                    response.titleShow = $scope.formData.name;
+                    break;
+                case 'schedulingStk':
+                    filter.state = 'scheduling';
+                    service.doTotal('pisubtask', filter.substate);
+                    filter.substateStk = null;
+                    response.linkAux = 'scheduling';
+                    if (filter.substate.description) {
+                        response.titleShow = 'Scheduling: ' + filter.substate.description;
+                    } else {
+                        response.titleShow = 'Scheduling';
+                    }
+                    break;
+                case 'schedulingSubRes':
+                    filter.state = 'scheduling';
+                    service.doTotal('pisubtask', filter.substateStk);
+                    filter.actionBtnShow = true;
+                    filter.substateStkRes = null;
+                    $scope.linkAux = 'schedulingStk';
+                    if (filter.substateStk.description) {
+                        $scope.titleShow = 'Scheduling Subtaks: ' + filter.substateStk.description;
+                    } else {
+                        $scope.titleShow = 'Scheduling Subtaks';
+                    }
+                    break;
+                case 'schedulingRes':
+                    filter.state = 'scheduling';
+                    service.doTotal('piresource', filter.substate);
+                    filter.actionBtnShow = true;
+                    filter.substateRes = null;
+                    $scope.linkAux = 'scheduling';
+                    if (filter.substate.description) {
+                        $scope.titleShow = 'Scheduling:' + filter.substate.description;
+                    } else {
+                        $scope.titleShow = 'Scheduling';
+                    }
+                    break;
+                case 'payitem':
+                    if (filter.substate) {
+                        filter.state = 'payitem';
+                        service.doTotal('pi', $scope.payitemField);
+                        filter.substateStkRes = null;
+                        filter.substateStk = null;
+                        filter.substateRes = null;
+                        filter.substate = null;
+                        $scope.titleShow = 'Pay-items';
+                        $scope.linkAux = 'payitems';
+                    } else {
+                        filter.state = 'form';
+                        $scope.linkAux = 'forms';
+                        $scope.titleShow = $scope.formData.name;
+                    }
+                    break;
+                case 'payitems':
+                    filter.state = 'form';
+                    $scope.linkAux = 'forms';
+                    $scope.titleShow = $scope.formData.name;
+                    break;
+                case 'payitemStk':
+                    filter.state = 'payitem';
+                    service.doTotal('pisubtask', filter.substate);
+                    filter.substateStk = null;
+                    $scope.linkAux = 'payitem';
+                    if (filter.substate.description) {
+                        $scope.titleShow = 'Pay-item: ' + filter.substate.description;
+                    } else {
+                        $scope.titleShow = 'Pay-item';
+                    }
+                    break;
+                case 'payitemSubRes':
+                    filter.state = 'payitem';
+                    service.doTotal('pisubresource', filter.substateStk);
+                    filter.actionBtnShow = true;
+                    filter.substateStkRes = null;
+                    $scope.linkAux = 'payitemStk';
+                    if (filter.substateStk.description) {
+                        $scope.titleShow = 'Pay-item Subtaks: ' + filter.substateStk.description;
+                    } else {
+                        $scope.titleShow = 'Pay-item Subtaks';
+                    }
+                    break;
+                case 'payitemRes':
+                    filter.state = 'payitem';
+                    service.doTotal('piresource', filter.substate);
+                    filter.actionBtnShow = true;
+                    filter.substateRes = null;
+                    $scope.linkAux = 'payitem';
+                    if (filter.substate.description) {
+                        $scope.titleShow = 'Pay-item:' + filter.substate.description;
+                    } else {
+                        $scope.titleShow = 'Pay-item';
+                    }
+                    break;
+            }
+            $scope.goToTop();
         };
         service.addResourceManually = function(filter) {
             switch (filter.state) {
