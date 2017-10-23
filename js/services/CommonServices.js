@@ -105,7 +105,7 @@ ppApp.service('CommonServices', [
                 "resource_margin": 0,
                 "stage_id": 1,
                 "stage_name": '',
-                "vat": vat,
+                "vat": vat || 0,
                 "quantity": 0,
                 "current_day": '',
                 "total_cost": 0,
@@ -170,7 +170,7 @@ ppApp.service('CommonServices', [
                     "stage_id": 0,
                     "stage_name": "",
                     "calculation": true,
-                    "vat": vat,
+                    "vat": vat || 0,
                     "total_cost": 0
                 }]
             });
@@ -194,7 +194,7 @@ ppApp.service('CommonServices', [
                 "stage_id": 0,
                 "stage_name": "",
                 "calculation": true,
-                "vat": vat,
+                "vat": vat || 0,
                 "total_cost": 0
             });
         };
@@ -216,7 +216,7 @@ ppApp.service('CommonServices', [
                 "current_day": "",
                 "stage_id": 0,
                 "stage_name": "",
-                "vat": vat,
+                "vat": vat || 0,
                 "calculation": true,
                 "total_cost": 0
             });
