@@ -91,6 +91,10 @@ ppApp.controller('NavCtrl', [
             }
         };
 
+        $scope.goOnWeb = function() {
+            window.open('http://app.preprod.proproject.io/', "_system");
+        }
+
         $rootScope.$on('sync.todo', function() {
             console.log('nav ctrl - on sync');
             $state.go('app.categories', {

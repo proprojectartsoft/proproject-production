@@ -9,7 +9,7 @@
     <ion-side-menu side="left" class="dark" drag-content="toggledrag">
         <header class="bar bar-header bar-dark"></header>
         <ion-content class="has-header dark-bg">
-            <ion-item nav-clear menu-close class="dark-bg dark-border" style="color:#fff;    padding-bottom: 0px;">
+            <ion-item nav-clear menu-close class="dark-bg dark-border" style="color:#fff; padding-bottom: 0px;">
                 <div class="user-circle-img">
                     <img src="img/new/user_default.png">
                 </div>
@@ -18,7 +18,7 @@
             </ion-item>
             <ion-item nav-clear menu-close ng-click="logout()" class="dark-bg menu-item p-10-15" style="color:#fff; border-top: none; padding: 0px;">
                 <div class="item item-toggle menu-disconnect">
-                    <button class="button button-block button-calm" style="margin-top:5px;height: 30px;min-height: 30px;line-height: 20px;">Logout</button>
+                    <button class="button button-block button-calm" style="margin-top:5px;height: 30px;min-height: 30px;line-height: 20px;">Log out</button>
                 </div>
             </ion-item>
 
@@ -35,9 +35,9 @@
                 <img src="img/new/about.png">
                 <span>About</span>
             </ion-item>
-            <ion-item nav-clear menu-close href="" onclick="navigator.app.loadUrl('http://app.preprod.proproject.io/', {openExternal: true});" class="dark-bg dark-border menu-item project-web-link">
-                <img src="img/new/onweb.png">
-                <span>ProProject on web</span>
+            <ion-item nav-clear menu-close ng-click="goOnWeb()" class="ds-invert">
+                <img src="img/web4.png">
+                <span>Visit our website</span>
             </ion-item>
         </ion-content>
     </ion-side-menu>

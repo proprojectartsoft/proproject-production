@@ -268,10 +268,6 @@ input[type=checkbox].css-checkbox {
     padding: 0;
 }
 
-.project-web-link.dark-bg a.item-content {
-    padding: 16px 49px 16px 16px;
-}
-
 .dark-border {
     border-bottom: 1px #000 solid;
     border-color: #121d21;

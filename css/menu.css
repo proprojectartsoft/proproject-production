@@ -1,101 +1,127 @@
-.user-circle-img{
-	width: 90px;
-	height: 90px;
-	border-radius: 50%;
-	background-color: #1EBDF4;
-	text-align: center;
-	border: 4px #1EBDF4 solid;
-	overflow: hidden;
-	margin: 0 auto;
+.user-circle-img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #1EBDF4;
+    text-align: center;
+    border: 4px #1EBDF4 solid;
+    overflow: hidden;
+    margin: 0 auto;
 }
+
 .user-circle-img img {
-	width: 90px;
-	margin: 0 auto;
-	display: block;
-	margin-left: -4px;
+    width: 90px;
+    margin: 0 auto;
+    display: block;
+    margin-left: -4px;
 }
-.menu-name,
-.menu-email,
-.menu-disconnect{
-	font-size: 14px;
-	font-weight: 300;
-	color: #fff;
-	text-align: center;
+
+.menu-name, .menu-email, .menu-disconnect {
+    font-size: 14px;
+    font-weight: 300;
+    color: #fff;
+    text-align: center;
 }
-.menu-email{
-	color: #1EBDF4;
+
+.menu-email {
+    color: #1EBDF4;
 }
-.menu-disconnect{
-	font-weight: 400;
-	background: none;
-	border: none;
-	padding: 0;
+
+.ds-invert {
+    background-color: #fff;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    padding-bottom: 0;
 }
-.menu-disconnect .item-toggle{
-	background: none;
-	color: #fff;
-	font-size: 14px;
-	font-weight: 400;
-	width: 150px;
-	margin: 0 auto;
-	border: 0px;
+
+.ds-invert>img {
+    height: auto;
+    width: 30px;
 }
-.menu-disconnect .toggle input:checked + .track{
-	border-color: #fff;
-	background-color: #fff;
+
+.ds-invert span {
+    color: #32475a;
+    padding-left: 5px;
+    font-weight: 400;
+    font-size: 18px;
+    vertical-align: middle;
+    padding-bottom: 20px;
+    display: inline-block;
 }
-.menu-disconnect .toggle input:checked + .track .handle{
-	background-color: #1EBDF4;
+
+.menu-disconnect {
+    font-weight: 400;
+    background: none;
+    border: none;
+    padding: 0;
 }
-.menu-disconnect .toggle .track{
-	width: 48px;
-	height: 18px;
-	margin-top: 6px;
+
+.menu-disconnect .item-toggle {
+    background: none;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    width: 150px;
+    margin: 0 auto;
+    border: 0px;
 }
-.menu-item img{
-	width: 30px;
-	margin-right: 10px;
-	float: left;
+
+.menu-disconnect .toggle input:checked+.track {
+    border-color: #fff;
+    background-color: #fff;
 }
-.menu-item{
-	color: #fff;
-	font-size: 16px;
-	font-weight: 400;
+
+.menu-disconnect .toggle input:checked+.track .handle {
+    background-color: #1EBDF4;
 }
-.p-10-15{
-	padding: 10px 15px;
+
+.menu-disconnect .toggle .track {
+    width: 48px;
+    height: 18px;
+    margin-top: 6px;
 }
-.menu-open  ion-side-menu-content{
-	background-color: rgb(0, 0, 0);
+
+.menu-item img {
+    width: 30px;
+    margin-right: 10px;
+    float: left;
 }
-.menu-open ion-side-menu-content .view-container{
-	opacity: 0.8;
+
+.menu-item {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
 }
-.custom-menu .scroll{
-	height: 100%;
+
+.p-10-15 {
+    padding: 10px 15px;
 }
-.project-web-link{
-	position: absolute;
-	bottom: 0;
-	width: 100%;
+
+.menu-open ion-side-menu-content {
+    background-color: rgb(0, 0, 0);
 }
-.project-web-link span{
-	line-height: 20px!important;
+
+.menu-open ion-side-menu-content .view-container {
+    opacity: 0.8;
 }
-.project-web-link a.item-content {
-	background: #fff!important;
-	color: #8e8e8e!important;
+
+.custom-menu .scroll {
+    height: 100%;
 }
+
 .menu-item span {
-	margin-bottom: -6px;
-	display: inline-block;
-	float: left;
-	line-height: 30px;
+    margin-bottom: -6px;
+    display: inline-block;
+    float: left;
+    line-height: 30px;
+    font-size: 18px;
 }
-.menu-disconnect button{
-	display: inline-block;
-	width: auto;
-	min-height: 40px;
+
+.menu-disconnect button {
+    display: inline-block;
+    width: auto;
+    min-height: 40px;
 }
 
 #menu .bar-header .title-right {
