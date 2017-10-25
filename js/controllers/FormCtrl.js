@@ -157,173 +157,19 @@ ppApp.controller('FormCtrl', [
         };
         //Keep track of current state and set the state to go back to
         $scope.backHelper = function() {
-            switch ($scope.linkAux) {
-                case 'forms':
-                    $state.go('app.forms', {
-                        'projectId': $stateParams.projectId,
-                        'categoryId': $scope.formData.category_id
-                    });
-                    break;
-                case 'photos':
-                    $scope.filter.substate = null;
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    break;
-                case 'photodetails':
-                    $scope.filter.substate = 'gallery';
-                    $scope.linkAux = 'photos';
-                    pullDown();
-                    break;
-                case 'resource':
-                    CommonServices.doTotal('resource', $scope.resourceField);
-                    $scope.titleShow = 'Resources';
-                    $scope.filter.state = 'resource';
-                    $scope.filter.substate = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'resources';
-                    break;
-                case 'resources':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    break;
-                case 'staff':
-                    $scope.filter.state = 'staff';
-                    $scope.titleShow = 'Staffs';
-                    $scope.filter.substate = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'staffs';
-                    break;
-                case 'staffs':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    break;
-                case 'scheduling':
-                    if ($scope.filter.substate) {
-                        $scope.filter.state = 'scheduling';
-                        CommonServices.doTotal('pi', $scope.payitemField);
-                        $scope.filter.substateStkRes = null;
-                        $scope.filter.substateStk = null;
-                        $scope.filter.substateRes = null;
-                        $scope.filter.substate = null;
-                        $ionicScrollDelegate.resize();
-                        $scope.titleShow = 'Schedulings';
-                        $scope.linkAux = 'schedulings';
-                    } else {
-                        $scope.filter.state = 'form';
-                        $ionicScrollDelegate.resize();
-                        $scope.linkAux = 'forms';
-                        $scope.titleShow = $scope.formData.name;
-                    }
-                    break;
-                case 'schedulings':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    $scope.titleShow = $scope.formData.name;
-                    break;
-                case 'schedulingStk':
-                    $scope.filter.state = 'scheduling';
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    $scope.filter.substateStk = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'scheduling';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Scheduling: ' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Scheduling';
-                    }
-                    break;
-                case 'schedulingSubRes':
-                    $scope.filter.state = 'scheduling';
-                    CommonServices.doTotal('pisubtask', $scope.filter.substateStk);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateStkRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'schedulingStk';
-                    if ($scope.filter.substateStk.description) {
-                        $scope.titleShow = 'Scheduling Subtaks: ' + $scope.filter.substateStk.description;
-                    } else {
-                        $scope.titleShow = 'Scheduling Subtaks';
-                    }
-                    break;
-                case 'schedulingRes':
-                    $scope.filter.state = 'scheduling';
-                    CommonServices.doTotal('piresource', $scope.filter.substate);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'scheduling';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Scheduling:' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Scheduling';
-                    }
-                    break;
-                case 'payitem':
-                    if ($scope.filter.substate) {
-                        $scope.filter.state = 'payitem';
-                        CommonServices.doTotal('pi', $scope.payitemField);
-                        $scope.filter.substateStkRes = null;
-                        $scope.filter.substateStk = null;
-                        $scope.filter.substateRes = null;
-                        $scope.filter.substate = null;
-                        $ionicScrollDelegate.resize();
-                        $scope.titleShow = 'Pay-items';
-                        $scope.linkAux = 'payitems';
-                    } else {
-                        $scope.filter.state = 'form';
-                        $ionicScrollDelegate.resize();
-                        $scope.linkAux = 'forms';
-                        $scope.titleShow = $scope.formData.name;
-                    }
-                    break;
-                case 'payitems':
-                    $scope.filter.state = 'form';
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'forms';
-                    $scope.titleShow = $scope.formData.name;
-                    break;
-                case 'payitemStk':
-                    $scope.filter.state = 'payitem';
-                    CommonServices.doTotal('pisubtask', $scope.filter.substate);
-                    $scope.filter.substateStk = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'payitem';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Pay-item: ' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Pay-item';
-                    }
-                    break;
-                case 'payitemSubRes':
-                    $scope.filter.state = 'payitem';
-                    CommonServices.doTotal('pisubresource', $scope.filter.substateStk);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateStkRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'payitemStk';
-                    if ($scope.filter.substateStk.description) {
-                        $scope.titleShow = 'Pay-item Subtaks: ' + $scope.filter.substateStk.description;
-                    } else {
-                        $scope.titleShow = 'Pay-item Subtaks';
-                    }
-                    break;
-                case 'payitemRes':
-                    $scope.filter.state = 'payitem';
-                    CommonServices.doTotal('piresource', $scope.filter.substate);
-                    $scope.filter.actionBtnShow = true;
-                    $scope.filter.substateRes = null;
-                    $ionicScrollDelegate.resize();
-                    $scope.linkAux = 'payitem';
-                    if ($scope.filter.substate.description) {
-                        $scope.titleShow = 'Pay-item:' + $scope.filter.substate.description;
-                    } else {
-                        $scope.titleShow = 'Pay-item';
-                    }
-                    break;
+            if ($scope.linkAux == 'forms') {
+                $state.go('app.forms', {
+                    'projectId': $stateParams.projectId,
+                    'categoryId': $scope.formData.category_id
+                });
+            } else {
+                var temp = CommonServices.backHelper($scope.linkAux, $scope.filter, {
+                    resourceField: $scope.resourceField,
+                    payitemField: $scope.payitemField
+                }, true);
+                $scope.titleShow = temp.titleShow || $scope.formData.name || '';
+                $scope.linkAux = temp.linkAux;
+                $ionicScrollDelegate.resize();
             }
             $scope.goToTop();
         };

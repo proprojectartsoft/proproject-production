@@ -654,10 +654,11 @@ ppApp.service('CommonServices', [
                     });
             }
         };
-        service.backHelper = function(linkAux, filter, data) { //TODO:
+        service.backHelper = function(linkAux, filter, data, doCompute) {
             var response = {};
             switch (linkAux) {
                 case 'photos':
+                    //return from gallery to forms
                     filter.substate = null;
                     filter.state = 'form';
                     response.linkAux = 'forms';
@@ -669,19 +670,24 @@ ppApp.service('CommonServices', [
                     pullDown();
                     break;
                 case 'resource':
-                    service.doTotal('resource', data.resourceField);
-                    response.titleShow = 'Resources';
+                    //return from view resource details to resources list
+                    if (doCompute) {
+                        service.doTotal('resource', data.resourceField);
+                        response.titleShow = 'Resources';
+                    }
                     filter.state = 'resource';
                     filter.substate = null;
                     response.linkAux = 'resources';
                     break;
                 case 'resources':
+                    //return from resources list to forms
                     filter.state = 'form';
-                    $scope.linkAux = 'forms';
+                    response.linkAux = 'forms';
                     break;
                 case 'staff':
                     filter.state = 'staff';
-                    response.titleShow = 'Staffs';
+                    if (doCompute)
+                        response.titleShow = 'Staffs';
                     filter.substate = null;
                     response.linkAux = 'staffs';
                     break;
@@ -692,7 +698,8 @@ ppApp.service('CommonServices', [
                 case 'scheduling':
                     if (filter.substate) {
                         filter.state = 'scheduling';
-                        service.doTotal('pi', data.payitemField);
+                        if (doCompute)
+                            service.doTotal('pi', data.payitemField);
                         filter.substateStkRes = null;
                         filter.substateStk = null;
                         filter.substateRes = null;
@@ -702,17 +709,16 @@ ppApp.service('CommonServices', [
                     } else {
                         filter.state = 'form';
                         response.linkAux = 'forms';
-                        response.titleShow = $scope.formData.name;
                     }
                     break;
                 case 'schedulings':
                     filter.state = 'form';
                     response.linkAux = 'forms';
-                    response.titleShow = $scope.formData.name;
                     break;
                 case 'schedulingStk':
                     filter.state = 'scheduling';
-                    service.doTotal('pisubtask', filter.substate);
+                    if (doCompute)
+                        service.doTotal('pisubtask', filter.substate);
                     filter.substateStk = null;
                     response.linkAux = 'scheduling';
                     if (filter.substate.description) {
@@ -723,86 +729,90 @@ ppApp.service('CommonServices', [
                     break;
                 case 'schedulingSubRes':
                     filter.state = 'scheduling';
-                    service.doTotal('pisubtask', filter.substateStk);
+                    if (doCompute)
+                        service.doTotal('pisubtask', filter.substateStk);
                     filter.actionBtnShow = true;
                     filter.substateStkRes = null;
-                    $scope.linkAux = 'schedulingStk';
+                    response.linkAux = 'schedulingStk';
                     if (filter.substateStk.description) {
-                        $scope.titleShow = 'Scheduling Subtaks: ' + filter.substateStk.description;
+                        response.titleShow = 'Scheduling Subtaks: ' + filter.substateStk.description;
                     } else {
-                        $scope.titleShow = 'Scheduling Subtaks';
+                        response.titleShow = 'Scheduling Subtaks';
                     }
                     break;
                 case 'schedulingRes':
                     filter.state = 'scheduling';
-                    service.doTotal('piresource', filter.substate);
+                    if (doCompute)
+                        service.doTotal('piresource', filter.substate);
                     filter.actionBtnShow = true;
                     filter.substateRes = null;
-                    $scope.linkAux = 'scheduling';
+                    response.linkAux = 'scheduling';
                     if (filter.substate.description) {
-                        $scope.titleShow = 'Scheduling:' + filter.substate.description;
+                        response.titleShow = 'Scheduling:' + filter.substate.description;
                     } else {
-                        $scope.titleShow = 'Scheduling';
+                        response.titleShow = 'Scheduling';
                     }
                     break;
                 case 'payitem':
                     if (filter.substate) {
                         filter.state = 'payitem';
-                        service.doTotal('pi', $scope.payitemField);
+                        if (doCompute)
+                            service.doTotal('pi', data.payitemField);
                         filter.substateStkRes = null;
                         filter.substateStk = null;
                         filter.substateRes = null;
                         filter.substate = null;
-                        $scope.titleShow = 'Pay-items';
-                        $scope.linkAux = 'payitems';
+                        response.titleShow = 'Pay-items';
+                        response.linkAux = 'payitems';
                     } else {
                         filter.state = 'form';
-                        $scope.linkAux = 'forms';
-                        $scope.titleShow = $scope.formData.name;
+                        response.linkAux = 'forms';
                     }
                     break;
                 case 'payitems':
                     filter.state = 'form';
-                    $scope.linkAux = 'forms';
-                    $scope.titleShow = $scope.formData.name;
+                    response.linkAux = 'forms';
                     break;
                 case 'payitemStk':
                     filter.state = 'payitem';
-                    service.doTotal('pisubtask', filter.substate);
+                    if (doCompute)
+                        service.doTotal('pisubtask', filter.substate);
                     filter.substateStk = null;
-                    $scope.linkAux = 'payitem';
+                    response.linkAux = 'payitem';
                     if (filter.substate.description) {
-                        $scope.titleShow = 'Pay-item: ' + filter.substate.description;
+                        response.titleShow = 'Pay-item: ' + filter.substate.description;
                     } else {
-                        $scope.titleShow = 'Pay-item';
+                        response.titleShow = 'Pay-item';
                     }
                     break;
                 case 'payitemSubRes':
                     filter.state = 'payitem';
-                    service.doTotal('pisubresource', filter.substateStk);
+                    if (doCompute)
+                        service.doTotal('pisubresource', filter.substateStk);
                     filter.actionBtnShow = true;
                     filter.substateStkRes = null;
-                    $scope.linkAux = 'payitemStk';
+                    response.linkAux = 'payitemStk';
                     if (filter.substateStk.description) {
-                        $scope.titleShow = 'Pay-item Subtaks: ' + filter.substateStk.description;
+                        response.titleShow = 'Pay-item Subtaks: ' + filter.substateStk.description;
                     } else {
-                        $scope.titleShow = 'Pay-item Subtaks';
+                        response.titleShow = 'Pay-item Subtaks';
                     }
                     break;
                 case 'payitemRes':
                     filter.state = 'payitem';
-                    service.doTotal('piresource', filter.substate);
+                    if (doCompute)
+                        service.doTotal('piresource', filter.substate);
                     filter.actionBtnShow = true;
                     filter.substateRes = null;
-                    $scope.linkAux = 'payitem';
+                    response.linkAux = 'payitem';
                     if (filter.substate.description) {
-                        $scope.titleShow = 'Pay-item:' + filter.substate.description;
+                        response.titleShow = 'Pay-item:' + filter.substate.description;
                     } else {
-                        $scope.titleShow = 'Pay-item';
+                        response.titleShow = 'Pay-item';
                     }
                     break;
             }
-            $scope.goToTop();
+            return response;
         };
         service.addResourceManually = function(filter) {
             switch (filter.state) {
