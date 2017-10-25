@@ -140,15 +140,6 @@ ppApp.config([
                     }
                 }
             })
-            .state('app.myaccount', {
-                url: "/myaccount",
-                views: {
-                    'menuContent': {
-                        templateUrl: "view/myaccount.html",
-                        controller: 'MyAccountCtrl'
-                    }
-                }
-            })
             .state('app.shared', {
                 url: "/shared",
                 views: {
