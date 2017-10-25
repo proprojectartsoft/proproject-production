@@ -916,10 +916,7 @@ ppApp.service('CommonServices', [
                 parent.total_cost = 0;
                 if (type === 'resource' || type === 'piresource' || type === 'pisubresource') {
                     angular.forEach(parent.resources, function(res) {
-                        if (isNaN(res.quantity)) {
-                            res.total_cost = 0;
-                        }
-                        if (isNaN(res.direct_cost)) {
+                        if (isNaN(res.quantity) || isNaN(res.direct_cost)) {
                             res.total_cost = 0;
                         }
                         //compute resource sale price

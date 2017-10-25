@@ -94,7 +94,7 @@ ppApp.service('SyncService', [
                                 }
                                 tx.executeSql('INSERT INTO ' + tableName + ' VALUES (' + q + ')', values);
                             });
-                            prm.resolve(); //TODO: after executeSql; on transaction.then
+                            prm.resolve();
                         }, function(error) {
                             prm.resolve();
                             console.log('Transaction ERROR: ' + error.message);
@@ -172,11 +172,44 @@ ppApp.service('SyncService', [
                             localStorage.setObject('ppnavTitle', auxTitle.name);
                             localStorage.setObject('ppprojectId', auxTitle.id);
                         }
+                        //prepare project to be stored in local db
+                        var temp = [],
+                            fields = '',
+                            values = [],
+                            q = '',
+                            qs = '';
+                        //make a list with all fields of the first project
+                        for (var key in result.data[0]) {
+                            if (key == 'settings') {
+                                //add project's settings fields
+                                for (var subkey in result.data[0][key]) {
+                                    temp.push(result.data[0][key][subkey].name);
+                                    q += '?,';
+                                }
+                            } else {
+                                //add project's fields
+                                temp.push(key);
+                                q += '?,';
+                            }
+                        }
+                        q = q.substr(0, q.length - 1);
+                        fields = temp.join();
+
                         $APP.db.transaction(function(tx) {
                             tx.executeSql('DROP TABLE IF EXISTS ProjectsTable');
-                            tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (id int primary key, name text)');
-                            angular.forEach(result.data, function(project) {
-                                tx.executeSql('INSERT INTO ProjectsTable VALUES (?,?)', [project.id, project.name]);
+                            tx.executeSql('CREATE TABLE IF NOT EXISTS ProjectsTable (' + fields + ')');
+                            angular.forEach(result.data, function(res) {
+                                values = [];
+                                for (var key in res) {
+                                    if (key == 'settings') {
+                                        for (var subkey in res[key]) {
+                                            values.push(res[key][subkey].value);
+                                        }
+                                    } else {
+                                        values.push(res[key]);
+                                    }
+                                }
+                                tx.executeSql('INSERT INTO ProjectsTable VALUES (' + q + ')', values);
                             });
                             prm.resolve();
                         }, function(error) {
@@ -200,7 +233,7 @@ ppApp.service('SyncService', [
                     }
 
                     //method to add the given items to server
-                    var addItemsToServer = function(form, field, url) { 
+                    var addItemsToServer = function(form, field, url) {
                             var d = $q.defer(),
                                 cnt = 0,
                                 items = [],

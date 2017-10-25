@@ -37,8 +37,8 @@ ppApp.controller('FormInstanceCtrl', [
             var proj = $filter('filter')(res, {
                 id: $stateParams.projectId
             });
-            if (proj && proj.length && proj[0].settings) {
-                $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj[0].settings, 'name', "margin").value);
+            if (proj && proj.length) { // && proj[0].settings
+                $rootScope.proj_margin = parseInt(proj[0].margin) || 0; //parseInt(CommonServices.filterByField(proj[0].settings, 'name', "margin").value);
             } else {
                 $rootScope.proj_margin = 0;
             }

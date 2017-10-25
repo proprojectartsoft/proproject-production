@@ -70,11 +70,12 @@ ppApp.controller('FormCtrl', [
         //set project settings
         SyncService.getProjects().then(function(res) {
             var proj = CommonServices.filterByField(res, 'id', parseInt($stateParams.projectId, 10));
-            if (proj.settings) {
-                $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
-            } else {
-                $rootScope.proj_margin = 0;
-            }
+            $rootScope.proj_margin = parseInt(proj.margin) || 0;
+            // if (proj.settings) {
+            //     $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
+            // } else {
+            //     $rootScope.proj_margin = 0;
+            // }
         }, function(reason) {
             SettingService.show_message_popup("Error", reason);
         });

@@ -49,11 +49,12 @@ ppApp.controller('EditCtrl', [
         //set project settings
         SyncService.getProjects().then(function(res) {
             var proj = CommonServices.filterByField(res, 'id', $stateParams.projectId);
-            if (proj.settings) {
-                $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
-            } else {
-                $rootScope.proj_margin = 0;
-            }
+            $rootScope.proj_margin = parseInt(proj.margin) || 0;
+            // if (proj.settings) {
+            //     $rootScope.proj_margin =  parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
+            // } else {
+            //     $rootScope.proj_margin = 0;
+            // }
         }, function(reason) {
             SettingService.show_message_popup("Error", reason);
         });
