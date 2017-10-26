@@ -406,7 +406,7 @@ ppApp.service('CommonServices', [
                 "total_cost": 0
             });
         };
-        service.addStaff = function(resources, startTime, breakTime, finishTime, vat) {
+        service.addStaff = function(resources, startTime, breakTime, finishTime, vat, totalTime) {
             resources.push({
                 name: "",
                 customerId: 0,
@@ -426,7 +426,7 @@ ppApp.service('CommonServices', [
                 start_time: startTime,
                 break_time: breakTime,
                 finish_time: finishTime,
-                total_time: "",
+                total_time: totalTime,
                 comment: "",
                 vat: vat
             })
@@ -686,8 +686,10 @@ ppApp.service('CommonServices', [
                     break;
                 case 'staff':
                     filter.state = 'staff';
-                    if (doCompute)
+                    if (doCompute){
+                        service.doTotal('staff', filter.substate);
                         response.titleShow = 'Staffs';
+                    }
                     filter.substate = null;
                     response.linkAux = 'staffs';
                     break;
@@ -911,6 +913,22 @@ ppApp.service('CommonServices', [
             }
             data.quantity = Math.round(data.quantity * 100) / 100
         };
+        function calcTime(start, finish, breakTime) {
+          var hhmm = ''
+          var stringBreak = breakTime.split(":");
+          var stringStart = start.split(":");
+          var stringFinish = finish.split(":");
+          var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
+          var hh = Math.floor(totalTime / 60)
+          var mm = Math.abs(totalTime % 60)
+          hhmm = hh + ':';
+          if (mm < 10) {
+            hhmm = hhmm + '0' + mm;
+          } else {
+            hhmm = hhmm + mm;
+          }
+          return hhmm;
+        }
         service.doTotal = function(type, parent) {
             if (parent) {
                 parent.total_cost = 0;
@@ -950,6 +968,13 @@ ppApp.service('CommonServices', [
                         }
                         parent.total_cost = parent.total_cost + pi.total_cost;
                     });
+                }
+
+                if (type === 'staff') {
+                    parent.break_time = (typeof parent.break_time === "string") ? parent.break_time : $filter('date')(parent.break_time, "HH:mm");
+                    parent.start_time = (typeof parent.start_time === "string") ? parent.start_time : $filter('date')(parent.start_time, "HH:mm");
+                    parent.finish_time = (typeof parent.finish_time === "string") ? parent.finish_time : $filter('date')(parent.finish_time, "HH:mm");
+                    parent.total_time = calcTime(parent.start_time, parent.finish_time, parent.break_time);
                 }
 
                 if (type === 'payitem') {

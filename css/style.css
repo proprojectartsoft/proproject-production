@@ -757,3 +757,7 @@ ion-refresher {
 .header-title {
     left: 57px;
 }
+
+.staff-times{
+  display: block;
+}

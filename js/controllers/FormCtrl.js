@@ -168,6 +168,7 @@ ppApp.controller('FormCtrl', [
                     resourceField: $scope.resourceField,
                     payitemField: $scope.payitemField
                 }, true);
+                // if($scope.filter.start && $scope.filter.finish) console.log(calcTime($scope.filter.start, $scope.filter.finish, $scope.filter.break))
                 $scope.titleShow = temp.titleShow || $scope.formData.name || '';
                 $scope.linkAux = temp.linkAux;
                 $ionicScrollDelegate.resize();
