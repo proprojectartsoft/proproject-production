@@ -104,15 +104,6 @@ ppApp.controller('FormCtrl', [
                     'total_cost': 0,
                     'resources': []
                 };
-
-                CommonServices.addResource($scope.resourceField.resources, {
-                    open: true,
-                    stage_id: 1,
-                    calculation: false,
-                    id: 0,
-                    resource_field_id: 0,
-                    vat: 0
-                });
             }
             if ($scope.formData.pay_item_field_design) {
                 $scope.payitemField = {
@@ -122,10 +113,6 @@ ppApp.controller('FormCtrl', [
                     'display_resources': $scope.formData.pay_item_field_design.display_resources,
                     "pay_items": []
                 };
-                CommonServices.addPayitem($scope.payitemField.pay_items);
-                //     "open": true, TODO:
-                //     "child": true,
-
                 $scope.filter.substate = $scope.payitemField.pay_items[0];
             }
             if ($scope.formData.scheduling_field_design) {
@@ -134,9 +121,6 @@ ppApp.controller('FormCtrl', [
                     'display_subtask': $scope.formData.scheduling_field_design.true,
                     "pay_items": []
                 };
-                CommonServices.addPayitem($scope.payitemField.pay_items);
-                //     "open": true,
-                //     "child": true,
             }
             if ($scope.formData.staff_field_design) {
                 $scope.staffField = {
@@ -144,7 +128,6 @@ ppApp.controller('FormCtrl', [
                     'withTimes': $scope.formData.staff_field_design.withTimes,
                     'resources': []
                 };
-                CommonServices.addStaff($scope.staffField.resources, $scope.filter.start, $scope.filter.break, $scope.filter.finish, $scope.filter.vat);
             }
         }, function(reason) {
             console.log(reason);
@@ -193,7 +176,7 @@ ppApp.controller('FormCtrl', [
                 resourceField: $scope.resourceField,
                 staffField: $scope.staffField,
                 payitemField: $scope.payitemField
-            });
+            }, true);
             $scope.linkAux = temp.linkAux;
             $scope.titleShow = temp.titleShow;
             $ionicScrollDelegate.resize();

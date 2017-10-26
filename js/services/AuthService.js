@@ -59,8 +59,10 @@ ppApp.factory('AuthService', [
                     });
             },
             version: function() {
-                return $http.get($APP.server + '/api/userversion/session', '', {}).then(function(payload) {
+                return $http.get($APP.server + '/api/userversion/session', '', {}).success(function(payload) {
                     return payload.data;
+                }).error(function(err) {
+                    return err;
                 });
             },
             me: function() {

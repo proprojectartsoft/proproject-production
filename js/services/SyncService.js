@@ -54,7 +54,7 @@ ppApp.service('SyncService', [
         //get data from server
         var syncData = function() {
             var deferred = $q.defer();
-            AuthService.version().then(function(result) {
+            AuthService.version().success(function(result) {
                 localStorage.setObject('ppversion', result);
             });
 
@@ -495,7 +495,7 @@ ppApp.service('SyncService', [
                         .success(function(data) {
                             localStorage.setObject("ppuser", data);
                             if (isInit) {
-                                AuthService.version().then(function(result) {
+                                AuthService.version().success(function(result) {
                                     if (!localStorage.getItem('ppversion') || localStorage.getItem('ppversion') < result) {
                                         syncData().then(function(res) {
                                             defer.resolve();
@@ -503,6 +503,8 @@ ppApp.service('SyncService', [
                                     } else {
                                         defer.resolve();
                                     }
+                                }).error(function(err) {
+                                    defer.resolve();
                                 })
                             } else {
                                 syncData().then(function(res) {
