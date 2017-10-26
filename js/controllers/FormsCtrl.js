@@ -42,7 +42,7 @@ ppApp.controller('FormsCtrl', [
         }, function(reason) {
             console.log(reason);
         });
-  
+
         $scope.categoryName = $rootScope.categories[$stateParams.categoryId - 1].name;
 
         $scope.refresh = function() {
@@ -54,6 +54,7 @@ ppApp.controller('FormsCtrl', [
                         $rootScope.formDesigns.push(aux);
                     }
                 });
+                $scope.$broadcast('scroll.refreshComplete');
             })
         };
 

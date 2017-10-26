@@ -189,6 +189,7 @@ ppApp.controller('FormCompletedCtrl', [
                 $scope.$broadcast('scroll.refreshComplete');
             }, function(err) {
                 console.log(err);
+                $scope.$broadcast('scroll.refreshComplete');
             });
         };
 

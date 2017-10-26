@@ -6,7 +6,7 @@
                 <span ng-if="!payitem.description">Scheduling {{$index + 1}}</span>
                 <span ng-if="payitem.description">{{payitem.description}}</span>
                 <div class="item-subtotal">
-                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i> {{payitem.total_cost  | number: 2}}
+                    <i ng-if="currency === 'pound'">£</i><i ng-if="currency === 'dolar'">$</i><i ng-if="currency === 'euro'">€</i> {{payitem.total_cost | number: 2}}
                 </div>
                 <ion-option-button class="button-assertive" ng-click="deleteElement(payitemField.pay_items, payitem)" ng-if="filter.edit">
                     Delete
@@ -29,12 +29,16 @@
             <div class="blue-dropArrow"></div>
             <div class="formContent">
                 <div class="calm-border">
-                    <label class="item item-input item-stacked-label calm-border">
+                    <div class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Description</span>
                         </div>
-                        <input ng-change="updateTitle(filter.substate.description, 'Scheduling')" class="pp-input" ng-model="filter.substate.description" ng-readonly="!filter.edit">
-                    </label>
+                        <div style="position: relative">
+                          <input ng-change="updateTitle(filter.substate.description, 'Scheduling')" class="pp-input" ng-model="filter.substate.description" ng-readonly="!filter.edit">
+                          <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'payitem');
+                          $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="item item-input item-stacked-label calm-border">
                     <div class="inputLabel pp-pad-10">
@@ -42,8 +46,6 @@
                     </div>
                     <div style="position: relative">
                         <input class="pp-input" ng-model="filter.substate.reference" ng-readonly="!filter.edit">
-                        <!-- <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'pi');
-                            $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span> -->
                     </div>
                 </div>
                 <div class="calm-border">
@@ -118,7 +120,9 @@
                             <span class="all-name">Description</span>
                         </div>
                         <input ng-change="updateTitle(filter.substateStk.description, 'Scheduling Subtask')" class="pp-input" ng-model="filter.substateStk.description" ng-readonly="!filter.edit">
-                    </label>
+                        <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateStk, 'payitem');
+                          $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
+                      </label>
                 </div>
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">
                     <ion-list show-delete="data.showDelete">

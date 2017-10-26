@@ -42,10 +42,11 @@ ppApp.controller('RegisterCtrl', [
                 if (isInit) {
                     $scope.parsedData = $scope.transform(res.data.records);
                 }
+                $scope.$broadcast('scroll.refreshComplete');
             }, function(err) {
+                $scope.$broadcast('scroll.refreshComplete');
                 console.log(err);
             });
-            $scope.$broadcast('scroll.refreshComplete');
         }
 
         $scope.help = function(label, register) {

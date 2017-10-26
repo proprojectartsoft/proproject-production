@@ -92,9 +92,10 @@ ppApp.controller('RegistersCtrl', [
                     if (res.data) {
                         $scope.registers = res.data;
                     }
-                    $scope.$broadcast('scroll.refreshComplete');
                 }
+                $scope.$broadcast('scroll.refreshComplete');
             }, function(err) {
+                $scope.$broadcast('scroll.refreshComplete');
                 console.log(err);
             });
         }
