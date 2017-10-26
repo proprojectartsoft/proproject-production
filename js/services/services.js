@@ -455,9 +455,22 @@ ppApp.service('CommonServices', [
             });
             subtasks.push(temp);
         };
-        service.goToResource = function(substate, filter, resourceField, aux) {
-            if (substate || resourceField && resourceField.id == 0) {
-                filter.substate = substate || resourceField.resources[0];
+        service.goToResource = function(substate, filter, resourceField, aux, isCreate) {
+            if (!resourceField.resources.length && isCreate) {
+                service.addResource(resourceField.resources, {
+                    open: true,
+                    stage_id: 1,
+                    calculation: false,
+                    id: 0,
+                    resource_field_id: 0,
+                    vat: 0
+                });
+                filter.substate = resourceField.resources[0];
+                aux.linkAux = 'resource';
+                aux.titleShow = 'Resource';
+            } else
+            if (substate) {
+                filter.substate = substate;
                 aux.linkAux = 'resource';
                 if (filter.substate && filter.substate.name) {
                     aux.titleShow = 'Resource: ' + filter.substate.name;
@@ -469,9 +482,14 @@ ppApp.service('CommonServices', [
                 aux.titleShow = 'Resources';
             }
         };
-        service.goToStaff = function(substate, filter, staffField, aux) {
-            if (substate || staffField && staffField.id == 0) {
-                filter.substate = substate || staffField.resources[0];
+        service.goToStaff = function(substate, filter, staffField, aux, isCreate) {
+            if (!staffField.resources.length && isCreate) {
+                service.addStaff(staffField.resources, filter.start, filter.break, filter.finish, filter.vat);
+                filter.substate = staffField.resources[0];
+                aux.linkAux = 'staff';
+                aux.titleShow = 'Staff';
+            } else if (substate) {
+                filter.substate = substate;
                 aux.linkAux = 'staff';
                 if (filter.substate && filter.substate.name) {
                     aux.titleShow = 'Staff: ' + filter.substate.name;
@@ -483,9 +501,15 @@ ppApp.service('CommonServices', [
                 aux.titleShow = 'Staffs';
             }
         };
-        service.goToPayitem = function(substate, filter, payitemField, aux) {
-            if (substate || payitemField && payitemField.id == 0) {
-                filter.substate = substate || payitemField.pay_items[0];
+        service.goToPayitem = function(substate, filter, payitemField, aux, isCreate) {
+            if (!payitemField.pay_items.length && isCreate) {
+                service.addPayitem(payitemField.pay_items);
+                filter.substate = payitemField.pay_items[0];
+                aux.titleShow = 'Pay-item';
+                aux.linkAux = 'payitem';
+            }
+            if (substate) {
+                filter.substate = substate;
                 if (filter.substate && filter.substate.description) {
                     aux.titleShow = 'Pay-item: ' + filter.substate.description;
                 } else {
@@ -497,9 +521,15 @@ ppApp.service('CommonServices', [
                 aux.titleShow = 'Pay-items';
             }
         };
-        service.goToScheduling = function(substate, filter, payitemField, aux, projectId) {
-            if (substate || payitemField && payitemField.id == 0) {
+        service.goToScheduling = function(substate, filter, payitemField, aux, isCreate) {
+            if (!payitemField.pay_items.length && isCreate) {
+                service.addPayitem(payitemField.pay_items);
                 filter.substate = substate || payitemField.pay_items[0];
+                aux.titleShow = 'Scheduling';
+                aux.linkAux = 'scheduling';
+            }
+            if (substate) {
+                filter.substate = substate;
                 if (filter.substate && filter.substate.description) {
                     aux.titleShow = 'Scheduling: ' + filter.substate.description;
                 } else {
@@ -511,7 +541,7 @@ ppApp.service('CommonServices', [
                 aux.titleShow = 'Schedulings';
             }
         };
-        service.goState = function(state, substate, filter, data) {
+        service.goState = function(state, substate, filter, data, isCreate) {
             filter.state = state;
             var aux = {
                 linkAux: data.linkAux,
@@ -519,17 +549,17 @@ ppApp.service('CommonServices', [
             }
             switch (state) {
                 case 'resource':
-                    service.goToResource(substate, filter, data.resourceField, aux);
+                    service.goToResource(substate, filter, data.resourceField, aux, isCreate);
                     break;
                 case 'staff':
-                    service.goToStaff(substate, filter, data.staffField, aux);
+                    service.goToStaff(substate, filter, data.staffField, aux, isCreate);
                     break;
                 case 'scheduling':
-                    service.goToScheduling(substate, filter, data.payitemField, aux);
+                    service.goToScheduling(substate, filter, data.payitemField, aux, isCreate);
                     service.doTotal('pisubtask', filter.substate);
                     break;
                 case 'payitem':
-                    service.goToPayitem(substate, filter, data.payitemField, aux);
+                    service.goToPayitem(substate, filter, data.payitemField, aux, isCreate);
                     if (filter.substate)
                         service.doTotal('pisubtask', filter.substate);
                     break;
