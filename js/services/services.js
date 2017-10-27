@@ -326,6 +326,8 @@ ppApp.service('CommonServices', [
                     if (titleShow.indexOf('Staff') > -1) {
                         titleShow = 'Staff: ' + item.name;
                     }
+                    filter.popup_predicate.vat = item.vat;
+                    filter.popup_predicate.resource_margin = item.resource_margin || 0;
                     filter.popup_predicate.product_ref = item.product_ref;
                     filter.popup_predicate.direct_cost = item.direct_cost;
                     //set resource type
@@ -663,10 +665,6 @@ ppApp.service('CommonServices', [
                 case 'payitem':
                     filter.pi = true;
                     filter.popup_list = settings.payitems;
-                    // PayitemService.list_payitems(projectId).then(function(data) {
-                    //     $rootScope.payitem_list = data;
-                    //     filter.popup_list = $rootScope.payitem_list;
-                    // });
                     filter.popup_title = "Payitem filter"
                 default:
                     filter.pi = true;
@@ -678,7 +676,6 @@ ppApp.service('CommonServices', [
                         }
                     }, function(res) {
                         $rootScope.payitem_list = res.data;
-                        // filter.popup_list = $rootScope.payitem_list;
                     }, function(err) {
                         console.log(err);
                     });
@@ -1276,7 +1273,7 @@ ppApp.service('CommonServices', [
                         item.abseteeism_reason_name = item.absenteeism_obj.reason;
                     }
                     if (item.current_day_obj) {
-                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
+                        item.current_day = $filter('date')(item.current_day_obj, "yyyy-MM-dd");
                     }
                     if (item.expiry_date_obj) { //TODO: not for res
                         var date = new Date(item.expiry_date_obj);
@@ -1297,14 +1294,11 @@ ppApp.service('CommonServices', [
                             url: 'resourcefield',
                             data: specialFields.resourceField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.resource_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.resourceField = formData.resourceField || [];
                             formData.resourceField.push(specialFields.resourceField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1333,14 +1327,11 @@ ppApp.service('CommonServices', [
                             url: 'payitemfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.pay_item_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.payitemField = formData.payitemField || [];
                             formData.payitemField.push(specialFields.payitemField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1369,14 +1360,11 @@ ppApp.service('CommonServices', [
                             url: 'schedulingfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.scheduling_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.schedField = formData.schedField || [];
                             formData.schedField.push(specialFields.payitemField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1396,14 +1384,11 @@ ppApp.service('CommonServices', [
                             url: 'stafffield',
                             data: specialFields.staffField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.staff_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.staffField = formData.staffField || [];
                             formData.staffField.push(specialFields.staffField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1608,12 +1593,12 @@ ppApp.service('CommonServices', [
                                             if (res.current_day) {
                                                 var partsOfStr = res.current_day.split('-');
                                                 item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                                res.current_day_obj = res.current_day;
+                                                res.current_day_obj = item.current_day_obj //res.current_day;TODO:
                                             }
                                             if (res.expiry_date) {
                                                 var partsOfStr = res.expiry_date.split('-');
                                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                                res.expiry_date_obj = res.expiry_date;
+                                                res.expiry_date_obj = item.expiry_date_obj //TODO:res.expiry_date;
                                             }
                                             // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
                                             subtask.total_cost += res.total_cost;

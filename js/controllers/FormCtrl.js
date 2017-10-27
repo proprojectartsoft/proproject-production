@@ -48,9 +48,9 @@ ppApp.controller('FormCtrl', [
             $scope.filter.vat = parseInt(CommonServices.filterByField(custSett, 'name', 'vat').value, 10);
             $scope.currency = CommonServices.filterByField(custSett, 'name', 'currency').value;
             $scope.filter.currency = angular.copy($scope.currency);
-            $scope.filter.start = CommonServices.filterByField(custSett, 'name', 'start').value;
-            $scope.filter.break = CommonServices.filterByField(custSett, 'name', 'break').value;
-            $scope.filter.finish = CommonServices.filterByField(custSett, 'name', 'finish').value;
+            $scope.filter.start = $scope.filter.start || CommonServices.filterByField(custSett, 'name', 'start').value;
+            $scope.filter.break = $scope.filter.break || CommonServices.filterByField(custSett, 'name', 'break').value;
+            $scope.filter.finish = $scope.filter.finish || CommonServices.filterByField(custSett, 'name', 'finish').value;
             // $scope.filter.margin = CommonServices.filterByField(custSett,'name', 'margin').value;
         })
 
@@ -71,11 +71,9 @@ ppApp.controller('FormCtrl', [
         SyncService.getProjects().then(function(res) {
             var proj = CommonServices.filterByField(res, 'id', parseInt($stateParams.projectId, 10));
             $rootScope.proj_margin = parseInt(proj.margin) || 0;
-            // if (proj.settings) {
-            //     $rootScope.proj_margin = parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
-            // } else {
-            //     $rootScope.proj_margin = 0;
-            // }
+            $scope.filter.start = proj.start || CommonServices.filterByField(custSett, 'name', 'start').value || '06:00';
+            $scope.filter.break = proj.break || CommonServices.filterByField(custSett, 'name', 'break').value || '00:30';
+            $scope.filter.finish = proj.finish || CommonServices.filterByField(custSett, 'name', 'finish').value || '16:00';
         }, function(reason) {
             SettingService.show_message_popup("Error", reason);
         });
