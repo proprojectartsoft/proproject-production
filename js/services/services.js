@@ -309,6 +309,7 @@ ppApp.service('CommonServices', [
             return {};
         };
         service.selectPopover = function(filter, item, titleShow) {
+            //filter.popup_predicate is the same as filter.substate
             if (!filter.pi) {
                 filter.popup_predicate.name = item.name;
                 if (filter.state == 'resource') {
@@ -326,6 +327,9 @@ ppApp.service('CommonServices', [
                     if (titleShow.indexOf('Staff') > -1) {
                         titleShow = 'Staff: ' + item.name;
                     }
+
+                    filter.popup_predicate.vat = item.vat;
+                    filter.popup_predicate.resource_margin = item.resource_margin || 0;
                     filter.popup_predicate.product_ref = item.product_ref;
                     filter.popup_predicate.direct_cost = item.direct_cost;
                     //set resource type
@@ -639,7 +643,6 @@ ppApp.service('CommonServices', [
                         filter.state = state;
                         aux.linkAux = 'payitemRes';
                         if (data.name) {
-                            console.log(data.name)
                             aux.titleShow = 'Pay-item Resource: ' + data.name;
                         } else {
                             aux.titleShow = 'Pay-item Resource';
@@ -651,6 +654,7 @@ ppApp.service('CommonServices', [
             }
         };
         service.openPopover = function(test, filter, projectId) {
+            //populate popup_list with the corresponding list of resources
             switch (test) {
                 case 'staff':
                     filter.pi = false;
@@ -663,10 +667,6 @@ ppApp.service('CommonServices', [
                 case 'payitem':
                     filter.pi = true;
                     filter.popup_list = settings.payitems;
-                    // PayitemService.list_payitems(projectId).then(function(data) {
-                    //     $rootScope.payitem_list = data;
-                    //     filter.popup_list = $rootScope.payitem_list;
-                    // });
                     filter.popup_title = "Payitem filter"
                 default:
                     filter.pi = true;
@@ -677,8 +677,7 @@ ppApp.service('CommonServices', [
                             projectId: projectId
                         }
                     }, function(res) {
-                        $rootScope.payitem_list = res.data;
-                        // filter.popup_list = $rootScope.payitem_list;
+
                     }, function(err) {
                         console.log(err);
                     });
@@ -716,7 +715,7 @@ ppApp.service('CommonServices', [
                     break;
                 case 'staff':
                     filter.state = 'staff';
-                    if (doCompute){
+                    if (doCompute) {
                         service.doTotal('staff', filter.substate);
                         response.titleShow = 'Staffs';
                     }
@@ -943,21 +942,22 @@ ppApp.service('CommonServices', [
             }
             data.quantity = Math.round(data.quantity * 100) / 100
         };
+
         function calcTime(start, finish, breakTime) {
-          var hhmm = ''
-          var stringBreak = breakTime.split(":");
-          var stringStart = start.split(":");
-          var stringFinish = finish.split(":");
-          var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
-          var hh = Math.floor(totalTime / 60)
-          var mm = Math.abs(totalTime % 60)
-          hhmm = hh + ':';
-          if (mm < 10) {
-            hhmm = hhmm + '0' + mm;
-          } else {
-            hhmm = hhmm + mm;
-          }
-          return hhmm;
+            var hhmm = ''
+            var stringBreak = breakTime.split(":");
+            var stringStart = start.split(":");
+            var stringFinish = finish.split(":");
+            var totalTime = ((parseInt(stringFinish[0]) * 60) + parseInt(stringFinish[1])) - ((parseInt(stringStart[0]) * 60) + parseInt(stringStart[1])) - ((parseInt(stringBreak[0]) * 60) + parseInt(stringBreak[1]));
+            var hh = Math.floor(totalTime / 60)
+            var mm = Math.abs(totalTime % 60)
+            hhmm = hh + ':';
+            if (mm < 10) {
+                hhmm = hhmm + '0' + mm;
+            } else {
+                hhmm = hhmm + mm;
+            }
+            return hhmm;
         }
         service.doTotal = function(type, parent) {
             if (parent) {
@@ -1276,7 +1276,7 @@ ppApp.service('CommonServices', [
                         item.abseteeism_reason_name = item.absenteeism_obj.reason;
                     }
                     if (item.current_day_obj) {
-                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
+                        item.current_day = $filter('date')(item.current_day_obj, "yyyy-MM-dd");
                     }
                     if (item.expiry_date_obj) { //TODO: not for res
                         var date = new Date(item.expiry_date_obj);
@@ -1297,14 +1297,11 @@ ppApp.service('CommonServices', [
                             url: 'resourcefield',
                             data: specialFields.resourceField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.resource_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.resourceField = formData.resourceField || [];
                             formData.resourceField.push(specialFields.resourceField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1333,14 +1330,11 @@ ppApp.service('CommonServices', [
                             url: 'payitemfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.pay_item_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.payitemField = formData.payitemField || [];
                             formData.payitemField.push(specialFields.payitemField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1369,14 +1363,11 @@ ppApp.service('CommonServices', [
                             url: 'schedulingfield',
                             data: specialFields.payitemField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.scheduling_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.schedField = formData.schedField || [];
                             formData.schedField.push(specialFields.payitemField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1396,14 +1387,11 @@ ppApp.service('CommonServices', [
                             url: 'stafffield',
                             data: specialFields.staffField
                         }, function(res) {
-                            // if (method == 'POST')
                             formData.staff_field_id = res.data.id;
                             def.resolve();
                         }, function(err) {
-                            // if (method == 'POST') {
                             formData.staffField = formData.staffField || [];
                             formData.staffField.push(specialFields.staffField);
-                            // }
                             def.resolve();
                         });
                     } else {
@@ -1608,12 +1596,12 @@ ppApp.service('CommonServices', [
                                             if (res.current_day) {
                                                 var partsOfStr = res.current_day.split('-');
                                                 item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                                res.current_day_obj = res.current_day;
+                                                res.current_day_obj = item.current_day_obj //res.current_day;TODO:
                                             }
                                             if (res.expiry_date) {
                                                 var partsOfStr = res.expiry_date.split('-');
                                                 item.expiry_date_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
-                                                res.expiry_date_obj = res.expiry_date;
+                                                res.expiry_date_obj = item.expiry_date_obj //TODO:res.expiry_date;
                                             }
                                             // res.total_cost = res.quantity * res.direct_cost + res.quantity * res.direct_cost * res.vat / 100;
                                             subtask.total_cost += res.total_cost;
@@ -1837,33 +1825,35 @@ ppApp.service('CommonServices', [
             return (requestForm);
         };
         service.viewField = function(data) {
-            if (data.type === "checkbox" && data.field_values && data.field_values.length > 0) {
-                if (data.field_values[0].value === 'true' || data.field_values[0].value === true) {
-                    data.value = true;
-                } else {
-                    data.value = false;
-                }
-            }
-            if ((data.type === "select" || data.type === "radio") && data.field_values && data.field_values.length > 0) {
-                angular.forEach(data.field_values, function(entry) {
-                    if (entry.value === true || entry.value === "true") {
-                        data.value = entry.name;
+            if (data.field_values && data.field_values.length > 0) {
+                if (data.type === "checkbox") {
+                    if (data.field_values[0].value === 'true' || data.field_values[0].value === true) {
+                        data.value = true;
+                    } else {
+                        data.value = false;
                     }
-                });
-            }
-            if (data.type === "time" && data.field_values && data.field_values.length > 0) {
-                if (data.field_values[0].value !== '' && data.field_values[0].value !== 0 && data.field_values[0].value !== '0') {
-                    data.value = new Date("01 " + data.field_values[0].value);
-                } else {
-                    data.value = null;
                 }
-            }
-            if (data.type === "date" && data.field_values && data.field_values.length > 0) {
-                var fix = data.field_values[0].value.substr(3, 2) + '-' + data.field_values[0].value.substr(0, 2) + '-' + data.field_values[0].value.substr(6, 4);
-                if (data.field_values[0].value !== '0' && data.field_values[0].value !== 0 && data.field_values[0].value !== '') {
-                    data.value = new Date(fix);
-                } else {
-                    data.value = null;
+                if (data.type === "select" || data.type === "radio") {
+                    angular.forEach(data.field_values, function(entry) {
+                        if (entry.value === true || entry.value === "true") {
+                            data.value = entry.name;
+                        }
+                    });
+                }
+                if (data.type === "time") {
+                    if (data.field_values[0].value !== '' && data.field_values[0].value !== 0 && data.field_values[0].value !== '0') {
+                        data.value = new Date("01 " + data.field_values[0].value);
+                    } else {
+                        data.value = null;
+                    }
+                }
+                if (data.type === "date") {
+                    var fix = data.field_values[0].value.substr(3, 2) + '-' + data.field_values[0].value.substr(0, 2) + '-' + data.field_values[0].value.substr(6, 4);
+                    if (data.field_values[0].value !== '0' && data.field_values[0].value !== 0 && data.field_values[0].value !== '') {
+                        data.value = new Date(fix);
+                    } else {
+                        data.value = null;
+                    }
                 }
             }
             return data;

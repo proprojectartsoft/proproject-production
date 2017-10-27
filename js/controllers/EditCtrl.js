@@ -40,9 +40,9 @@ ppApp.controller('EditCtrl', [
             $scope.filter.vat = parseInt(CommonServices.filterByField(custSett, 'name', 'vat').value, 10);
             $scope.currency = CommonServices.filterByField(custSett, 'name', 'currency').value;
             $scope.filter.currency = angular.copy($scope.currency);
-            $scope.filter.start = CommonServices.filterByField(custSett, 'name', 'start').value;
-            $scope.filter.break = CommonServices.filterByField(custSett, 'name', 'break').value;
-            $scope.filter.finish = CommonServices.filterByField(custSett, 'name', 'finish').value;
+            $scope.filter.start = $scope.filter.start || CommonServices.filterByField(custSett, 'name', 'start').value;
+            $scope.filter.break = $scope.filter.break || CommonServices.filterByField(custSett, 'name', 'break').value;
+            $scope.filter.finish = $scope.filter.finish || CommonServices.filterByField(custSett, 'name', 'finish').value;
             // $scope.filter.margin = CommonServices.filterByField(custSett, 'name','margin');
         })
 
@@ -50,11 +50,9 @@ ppApp.controller('EditCtrl', [
         SyncService.getProjects().then(function(res) {
             var proj = CommonServices.filterByField(res, 'id', $stateParams.projectId);
             $rootScope.proj_margin = parseInt(proj.margin) || 0;
-            // if (proj.settings) {
-            //     $rootScope.proj_margin =  parseInt(CommonServices.filterByField(proj.settings, 'name', "margin").value);
-            // } else {
-            //     $rootScope.proj_margin = 0;
-            // }
+            $scope.filter.start = proj.start || CommonServices.filterByField(custSett, 'name', 'start').value || '06:00';
+            $scope.filter.break = proj.break || CommonServices.filterByField(custSett, 'name', 'break').value || '00:30';
+            $scope.filter.finish = proj.finish || CommonServices.filterByField(custSett, 'name', 'finish').value || '16:00';
         }, function(reason) {
             SettingService.show_message_popup("Error", reason);
         });
@@ -150,11 +148,14 @@ ppApp.controller('EditCtrl', [
                 $scope.addStaff();
             }
         };
+        //open popover with the list of resources from filter.substate(Stk/StkRes)
         $scope.openPopover = function($event, predicate, test) {
+            //filter.popup_predicate takes the reference to filter.substate
             $scope.filter.popup_predicate = predicate;
             CommonServices.openPopover(test, $scope.filter, $stateParams.projectId);
             $scope.popover.show($event);
         };
+        //select one item from popup_list
         $scope.selectPopover = function(item) {
             CommonServices.selectPopover($scope.filter, item, $scope.titleShow);
             $scope.popover.hide();
@@ -266,6 +267,7 @@ ppApp.controller('EditCtrl', [
         });
         $scope.formData = angular.copy($rootScope.rootForm);
         $scope.titleShow = $scope.formData.name;
+
         $scope.goPicture = function() {
             $scope.filter.state = 'photos';
             $scope.filter.substate = 'gallery';
@@ -538,5 +540,11 @@ ppApp.controller('EditCtrl', [
                 }, 100);
             })
         }
+
+        if ($scope.filter && $scope.filter.substate && $scope.filter.substate.current_day_obj)
+            console.log($scope.filter.substate.current_day_obj);
+
+
+
     }
 ]);
