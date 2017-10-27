@@ -121,7 +121,7 @@
                         </div>
                         <input ng-change="updateTitle(filter.substateStk.description, 'Scheduling Subtask')" class="pp-input" ng-model="filter.substateStk.description" ng-readonly="!filter.edit">
                         <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substateStk, 'payitem');
-                          $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
+                          $event.stopPropagation();" style="position: absolute;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                       </label>
                 </div>
                 <div class="form-new-fields" ng-if="filter.substateStk.resources.length !== 0" style="margin-top:10px;">

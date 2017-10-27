@@ -136,12 +136,9 @@
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
     </div>
-    <!--    <input input id="{{hash}}" type="date" name="{{data.name}}"
-               ng-model="data.field_values[0].value" value="{{data.default_value}}"
-               placeholder="{{data.placeholder}}" ng-required="data.required">-->
     <div ng-required="data.required" ion-datetime-picker date ng-model="data.field_values[0].value" month-step="1" hour-step="1" minute-step="1" second-step="1">
-        <!--{{data.field_values[0].value| date: "dd-MM-yyyy"}}-->
-        <input date='dd-MM-yyyy' ng-model="data.field_values[0].value" style='padding: 15px;'>
+        <div ng-if="data.field_values[0].value" style='padding: 15px;background-color: #fff; color:#333333;font-size: 14px;'>{{data.field_values[0].value | date: 'dd-MM-yyyy'}}</div>
+        <div ng-if="!data.field_values[0].value" style='padding: 15px;background-color: #fff;color: #A4A4A4;font-size: 14px;'><span>tap here to input date</span></div>
     </div>
 </div>
 
@@ -151,11 +148,9 @@
         <span class="all-name" ng-class="{'all-req' : data.required }">{{data.name}}</span>
         <span class="all-description">{{data.guidance}}</span>
     </div>
-    <!--    <input input id="{{hash}}" type="time" name="{{data.name}}"
-               ng-model="data.field_values[0].value" value="{{data.default_value}}"
-               placeholder="{{data.placeholder}}" ng-required="data.required">-->
     <div class="datetime-picker" ng-required="data.required" ion-datetime-picker time ng-model="data.field_values[0].value" month-step="1" hour-step="1" minute-step="1" second-step="1">
-        <!--{{data.field_values[0].value| date: "H:mm"}}-->
-        <input date='HH:mm' ng-model="data.field_values[0].value" style='padding: 15px;'>
+        <div ng-if="data.field_values[0].value" style='padding: 15px;background-color: #fff; color:#333333;font-size: 14px;'>{{data.field_values[0].value | date: 'HH:mm'}}</div>
+        <div ng-if="!data.field_values[0].value" style='padding: 15px;background-color: #fff;color: #A4A4A4;font-size: 14px;'><span>tap here to input time</span></div>
+
     </div>
 </div>
