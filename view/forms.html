@@ -27,10 +27,11 @@
         <a class="tab-item active-tab">
             <img src="img/new/all forms.png">
         </a>
-        <a class="tab-item" ui-sref="app.completed({projectId:projectId, categoryId:categoryId})" ui-sref-opts="{reload: true}" ng-class="{'active-tab': tab == 'compl'};">
+        <a class="tab-item" ui-sref="app.completed({projectId:projectId, categoryId:categoryId})" ng-class="{'active-tab': tab == 'compl'};">
+            <!-- ui-sref-opts="{reload: false}" -->
             <img src="img/new/completed forms.png">
         </a>
-        <a class="tab-item" ui-sref="app.registers({projectId:projectId, categoryId:categoryId})" ui-sref-opts="{reload: true}" ng-class="{'active-tab' : tab == 'regs'};">
+        <a class="tab-item" ui-sref="app.registers({projectId:projectId, categoryId:categoryId})" ng-class="{'active-tab' : tab == 'regs'};">
             <img src="img/new/registers.png">
         </a>
     </div>

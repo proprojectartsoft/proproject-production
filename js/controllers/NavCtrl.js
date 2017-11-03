@@ -10,7 +10,7 @@ ppApp.controller('NavCtrl', [
     'SettingService',
     function($rootScope, $state, AuthService, $scope, $ionicSideMenuDelegate, CacheFactory, $timeout, SyncService, SettingService) {
         $scope.toggleLeft = function($event) {
-            $ionicSideMenuDelegate.toggleLeft();
+            $ionicSideMenuDelegate.toggleLeft(true);
         };
         var settingsCache = CacheFactory.get('settings');
         if (!settingsCache) {
