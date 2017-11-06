@@ -552,6 +552,7 @@ ppApp.service('CommonServices', [
             switch (state) {
                 case 'resource':
                     service.goToResource(substate, filter, data.resourceField, aux, isCreate);
+                    service.doTotal('resource', data.resourceField);
                     break;
                 case 'staff':
                     service.goToStaff(substate, filter, data.staffField, aux, isCreate);
