@@ -5,7 +5,8 @@
                 <!-- <span class="badge" style="float:left;position:static;margin-right: 5px;margin-left: -10px;background-color: #11C1F3;color:#fff">{{$index + 1}}</span> -->
                 <span ng-if="!resource.name">Staff {{$index + 1}}</span>
                 <span ng-if="resource.name">{{resource.name}}</span>
-                <span ng-if="resource.name" class="staff-times">{{resource.start_time}}/{{resource.break_time}}/{{resource.finish_time}} - {{resource.total_time}}</span>
+                <span ng-if="resource.current_day"> - {{resource.current_day.split('-')[2]}}.{{resource.current_day.split('-')[1]}}.{{resource.current_day.split('-')[0]}}</span>
+                <span ng-if="resource.name" class="staff-times">{{resource.start_time}}/{{resource.break_time}}/{{resource.finish_time}} - {{resource.total_time}}hrs</span>
                 <ion-option-button class="button-assertive" ng-click="deleteElement(staffField.resources, resource)" ng-if="filter.edit">
                     Delete
                 </ion-option-button>
