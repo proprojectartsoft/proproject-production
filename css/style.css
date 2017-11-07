@@ -761,3 +761,7 @@ ion-refresher {
 .staff-times{
   display: block;
 }
+
+.pp-scroll{
+  overflow: scroll;
+}
