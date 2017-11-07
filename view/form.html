@@ -1,6 +1,10 @@
 <ion-view title="Form" id="form" cache-view="false">
-    <ion-header-bar align-title="left" class="bar-subheader item item-button-left subHeader-form-bar" ng-click="backHelper()">
-        <div class="back-arrow ion-ios-arrow-left"></div>
+    <ion-header-bar align-title="left"
+                    class="bar-subheader item item-button-left subHeader-form-bar"
+                    ng-click="backHelper()"
+                    ng-class="{'input-disabled' : $root.form.form_special.$invalid === true}"
+                    ng-disabled="{{$root.form.form_special.$invalid}}">
+        <div class="back-arrow ion-ios-arrow-left" ng-class="{'input-disabled' : $root.form.form_special.$invalid === true}"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form' ">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
     <ion-content class="blue-bgd pp-scroll" ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate, 'swipe-preview': filter.state !== 'form' || repeatable == true}" delegate-handle="mainScroll">

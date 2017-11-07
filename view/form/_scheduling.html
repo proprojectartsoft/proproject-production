@@ -20,7 +20,7 @@
         <div class="header-prj-text"> Design: {{formData.name}}</div>
         <div class="blue-label">{{formData.code}}</div>
     </div>
-    <form class="form-container-bgd">
+    <form name="$root.form.form_special" class="form-container-bgd">
         <div style="position: relative; margin-bottom:5px">
             <div class="item-stable item fs all-field-header isOpen" style="width:100%">
                 <div class="fieldSet-name" ng-if="filter.substate.name">{{filter.substate.name}}</div>
@@ -34,7 +34,7 @@
                             <span class="all-name">Description</span>
                         </div>
                         <div style="position: relative">
-                          <input ng-change="updateTitle(filter.substate.description, 'Scheduling')" class="pp-input" ng-model="filter.substate.description" ng-readonly="!filter.edit">
+                          <input ng-change="updateTitle(filter.substate.description, 'Scheduling')" class="pp-input" ng-model="filter.substate.description" ng-readonly="!filter.edit" required>
                           <span ng-if="filter.edit" class="ion ion-folder" ng-click="openPopover($event, filter.substate, 'payitem');
                           $event.stopPropagation();" style="position: absolute;top: 0px;right: 0px;font-size: 26px;color: #31475a; padding: 10px 10px 10px 15px;"></span>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Unit</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substate.unit_obj" ng-disabled="!filter.edit"></select>
+                        <select required class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substate.unit_obj" ng-disabled="!filter.edit"></select>
                     </label>
                 </div>
                 <div class="calm-border">
@@ -61,7 +61,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input type="number" class="pp-input" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
+                        <input required type="number" class="pp-input" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
                     </label>
                 </div>
                 <div class="form-new-fields" style="margin-top:10px;">
@@ -106,7 +106,7 @@
         <div class="header-prj-text"> Design: {{formData.name}}</div>
         <div class="blue-label">{{formData.code}}</div>
     </div>
-    <form class="form-container-bgd">
+    <form name="$root.form.form_special" class="form-container-bgd">
         <div style="position: relative; margin-bottom:5px">
             <div class="item-stable item fs all-field-header isOpen" style="width:100%;background-color: #287BA7 !important;border-color: #287BA7 !important;">
                 <div class="fieldSet-name" ng-if="filter.substate.name">{{filter.substate.name}}</div>
@@ -151,7 +151,7 @@
         <div class="header-prj-text"> Design: {{formData.name}}</div>
         <div class="blue-label">{{formData.code}}</div>
     </div>
-    <form class="form-container-bgd">
+    <form name="$root.form.form_special" class="form-container-bgd">
         <div style="position: relative; margin-bottom:5px">
             <div class="item-stable item fs all-field-header isOpen" style="width:100%;background-color: #ed9100!important;border-color: #ed9100!important;">
                 <div class="fieldSet-name" ng-if="filter.substate.name">{{filter.substate.name}}</div>
@@ -181,43 +181,43 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource type</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in resource_type_list track by option.id" ng-model="filter.substateStkRes.res_type_obj"  ng-disabled="!filter.edit"></select>
+                        <select required class="form-select" ng-options="option as option.name for option in resource_type_list track by option.id" ng-model="filter.substateStkRes.res_type_obj"  ng-disabled="!filter.edit"></select>
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Unit</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substateStkRes.unit_obj" ng-disabled="!filter.edit"></select>
+                        <select required class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substateStkRes.unit_obj" ng-disabled="!filter.edit"></select>
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateStkRes.quantity" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateStkRes.quantity" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Direct cost</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateStkRes.direct_cost" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateStkRes.direct_cost" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource Margin (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateStkRes.resource_margin" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateStkRes.resource_margin" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Project Margin (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">VAT/Tax (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateStkRes.vat" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateStkRes.vat" ng-readonly="!filter.edit">
                     </label>
                 </div>
             </div>
@@ -229,7 +229,7 @@
         <div class="header-prj-text"> Design: {{formData.name}}</div>
         <div class="blue-label">{{formData.code}}</div>
     </div>
-    <form class="form-container-bgd">
+    <form name="$root.form.form_special" class="form-container-bgd">
         <div style="position: relative; margin-bottom:5px">
             <div class="item-stable item fs all-field-header isOpen" style="width:100%;background-color: #287BA7!important;border-color: #287BA7!important;">
                 <div class="fieldSet-name" ng-if="filter.substate.name">{{filter.substate.name}}</div>
@@ -259,43 +259,43 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource type</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in resource_type_list track by option.id" ng-model="filter.substateRes.res_type_obj" ng-disabled="!filter.edit"></select>
+                        <select required class="form-select" ng-options="option as option.name for option in resource_type_list track by option.id" ng-model="filter.substateRes.res_type_obj" ng-disabled="!filter.edit"></select>
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Unit</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substateRes.unit_obj" ng-disabled="!filter.edit"></select>
+                        <select required class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substateRes.unit_obj" ng-disabled="!filter.edit"></select>
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateRes.quantity" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateRes.quantity" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Direct cost</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateRes.direct_cost" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateRes.direct_cost" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource Margin (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateRes.resource_margin" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateRes.resource_margin" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Project Margin (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
                     </label>
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">VAT/Tax (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substateRes.vat" ng-readonly="!filter.edit">
+                        <input required class="pp-input" type="number" ng-model="filter.substateRes.vat" ng-readonly="!filter.edit">
                     </label>
                 </div>
             </div>

@@ -765,3 +765,29 @@ ion-refresher {
 .pp-scroll{
   overflow: scroll;
 }
+
+.input-disabled{
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
+input.ng-invalid.ng-touched {
+  border: 1px solid #ef5450;
+}
+
+input.ng-invalid-required.ng-untouched {
+  border-left: 3px solid #ef5450;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+select.ng-invalid.ng-touched {
+  border: 1px solid #ef5450;
+}
+
+select.ng-invalid-required.ng-untouched {
+  border-left: 3px solid #ef5450;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}

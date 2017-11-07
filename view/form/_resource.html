@@ -34,7 +34,7 @@
         <div class="header-prj-text"> Design: {{formData.name}}</div>
         <div class="blue-label">{{formData.code}}</div>
     </div>
-    <form class="form-container-bgd">
+    <form name='$root.form.form_special' class="form-container-bgd">
         <div style="position: relative; margin-bottom:5px">
             <div class="item-stable item fs all-field-header isOpen" style="width:100%">
                 <div class="fieldSet-name" ng-if="filter.substate.name">{{filter.substate.name}}</div>
@@ -85,7 +85,10 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Unit</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in unit_list track by option.id" ng-model="filter.substate.unit_obj" ng-disabled="!filter.edit"></select>
+                        <select class="form-select"
+                        ng-options="option as option.name for option in unit_list track by option.id"
+                        ng-model="filter.substate.unit_obj"
+                        ng-disabled="!filter.edit" required></select>
                     </label>
                 </div>
                 <div class="calm-border">
@@ -93,7 +96,10 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource type</span>
                         </div>
-                        <select class="form-select" ng-options="option as option.name for option in resource_type_list track by option.id" ng-model="filter.substate.res_type_obj" ng-disabled="!filter.edit"></select>
+                        <select class="form-select"
+                        ng-options="option as option.name for option in resource_type_list track by option.id"
+                        ng-model="filter.substate.res_type_obj"
+                        ng-disabled="!filter.edit" required></select>
                     </label>
                 </div>
                 <div class="calm-border">
@@ -101,7 +107,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Quantity</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substate.quantity" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.quantity" ng-readonly="!filter.edit" required>
                     </label>
                 </div>
                 <div class="calm-border" ng-if="resourceField.financial_option">
@@ -109,7 +115,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Direct cost</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substate.direct_cost" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.direct_cost" ng-readonly="!filter.edit" required>
                     </label>
                 </div>
 
@@ -119,7 +125,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource Margin (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substate.resource_margin" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.resource_margin" ng-readonly="!filter.edit" required>
                     </label>
                 </div>
                 <div class="calm-border">
@@ -127,7 +133,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Project Margin (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="$root.proj_margin" ng-readonly="!filter.edit" required>
                     </label>
                 </div>
 
@@ -136,7 +142,7 @@
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">VAT/Tax (%)</span>
                         </div>
-                        <input class="pp-input" type="number" ng-model="filter.substate.vat" ng-readonly="!filter.edit">
+                        <input class="pp-input" type="number" ng-model="filter.substate.vat" ng-readonly="!filter.edit" required />
                     </label>
                 </div>
             </div>
