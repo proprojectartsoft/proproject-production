@@ -7,7 +7,7 @@
         <!--<span class="all-ion-text" style="font-size: 15vw; color:#4A6780; text-align: center; padding-top:50vw; display:block;">Shared library</span>-->
         <div ng-repeat="reg in sharedListData| orderBy:'-date_completed'">
             <div class="all-field-header isOpen" style="margin-bottom:0px !important">
-                <span>{{num - $index}})&nbsp;{{reg['date_completed']| date:'EEE, dd MMM yyyy hh:mm a'}}</span>
+                <span>{{num - $index}})&nbsp;{{reg['accessed_on']| date:'EEE, dd MMM yyyy hh:mm a'}}</span>
             </div>
             <div class="item item item-input item-stacked-label calm-border" style="color: #31475A;padding: 10px !important;width: calc(100% - 2px);margin-left: 1px;background-color: #fff;margin-bottom: 5px">
                 <div class="register-value">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="register-value">
                     <div><strong>Shared on</strong></div>
-                    <span >{{reg.shared_on | date: "yyyy-MM-dd H:mm"}}</span>
+                    <span >{{reg.shared_on | date: "EEE, dd MMM yyyy hh:mm a"}}</span>
                 </div>
                 <div class="register-value">
                     <a ui-sref="app.sharedform({formId:reg.form_instance_id, id:reg.id})" class="button button-block button-calm" style=" margin-bottom: 0px;border-color: #11C1F3">View Form</a>
