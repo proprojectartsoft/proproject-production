@@ -13,7 +13,8 @@ ppApp.controller('FormCompletedCtrl', [
     'SecuredPopups',
     'PostService',
     'SettingService',
-    function($scope, $state, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, $timeout, SecuredPopups, PostService, SettingService) {
+    '$ionicPopup',
+    function($scope, $state, CacheFactory, $rootScope, $location, $stateParams, AuthService, $ionicSideMenuDelegate, $ionicHistory, $ionicListDelegate, $timeout, SecuredPopups, PostService, SettingService, $ionicPopup) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -59,13 +60,40 @@ ppApp.controller('FormCompletedCtrl', [
             }
         }
 
+        function createPopup(id) {
+            return {
+                template: '<input type="text" ng-model="filter.email">',
+                title: 'Share form',
+                subTitle: 'Please enter a valid e-mail address.',
+                scope: $scope,
+                buttons: [{
+                    text: '<i class="ion-person-add"></i>',
+                    onTap: function(e) {
+                        $scope.importContact(id);
+                    }
+                }, {
+                    text: 'Cancel',
+                }, {
+                    text: 'Send',
+                    type: 'button-positive',
+                    onTap: function(e) {
+                        if (!$scope.filter.email) {
+                            e.preventDefault();
+                            SettingService.show_message_popup('Share', "Please insert a valid e-mail address.");
+                        } else {
+                            sendEmail($scope.filter.email, id);
+                        }
+                    }
+                }]
+            }
+        }
+
         function addContact(id, contact) {
             if ($scope.filter.email && $scope.filter.email != "") {
                 if (!$scope.filter.email.includes(contact)) {
                     $scope.filter.email = $scope.filter.email + "," + contact;
                     $timeout(function() {
-                        // var popup = $ionicPopup.show(createPopup(id));
-                        SettingService.show_create_popup($scope.filter.email, $scope.importContact, sendEmail, id);
+                        $ionicPopup.show(createPopup(id));
                     });
                 } else {
                     SettingService.show_message_popup('Share', "E-mail already added to share list.");
@@ -73,8 +101,7 @@ ppApp.controller('FormCompletedCtrl', [
             } else {
                 $scope.filter.email = contact;
                 $timeout(function() {
-                    SettingService.show_create_popup($scope.filter.email, $scope.importContact, sendEmail, id);
-                    // var popup = $ionicPopup.show(createPopup(id));
+                    $ionicPopup.show(createPopup(id));
                 });
             }
         }
@@ -92,8 +119,7 @@ ppApp.controller('FormCompletedCtrl', [
         }
 
         $scope.shareThis = function(predicate) {
-            SettingService.show_create_popup($scope.filter.email, $scope.importContact, sendEmail, predicate.id);
-            // var popup = $ionicPopup.show(createPopup(predicate.id));
+            $ionicPopup.show(createPopup(predicate.id));
         };
 
         $scope.isLoaded = false;
