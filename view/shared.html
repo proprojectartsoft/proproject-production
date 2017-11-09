@@ -23,6 +23,10 @@
                     <span >{{reg.share_by_user_name}}</span>
                 </div>
                 <div class="register-value">
+                    <div><strong>Shared on</strong></div>
+                    <span >{{reg.shared_on | date: "yyyy-MM-dd H:mm"}}</span>
+                </div>
+                <div class="register-value">
                     <a ui-sref="app.sharedform({formId:reg.form_instance_id, id:reg.id})" class="button button-block button-calm" style=" margin-bottom: 0px;border-color: #11C1F3">View Form</a>
                 </div>
             </div>
