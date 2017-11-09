@@ -92,7 +92,8 @@ ppApp.controller('NavCtrl', [
         };
 
         $scope.goOnWeb = function() {
-            window.open('http://app.preprod.proproject.io/', "_system");
+            // window.open('http://app.proproject.io/', "_system");
+            window.location.replace('http://app.proproject.io/');
         }
 
         $rootScope.$on('sync.todo', function() {
