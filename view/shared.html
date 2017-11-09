@@ -16,7 +16,8 @@
                 </div>
                 <div class="register-value">
                     <div><strong>Shared to</strong></div>
-                    <span >{{reg.user_name}}</span>
+                    <span ng-if="reg.user_name !== 'first name last name'">{{reg.user_name}}</span>
+                    <span ng-if="reg.user_name === 'first name last name'">{{reg.login}}</span>
                 </div>
                 <div class="register-value">
                     <div><strong>Shared by</strong></div>
