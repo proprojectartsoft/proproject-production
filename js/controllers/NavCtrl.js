@@ -91,6 +91,11 @@ ppApp.controller('NavCtrl', [
             }
         };
 
+        $scope.goOnWeb = function() {
+          window.open('http://proproject.io/', '_system', 'location=yes');
+          return false;
+        }
+
         $rootScope.$on('sync.todo', function() {
             console.log('nav ctrl - on sync');
             $state.go('app.categories', {
