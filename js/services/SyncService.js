@@ -64,12 +64,9 @@ ppApp.service('SyncService', [
             localStorage.removeItem('pppsync');
 
             //method to get items from server from the given url and store them in local db, in the table given by tableName
-            var storeToLocalDb = function(url, tableName, order) {
+            var storeToLocalDb = function(data, tableName, order) {
                     var prm = $q.defer();
-                    PostService.post({
-                        method: 'GET',
-                        url: url
-                    }, function(result) {
+                    PostService.post(data, function(result) {
                         var fields = '',
                             values = [],
                             temp = [],
@@ -352,20 +349,86 @@ ppApp.service('SyncService', [
                     return prm.promise;
                 }
 
-            var formsPrm = addForms(formsToSync, picsToSync),
-                resources = storeToLocalDb('resource', 'ResourcesTable', true),
-                payitems = storeToLocalDb('payitem', 'PayitemsTable'),
-                unit = storeToLocalDb('unit', 'UnitTable'),
-                staff = storeToLocalDb('staff', 'StaffTable'),
-                resourceType = storeToLocalDb('resourcetype', 'ResourceTypeTable'),
-                absenteeism = storeToLocalDb('absenteeismreasons/list', 'AbsenteeismTable'),
-                custsett = storeToLocalDb('companysettings', 'CustsettTable'),
-                projPrm = projects(),
-                designsPrm = designs();
+            PostService.post({
+                method: 'GET',
+                url: 'companysettings'
+            }, function(result) {
+                var fields = '',
+                    values = [],
+                    temp = [],
+                    q = '',
+                    customerId = result.data[0].customer_id || 0;
 
-            Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designsPrm, projPrm, custsett, formsPrm]).then(function(res) {
-                deferred.resolve();
-            })
+                $APP.db.transaction(function(tx) {
+                    for (var key in result.data[0]) {
+                        temp.push(key);
+                        q += '?,';
+                    }
+                    q = q.substr(0, q.length - 1);
+                    fields = temp.join();
+                    tx.executeSql('DROP TABLE IF EXISTS CustsettTable');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS CustsettTable (' + fields + ')');
+                    angular.forEach(result.data, function(res) {
+                        values = [];
+                        for (var key in res) {
+                            values.push(res[key]);
+                        }
+                        tx.executeSql('INSERT INTO CustsettTable VALUES (' + q + ')', values);
+                    });
+
+                    var formsPrm = addForms(formsToSync, picsToSync),
+                        resources = storeToLocalDb({
+                            method: 'GET',
+                            url: 'resource'
+                        }, 'ResourcesTable', true),
+                        payitems = storeToLocalDb({
+                            method: 'GET',
+                            url: 'payitem'
+                        }, 'PayitemsTable'),
+                        unit = storeToLocalDb({
+                            method: 'GET',
+                            url: 'unit'
+                        }, 'UnitTable'),
+                        staff = storeToLocalDb({
+                            method: 'GET',
+                            url: 'staff'
+                        }, 'StaffTable'),
+                        resourceType = storeToLocalDb({
+                            method: 'GET',
+                            url: 'resourcetype',
+                            params: {
+                                customerId: customerId
+                            }
+                        }, 'ResourceTypeTable'),
+                        absenteeism = storeToLocalDb({
+                            method: 'GET',
+                            url: 'absenteeismreasons/list',
+                            params: {
+                                customerId: customerId
+                            }
+                        }, 'AbsenteeismTable'),
+                        projPrm = projects(),
+                        designsPrm = designs();
+
+                    Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designsPrm, projPrm, formsPrm]).then(function(res) {
+                        deferred.resolve();
+                    })
+                }, function(error) {
+                    console.log('Transaction ERROR: ' + error.message);
+                });
+            }, function(err) {})
+
+
+
+            // custsett = storeToLocalDb({
+            //     method: 'GET',
+            //     url: 'companysettings'
+            // }, 'CustsettTable').then(function(res) {
+            //     Promise.all([resources, unit, staff, resourceType, absenteeism, payitems, designsPrm, projPrm, formsPrm]).then(function(res) {
+            //         deferred.resolve();
+            //     })
+            // })
+
             return deferred.promise;
         };
 
