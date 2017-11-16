@@ -17,7 +17,7 @@ ppApp.factory('AuthService', [
                             'Accept': 'application/json;odata=verbose'
                         },
                         transformRequest: function(obj) {
-                            return 'login.user.name=' + user.username + '&login.user.password=' + user.password + '&user=true';
+                            return 'login.user.name=' + user.username + '&login.user.password=' + user.password + '&user=true' + '&login.user.gmt=' + user.gmt;
                         },
                         data: user
                     }).success(function(payload) {

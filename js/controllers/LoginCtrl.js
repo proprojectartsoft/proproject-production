@@ -11,7 +11,8 @@ ppApp.controller('LoginCtrl', [
         $scope.user = {
             username: "",
             password: "",
-            rememberMe: false
+            rememberMe: false,
+            gmt: -(new Date().getTimezoneOffset() / 60)
         }
         var ppremember = localStorage.getObject('ppremember');
         if (ppremember) {
@@ -73,7 +74,8 @@ ppApp.controller('LoginCtrl', [
             var popup = SettingService.show_loading_popup("Sync");
             AuthService.login({
                 username: $scope.user.username,
-                password: $scope.user.password
+                password: $scope.user.password,
+                gmt: -(new Date().getTimezoneOffset() / 60)
             }).success(function(response) {
                 localStorage.removeItem('loggedOut');
                 if (response) {
