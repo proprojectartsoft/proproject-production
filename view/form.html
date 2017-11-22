@@ -7,7 +7,7 @@
         <div class="back-arrow ion-ios-arrow-left" ng-class="{'input-disabled' : $root.form.form_special.$invalid === true}"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form' ">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
-    <ion-content class="blue-bgd pp-scroll" ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate, 'swipe-preview': filter.state !== 'form' || repeatable == true}" delegate-handle="mainScroll">
+    <ion-content class="blue-bgd pp-scroll" scroll="false" ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate, 'swipe-preview': filter.state !== 'form' || repeatable == true}" delegate-handle="mainScroll">
         <div class="content">
             <div class="list" ng-if="filter.state === 'form'">
                 <div class="formTitle clearfix" style="float:none">
