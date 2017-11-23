@@ -9,7 +9,8 @@ ppApp.controller('FormsCtrl', [
     '$ionicSideMenuDelegate',
     'SettingService',
     'SyncService',
-    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SettingService, SyncService) {
+    'PostService',
+    function($scope, $stateParams, $rootScope, AuthService, $state, $ionicHistory, $anchorScroll, $ionicSideMenuDelegate, SettingService, SyncService, PostService) {
 
         $scope.$on('$ionicView.enter', function() {
             $ionicHistory.clearHistory();
@@ -47,14 +48,38 @@ ppApp.controller('FormsCtrl', [
 
         $scope.refresh = function() {
             $rootScope.formDesigns = [];
-            SyncService.getDesigns().then(function(res) {
-                designsCache = res;
-                angular.forEach(designsCache, function(aux) {
+            PostService.post({
+                method: 'GET',
+                url: 'formdesign/mobilelist',
+                params: {
+                    categoryId: null
+                }
+            }, function(result) {
+                angular.forEach(result.data, function(aux) {
                     if (aux.category_id === parseInt($stateParams.categoryId)) {
                         $rootScope.formDesigns.push(aux);
                     }
                 });
-                $scope.$broadcast('scroll.refreshComplete');
+                $APP.db.transaction(function(tx) {
+                    tx.executeSql('DROP TABLE IF EXISTS DesignsTable');
+                    tx.executeSql('CREATE TABLE IF NOT EXISTS DesignsTable (id int primary key, name text, guidance text, category_id int, permission int, data text)');
+                    angular.forEach(result.data, function(form) {
+                        tx.executeSql('INSERT INTO DesignsTable VALUES (?,?,?,?,?,?)', [form.id, form.name, form.guidance, form.category_id, form.permission, JSON.stringify(form)]);
+                    });
+                    $scope.$broadcast('scroll.refreshComplete');
+                }, function(error) {
+                    $scope.$broadcast('scroll.refreshComplete');
+                    console.log('Transaction ERROR: ' + error.message);
+                });
+            }, function(err) {
+                SyncService.getDesigns().then(function(res) {
+                    angular.forEach(res, function(aux) {
+                        if (aux.category_id === parseInt($stateParams.categoryId)) {
+                            $rootScope.formDesigns.push(aux);
+                        }
+                    });
+                    $scope.$broadcast('scroll.refreshComplete');
+                })
             })
         };
 
