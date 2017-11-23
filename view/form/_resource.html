@@ -124,7 +124,7 @@
                 </div>
 
 
-                <div class="calm-border">
+                <div class="calm-border" ng-if="resourceField.financial_option">
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Resource Margin (%)</span>
@@ -132,7 +132,7 @@
                         <input class="pp-input" type="number" ng-model="filter.substate.resource_margin" ng-readonly="!filter.edit" required>
                     </label>
                 </div>
-                <div class="calm-border">
+                <div class="calm-border" ng-if="resourceField.financial_option">
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">Project Margin (%)</span>
@@ -141,7 +141,7 @@
                     </label>
                 </div>
 
-                <div class="calm-border">
+                <div class="calm-border" ng-if="resourceField.financial_option">
                     <label class="item item-input item-stacked-label calm-border">
                         <div class="inputLabel pp-pad-10">
                             <span class="all-name">VAT/Tax (%)</span>
