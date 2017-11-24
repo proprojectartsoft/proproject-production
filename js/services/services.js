@@ -317,6 +317,7 @@ ppApp.service('CommonServices', [
                     filter.popup_predicate.employer_name = item.employee_name;
                     filter.popup_predicate.staff_role = item.role;
                     filter.popup_predicate.direct_cost = item.direct_cost;
+                    filter.popup_predicate.staff_id = (item.id > 0) ? item.id : 0;
                     //set resource type
                     filter.popup_predicate.res_type_obj = service.filterByField(settings.resource_type, 'name', item.resource_type_name);
                     filter.popup_predicate.resource_type_id = filter.popup_predicate.res_type_obj.id;
