@@ -91,7 +91,7 @@ ppApp.controller('NavCtrl', [
             }
         };
 
-        $scope.goOnWeb = function() {
+        $scope.goOnline = function() {
           window.open('http://proproject.io/', '_system', 'location=yes');
           return false;
         }
