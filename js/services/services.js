@@ -669,7 +669,6 @@ ppApp.service('CommonServices', [
                     //return from test picture to gallery
                     filter.substate = 'gallery';
                     response.linkAux = 'photos';
-                    pullDown();
                     break;
                 case 'resource':
                     //return from view resource details to resources list
