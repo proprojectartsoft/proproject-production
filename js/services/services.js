@@ -400,7 +400,7 @@ ppApp.service('CommonServices', [
                 staff: true,
                 current_day: "",
                 start_time: startTime,
-                break_time: breakTime,
+                break_time: new Date(0, 0, 0, parseInt(breakTime.split(':')[0]), parseInt(breakTime.split(':')[1])),
                 finish_time: finishTime,
                 total_time: totalTime,
                 comment: "",
@@ -465,6 +465,7 @@ ppApp.service('CommonServices', [
                 aux.linkAux = 'staff';
                 aux.titleShow = 'Staff';
             } else if (substate) {
+                substate.break_time = substate.break_time ? new Date(0, 0, 0, parseInt(substate.break_time.split(':')[0]), parseInt(substate.break_time.split(':')[1])) : 0;
                 filter.substate = substate;
                 aux.linkAux = 'staff';
                 if (filter.substate && filter.substate.name) {
