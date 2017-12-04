@@ -71,8 +71,10 @@ ppApp.factory('AuthService', [
                     return user.data;
                 }, function errorCallback(response) {
                     $rootScope.online = false;
-                    SettingService.show_message_popup('Error', "Your session expired. Please log in to continue.");
-                    $state.go('login');
+                    if (navigator.onLine) {
+                      SettingService.show_message_popup('Error', "Your session expired. Please log in to continue.");
+                      $state.go('login');
+                    }
                 });
             }
         }
