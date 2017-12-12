@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.proproject.app" version="1.0.38" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="com.proproject.app" version="1.0.39" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:gap="http://phonegap.com/ns/1.0">
 
     <name>Pro Project</name>
 
@@ -7,9 +7,9 @@
 
     <author email="anthony.hanna@proproject.io" href="http://proproject.io/"></author>
 
-    <config-file platform="ios" parent="NSPhotoLibraryUsageDescription" overwrite="true">
+    <!-- <config-file platform="ios" parent="NSPhotoLibraryUsageDescription" overwrite="true">
         <string>We are using the Photo Library</string>
-    </config-file>
+    </config-file> -->
 
     <config-file platform="android" parent="/manifest/application">
         <application android:debuggable="true"/>
@@ -27,6 +27,9 @@
     <plugin name="cordova-plugin-file" source="npm" version="4.3.0" />
     <plugin name="cordova-plugin-file-transfer" source="npm" version="1.5.0" />
     <plugin name="cordova-plugin-camera" source="npm" version="2.4.1"/>
+      <param name="CAMERA_USAGE_DESCRIPTION" value="We are using the Camera for something..." />
+      <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="We are using the Photo Library for something..." />
+    </plugin>
     <plugin name="cordova-plugin-contacts" source="npm" version="2.3.1"/>
     <plugin name="cordova-plugin-network-information" source="npm"/>
     <plugin name="cordova-sqlite-storage" spec="~0.8.5"/>
