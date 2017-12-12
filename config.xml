@@ -26,7 +26,7 @@
     <plugin name="cordova-plugin-imagepicker" source="npm"/>
     <plugin name="cordova-plugin-file" source="npm" version="4.3.0" />
     <plugin name="cordova-plugin-file-transfer" source="npm" version="1.5.0" />
-    <plugin name="cordova-plugin-camera" source="npm" version="2.4.1"/>
+    <plugin name="cordova-plugin-camera" source="npm" version="2.4.1">
       <param name="CAMERA_USAGE_DESCRIPTION" value="We are using the Camera for something..." />
       <param name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="We are using the Photo Library for something..." />
     </plugin>
