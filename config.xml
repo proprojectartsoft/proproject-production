@@ -13,6 +13,7 @@
 
     <config-file platform="android" parent="/manifest/application">
         <application android:debuggable="false"/>
+        <application android:name="io.proproject.app"/>
     </config-file>
 
     <config-file platform="android" parent="/manifest">
