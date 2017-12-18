@@ -11,9 +11,9 @@
         <string>We are using the Photo Library</string>
     </config-file> -->
 
-    <config-file platform="android" parent="/manifest/application">
+    <!-- <config-file platform="android" parent="/manifest/application">
         <application android:debuggable="false"/>
-    </config-file>
+    </config-file> -->
 
     <config-file platform="android" parent="/manifest">
         <application android:theme="@android:style/Theme.NoTitleBar"></application>
