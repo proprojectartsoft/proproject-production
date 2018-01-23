@@ -1248,7 +1248,7 @@ ppApp.service('CommonServices', [
                         item.abseteeism_reason_name = item.absenteeism_obj.reason;
                     }
                     if (item.current_day_obj) {
-                        item.current_day = $filter('date')(item.current_day_obj, "yyyy-MM-dd");
+                        item.current_day = $filter('date')(item.current_day_obj, "dd-MM-yyyy");
                     }
                     if (item.expiry_date_obj) { //TODO: not for res
                         var date = new Date(item.expiry_date_obj);
@@ -1416,7 +1416,7 @@ ppApp.service('CommonServices', [
                                     item.total_cost = item.direct_cost * item.quantity + item.direct_cost * item.quantity * item.vat / 100;
                                     if (item.current_day) {
                                         var partsOfStr = item.current_day.split('-');
-                                        item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                        item.current_day_obj = new Date(partsOfStr[2], parseInt(partsOfStr[1]) - 1, partsOfStr[0])
                                     }
                                 });
                                 $rootScope.resourceField = data.resourceField;
@@ -1448,7 +1448,7 @@ ppApp.service('CommonServices', [
                                     item.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', item.abseteeism_reason_name);
                                     if (item.current_day) {
                                         var partsOfStr = item.current_day.split('-');
-                                        item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                        item.current_day_obj = new Date(partsOfStr[2], parseInt(partsOfStr[1]) - 1, partsOfStr[0])
                                     }
                                     if (item.expiry_date) {
                                         var partsOfStr = item.expiry_date.split('-');
@@ -1488,7 +1488,7 @@ ppApp.service('CommonServices', [
                                         res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
                                         if (res.current_day) {
                                             var partsOfStr = res.current_day.split('-');
-                                            item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                            item.current_day_obj = new Date(partsOfStr[2], parseInt(partsOfStr[1]) - 1, partsOfStr[0])
                                         }
                                         if (res.expiry_date) {
                                             var partsOfStr = res.expiry_date.split('-');
@@ -1505,7 +1505,7 @@ ppApp.service('CommonServices', [
                                             res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
                                             if (res.current_day) {
                                                 var partsOfStr = res.current_day.split('-');
-                                                item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                                item.current_day_obj = new Date(partsOfStr[2], parseInt(partsOfStr[1]) - 1, partsOfStr[0])
                                             }
                                             if (res.expiry_date) {
                                                 var partsOfStr = res.expiry_date.split('-');
@@ -1550,7 +1550,7 @@ ppApp.service('CommonServices', [
                                         res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
                                         if (res.current_day) {
                                             var partsOfStr = res.current_day.split('-');
-                                            item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                            item.current_day_obj = new Date(partsOfStr[2], parseInt(partsOfStr[1]) - 1, partsOfStr[0])
                                         }
                                         if (res.expiry_date) {
                                             var partsOfStr = res.expiry_date.split('-');
@@ -1567,7 +1567,7 @@ ppApp.service('CommonServices', [
                                             res.absenteeism_obj = service.filterByField(settings.absenteeism, 'reason', res.abseteeism_reason_name);
                                             if (res.current_day) {
                                                 var partsOfStr = res.current_day.split('-');
-                                                item.current_day_obj = new Date(partsOfStr[0], parseInt(partsOfStr[1]) - 1, partsOfStr[2])
+                                                item.current_day_obj = new Date(partsOfStr[2], parseInt(partsOfStr[1]) - 1, partsOfStr[0])
                                                 res.current_day_obj = item.current_day_obj //res.current_day;TODO:
                                             }
                                             if (res.expiry_date) {
