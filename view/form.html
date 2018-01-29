@@ -16,7 +16,7 @@
                 </div>
                 <form class="form-container-bgd">
                     <ion-list>
-                        <div ng-repeat="fieldset in formData.field_group_designs track by $index" data="fieldset" style="position: relative; margin-bottom:5px">
+                        <div ng-repeat="fieldset in formData.field_group_designs track by $index" data="fieldset" style="position: initial; margin-bottom:5px">
                             <ion-item id="{{formData.id}}:{{$index}}" ng-click="toggleGroup(fieldset, formData.id + ':' + $index)" ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}" class="item-stable item fs all-field-header" style="width:100%; padding: 0px !important">
                                 <div class="fieldSet-name">{{fieldset.name}}</div>
                                 <div class="ion-ios-arrow-down choose-arrow"></div>

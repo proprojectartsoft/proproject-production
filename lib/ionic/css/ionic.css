@@ -3360,6 +3360,7 @@ body.grade-c {
   margin-top: -1px;
   padding-top: 1px;
   margin-bottom: -1px;
+  padding-bottom: 0!important;
   width: auto;
   height: auto; }
 
