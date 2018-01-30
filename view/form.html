@@ -7,58 +7,75 @@
         <div class="back-arrow ion-ios-arrow-left" ng-class="{'input-disabled' : $root.form.form_special.$invalid === true}"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form' ">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
-    <ion-content class="blue-bgd pp-scroll" scroll="false" ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate, 'swipe-preview': filter.state !== 'form' || repeatable == true}" delegate-handle="mainScroll">
+    <ion-content class="blue-bgd pp-scroll"
+                 ng-class="{'grey-bgd':filter.state !== 'form' && !filter.substate, 'swipe-preview': filter.state !== 'form' || repeatable == true}"
+                 delegate-handle="mainScroll">
         <div class="content">
             <div class="list" ng-if="filter.state === 'form'">
-                <div class="formTitle clearfix" style="float:none">
+                <div class="formTitle">
                     <div class="header-prj-text"> Design: {{formData.name}}</div>
                     <div class="blue-label">{{formData.code}}</div>
                 </div>
                 <form class="form-container-bgd">
                     <ion-list>
-                        <div ng-repeat="fieldset in formData.field_group_designs track by $index" data="fieldset" style="position: relative; margin-bottom:5px">
-                            <ion-item id="{{formData.id}}:{{$index}}" ng-click="toggleGroup(fieldset, formData.id + ':' + $index)" ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}" class="item-stable item fs all-field-header" style="width:100%; padding: 0px !important">
+                        <div ng-repeat="fieldset in formData.field_group_designs track by $index"
+                             fs
+                             data="fieldset"
+                             style="position: relative; margin-bottom:5px">
+                            <ion-item id="{{formData.id}}:{{$index}}"
+                                      ng-click="toggleGroup(fieldset, formData.id + ':' + $index)"
+                                      ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}"
+                                      class="item-stable item fs all-field-header"
+                                      style="width:100%; padding: 0px !important">
                                 <div class="fieldSet-name">{{fieldset.name}}</div>
                                 <div class="ion-ios-arrow-down choose-arrow"></div>
                                 <span class="all-field-description">{{fieldset.guidance}}</span>
-                                <ion-option-button class="button-assertive" ng-click="repeatGroup(fieldset)" ng-if="fieldset.repeatable" style="background-color: #C8F7C5;color: #31475A;">
+                                <ion-option-button class="button-assertive"
+                                                   ng-click="repeatGroup(fieldset)"
+                                                   ng-if="fieldset.repeatable"
+                                                   style="background-color: #C8F7C5;color: #31475A;">
                                     Repeat
                                 </ion-option-button>
                             </ion-item>
                             <div ng-class="{'blue-dropArrow':shownGroup}"></div>
 
-                            <div class="formContent" ng-repeat="field in fieldset.field_designs" ng-show="isGroupShown(fieldset)">
+                            <div class="formContent"
+                                 ng-repeat="field in fieldset.field_designs"
+                                 ng-show="isGroupShown(fieldset)"
+                                 style="position: relative">
                                 <a ng-if="$first" style="padding: 15px 11px 15px; top:0px" class="all-field-repeat" ng-click="repeatField(fieldset, field)" ng-show="field.repeatable"><span class="icon ion-plus" style="color:#fff"></span> </a>
                                 <a ng-if="!$first" class="all-field-repeat" ng-click="repeatField(fieldset, field)" ng-show="field.repeatable"><span class="icon ion-plus" style="color:#fff"></span> </a>
                                 <field data="field"></field>
                             </div>
                         </div>
                     </ion-list>
+
+                    <div class="form-container-bgd" ng-if="formData.resource_field_design">
+                        <div class="item-stable item fs all-field-header">
+                            <span class="add-pic-text">Resource field</span>
+                            <button ng-click="goState('resource')">Open</button>
+                        </div>
+                    </div>
+                    <div class="form-container-bgd" ng-if="formData.scheduling_field_design">
+                        <div class="item-stable item fs all-field-header">
+                            <span class="add-pic-text">Scheduling field</span>
+                            <button ng-click="goState('scheduling')">Open</button>
+                        </div>
+                    </div>
+                    <div class="form-container-bgd" ng-if="formData.pay_item_field_design">
+                        <div class="item-stable item fs all-field-header">
+                            <span class="add-pic-text">Pay-item field</span>
+                            <button ng-click="goState('payitem')">Open</button>
+                        </div>
+                    </div>
+                    <div class="form-container-bgd" ng-if="formData.staff_field_design">
+                        <div class="item-stable item fs all-field-header">
+                            <span class="add-pic-text">Staff field</span>
+                            <button ng-click="goState('staff')">Open</button>
+                        </div>
+                    </div>
                 </form>
-                <div class="form-container-bgd" ng-if="formData.resource_field_design">
-                    <div class="item-stable item fs all-field-header">
-                        <span class="add-pic-text">Resource field</span>
-                        <button ng-click="goState('resource')">Open</button>
-                    </div>
-                </div>
-                <div class="form-container-bgd" ng-if="formData.scheduling_field_design">
-                    <div class="item-stable item fs all-field-header">
-                        <span class="add-pic-text">Scheduling field</span>
-                        <button ng-click="goState('scheduling')">Open</button>
-                    </div>
-                </div>
-                <div class="form-container-bgd" ng-if="formData.pay_item_field_design">
-                    <div class="item-stable item fs all-field-header">
-                        <span class="add-pic-text">Pay-item field</span>
-                        <button ng-click="goState('payitem')">Open</button>
-                    </div>
-                </div>
-                <div class="form-container-bgd" ng-if="formData.staff_field_design">
-                    <div class="item-stable item fs all-field-header">
-                        <span class="add-pic-text">Staff field</span>
-                        <button ng-click="goState('staff')">Open</button>
-                    </div>
-                </div>
+
                 <div class="form-container-bgd">
                     <div id="image-header" class="item-stable item fs all-field-header">
                         <span class="add-pic-text">Add pictures</span>

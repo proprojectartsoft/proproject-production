@@ -3,35 +3,47 @@
         <div class="back-arrow ion-ios-arrow-left"></div>
         <div class="header-prj-text"><span ng-if="filter.state === 'form'">{{formData.category}} - </span>{{titleShow}}</div>
     </ion-header-bar>
-    <ion-content class="blue-bgd pp-scroll" delegate-handle="mainScroll" ng-class="{'swipe-preview': filter.state !== 'form' || repeatable == true}">
+    <ion-content class="blue-bgd pp-scroll"
+                 delegate-handle="mainScroll"
+                 ng-class="{'swipe-preview': filter.state !== 'form' || repeatable == true}">
         <div class="content">
             <div class="list" ng-if="filter.state === 'form'">
-                <!--                                <a class="item item-button-left subHeader-form-bar" ng-click="back()"
-                                   href="#/app/view/{{projectId}}/{{formData.category_id}}">
-                                    <div class="back-arrow ion-ios-arrow-left"></div>
-                                    <div class="header-prj-text">{{formData.category}}</div>
-
-                                </a>-->
                 <div class="formTitle">
                     <div class="header-prj-text"> Form: {{formData.name}}</div>
                     <div class="blue-label">{{formData.code}}</div>
                 </div>
                 <form class="form-container-bgd">
                     <ion-list>
-                        <div ng-repeat="fieldset in formData.field_group_instances track by $index" fs data="fieldset" style="position: relative; margin-bottom:5px">
-
-                            <ion-item id="{{formData.id}}:{{$index}}" ng-click="toggleGroup(fieldset, formData.id + ':' + $index)" ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}" class="item-stable item fs all-field-header" style="width:100%; padding: 0px !important">
+                        <div ng-repeat="fieldset in formData.field_group_instances track by $index"
+                             fs
+                             data="fieldset"
+                             style="position: relative; margin-bottom:5px">
+                            <ion-item id="{{formData.id}}:{{$index}}"
+                                      ng-click="toggleGroup(fieldset, formData.id + ':' + $index)"
+                                      ng-class="{active: isGroupShown(group),isOpen:isGroupShown(fieldset)}"
+                                      class="item-stable item fs all-field-header"
+                                      style="width:100%; padding: 0px !important">
                                 <span class="fieldSet-name">{{fieldset.name}}</span>
                                 <div class="ion-ios-arrow-down choose-arrow"></div>
                                 <span class="all-field-description">{{fieldset.guidance}}</span>
-                                <ion-option-button class="button-assertive" ng-click="repeatGroup(fieldset)" ng-if="fieldset.repeatable" style="background-color: #C8F7C5;color: #31475A;">
+                                <ion-option-button class="button-assertive"
+                                                   ng-click="repeatGroup(fieldset)"
+                                                   ng-if="fieldset.repeatable"
+                                                   style="background-color: #C8F7C5;color: #31475A;">
                                     Repeat
                                 </ion-option-button>
                             </ion-item>
                             <div ng-class="{'blue-dropArrow':shownGroup}"></div>
-                            <div class="formContent" ng-repeat="field in fieldset.field_instances" style="position: relative" ng-show="isGroupShown(fieldset)">
-                                <a class="all-field-repeat" ng-click="repeatField(fieldset, field)" ng-show="field.repeatable"><span class="icon ion-plus"
-                                                                 style="color:#fff"></span> </a>
+
+                            <div class="formContent"
+                                 ng-repeat="field in fieldset.field_instances"
+                                 style="position: relative"
+                                 ng-show="isGroupShown(fieldset)">
+                                <a class="all-field-repeat"
+                                   ng-click="repeatField(fieldset, field)"
+                                   ng-show="field.repeatable"><span class="icon ion-plus"
+                                                                    style="color:#fff"></span>
+                                </a>
                                 <edit data="field"></edit>
                             </div>
                         </div>
