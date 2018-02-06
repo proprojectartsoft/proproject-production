@@ -332,8 +332,12 @@ ppApp.service('SyncService', [
                                 url: 'forminstance',
                                 data: form.form
                             }, function(res) {
+                                //mixpanel people proprieties
+                                mixpanel.people.increment('Forms completed: PP app', 1);
                                 uploadImages(picsToAdd, res.data.id, form.form.project_id).then(function(r) {
                                     count++;
+                                    //mixpanel people proprieties
+                                    mixpanel.people.increment('Images uploaded: PP app', 1);
                                     if (count >= forms.length) {
                                         prm.resolve();
                                     }
