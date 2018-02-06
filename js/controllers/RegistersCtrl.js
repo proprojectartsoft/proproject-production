@@ -24,7 +24,9 @@ ppApp.controller('RegistersCtrl', [
         $rootScope.slideHeaderHelper = false;
 
         // mixpanel track events
-        mixpanel.track("Page view: PP app", {'Page name:': 'Registers list'});
+        if (navigator.onLine) {
+          mixpanel.track("Page view: PP app", {'Page name:': 'Registers list'});
+        }
 
         $scope.$on('$stateChangeSuccess', function() {});
 

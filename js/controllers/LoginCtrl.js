@@ -77,9 +77,29 @@ ppApp.controller('LoginCtrl', [
                 password: $scope.user.password,
                 gmt: -(new Date().getTimezoneOffset() / 60)
             }).success(function(response) {
+                //mixpanel login info by user
+                mixpanel.identify($scope.user.username);
+
+                // mixpanel.time_event("Total time spent on platform");
+
+                mixpanel.register_once({
+                  'Images uploaded: PP app': 0,
+                  'Forms completed: PP app': 0,
+                  'Form shares: PP app': 0
+                });
+
+                mixpanel.people.set_once({
+                  'First Login Date: PP app': new Date(),
+                  'No. of logins: PP app': 0
+                });
+
+                mixpanel.people.set({
+                  "$last_login": new Date(),         // properties can be dates...
+                });
+
                 //mixpanel people proprieties
 	              mixpanel.people.increment('No. of logins: PP app', 1);
-                
+
                 localStorage.removeItem('loggedOut');
                 if (response) {
                     if ($scope.user.rememberMe) {

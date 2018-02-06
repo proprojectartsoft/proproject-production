@@ -24,7 +24,9 @@ ppApp.controller('FormCompletedCtrl', [
         $scope.filter.email = "";
 
         // mixpanel track events
-        mixpanel.track("Page view: PP app", {'Page name:': 'Completed forms list'});
+        if (navigator.onLine) {
+          mixpanel.track("Page view: PP app", {'Page name:': 'Completed forms list'});
+        }
 
         function sendEmail(res, id) {
             if (res) {
