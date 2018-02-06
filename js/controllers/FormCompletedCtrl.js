@@ -23,6 +23,9 @@ ppApp.controller('FormCompletedCtrl', [
         $scope.filter = {};
         $scope.filter.email = "";
 
+        // mixpanel track events
+        mixpanel.track("Page view: PP app", {'Page name:': 'Completed forms list'});
+
         function sendEmail(res, id) {
             if (res) {
                 var alertPopup1 = SettingService.show_loading_popup("Sending email", "<center><ion-spinner icon='android'></ion-spinner></center>");
@@ -36,6 +39,9 @@ ppApp.controller('FormCompletedCtrl', [
                 }, function(response) {
                     alertPopup1.close();
                     if (response.data.message === "Form shared") {
+                        //mixpanel people proprieties
+                        mixpanel.people.increment('Form shares: PP app', 1);
+
                         res = "";
                         var alertPopupC = SecuredPopups.show('alert', {
                             title: 'Share',

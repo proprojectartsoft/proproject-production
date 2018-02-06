@@ -103,5 +103,27 @@ ppApp.controller('NavCtrl', [
             });
             $scope.sync();
         });
+
+        $scope.user = localStorage.getObject("ppuser");
+        //mixpanel login info by user
+        mixpanel.identify($scope.user.username);
+
+        // mixpanel.time_event("Total time spent on platform");
+
+        mixpanel.register_once({
+          'Images uploaded: PP app': 0,
+          'Forms completed: PP app': 0,
+          'Form shares: PP app': 0
+        });
+
+        mixpanel.people.set_once({
+          'First Login Date: PP app': new Date(),
+          'No. of logins: PP app': 0
+        });
+
+        mixpanel.people.set({
+          "$last_login": new Date(),         // properties can be dates...
+        });
+
     }
 ]);

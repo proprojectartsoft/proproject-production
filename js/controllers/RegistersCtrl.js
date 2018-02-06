@@ -23,6 +23,9 @@ ppApp.controller('RegistersCtrl', [
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
+        // mixpanel track events
+        mixpanel.track("Page view: PP app", {'Page name:': 'Registers list'});
+
         $scope.$on('$stateChangeSuccess', function() {});
 
         AuthService.me().then(function(user) {

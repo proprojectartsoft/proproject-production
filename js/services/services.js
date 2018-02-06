@@ -1089,6 +1089,10 @@ ppApp.service('CommonServices', [
                                 $rootScope.rootForm = res.data;
                                 $timeout(function() {
                                     formUp.close();
+
+                                    //mixpanel people proprieties
+                                    mixpanel.people.increment('Forms completed: PP app', 1);
+
                                     $state.go('app.formInstance', {
                                         'projectId': $rootScope.projectId,
                                         'type': 'form',
@@ -1126,18 +1130,6 @@ ppApp.service('CommonServices', [
                     img.id = 0;
                     img.formInstanceId = $rootScope.formId;
                     img.projectId = request.data.project_id;
-                    //for saved as new
-                    // if (isNew && img.url) {
-                    //     img = {
-                    //         base64String: '',
-                    //         comment: img.comment,
-                    //         formInstanceId: img.formInstanceId,
-                    //         id: img.id,
-                    //         projectId: img.projectId,
-                    //         tags: img.tags,
-                    //         title: img.title
-                    //     }
-                    // }
 
                     PostService.post({
                         method: 'POST',
@@ -1146,6 +1138,10 @@ ppApp.service('CommonServices', [
                         withCredentials: true
                     }, function(succ) {
                         cnt++;
+
+                        //mixpanel people proprieties
+                        mixpanel.people.increment('Images uploaded: PP app', 1);
+
                         //last image uploaded with success
                         if (cnt >= images.length) {
                             finishCallback(formUp);
@@ -1213,18 +1209,6 @@ ppApp.service('CommonServices', [
                         });
                     }
                 }
-                //  else if (data.status === 0 || data.status === 502) {
-                // var sync = CacheFactory.get('sync'); //TODO: check if needed
-                // if (!sync) {
-                //     sync = CacheFactory('sync');
-                // }
-                // sync.setOptions({
-                //     storageMode: 'localStorage'
-                // });
-                // $rootScope.toBeUploadedCount = sync.keys().length;
-                // $rootScope.toBeUploadedCount++;
-                // sync.put($rootScope.toBeUploadedCount, requestForm);
-                // }
             });
         };
 

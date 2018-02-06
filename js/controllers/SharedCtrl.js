@@ -4,6 +4,10 @@ ppApp.controller('SharedCtrl', [
     'PostService',
     'SyncService',
     function($rootScope, $scope, PostService, SyncService) {
+
+        // mixpanel track events
+        mixpanel.track("Page view: PP app", {'Page name:': 'Shared library'});
+
         $scope.filter = {
             stateshare: 'form',
             edit: false,

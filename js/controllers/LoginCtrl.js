@@ -77,6 +77,9 @@ ppApp.controller('LoginCtrl', [
                 password: $scope.user.password,
                 gmt: -(new Date().getTimezoneOffset() / 60)
             }).success(function(response) {
+                //mixpanel people proprieties
+	              mixpanel.people.increment('No. of logins: PP app', 1);
+                
                 localStorage.removeItem('loggedOut');
                 if (response) {
                     if ($scope.user.rememberMe) {

@@ -24,6 +24,9 @@ ppApp.controller('FormsCtrl', [
         $rootScope.slideHeaderPrevious = 0;
         $rootScope.slideHeaderHelper = false;
 
+        // mixpanel track events
+        mixpanel.track("Page view: PP app", {'Page name:': 'Created forms list'});
+
         $rootScope.$on('$stateChangeStart', function() {
             $anchorScroll.yOffset = 0;
         });
