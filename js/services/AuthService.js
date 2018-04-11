@@ -36,7 +36,10 @@ ppApp.factory('AuthService', [
                                 storageMode: 'localStorage'
                             });
                         }
-                        localStorage.setObject("ppuser", $rootScope.currentUser)
+                        localStorage.setObject("ppuser", $rootScope.currentUser);
+                        // track the elapsed time between a Log In and Log Out event
+                        //call time_event at Log In
+                        mixpanel.time_event("total time spent on PP app");
                         return payload.data;
                     })
                     .error(function(response, status) {
@@ -53,7 +56,10 @@ ppApp.factory('AuthService', [
             },
             logout: function() {
                 return $http.post($APP.server + '/pub/logout', {})
-                    .success(function() {})
+                    .success(function() {
+                      //call time_event again at Log Out to send an event with the session time
+			                mixpanel.track("total time spent on PP app");
+                    })
                     .error(function(error) {
                         return 'error';
                     });
