@@ -16,7 +16,8 @@
                     <div class="header-prj-text"> Design: {{formData.name}}</div>
                     <div class="blue-label">{{formData.code}}</div>
                 </div>
-                <form class="form-container-bgd">
+                <form class="form-container-bgd"
+                      name="edit_form">
                     <ion-list>
                         <div ng-repeat="fieldset in formData.field_group_designs track by $index"
                              fs
@@ -43,8 +44,17 @@
                                  ng-repeat="field in fieldset.field_designs"
                                  ng-show="isGroupShown(fieldset)"
                                  style="position: relative">
-                                <a ng-if="$first" style="padding: 15px 11px 15px; top:0px" class="all-field-repeat" ng-click="repeatField(fieldset, field)" ng-show="field.repeatable"><span class="icon ion-plus" style="color:#fff"></span> </a>
-                                <a ng-if="!$first" class="all-field-repeat" ng-click="repeatField(fieldset, field)" ng-show="field.repeatable"><span class="icon ion-plus" style="color:#fff"></span> </a>
+                                <a ng-if="$first"
+                                   style="padding: 15px 11px 15px; top:0px"
+                                   class="all-field-repeat"
+                                   ng-click="repeatField(fieldset, field)"
+                                   ng-show="field.repeatable">
+                                  <span class="icon ion-plus" style="color:#fff"></span> </a>
+                                <a ng-if="!$first"
+                                   class="all-field-repeat"
+                                   ng-click="repeatField(fieldset, field)"
+                                   ng-show="field.repeatable">
+                                   <span class="icon ion-plus" style="color:#fff"></span> </a>
                                 <field data="field"></field>
                             </div>
                         </div>
@@ -85,7 +95,11 @@
                     </div>
                 </div>
                 <div class="padding">
-                    <button type="submit" ng-click="submit(formData)" ng-disabled="formData.permission < 2" value="Save" class="button button-block button-calm">Submit
+                    <button type="submit"
+                            ng-click="submit(formData)"
+                            ng-disabled="((formData.permission < 2) || (edit_form.$invalid))"
+                            value="Save"
+                            class="button button-block button-calm">Submit
                     </button>
                 </div>
             </div>

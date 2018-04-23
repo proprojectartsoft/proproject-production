@@ -79,7 +79,7 @@
         <span class="item-content">{{box.name}}</span>
         <span class="checkbox all-checkbox">
             <input input type="radio" ng-model="data.value" value="{{box.value}}"
-                   ng-required="data.required" name="{{hash}}">
+                   name="{{hash}}">
         </span>
     </label>
 </div>
@@ -93,7 +93,7 @@
         </div>
         <span class="checkbox all-checkbox">
             <input input id="{{hash}}" type="checkbox" name="{{data.name}}" ng-model="data.value"
-                   value="1" ng-required="data.required">
+                   value="1">
         </span>
     </label>
 </div>
