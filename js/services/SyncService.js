@@ -179,6 +179,7 @@ ppApp.service('SyncService', [
                         for (var key in result.data[0]) {
                             if (key == 'settings') {
                                 //add project's settings fields
+                                result.data[0][key].sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);} );
                                 for (var subkey in result.data[0][key]) {
                                     temp.push(result.data[0][key][subkey].name);
                                     q += '?,';
